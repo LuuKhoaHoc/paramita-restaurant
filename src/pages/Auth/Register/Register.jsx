@@ -10,13 +10,13 @@ import {
   TextField
 } from '@prismane/core'
 import { useForm, useScroll } from '@prismane/core/hooks'
-import { min, email } from '@prismane/core/validators'
-import emptyField from '../../../utils/emptyField'
-import usernameAndEmail from '../../../utils/usernameAndEmail'
 import React, { useEffect } from 'react'
-import { LoginPic } from '../../../images'
+import { LoginPic } from '~/images'
 import { Link } from 'react-router-dom'
-import { Footer, MainPic} from '../../../components'
+import { Footer, MainPic } from '~/components'
+import p from '~/utils/zodToPrismane'
+import { z } from 'zod'
+import { Envelope, Password, User } from '@phosphor-icons/react'
 
 const Register = () => {
   const { scrollToId } = useScroll()
@@ -29,28 +29,59 @@ const Register = () => {
       username: {
         value: '',
         validators: {
-          required: (v) => emptyField(v),
-          username: (v) => usernameAndEmail(v)
+          required: (v) =>
+            p(
+              v,
+              z.string().trim().min(1, { message: 'Không được để trống ô này' })
+            ),
+          username: (v) =>
+            p(
+              v,
+              z.string().min(4, {
+                message: 'Tên tài khoản ít nhất phải 4 kí tự'
+              })
+            )
         }
       },
       email: {
         value: '',
         validators: {
-          required: (v) => emptyField(v),
-          email: (v) => email(v)
+          required: (v) =>
+            p(
+              v,
+              z.string().trim().min(1, { message: 'Không được để trống ô này' })
+            ),
+          email: (v) =>
+            p(v, z.string().email({ message: 'Không phải là email' }))
         }
       },
       password: {
         value: '',
         validators: {
-          required: (v) => emptyField(v),
-          min: (v) => min(v, 6)
+          required: (v) =>
+            p(
+              v,
+              z.string().trim().min(1, { message: 'Không được để trống ô này' })
+            ),
+          min: (v) =>
+            p(
+              v,
+              z
+                .string()
+                .min(6, { message: 'Mật khẩu phải ít nhất phải 6 kí tự' })
+            )
         }
       },
       checkbox: {
         value: false,
         validators: {
-          checked: (v) => emptyField(v)
+          checked: (v) =>
+            p(
+              v,
+              z.boolean().refine((val) => val === true, {
+                message: 'Vui lòng chọn vào ô này'
+              })
+            )
         }
       }
     }
@@ -78,6 +109,9 @@ const Register = () => {
           br={'2xl'}
           bsh={'xl'}
           sx={{
+            '.PrismaneTextField-label, .PrismanePasswordField-label': {
+              fontSize: '20px'
+            },
             '.PrismaneCheckbox-error': {
               fontSize: '16px'
             }
@@ -100,11 +134,8 @@ const Register = () => {
               variant='underlined'
               label='Tên tài khoản'
               placeholder='paramita'
-              sx={{
-                '.PrismaneTextField-label': {
-                  fontSize: '20px'
-                }
-              }}
+              icon={<User />}
+              sx={{}}
             />
             <TextField
               {...register('email')}
@@ -112,11 +143,8 @@ const Register = () => {
               variant='underlined'
               label='Email'
               placeholder='xinchao@paramita.com'
-              sx={{
-                '.PrismaneTextField-label': {
-                  fontSize: '20px'
-                }
-              }}
+              icon={<Envelope />}
+              sx={{}}
             />
             <PasswordField
               {...register('password')}
@@ -124,15 +152,11 @@ const Register = () => {
               variant='underlined'
               label='Mật khẩu'
               placeholder='********'
-              sx={{
-                '.PrismanePasswordField-label': {
-                  fontSize: '20px'
-                }
-              }}
+              icon={<Password weight='fill' />}
+              sx={{}}
             />
             <Checkbox
               {...register('checkbox')}
-              name='agreement'
               label='Tôi đồng ý với điều khoản thoả thuận'
             />
             <Button
@@ -157,7 +181,6 @@ const Register = () => {
           </Card.Footer>
         </Card>
       </Flex>
-      <Footer />
     </Box>
   )
 }

@@ -3,22 +3,39 @@ import { Link, NavLink } from 'react-router-dom'
 // core
 import { Box, Flex, Image, Center, Button, Header, Grid } from '@prismane/core'
 // img
-import { Logo } from '../../images'
+import { LogoText } from '~/images'
 // utils
 import lazyWithPreload from 'react-lazy-with-preload'
 
-const Home = lazyWithPreload(() => import('../../pages/Home/Home'))
-const AboutUs = lazyWithPreload(() => import('../../pages/AboutUs/AboutUs'))
-const Album = lazyWithPreload(() => import('../../pages/Album/Album'))
-const BookTable = lazyWithPreload(() =>
-  import('../../pages/BookTable/BookTable')
-)
-const Contact = lazyWithPreload(() => import('../../pages/Contact/Contact'))
-const Menu = lazyWithPreload(() => import('../../pages/Menu/Menu'))
-const Order = lazyWithPreload(() => import('../../pages/Order/Order'))
-const Login = lazyWithPreload(() => import('../../pages/Auth/Login/Login'))
+const Home = lazyWithPreload(() => import('~/pages/Home/Home'))
+const AboutUs = lazyWithPreload(() => import('~/pages/AboutUs/AboutUs'))
+const Promotion = lazyWithPreload(() => import('~/pages/Promotion/Promotion'))
+const BookTable = lazyWithPreload(() => import('~/pages/BookTable/BookTable'))
+const Contact = lazyWithPreload(() => import('~/pages/Contact/Contact'))
+const Menu = lazyWithPreload(() => import('~/pages/Menu/Menu'))
+const Order = lazyWithPreload(() => import('~/pages/Order/Order'))
+const Login = lazyWithPreload(() => import('~/pages/Auth/Login/Login'))
 
 const Navbar = () => {
+  const lineAnimation = {
+    '&::before': {
+      content: '',
+      width: '100%',
+      height: '4px',
+      borderRadius: '2px',
+      backgroundColor: 'primary',
+      bottom: '-5px',
+      left: 0,
+      transformOrigin: 'right',
+      transform: 'scaleX(0)',
+      transition: 'transform 0.2s ease-in-out'
+    },
+    '&:hover::before': {
+      transformOrigin: 'left',
+      transform: 'scaleX(1)'
+    }
+  }
+
   window.addEventListener('scroll', () => {
     if (document.documentElement.scrollTop > 10) {
       document.getElementById('header').style.boxShadow =
@@ -37,7 +54,7 @@ const Navbar = () => {
       h={'max-content'}
       pos={'fixed'}
       t={0}
-      z={10}
+      z={100}
     >
       <Grid.Item columnStart={3} columnEnd={11}>
         <Header z={1}>
@@ -58,7 +75,12 @@ const Navbar = () => {
             >
               <NavLink to={'/'} onMouseOver={() => Home.preload()}>
                 <Center w={160} h={'100%'}>
-                  <Image w={130} src={Logo} alt='Paramita Logo' fit='contain' />
+                  <Image
+                    w={130}
+                    src={LogoText}
+                    alt='Paramita Logo'
+                    fit='contain'
+                  />
                 </Center>
               </NavLink>
             </Box>
@@ -69,25 +91,8 @@ const Navbar = () => {
                   td={'none'}
                   bg={['transparent', { ':before': 'primary' }]}
                   pos={['relative', { ':before': 'absolute' }]}
-                  cl={'#fff'}
-                  sx={{
-                    '&::before': {
-                      content: '',
-                      width: '100%',
-                      height: '4px',
-                      borderRadius: '2px',
-                      backgroundColor: 'primary',
-                      bottom: '-5px',
-                      left: 0,
-                      transformOrigin: 'right',
-                      transform: 'scaleX(0)',
-                      transition: 'transform 0.2s ease-in-out'
-                    },
-                    '&:hover::before': {
-                      transformOrigin: 'left',
-                      transform: 'scaleX(1)'
-                    }
-                  }}
+                  cl={['#fff', { hover: ['primary', 100] }]}
+                  sx={lineAnimation}
                 >
                   <NavLink to={'/about'} onMouseOver={() => AboutUs.preload()}>
                     Tìm hiểu
@@ -97,53 +102,22 @@ const Navbar = () => {
                   td={'none'}
                   bg={['transparent', { ':before': 'primary' }]}
                   pos={['relative', { ':before': 'absolute' }]}
-                  cl={'#fff'}
-                  sx={{
-                    '&::before': {
-                      content: '',
-                      width: '100%',
-                      height: '4px',
-                      borderRadius: '2px',
-                      backGroundColor: 'primary',
-                      bottom: '-5px',
-                      left: 0,
-                      transformOrigin: 'right',
-                      transform: 'scaleX(0)',
-                      transition: 'transform 0.2s ease-in-out'
-                    },
-                    '&:hover::before': {
-                      transformOrigin: 'left',
-                      transform: 'scaleX(1)'
-                    }
-                  }}
+                  cl={['#fff', { hover: ['primary', 100] }]}
+                  sx={lineAnimation}
                 >
-                  <NavLink to={'/album'} onMouseOver={() => Album.preload()}>
-                    Thư viện{' '}
+                  <NavLink
+                    to={'/promotion'}
+                    onMouseOver={() => Promotion.preload()}
+                  >
+                    Khuyến mãi{' '}
                   </NavLink>
                 </Box>
                 <Box
                   td={'none'}
                   bg={['transparent', { ':before': 'primary' }]}
                   pos={['relative', { ':before': 'absolute' }]}
-                  cl={'#fff'}
-                  sx={{
-                    '&::before': {
-                      content: '',
-                      width: '100%',
-                      height: '4px',
-                      borderRadius: '2px',
-                      backGroundColor: 'primary',
-                      bottom: '-5px',
-                      left: 0,
-                      transformOrigin: 'right',
-                      transform: 'scaleX(0)',
-                      transition: 'transform 0.2s ease-in-out'
-                    },
-                    '&:hover::before': {
-                      transformOrigin: 'left',
-                      transform: 'scaleX(1)'
-                    }
-                  }}
+                  cl={['#fff', { hover: ['primary', 100] }]}
+                  sx={lineAnimation}
                 >
                   <NavLink
                     to={'/book-table'}
@@ -156,25 +130,8 @@ const Navbar = () => {
                   td={'none'}
                   bg={['transparent', { ':before': 'primary' }]}
                   pos={['relative', { ':before': 'absolute' }]}
-                  cl={'#fff'}
-                  sx={{
-                    '&::before': {
-                      content: '',
-                      width: '100%',
-                      height: '4px',
-                      borderRadius: '2px',
-                      backGroundColor: 'primary',
-                      bottom: '-5px',
-                      left: 0,
-                      transformOrigin: 'right',
-                      transform: 'scaleX(0)',
-                      transition: 'transform 0.2s ease-in-out'
-                    },
-                    '&:hover::before': {
-                      transformOrigin: 'left',
-                      transform: 'scaleX(1)'
-                    }
-                  }}
+                  cl={['#fff', { hover: ['primary', 100] }]}
+                  sx={lineAnimation}
                 >
                   <NavLink
                     to={'/order-online'}
@@ -187,25 +144,8 @@ const Navbar = () => {
                   td={'none'}
                   bg={['transparent', { ':before': 'primary' }]}
                   pos={['relative', { ':before': 'absolute' }]}
-                  cl={'#fff'}
-                  sx={{
-                    '&::before': {
-                      content: '',
-                      width: '100%',
-                      height: '4px',
-                      borderRadius: '2px',
-                      backGroundColor: 'primary',
-                      bottom: '-5px',
-                      left: 0,
-                      transformOrigin: 'right',
-                      transform: 'scaleX(0)',
-                      transition: 'transform 0.2s ease-in-out'
-                    },
-                    '&:hover::before': {
-                      transformOrigin: 'left',
-                      transform: 'scaleX(1)'
-                    }
-                  }}
+                  cl={['#fff', { hover: ['primary', 100] }]}
+                  sx={lineAnimation}
                 >
                   <NavLink to={'/menu'} onMouseOver={() => Menu.preload()}>
                     Thực đơn{' '}
@@ -215,25 +155,8 @@ const Navbar = () => {
                   td={'none'}
                   bg={['transparent', { ':before': 'primary' }]}
                   pos={['relative', { ':before': 'absolute' }]}
-                  cl={'#fff'}
-                  sx={{
-                    '&::before': {
-                      content: '',
-                      width: '100%',
-                      height: '4px',
-                      borderRadius: '2px',
-                      backGroundColor: 'primary',
-                      bottom: '-5px',
-                      left: 0,
-                      transformOrigin: 'right',
-                      transform: 'scaleX(0)',
-                      transition: 'transform 0.2s ease-in-out'
-                    },
-                    '&:hover::before': {
-                      transformOrigin: 'left',
-                      transform: 'scaleX(1)'
-                    }
-                  }}
+                  cl={['#fff', { hover: ['primary', 100] }]}
+                  sx={lineAnimation}
                 >
                   <NavLink
                     to={'/contact'}

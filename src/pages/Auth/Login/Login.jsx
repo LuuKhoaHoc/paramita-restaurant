@@ -3,7 +3,6 @@ import {
   Box,
   Button,
   Card,
-  Checkbox,
   Flex,
   Form,
   PasswordField,
@@ -11,44 +10,49 @@ import {
   TextField
 } from '@prismane/core'
 import { useAnimation, useForm, useScroll } from '@prismane/core/hooks'
-import { min } from '@prismane/core/validators'
-import emptyField from '../../../utils/emptyField'
-import usernameAndEmail from '../../../utils/usernameAndEmail'
+import p from '~/utils/zodToPrismane'
+import { z } from 'zod'
+import usernameAndEmail from '~/utils/usernameAndEmail'
 import React, { useEffect } from 'react'
-import { LoginPic } from '../../../images'
+import { LoginPic } from '~/images'
 import { Link } from 'react-router-dom'
-import { Footer, MainPic } from '../../../components'
+import { Footer, MainPic } from '~/components'
+import { Password, User } from '@phosphor-icons/react'
 
 const Login = () => {
   const { scrollToId } = useScroll()
-  useEffect(() => {
-    scrollToId('register')
-  }, [])
-  // const { animate, animating, duration, timing } = useAnimation(
-  //   true,
-  //   1000,
-  //   'ease-in-out'
-  // )
+  useEffect(() => scrollToId('login'), [])
+  const { animate, animating, duration, timing } = useAnimation(
+    true,
+    1500,
+    'ease-in'
+  )
   const { handleSubmit, handleReset, register } = useForm({
     fields: {
       username: {
         value: '',
         validators: {
-          required: (v) => emptyField(v),
+          required: (v) =>
+            p(
+              v,
+              z.string().trim().min(1, { message: 'Không được để trống ô này' })
+            ),
           username: (v) => usernameAndEmail(v)
         }
       },
       password: {
         value: '',
         validators: {
-          required: (v) => emptyField(v),
-          min: (v) => min(v, 6)
-        }
-      },
-      checkbox: {
-        value: false,
-        validators: {
-          checked: (v) => emptyField(v)
+          required: (v) =>
+            p(
+              v,
+              z.string().trim().min(1, { message: 'Không được để trống ô này' })
+            ),
+          min: (v) =>
+            p(
+              v,
+              z.string().min(6, { message: 'Mật khẩu ít nhất phải 6 kí tự' })
+            )
         }
       }
     }
@@ -60,9 +64,8 @@ const Login = () => {
         title={'Paramita'}
         sloganCenter={'Chào mừng bạn đến với hệ thống'}
       />
-
       <Flex
-        id='register'
+        id='login'
         ff={'BalihoScript'}
         fs={'lg'}
         align='center'
@@ -70,7 +73,13 @@ const Login = () => {
         bd={'1px solid lightgray'}
         bg={'primary'}
       >
-        <Animation animation='slide-down' animated={true} duration={1000}>
+        <Animation
+          animation='slide-down'
+          animated={animating}
+          duration={duration}
+          timing={timing}
+          onScroll={() => animate()}
+        >
           <Card
             m={50}
             p={50}
@@ -78,6 +87,9 @@ const Login = () => {
             br={'2xl'}
             bsh={'xl'}
             sx={{
+              '.PrismaneTextField-label, .PrismanePasswordField-label': {
+                fontSize: '20px'
+              },
               '.PrismaneCheckbox-error': {
                 fontSize: '16px'
               }
@@ -101,11 +113,7 @@ const Login = () => {
                 variant='underlined'
                 label='Tên tài khoản hoặc Email'
                 placeholder='paramita/xinchao@paramita.com'
-                sx={{
-                  '.PrismaneTextField-label': {
-                    fontSize: '20px'
-                  }
-                }}
+                icon={<User />}
               />
               <PasswordField
                 {...register('password')}
@@ -113,17 +121,11 @@ const Login = () => {
                 variant='underlined'
                 label='Mật khẩu'
                 placeholder='********'
-                sx={{
-                  '.PrismanePasswordField-label': {
-                    fontSize: '20px'
-                  }
-                }}
+                icon={<Password weight='fill' />}
               />
-              <Checkbox
-                {...register('checkbox')}
-                name='agreement'
-                label='Tôi đồng ý với điều khoản thoả thuận'
-              />
+              <Text cl={['#0266BE', { hover: 'blue' }]}>
+                <Link to={'/forgot-password'}>Quên mật khẩu?</Link>
+              </Text>
               <Button
                 size='lg'
                 variant='tertiary'
@@ -147,7 +149,6 @@ const Login = () => {
           </Card>
         </Animation>
       </Flex>
-      <Footer />
     </Box>
   )
 }

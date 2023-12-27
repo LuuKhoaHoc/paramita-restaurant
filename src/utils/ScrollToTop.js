@@ -5,7 +5,9 @@ const ScrollToTop = () => {
   const { pathname } = useLocation()
 
   useEffect(() => {
-    window && window.scrollTo(0, 0)
+    if (pathname.startsWith('/menu/')) return
+
+    window.scrollTo(0, 0)
   }, [pathname])
 
   return null

@@ -1,5 +1,4 @@
 import { Animation, Center, Image } from '@prismane/core'
-import React from 'react'
 import { Rings } from 'react-loader-spinner'
 import Logo from '../../images/Logo.png'
 import { useAnimation } from '@prismane/core/hooks'
@@ -17,7 +16,13 @@ const Loading = () => {
       duration={duration}
       timing={timing}
     >
-      <Center pos={'relative'} w={'100%'} mih={'100vh'} bg={'primary'}>
+      <Center
+        pos={'relative'}
+        w={'100%'}
+        mih={'100vh'}
+        bg={'primary'}
+        z={10000}
+      >
         <Image
           src={Logo}
           alt='logo'

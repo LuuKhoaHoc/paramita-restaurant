@@ -1,8 +1,141 @@
-import React from 'react'
+import {
+  Box,
+  Button,
+  Card,
+  Flex,
+  Form,
+  PinField,
+  Text,
+  TextField
+} from '@prismane/core'
+import { useForm, useScroll } from '@prismane/core/hooks'
+import usernameAndEmail from '~/utils/usernameAndEmail'
+import p from '~/utils/zodToPrismane'
+import React, { useEffect } from 'react'
+import { LoginPic } from '~/images'
+import { useNavigate } from 'react-router-dom'
+import { MainPic } from '~/components'
+import { ArrowLeft } from '@phosphor-icons/react/dist/ssr'
+import { z } from 'zod'
+import { Envelope } from '@phosphor-icons/react'
 
 const ForgotPassword = () => {
+  const navigate = useNavigate()
+  const { scrollToId } = useScroll()
+  useEffect(() => {
+    scrollToId('forgot-password')
+  }, [])
+  const { handleSubmit, handleReset, register } = useForm({
+    fields: {
+      username: {
+        value: '',
+        validators: {
+          required: (v) =>
+            p(
+              v,
+              z.string().trim().min(1, { message: 'Không được để trống ô này' })
+            ),
+          username: (v) => usernameAndEmail(v)
+        }
+      },
+      pin: {
+        value: '',
+        validators: {
+          required: (v) =>
+            p(
+              v,
+              z
+                .string()
+                .trim()
+                .min(1, { message: 'Không được để trống mã Pin' })
+            ),
+          min: (v) =>
+            p(v, z.string().length(4, { message: 'Mã Pin phải 4 số' }))
+        }
+      }
+    }
+  })
   return (
-    <div>ForgotPassword</div>
+    <Box pos={'relative'} mih={'100vh'}>
+      <MainPic
+        image={LoginPic}
+        title={'Paramita'}
+        sloganCenter={'Chào mừng bạn đến với hệ thống'}
+      />
+      <Flex
+        id='forgot-password'
+        ff={'BalihoScript'}
+        fs={'lg'}
+        align='center'
+        justify='center'
+        bd={'1px solid lightgray'}
+        bg={'primary'}
+      >
+        <Card
+          m={50}
+          p={70}
+          br={'2xl'}
+          bsh={'xl'}
+          sx={{
+            '.PrismaneTextField-label, .PrismanePinField-label': {
+              fontSize: '20px'
+            }
+          }}
+        >
+          <Card.Header>
+            <Text fs={'3xl'} mx={'auto'}>
+              Quên mật khẩu
+            </Text>
+          </Card.Header>
+          <Form
+            onSubmit={(SubmitEvent) =>
+              handleSubmit(SubmitEvent, (value) => console.log(value))
+            }
+            onReset={handleReset}
+          >
+            <TextField
+              {...register('username')}
+              size='md'
+              variant='underlined'
+              label='Email'
+              placeholder='hi@paramita.com'
+              icon={<Envelope />}
+            />
+            <PinField
+              {...register('pin')}
+              size='md'
+              variant='underlined'
+              label='Mã xác nhận'
+            />
+            <Button
+              size='lg'
+              variant='tertiary'
+              color='primary'
+              type='submit'
+              ff={'BalihoScript'}
+              mx={'auto'}
+              fillOnHover
+            >
+              Xác nhận
+            </Button>
+          </Form>
+          <Card.Footer>
+            <Flex
+              w={'100%'}
+              cs={'pointer'}
+              cl={['#0266BE', { hover: 'blue' }]}
+              justify='center'
+              align='center'
+              gap={8}
+              onClick={() => navigate(-1)}
+            >
+              <ArrowLeft />
+              Quay lại
+            </Flex>
+          </Card.Footer>
+        </Card>
+      </Flex>
+    </Box>
   )
 }
 

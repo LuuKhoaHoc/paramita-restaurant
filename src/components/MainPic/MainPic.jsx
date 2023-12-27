@@ -29,14 +29,19 @@ const MainPic = ({
   return (
     <Box w={'100%'} h={'100vh'} pos={'relative'}>
       <Transition
-        as={Image}
-        src={image}
         alt='main pic'
         w='100%'
         h='100%'
         pos='absolute'
-        z={-1}
+        transition='all'
+        timing='ease-in'
         ft={'brightness(0.5)'}
+        sx={{
+          backgroundImage: `url(${image})`,
+          backgroundRepeat: 'no-repeat',
+          backgroundPosition: 'center',
+          backgroundSize: 'cover'
+        }}
       />
       <Center
         w={'100%'}
@@ -47,7 +52,7 @@ const MainPic = ({
         cs={'default'}
       >
         {sloganLeft ? (
-          <Text fs={'2xl'} mb={-50} mr={300}>
+          <Text fs={'2xl'} mb={-50} mr={300} z={10}>
             <TypeAnimation
               sequence={[sloganLeft, 1000]}
               speed={75}
@@ -58,7 +63,7 @@ const MainPic = ({
           ''
         )}
         {sloganRight ? (
-          <Text fs={'lg'} mb={-50} ml={250}>
+          <Text fs={'lg'} mb={-50} ml={250} z={10}>
             <TypeAnimation
               sequence={[sloganRight, 1000]}
               speed={75}
@@ -69,7 +74,7 @@ const MainPic = ({
           ''
         )}
         {sloganCenter ? (
-          <Text fs={'3xl'} mb={-50} ls={5}>
+          <Text fs={'3xl'} mb={-50} ls={5} z={10}>
             <TypeAnimation
               sequence={[sloganCenter, 1000]}
               speed={75}
@@ -79,11 +84,11 @@ const MainPic = ({
         ) : (
           ''
         )}
-        <Text fs={'8xl'} cl={color}>
+        <Text fs={'8xl'} cl={color} z={10}>
           {title}
         </Text>
         {subtitle === 'Paramita' || subtitle === 'Restaurant' ? (
-          <Text ls={30} fs={'3xl'} ml={30} mt={-40}>
+          <Text ls={30} fs={'3xl'} ml={30} mt={-40} z={10}>
             <TypeAnimation
               sequence={[subtitle, 1000]}
               speed={1}
@@ -91,10 +96,10 @@ const MainPic = ({
             />
           </Text>
         ) : (
-          <Text ls={5} fs={'3xl'} ml={30} mt={-20}>
+          <Text ls={5} fs={'3xl'} ml={30} mt={-20} z={10}>
             <TypeAnimation
               sequence={[subtitle, 1000]}
-              speed={1}
+              speed={75}
               cursor={false}
             />
           </Text>
