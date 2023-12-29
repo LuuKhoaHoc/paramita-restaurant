@@ -34,7 +34,7 @@ const Menu = () => {
     'Rau, gỏi',
     'Món chính',
     'Lẩu',
-    'Các món Tây',
+    'Món Âu',
     'Thức uống',
     'Cà phê',
     'Nước ép',

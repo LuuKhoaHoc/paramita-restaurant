@@ -1,6 +1,5 @@
 import { Routes, Route, Outlet } from 'react-router-dom'
 import React, { Suspense } from 'react'
-import lazyWithPreload from 'react-lazy-with-preload'
 // utils
 import ScrollToTop from '~/utils/ScrollToTop'
 import {
@@ -13,38 +12,30 @@ import {
 } from '~/components'
 import { Food1, Food2, HomePic2, Space1, Space2, Space3 } from '~/images'
 import { Box, useThemeModeValue } from '@prismane/core'
-
 // routes
-const Home = lazyWithPreload(() => import('~/pages/Home/Home'))
-const AboutUs = lazyWithPreload(() => import('~/pages/AboutUs/AboutUs'))
-const Album = lazyWithPreload(() => import('~/pages/Album/Album'))
-const AlbumDetail = lazyWithPreload(() =>
-  import('~/pages/Album/AlbumDetail/AlbumDetail')
-)
-const Promotion = lazyWithPreload(() => import('~/pages/Promotion/Promotion'))
-const PromotionDetail = lazyWithPreload(() =>
-  import('~/pages/Promotion/PromotionDetail/PromotionDetail')
-)
-const BookTable = lazyWithPreload(() => import('~/pages/BookTable/BookTable'))
-const Contact = lazyWithPreload(() => import('~/pages/Contact/Contact'))
-const Menu = lazyWithPreload(() => import('~/pages/Menu/Menu'))
-const MenuCategory = lazyWithPreload(() =>
-  import('~/pages/Menu/MenuCategory/MenuCategory')
-)
-const MenuItemDetail = lazyWithPreload(() =>
-  import('~/pages/Menu/MenuListItem/MenuItem/MenuItemDetail/MenuItemDetail')
-)
-const Career = lazyWithPreload(() => import('~/pages/Career/Career'))
-const Privacy = lazyWithPreload(() => import('~/pages/Privacy/Privacy'))
-const TermOfUse = lazyWithPreload(() => import('~/pages/TermOfUse/TermOfUse'))
-const FAQ = lazyWithPreload(() => import('~/pages/FAQ/FAQ'))
-const Order = lazyWithPreload(() => import('~/pages/Order/Order'))
-const Auth = lazyWithPreload(() => import('~/pages/Auth/Auth'))
-const Login = lazyWithPreload(() => import('~/pages/Auth/Login/Login'))
-const Register = lazyWithPreload(() => import('~/pages/Auth/Register/Register'))
-const ForgotPassword = lazyWithPreload(() =>
-  import('~/pages/Auth/ForgotPassword/ForgotPassword')
-)
+import {
+  Home,
+  AboutUs,
+  Promotion,
+  PromotionDetail,
+  Order,
+  Contact,
+  BookTable,
+  MenuCategory,
+  MenuItemDetail,
+  Album,
+  AlbumDetail,
+  Career,
+  Privacy,
+  TermOfUse,
+  FAQ,
+  Auth,
+  Login,
+  Register,
+  ForgotPassword,
+  Menu
+} from './routes'
+
 const imagesGallery = [Space1, Space2, Space3, Food1, Food2, HomePic2]
 
 const App = () => {
@@ -62,6 +53,7 @@ const App = () => {
             <Route path='/promotion' element={<Promotion />} />
             <Route path='/promotion/:promotion' element={<PromotionDetail />} />
             <Route path='/order-online' element={<Order />} />
+            <Route path='/order-online/:category' element={<Order />} />
             <Route path='/contact' element={<Contact />} />
             <Route path='/book-table' element={<BookTable />} />
           </Route>
@@ -71,9 +63,9 @@ const App = () => {
           <Route path='/album' element={<Album />} />
           <Route path='/album/:album' element={<AlbumDetail />} />
           <Route path='/career' element={<Career />} />
-          <Route path='/privacy' element={<Privacy/>} />
-          <Route path='/term' element={<TermOfUse/>} />
-          <Route path='/faq' element={<FAQ/>} />
+          <Route path='/privacy' element={<Privacy />} />
+          <Route path='/term' element={<TermOfUse />} />
+          <Route path='/faq' element={<FAQ />} />
           <Route element={<Auth />}>
             <Route path='/login' element={<Login />} />
             <Route path='/register' element={<Register />} />
