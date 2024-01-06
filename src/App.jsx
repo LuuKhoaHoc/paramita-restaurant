@@ -8,7 +8,8 @@ import {
   Navbar,
   ToggleMode,
   SmallBookTable,
-  SmallGallery
+  SmallGallery,
+  ScrollToTop as ScrollToTopButton
 } from '~/components'
 import { Food1, Food2, HomePic2, Space1, Space2, Space3 } from '~/images'
 import { Box, useThemeModeValue } from '@prismane/core'
@@ -19,6 +20,7 @@ import {
   Promotion,
   PromotionDetail,
   Order,
+  Cart,
   Contact,
   BookTable,
   MenuCategory,
@@ -33,8 +35,11 @@ import {
   Login,
   Register,
   ForgotPassword,
-  Menu
+  Menu,
+  Error,
+  Account
 } from './routes'
+import { CartProvider } from '~/contexts/CartContext'
 
 const imagesGallery = [Space1, Space2, Space3, Food1, Food2, HomePic2]
 
@@ -44,37 +49,47 @@ const App = () => {
   return (
     <Suspense fallback={<Loading />}>
       <Box bg={bgColor} cl={textColor}>
-        <ScrollToTop />
-        <Navbar />
-        <Routes>
-          <Route element={<Addition />}>
-            <Route path='/' index element={<Home />} />
-            <Route path='/about' element={<AboutUs />} />
-            <Route path='/promotion' element={<Promotion />} />
-            <Route path='/promotion/:promotion' element={<PromotionDetail />} />
-            <Route path='/order-online' element={<Order />} />
-            <Route path='/order-online/:category' element={<Order />} />
-            <Route path='/contact' element={<Contact />} />
-            <Route path='/book-table' element={<BookTable />} />
-          </Route>
-          <Route path='/menu' element={<Menu />} />
-          <Route path='/menu/:category' element={<MenuCategory />} />
-          <Route path='/menu/:category/:item' element={<MenuItemDetail />} />
-          <Route path='/album' element={<Album />} />
-          <Route path='/album/:album' element={<AlbumDetail />} />
-          <Route path='/career' element={<Career />} />
-          <Route path='/privacy' element={<Privacy />} />
-          <Route path='/term' element={<TermOfUse />} />
-          <Route path='/faq' element={<FAQ />} />
-          <Route element={<Auth />}>
+        <CartProvider>
+          <ScrollToTop />
+          <Navbar />
+          <Routes>
+            <Route element={<Addition />}>
+              <Route path='/' index element={<Home />} />
+              <Route path='/about' element={<AboutUs />} />
+              <Route path='/promotion' element={<Promotion />} />
+              <Route
+                path='/promotion/:promotion'
+                element={<PromotionDetail />}
+              />
+              <Route path='/order-online' element={<Order />} />
+              <Route path='/order-online/:category' element={<Order />} />
+              <Route path='/contact' element={<Contact />} />
+              <Route path='/book-table' element={<BookTable />} />
+            </Route>
+            <Route path='/menu' element={<Menu />} />
+            <Route path='/menu/:category' element={<MenuCategory />} />
+            <Route path='/menu/:category/:item' element={<MenuItemDetail />} />
+            <Route path='/album' element={<Album />} />
+            <Route path='/album/:album' element={<AlbumDetail />} />
+            <Route path='/career' element={<Career />} />
+            <Route path='/privacy' element={<Privacy />} />
+            <Route path='/term' element={<TermOfUse />} />
+            <Route path='/faq' element={<FAQ />} />
+            <Route element={<Auth />}>
+              <Route path='/account' element={<Account />} />
+              <Route path='/account/*' element={<Account />} />
+              <Route path='/cart' element={<Cart />} />
+              <Route path='/checkout' element={<Cart />} />
+            </Route>
             <Route path='/login' element={<Login />} />
             <Route path='/register' element={<Register />} />
-          </Route>
-          <Route path='/forgot-password' element={<ForgotPassword />} />
-          <Route path='*' element={<Home />} />
-        </Routes>
-        <Footer />
-        <ToggleMode />
+            <Route path='/forgot-password' element={<ForgotPassword />} />
+            <Route path='*' element={<Error />} />
+          </Routes>
+          <Footer />
+          <ScrollToTopButton />
+          <ToggleMode />
+        </CartProvider>
       </Box>
     </Suspense>
   )

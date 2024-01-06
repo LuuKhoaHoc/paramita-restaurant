@@ -13,8 +13,9 @@
     "declaration": true,
     "declarationMap": true,
     "noErrorTruncation": true,
+    "baseUrl": ".",
     "paths": {
-      "~/*": ["./src/*"]
+      "~/*": ["src/*"]
     }
   },
   "include": ["src"],

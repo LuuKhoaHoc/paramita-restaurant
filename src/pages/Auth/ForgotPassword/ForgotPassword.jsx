@@ -6,7 +6,8 @@ import {
   Form,
   PinField,
   Text,
-  TextField
+  TextField,
+  fr
 } from '@prismane/core'
 import { useForm, useScroll } from '@prismane/core/hooks'
 import usernameAndEmail from '~/utils/usernameAndEmail'
@@ -78,7 +79,7 @@ const ForgotPassword = () => {
           bsh={'xl'}
           sx={{
             '.PrismaneTextField-label, .PrismanePinField-label': {
-              fontSize: '20px'
+              fontSize: fr(5)
             }
           }}
         >

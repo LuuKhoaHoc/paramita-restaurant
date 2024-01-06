@@ -7,7 +7,8 @@ import {
   Form,
   PasswordField,
   Text,
-  TextField
+  TextField,
+  fr
 } from '@prismane/core'
 import { useForm, useScroll } from '@prismane/core/hooks'
 import React, { useEffect } from 'react'
@@ -19,6 +20,9 @@ import { z } from 'zod'
 import { Envelope, Password, User } from '@phosphor-icons/react'
 
 const Register = () => {
+  if (sessionStorage.getItem('login') === 'true') {
+    window.location.href = '/'
+  }
   const { scrollToId } = useScroll()
   useEffect(() => {
     scrollToId('register')
@@ -110,10 +114,10 @@ const Register = () => {
           bsh={'xl'}
           sx={{
             '.PrismaneTextField-label, .PrismanePasswordField-label': {
-              fontSize: '20px'
+              fontSize: fr(5)
             },
             '.PrismaneCheckbox-error': {
-              fontSize: '16px'
+              fontSize: fr(4)
             }
           }}
         >

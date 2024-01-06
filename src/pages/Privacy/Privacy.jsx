@@ -4,7 +4,7 @@ import React from 'react'
 const Privacy = () => {
   return (
     <>
-      <Box h={90} bg={['primary', 100]} />
+      <Box h={fr(22.5)} bg={['primary', 100]} />
       <Grid templateColumns={12}>
         <Grid.Item columnStart={4} columnEnd={10}>
           <Flex
@@ -14,7 +14,13 @@ const Privacy = () => {
             my={fr(5)}
             direction='column'
           >
-            <Text as={'h1'} fs={'3xl'} ff={'GeomanistBold'} ta={'center'} tt={'uppercase'}>
+            <Text
+              as={'h1'}
+              fs={'3xl'}
+              ff={'GeomanistBold'}
+              ta={'center'}
+              tt={'uppercase'}
+            >
               Chính sách bảo mật thông tin
             </Text>
             <Text as={'p'} fs={'xl'}>

@@ -1,5 +1,6 @@
 import { Note, Plus, ShoppingCart } from '@phosphor-icons/react'
 import {
+  Alert,
   Box,
   Button,
   Divider,
@@ -10,15 +11,73 @@ import {
   Radio,
   Text,
   TextField,
-  fr
+  fr,
+  useToast
 } from '@prismane/core'
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import { QuantityItem } from '~/components'
+import { CartContext } from '~/contexts/CartContext'
 
 const OrderItem = ({ image, title, price, description }) => {
+  const {addCartItem} = useContext(CartContext)
+  const toast = useToast()
   const [open, setOpen] = useState(false)
   const [selected, setSelected] = useState('yes')
   const [notes, setNotes] = useState('')
+  const [quantity, setQuantity] = useState(1)
+  const handleQuantityChange = (newQuantity) => {
+    setQuantity(newQuantity)
+  }
+  const handleSendItem = () => {
+    const item = {
+      image,
+      title,
+      price,
+      description,
+      quantity,
+      notes,
+      selected
+    }
+    addCartItem(item)
+    toast({
+      element: (
+        <Alert
+          variant='success'
+          ff={'BalihoScript'}
+          sx={{
+            '.PrismaneAlert-text': {
+              fontSize: fr(5)
+            }
+          }}
+        >
+          Đã thêm món vào giỏ hàng thành công
+        </Alert>
+      )
+    })
+    setOpen(false)
+  }
+  const handleOrder = () => {
+    if (sessionStorage.getItem('login') === 'true') {
+      handleSendItem()
+    } else {
+      setOpen(false)
+      toast({
+        element: (
+          <Alert
+            variant='warning'
+            ff={'BalihoScript'}
+            sx={{
+              '.PrismaneAlert-text': {
+                fontSize: fr(5)
+              }
+            }}
+          >
+            Bạn cần đăng nhập để thêm vào giỏ hàng
+          </Alert>
+        )
+      })
+    }
+  }
   return (
     <>
       <Modal
@@ -48,7 +107,7 @@ const OrderItem = ({ image, title, price, description }) => {
         </Text>
         <Flex justify='between' align='center' fs={'lg'} mb={fr(2)}>
           <Text>{price}</Text>
-          <QuantityItem />
+          <QuantityItem onQuantityChange={handleQuantityChange} />
         </Flex>
         <TextField
           placeholder='Ghi chú thêm cho món này'
@@ -79,7 +138,6 @@ const OrderItem = ({ image, title, price, description }) => {
             </Radio.Group>
           </List.Item>
           <Divider />
-          
         </List>
         <Modal.Footer>
           <Button
@@ -89,6 +147,7 @@ const OrderItem = ({ image, title, price, description }) => {
             size='lg'
             br={'full'}
             ff={'GeomanistMedium'}
+            onClick={handleOrder}
           >
             {price} đ - Thêm vào giỏ hàng
           </Button>

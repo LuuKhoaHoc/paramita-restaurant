@@ -4,7 +4,7 @@ import React from 'react'
 const TermOfUse = () => {
   return (
     <>
-      <Box h={90} bg={['primary', 100]} />
+      <Box h={fr(22.5)} bg={['primary', 100]} />
       <Grid templateColumns={12}>
         <Grid.Item columnStart={4} columnEnd={10}>
           <Flex

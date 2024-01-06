@@ -1,9 +1,9 @@
 import { Navigate, Outlet } from 'react-router-dom'
 
 const Auth = () => {
-  const isAuth = false
+  const isAuth = sessionStorage.getItem('login') === 'true'
 
-  return isAuth ? <Navigate to={'/'} /> : <Outlet />
+  return isAuth ? <Outlet /> : <Navigate to={'/login'} />
 }
 
 export default Auth

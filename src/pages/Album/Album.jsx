@@ -22,7 +22,7 @@ const Album = () => {
     {
       image:
         'https://zenhousevietnam.com/wp-content/uploads/2023/10/Hoa-Ai.webp',
-      title: 'Phòng hoá ái'
+      title: 'Phòng hoà ái'
     },
     {
       image:

@@ -72,7 +72,7 @@ const MenuItemDetail = () => {
   }, [state])
   return (
     <Box pos={'relative'} mih={'100vh'}>
-      <Box h={90} w={'100%'} z={-1} bg={['primary', 100]}></Box>
+      <Box h={fr(22.5)} w={'100%'} z={-1} bg={['primary', 100]}></Box>
       <Box
         w={'100%'}
         h={'100%'}

@@ -34,7 +34,7 @@ const AccordionItem = ({ value, control, panel }) => {
 const FAQ = () => {
   return (
     <>
-      <Box h={90} bg={['primary', 100]} />
+      <Box h={fr(22.5)} bg={['primary', 100]} />
       <Grid templateColumns={12}>
         <Grid.Item columnStart={4} columnEnd={10}>
           <Flex
@@ -98,7 +98,9 @@ const FAQ = () => {
               />
               <AccordionItem
                 value={'seventh'}
-                control={'Tôi có thể mang theo thức ăn ngoài vào nhà hàng được không?'}
+                control={
+                  'Tôi có thể mang theo thức ăn ngoài vào nhà hàng được không?'
+                }
                 panel={
                   'Theo chính sách, nhà hàng không cho phép mang thức ăn từ bên ngoài vào. Quý khách vui lòng chỉ dùng các món do nhà hàng phục vụ.'
                 }

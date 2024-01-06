@@ -7,7 +7,8 @@ import {
   Form,
   PasswordField,
   Text,
-  TextField
+  TextField,
+  fr
 } from '@prismane/core'
 import { useAnimation, useForm, useScroll } from '@prismane/core/hooks'
 import p from '~/utils/zodToPrismane'
@@ -16,18 +17,23 @@ import usernameAndEmail from '~/utils/usernameAndEmail'
 import React, { useEffect } from 'react'
 import { LoginPic } from '~/images'
 import { Link } from 'react-router-dom'
-import { Footer, MainPic } from '~/components'
+import { AlertCustom, MainPic } from '~/components'
 import { Password, User } from '@phosphor-icons/react'
 
 const Login = () => {
+  const username = 'paramita'
+  const password = 'paramita'
   const { scrollToId } = useScroll()
+  if (sessionStorage.getItem('login') === 'true') {
+    window.location.href = '/'
+  }
   useEffect(() => scrollToId('login'), [])
   const { animate, animating, duration, timing } = useAnimation(
     true,
     1500,
     'ease-in'
   )
-  const { handleSubmit, handleReset, register } = useForm({
+  const { handleSubmit, handleReset, register, setError } = useForm({
     fields: {
       username: {
         value: '',
@@ -88,10 +94,10 @@ const Login = () => {
             bsh={'xl'}
             sx={{
               '.PrismaneTextField-label, .PrismanePasswordField-label': {
-                fontSize: '20px'
+                fontSize: fr(5)
               },
               '.PrismaneCheckbox-error': {
-                fontSize: '16px'
+                fontSize: fr(4)
               }
             }}
           >
@@ -102,7 +108,18 @@ const Login = () => {
             </Card.Header>
             <Form
               onSubmit={(SubmitEvent) =>
-                handleSubmit(SubmitEvent, (value) => console.log(value))
+                handleSubmit(SubmitEvent, (value) => {
+                  if (
+                    value.username === username &&
+                    value.password === password
+                  ) {
+                    sessionStorage.setItem('login', true)
+                  } else if (value.username !== username) {
+                    setError('username', 'Tài khoản không đúng')
+                  } else if (value.password !== password) {
+                    setError('password', 'Mật khẩu không đúng')
+                  }
+                })
               }
               onReset={handleReset}
               my={30}

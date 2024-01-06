@@ -25,7 +25,7 @@ const AlbumDetail = () => {
     {
       image:
         'https://zenhousevietnam.com/wp-content/uploads/2023/10/Hoa-Ai.webp',
-      title: 'Phòng hoá ái'
+      title: 'Phòng hoà ái'
     },
     {
       image:
@@ -60,11 +60,19 @@ const AlbumDetail = () => {
   ]
   return (
     <>
-      <Box h={90} bg={['primary', 100]} />
+      <Box h={fr(22.5)} bg={['primary', 100]} />
       <Grid templateColumns={12}>
         <Grid.Item columnStart={3} columnEnd={11}>
-          <Flex w={'100%'} ff={'BalihoScript'} gap={fr(5)} my={fr(5)} direction='column'>
-            <Text fs={'2xl'} ff={'GeomanistLight'}>{useLocation().state.title}</Text>
+          <Flex
+            w={'100%'}
+            ff={'BalihoScript'}
+            gap={fr(5)}
+            my={fr(5)}
+            direction='column'
+          >
+            <Text fs={'2xl'} ff={'GeomanistLight'} tt={'capitalize'}>
+              {useLocation().state.title}
+            </Text>
             <LightGallery
               autoplay
               speed={500}

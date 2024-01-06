@@ -24,12 +24,27 @@ const Privacy = lazyWithPreload(() => import('~/pages/Privacy/Privacy'))
 const TermOfUse = lazyWithPreload(() => import('~/pages/TermOfUse/TermOfUse'))
 const FAQ = lazyWithPreload(() => import('~/pages/FAQ/FAQ'))
 const Order = lazyWithPreload(() => import('~/pages/Order/Order'))
+const Cart = lazyWithPreload(() => import('~/pages/Cart/Cart'))
 const Auth = lazyWithPreload(() => import('~/pages/Auth/Auth'))
 const Login = lazyWithPreload(() => import('~/pages/Auth/Login/Login'))
 const Register = lazyWithPreload(() => import('~/pages/Auth/Register/Register'))
 const ForgotPassword = lazyWithPreload(() =>
   import('~/pages/Auth/ForgotPassword/ForgotPassword')
 )
+const Account = lazyWithPreload(() => import('~/pages/Auth/Account/Account'))
+const AccountAddresses = lazyWithPreload(() =>
+  import('~/pages/Auth/Account/AccountAddresses/AccountAddresses')
+)
+const AccountHistory = lazyWithPreload(() =>
+  import('~/pages/Auth/Account/AccountHistory/AccountHistory')
+)
+const AccountOrders = lazyWithPreload(() =>
+  import('~/pages/Auth/Account/AccountOrders/AccountOrders')
+)
+const ChangePassword = lazyWithPreload(() =>
+  import('~/pages/Auth/Account/ChangePassword/ChangePassword')
+)
+const Error = lazyWithPreload(() => import('~/pages/Error/Error'))
 
 export {
   Home,
@@ -48,8 +63,15 @@ export {
   TermOfUse,
   FAQ,
   Order,
+  Cart,
   Auth,
   Login,
   Register,
-  ForgotPassword
+  ForgotPassword,
+  Account,
+  AccountAddresses,
+  AccountHistory,
+  AccountOrders,
+  ChangePassword,
+  Error
 }
