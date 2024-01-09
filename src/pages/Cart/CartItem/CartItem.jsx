@@ -1,15 +1,18 @@
-import { X } from '@phosphor-icons/react'
+import { Gear, X } from '@phosphor-icons/react'
 import {
+  Button,
+  Center,
   Flex,
   Icon,
   Image,
+  Modal,
   NumberField,
   Radio,
   Table,
   Text,
   fr
 } from '@prismane/core'
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useContext, useState } from 'react'
 import { CartContext } from '~/contexts/CartContext'
 
 const CartItem = ({ image, title, price, selected, quantity }) => {
@@ -19,8 +22,50 @@ const CartItem = ({ image, title, price, selected, quantity }) => {
   const handleRemoveItem = (title) => {
     removeCartItem(title)
   }
+  const [open, setOpen] = useState(false)
   return (
     <>
+      <Modal
+        ff={'BalihoScript'}
+        w={fr(144)}
+        open={open}
+        onClose={() => setOpen(false)}
+        closable
+      >
+        <Modal.Header ff={'GeomanistMedium'}>
+          <Text
+            fw='bold'
+            fs='3xl'
+            cl={(theme) =>
+              theme.mode === 'dark' ? ['base', 300] : ['base', 900]
+            }
+          >
+            Tuỳ chọn
+          </Text>
+        </Modal.Header>
+        <Flex w={'100%'} direction='column' px={fr(4)} mx={fr(-4)}>
+          {selected.map((option, index) => (
+            <Flex justify='between' key={index}>
+              <Text fs={'lg'}>{option.title}</Text>
+              <Radio.Group
+                name='answer'
+                value={option.selected}
+                onChange={(e) =>
+                  updateCartItemSelected(title, option.title, e.target.value)
+                }
+              >
+                <Radio value='no' label='Không' />
+                <Radio value='yes' label='Có' />
+              </Radio.Group>
+            </Flex>
+          ))}
+        </Flex>
+        <Modal.Footer>
+          <Button br={'full'} ff={'Geomanist'} size='md' onClick={() => setOpen(false)}>
+            Xác nhận
+          </Button>
+        </Modal.Footer>
+      </Modal>
       <Table.Row>
         <Table.Cell>
           <Flex align='center' gap={fr(2)}>
@@ -35,6 +80,13 @@ const CartItem = ({ image, title, price, selected, quantity }) => {
             <Image src={image} w={fr(20)} h={fr(20)} alt={title} br={'lg'} />
             <Text fs={'lg'}>{title}</Text>
           </Flex>
+        </Table.Cell>
+        <Table.Cell>
+          <Center>
+            <Icon cs={'pointer'} size={fr(5)} onClick={() => setOpen(!open)}>
+              <Gear />
+            </Icon>
+          </Center>
         </Table.Cell>
         <Table.Cell ta={'center'}>
           <Text fs={'lg'}>{price}đ</Text>
@@ -53,21 +105,6 @@ const CartItem = ({ image, title, price, selected, quantity }) => {
           <Text fs={'lg'}>{subtotal.toLocaleString('vi-VN')}đ</Text>
         </Table.Cell>
       </Table.Row>
-      <tr>
-        <td>
-          <Flex gap={fr(4)}>
-            <Text fs={'lg'}>Ngũ vị tân</Text>
-            <Radio.Group
-              name='answer'
-              value={selected}
-              onChange={(e) => updateCartItemSelected(title, e.target.value)}
-            >
-              <Radio value='no' label='Không' />
-              <Radio value='yes' label='Có' />
-            </Radio.Group>
-          </Flex>
-        </td>
-      </tr>
     </>
   )
 }

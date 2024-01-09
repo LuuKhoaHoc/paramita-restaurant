@@ -25,13 +25,16 @@ export const CartProvider = ({ children }) => {
   }, [cartItems])
 
   const addCartItem = (item) => {
-    const existingItem = cartItems.find(
+    const existingItemIndex = cartItems.findIndex(
       (cartItem) => cartItem.title === item.title
     )
-    if (existingItem) {
-      updateCartItemQuantity(item.title, existingItem.quantity + 1)
+
+    if (existingItemIndex !== -1) {
+      const updatedCartItems = [...cartItems]
+      updatedCartItems[existingItemIndex].quantity += 1
+      setCartItems(updatedCartItems)
     } else {
-      setCartItems((prevItems) => [...prevItems, item])
+      setCartItems((prevItems) => [...prevItems, { ...item, quantity: 1 }])
     }
   }
 
@@ -40,30 +43,40 @@ export const CartProvider = ({ children }) => {
       prevItems.filter((item) => item.title !== itemId)
     )
   }
-  const updateCartItemSelected = (title, newSelected) => {
-    const existingItem = cartItems.find((cartItem) => cartItem.title === title)
-    if (existingItem) {
-      setCartItems((prevItems) =>
-        prevItems.map((item) =>
-          item.title === title ? { ...item, selected: newSelected } : item
-        )
+
+  const updateCartItemSelected = (title, selectTitle, select) => {
+    setCartItems((prevItems) =>
+      prevItems.map((item) =>
+        item.title === title
+          ? {
+              ...item,
+              optionList: item.optionList.map((option) =>
+                option.title === selectTitle
+                  ? { ...option, selected: select }
+                  : option
+              )
+            }
+          : item
       )
-    }
+    )
   }
   const updateCartItemQuantity = (title, newQuantity) => {
-    const existingItem = cartItems.find((cartItem) => cartItem.title === title)
-    if (existingItem) {
-      setCartItems((prevItems) =>
-        prevItems.map((item) =>
-          item.title === title ? { ...item, quantity: newQuantity } : item
-        )
+    setCartItems((prevItems) =>
+      prevItems.map((item) =>
+        item.title === title ? { ...item, quantity: newQuantity } : item
       )
-    }
+    )
   }
 
   return (
     <CartContext.Provider
-      value={{ cartItems, addCartItem, removeCartItem, updateCartItemQuantity, updateCartItemSelected }}
+      value={{
+        cartItems,
+        addCartItem,
+        removeCartItem,
+        updateCartItemQuantity,
+        updateCartItemSelected
+      }}
     >
       {children}
     </CartContext.Provider>

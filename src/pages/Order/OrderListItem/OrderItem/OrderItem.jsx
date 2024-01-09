@@ -19,10 +19,23 @@ import { QuantityItem } from '~/components'
 import { CartContext } from '~/contexts/CartContext'
 
 const OrderItem = ({ image, title, price, description }) => {
-  const {addCartItem} = useContext(CartContext)
+  const { addCartItem } = useContext(CartContext)
   const toast = useToast()
   const [open, setOpen] = useState(false)
-  const [selected, setSelected] = useState('yes')
+  const [optionList, setOptionList] = useState([
+    {
+      title: 'Ngũ vị tân',
+      selected: 'no'
+    },
+    {
+      title: 'Dụng cụ ăn',
+      selected: 'no'
+    },
+    {
+      title: 'Gia vị',
+      selected: 'no'
+    }
+  ])
   const [notes, setNotes] = useState('')
   const [quantity, setQuantity] = useState(1)
   const handleQuantityChange = (newQuantity) => {
@@ -36,21 +49,15 @@ const OrderItem = ({ image, title, price, description }) => {
       description,
       quantity,
       notes,
-      selected
+      optionList
     }
     addCartItem(item)
     toast({
       element: (
-        <Alert
-          variant='success'
-          ff={'BalihoScript'}
-          sx={{
-            '.PrismaneAlert-text': {
-              fontSize: fr(5)
-            }
-          }}
-        >
-          Đã thêm món vào giỏ hàng thành công
+        <Alert variant='success' ff={'BalihoScript'}>
+          <Alert.Title fs={'md'} ff={'Geomanist'}>
+            Đã thêm món vào giỏ hàng thành công
+          </Alert.Title>
         </Alert>
       )
     })
@@ -63,16 +70,10 @@ const OrderItem = ({ image, title, price, description }) => {
       setOpen(false)
       toast({
         element: (
-          <Alert
-            variant='warning'
-            ff={'BalihoScript'}
-            sx={{
-              '.PrismaneAlert-text': {
-                fontSize: fr(5)
-              }
-            }}
-          >
-            Bạn cần đăng nhập để thêm vào giỏ hàng
+          <Alert variant='warning' ff={'BalihoScript'}>
+            <Alert.Title fs={'md'} ff={'Geomanist'}>
+              Bạn cần đăng nhập để thêm vào giỏ hàng
+            </Alert.Title>
           </Alert>
         )
       })
@@ -100,6 +101,7 @@ const OrderItem = ({ image, title, price, description }) => {
           bsh={'md'}
           src={image}
           alt={title}
+          mx={'auto'}
         />
         <Text fs={'2xl'}>{title}</Text>
         <Text fs={'lg'} h={fr(20)}>
@@ -126,32 +128,41 @@ const OrderItem = ({ image, title, price, description }) => {
           <Text ml={fr(4)}>Tuỳ chọn</Text>
         </Box>
         <List p={fr(2)}>
-          <List.Item my={fr(2)} justify='between'>
-            <Text fs={'lg'}>Ngũ vị tân</Text>
-            <Radio.Group
-              name='answer'
-              value={selected}
-              onChange={(e) => setSelected(e.target.value)}
-            >
-              <Radio value='no' label='Không' />
-              <Radio value='yes' label='Có' />
-            </Radio.Group>
-          </List.Item>
+          {optionList.map((option, index) => (
+            <List.Item key={index} my={fr(2)} justify='between'>
+              <Text fs={'lg'}>{option.title}</Text>
+              <Radio.Group
+                name='answer'
+                value={option.selected}
+                onChange={(e) =>
+                  setOptionList(
+                    optionList.map((item, i) => {
+                      if (i === index) {
+                        return { ...item, selected: e.target.value }
+                      }
+                      return item
+                    })
+                  )
+                }
+              >
+                <Radio value='no' label='Không' />
+                <Radio value='yes' label='Có' />
+              </Radio.Group>
+            </List.Item>
+          ))}
           <Divider />
         </List>
-        <Modal.Footer>
-          <Button
-            full
-            shadow
-            icon={<ShoppingCart weight='bold' />}
-            size='lg'
-            br={'full'}
-            ff={'GeomanistMedium'}
-            onClick={handleOrder}
-          >
-            {price} đ - Thêm vào giỏ hàng
-          </Button>
-        </Modal.Footer>
+        <Button
+          full
+          shadow
+          icon={<ShoppingCart weight='bold' />}
+          size='lg'
+          br={'full'}
+          ff={'GeomanistMedium'}
+          onClick={handleOrder}
+        >
+          {price} đ - Thêm vào giỏ hàng
+        </Button>
       </Modal>
       <Flex
         direction='column'

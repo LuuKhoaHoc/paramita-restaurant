@@ -1,4 +1,5 @@
 import { Routes, Route, Outlet } from 'react-router-dom'
+import { Box, useThemeModeValue } from '@prismane/core'
 import React, { Suspense } from 'react'
 // utils
 import ScrollToTop from '~/utils/ScrollToTop'
@@ -12,7 +13,6 @@ import {
   ScrollToTop as ScrollToTopButton
 } from '~/components'
 import { Food1, Food2, HomePic2, Space1, Space2, Space3 } from '~/images'
-import { Box, useThemeModeValue } from '@prismane/core'
 // routes
 import {
   Home,
@@ -37,8 +37,9 @@ import {
   ForgotPassword,
   Menu,
   Error,
-  Account
-} from './routes'
+  Account,
+  Checkout
+} from '~/routes'
 import { CartProvider } from '~/contexts/CartContext'
 
 const imagesGallery = [Space1, Space2, Space3, Food1, Food2, HomePic2]
@@ -79,7 +80,7 @@ const App = () => {
               <Route path='/account' element={<Account />} />
               <Route path='/account/*' element={<Account />} />
               <Route path='/cart' element={<Cart />} />
-              <Route path='/checkout' element={<Cart />} />
+              <Route path='/checkout' element={<Checkout />} />
             </Route>
             <Route path='/login' element={<Login />} />
             <Route path='/register' element={<Register />} />

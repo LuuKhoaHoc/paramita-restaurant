@@ -241,7 +241,6 @@ const Navbar = () => {
                       pos={'absolute'}
                       t={fr(15)}
                       open={menuOpen}
-                      bg={bgColor}
                     >
                       <Menu.Label color={textColor}>Tài Khoản</Menu.Label>
                       <Menu.Item
