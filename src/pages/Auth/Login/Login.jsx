@@ -109,11 +109,23 @@ const Login = () => {
             <Form
               onSubmit={(SubmitEvent) =>
                 handleSubmit(SubmitEvent, (value) => {
+                  // Kiểm tra nếu đúng thông tin sẽ lưu vào sessionStorage
                   if (
                     value.username === username &&
                     value.password === password
                   ) {
                     sessionStorage.setItem('login', true)
+                    // Lấy dữ diệu từ DB lưu vào sessionStorage để sử dụng ở các trang khác
+                    sessionStorage.setItem(
+                      'checkout-information',
+                      JSON.stringify({
+                        address: '',
+                        name: 'paramita',
+                        phone: '0987654321',
+                        payment: 'tien-mat',
+                        notes: ''
+                      })
+                    )
                   } else if (value.username !== username) {
                     setError('username', 'Tài khoản không đúng')
                   } else if (value.password !== password) {

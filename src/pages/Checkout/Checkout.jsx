@@ -15,12 +15,13 @@ import {
   TextField,
   fr
 } from '@prismane/core'
-import { useForm, useSearch } from '@prismane/core/hooks'
 import CheckoutCart from '~/pages/Checkout/CheckoutCart/CheckoutCart'
 import CheckoutShipping from '~/pages/Checkout/CheckoutShipping/CheckoutShipping'
-import React from 'react'
+import CheckoutPayment from '~/pages/Checkout/CheckoutPayment/CheckoutPayment'
+import React, { useEffect } from 'react'
 
 const Checkout = () => {
+
   return (
     <Box pos={'relative'} mih={'100vh'}>
       <Box h={fr(22.5)} w={'100%'} z={-1} bg={['primary', 100]}></Box>
@@ -61,7 +62,9 @@ const Checkout = () => {
                   <Tabs.Panel value='first' direction='column'>
                     <CheckoutShipping />
                   </Tabs.Panel>
-                  <Tabs.Panel value='second'>Second</Tabs.Panel>
+                  <Tabs.Panel value='second'>
+                    <CheckoutPayment />
+                  </Tabs.Panel>
                   <Tabs.Panel value='third'>Third</Tabs.Panel>
                 </Tabs>
               </Flex>

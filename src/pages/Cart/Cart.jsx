@@ -52,6 +52,13 @@ const Cart = () => {
                   </Table.Row>
                 </Table.Head>
                 <Table.Body>
+                  {data.length === 0 && (
+                    <Table.Row>
+                      <Table.Cell colSpan={5} ta={'center'} fs={'lg'}>
+                        Không có sản phẩm nào trong giỏ hàng
+                      </Table.Cell>
+                    </Table.Row>
+                  )}
                   {data.map((item, index) => (
                     <CartItem
                       key={index}
@@ -62,15 +69,6 @@ const Cart = () => {
                       quantity={item.quantity}
                     />
                   ))}
-                  {data.length === 0 && (
-                    <Table.Row>
-                      <Table.Cell colSpan={4} ta={'center'}>
-                        <Text fs={'lg'}>
-                          Không có sản phẩm nào trong giỏ hàng
-                        </Text>
-                      </Table.Cell>
-                    </Table.Row>
-                  )}
                 </Table.Body>
               </Table>
               <Divider />

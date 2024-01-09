@@ -11,9 +11,12 @@ import {
   fr
 } from '@prismane/core'
 import { useForm, useSearch } from '@prismane/core/hooks'
-import React from 'react'
+import React, { useEffect } from 'react'
 
 const CheckoutShipping = () => {
+  const checkoutInformation = JSON.parse(
+    sessionStorage.getItem('checkout-information')
+  )
   const { handleSubmit, handleReset, register } = useForm({
     fields: {
       address: {
@@ -39,8 +42,16 @@ const CheckoutShipping = () => {
     localStorage.setItem('address-history', JSON.stringify(addressHistory))
   }
   const { query, setQuery, filtered } = useSearch(addressHistory)
+  const handleSetAddress = (v) => {
+    checkoutInformation.address = v
+    sessionStorage.setItem(
+      'checkout-information',
+      JSON.stringify(checkoutInformation)
+    )
+  }
   const handleSetInput = (e) => {
     setQuery(e.target.innerText)
+    handleSetAddress(e.target.innerText)
   }
   const handleSetInputByForm = (value) => {
     const { address, district, province } = value
@@ -48,8 +59,12 @@ const CheckoutShipping = () => {
     const valueString = `${address}, ${district}, ${province}`
     setQuery(valueString)
     addAddress(valueString)
+    handleSetAddress(valueString)
     handleReset()
   }
+  useEffect(() => {
+    setQuery(checkoutInformation?.address)
+  }, [])
   return (
     <>
       <Center w={'100%'} h={'fit-content'} my={fr(4)}>

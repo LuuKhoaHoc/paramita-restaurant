@@ -16,11 +16,11 @@ import { CountDown } from '~/components'
 import { CartContext } from '~/contexts/CartContext'
 const CheckoutCart = () => {
   const { cartItems, removeCartItem } = useContext(CartContext)
-  if (cartItems.length === 0) {
-    setTimeout(() => {
-      window.location.href = '/order-online'
-    }, 5000)
-  }
+  // if (cartItems.length === 0) {
+  //   setTimeout(() => {
+  //     window.location.href = '/order-online'
+  //   }, 5000)
+  // }
   return (
     <>
       <Flex w={'100%'} justify='between'>
@@ -82,7 +82,6 @@ const CheckoutCart = () => {
           fs={'xl'}
           ff={'GeomanistMedium'}
           cl={'primary'}
-          as={'p'}
           m={fr(4)}
           pos={['relative', { ':before': 'absolute' }]}
           sx={{
