@@ -49,13 +49,13 @@ const Checkout = () => {
               >
                 <Tabs defaultValue='first'>
                   <Tabs.List justify='end' ff={'Geomanist'}>
-                    <Tabs.Tab px={fr(10)} py={fr(4)} value='first'>
+                    <Tabs.Tab px={fr(6)} py={fr(4)} value='first'>
                       Vận chuyển
                     </Tabs.Tab>
-                    <Tabs.Tab px={fr(10)} py={fr(4)} value='second'>
+                    <Tabs.Tab px={fr(6)} py={fr(4)} value='second'>
                       Thanh toán
                     </Tabs.Tab>
-                    <Tabs.Tab px={fr(10)} py={fr(4)} value='third'>
+                    <Tabs.Tab px={fr(6)} py={fr(4)} value='third'>
                       Xác nhận
                     </Tabs.Tab>
                   </Tabs.List>
