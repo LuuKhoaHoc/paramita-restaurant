@@ -16,7 +16,7 @@ const PromotionDetail = () => {
   const array = cutStringToArray(strings)
   return (
     <>
-      <Box h={fr(22.5)} bg={['primary', 100]} />
+      <Box h={fr(22.5)} bg='#371b04' />
       <Grid templateColumns={12}>
         <Grid.Item columnStart={3} columnEnd={11}>
           <Flex w={'100%'} ff={'BalihoScript'} my={fr(5)}>

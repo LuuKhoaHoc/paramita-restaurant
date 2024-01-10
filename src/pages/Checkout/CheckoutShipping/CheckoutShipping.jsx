@@ -75,10 +75,12 @@ const CheckoutShipping = () => {
             value={query}
             onChange={(e) => setQuery(e.target.value)}
           />
-          <List mah={fr(38)} of={'auto'}>
+          <List mah={fr(38)} of={'auto'} 
+          >
             {accountAddress.map((item, index) => (
               <List.Item
                 key={index}
+                cl={theme => theme.mode === 'dark' ? 'white' : 'black'}
                 onClick={handleSetInput}
                 fs={'md'}
                 bg={['transparent', { hover: ['base', 100] }]}
@@ -101,7 +103,7 @@ const CheckoutShipping = () => {
               >
                 <Button
                   variant='text'
-                  cl={'secondary'}
+
                   icon={<ClockCounterClockwise />}
                 >
                   {item}{' '}

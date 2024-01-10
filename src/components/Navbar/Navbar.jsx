@@ -77,14 +77,16 @@ const Navbar = () => {
   // Hàm xử lý navbar khi scroll
   const handleScroll = () => {
     const header = document.getElementById('header')
+    const accountSide = document.getElementById('account-side')
+
     if (document.documentElement.scrollTop > 10) {
-      header.style.boxShadow =
-        '0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1)'
-      header.style.backdropFilter = 'blur(10px)'
-    } else if (document.documentElement.scrollTop > innerHeight) {
-    } else {
+      header.style.backgroundColor = '#371b04'
+    }
+    if (document.documentElement.scrollTop < 10) {
       header.style.boxShadow = 'none'
       header.style.backdropFilter = 'none'
+      header.style.backgroundColor = 'transparent'
+      header.style.color = 'white'
     }
   }
 
@@ -99,6 +101,7 @@ const Navbar = () => {
       id='header'
       templateColumns={12}
       w={'100%'}
+      cl={'#fff'}
       h={'max-content'}
       pos={'fixed'}
       t={0}
@@ -113,32 +116,17 @@ const Navbar = () => {
             h={fr(22.5)}
             fs={'lg'}
           >
-            <Box
-              cs={'pointer'}
-              bg={'#371B04'}
-              sx={{
-                borderBottomLeftRadius: '16px',
-                borderBottomRightRadius: '16px'
-              }}
-            >
-              <NavLink to={'/'} onMouseOver={() => Home.preload()}>
-                <Center w={160} h={'100%'}>
-                  <Image
-                    w={130}
-                    src={LogoText}
-                    alt='Paramita Logo'
-                    fit='contain'
-                  />
-                </Center>
-              </NavLink>
-            </Box>
+            <NavLink to={'/'} onMouseOver={() => Home.preload()}>
+              <Center w={160} h={'100%'}>
+                <Image w={160} src={LogoText} alt='Paramita Logo' fit='cover' />
+              </Center>
+            </NavLink>
             <Box w={'100%'}>
               <Flex justify='around' align='center' h={'100%'}>
                 <Box
                   td={'none'}
                   bg={['transparent', { ':before': 'primary' }]}
                   pos={['relative', { ':before': 'absolute' }]}
-                  cl={['#fff', { hover: ['primary', 100] }]}
                   sx={lineAnimation}
                 >
                   <NavLink to={'/about'} onMouseOver={() => AboutUs.preload()}>
@@ -149,7 +137,6 @@ const Navbar = () => {
                   td={'none'}
                   bg={['transparent', { ':before': 'primary' }]}
                   pos={['relative', { ':before': 'absolute' }]}
-                  cl={['#fff', { hover: ['primary', 100] }]}
                   sx={lineAnimation}
                 >
                   <NavLink
@@ -163,7 +150,6 @@ const Navbar = () => {
                   td={'none'}
                   bg={['transparent', { ':before': 'primary' }]}
                   pos={['relative', { ':before': 'absolute' }]}
-                  cl={['#fff', { hover: ['primary', 100] }]}
                   sx={lineAnimation}
                 >
                   <NavLink
@@ -177,7 +163,6 @@ const Navbar = () => {
                   td={'none'}
                   bg={['transparent', { ':before': 'primary' }]}
                   pos={['relative', { ':before': 'absolute' }]}
-                  cl={['#fff', { hover: ['primary', 100] }]}
                   sx={lineAnimation}
                 >
                   <NavLink
@@ -191,7 +176,6 @@ const Navbar = () => {
                   td={'none'}
                   bg={['transparent', { ':before': 'primary' }]}
                   pos={['relative', { ':before': 'absolute' }]}
-                  cl={['#fff', { hover: ['primary', 100] }]}
                   sx={lineAnimation}
                 >
                   <NavLink to={'/menu'} onMouseOver={() => Menus.preload()}>
@@ -202,7 +186,6 @@ const Navbar = () => {
                   td={'none'}
                   bg={['transparent', { ':before': 'primary' }]}
                   pos={['relative', { ':before': 'absolute' }]}
-                  cl={['#fff', { hover: ['primary', 100] }]}
                   sx={lineAnimation}
                 >
                   <NavLink
@@ -216,11 +199,11 @@ const Navbar = () => {
             </Box>
             {login ? (
               <>
-                <Center gap={fr(10)}>
+                <Center id='account-side' gap={fr(10)} cl={'#fff'}>
                   <Box>
                     <Link to={'/cart'}>
                       <Badge label={itemCount} size='sm' cl={'#fff'}>
-                        <Icon cl={'#fff'}>
+                        <Icon>
                           <ShoppingCartSimple weight='fill' />
                         </Icon>
                       </Badge>
@@ -229,7 +212,6 @@ const Navbar = () => {
                   <Flex direction='column' gap={fr(2)}>
                     <Box>
                       <Icon
-                        cl={'#fff'}
                         onClick={() => setMenuOpen(!menuOpen)}
                         cs={'pointer'}
                       >
@@ -242,7 +224,7 @@ const Navbar = () => {
                       t={fr(15)}
                       open={menuOpen}
                     >
-                      <Menu.Label color={textColor}>Tài Khoản</Menu.Label>
+                      <Menu.Label>Tài Khoản</Menu.Label>
                       <Menu.Item
                         align='center'
                         as={Link}
@@ -283,7 +265,7 @@ const Navbar = () => {
                         </Center>
                       </Menu.Item>
                       <Divider />
-                      <Menu.Label color={textColor}>Danger Zone</Menu.Label>
+                      <Menu.Label>Danger Zone</Menu.Label>
                       <Menu.Item
                         color='red'
                         align='center'

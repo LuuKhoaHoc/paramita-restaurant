@@ -18,13 +18,13 @@ import {
 import CheckoutCart from '~/pages/Checkout/CheckoutCart/CheckoutCart'
 import CheckoutShipping from '~/pages/Checkout/CheckoutShipping/CheckoutShipping'
 import CheckoutPayment from '~/pages/Checkout/CheckoutPayment/CheckoutPayment'
+import CheckoutReview from '~/pages/Checkout/CheckoutReview/CheckoutReview'
 import React, { useEffect } from 'react'
 
 const Checkout = () => {
-
   return (
     <Box pos={'relative'} mih={'100vh'}>
-      <Box h={fr(22.5)} w={'100%'} z={-1} bg={['primary', 100]}></Box>
+      <Box h={fr(22.5)} bg='#371b04' />
       <Box
         w={'100%'}
         h={'100%'}
@@ -65,7 +65,9 @@ const Checkout = () => {
                   <Tabs.Panel value='second'>
                     <CheckoutPayment />
                   </Tabs.Panel>
-                  <Tabs.Panel value='third'>Third</Tabs.Panel>
+                  <Tabs.Panel value='third'>
+                    <CheckoutReview />
+                  </Tabs.Panel>
                 </Tabs>
               </Flex>
               <Flex

@@ -14,7 +14,7 @@ import HistoryRewardPoint from '~/pages/Auth/Account/HistoryRewardPoint/HistoryR
 const Account = () => {
   return (
     <Box pos={'relative'} mih={'100vh'}>
-      <Box h={fr(22.5)} w={'100%'} z={-1} bg={['primary', 100]}></Box>
+      <Box h={fr(22.5)} bg='#371b04' />
       <Box
         w={'100%'}
         h={'100%'}

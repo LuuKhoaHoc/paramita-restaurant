@@ -61,7 +61,12 @@ const CartItem = ({ image, title, price, selected, quantity }) => {
           ))}
         </Flex>
         <Modal.Footer>
-          <Button br={'full'} ff={'Geomanist'} size='md' onClick={() => setOpen(false)}>
+          <Button
+            br={'full'}
+            ff={'Geomanist'}
+            size='md'
+            onClick={() => setOpen(false)}
+          >
             Xác nhận
           </Button>
         </Modal.Footer>
@@ -93,6 +98,7 @@ const CartItem = ({ image, title, price, selected, quantity }) => {
         </Table.Cell>
         <Table.Cell ta={'center'}>
           <NumberField
+            w={'fit-content'}
             value={quantity}
             onChange={(e) => {
               const newQuantity = +e.target.value
