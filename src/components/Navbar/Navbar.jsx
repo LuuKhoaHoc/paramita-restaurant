@@ -13,7 +13,8 @@ import {
   fr,
   Menu,
   Divider,
-  Badge
+  Badge,
+  Drawer
 } from '@prismane/core'
 // img
 import { LogoText } from '~/images'
@@ -22,6 +23,7 @@ import lazyWithPreload from 'react-lazy-with-preload'
 import { useEffect, useState, useContext } from 'react'
 import {
   ClockCountdown,
+  List,
   ListChecks,
   ShoppingCartSimple,
   SignOut,
@@ -38,8 +40,11 @@ const Order = lazyWithPreload(() => import('~/pages/Order/Order'))
 const Login = lazyWithPreload(() => import('~/pages/Auth/Login/Login'))
 
 import { CartContext } from '~/contexts/CartContext'
+import { useMediaQuery } from '@prismane/core/hooks'
 
 const Navbar = () => {
+  const isMobile = useMediaQuery('(max-width: 768px)')
+  const isTablet = useMediaQuery('(min-width: 769px) and (max-width: 1280px)')
   // Số lượng item trong cart
   const { cartItems } = useContext(CartContext)
   const itemCount = cartItems.reduce((total, item) => total + item.quantity, 0)
@@ -47,6 +52,8 @@ const Navbar = () => {
   const [login, setLogin] = useState(false)
   // State cho menu
   const [menuOpen, setMenuOpen] = useState(false)
+  // State cho drawer
+  const [right, setRight] = useState(false)
   useEffect(() => {
     if (
       sessionStorage.getItem('login') === 'true' ||
@@ -92,7 +99,7 @@ const Navbar = () => {
   const handleLogout = () => {
     sessionStorage.clear()
     localStorage.removeItem('orders')
-    localStorage.removeItem('ordersSuccess')
+    localStorage.removeItem('orderSuccess')
     localStorage.removeItem('login')
     setLogin(false)
   }
@@ -117,191 +124,250 @@ const Navbar = () => {
             h={fr(22.5)}
             fs={'lg'}
           >
-            <NavLink to={'/'} onMouseOver={() => Home.preload()}>
-              <Center w={160} h={'100%'}>
-                <Image w={160} src={LogoText} alt='Paramita Logo' fit='cover' />
-              </Center>
-            </NavLink>
-            <Box w={'100%'}>
-              <Flex justify='around' align='center' h={'100%'}>
-                <Box
-                  td={'none'}
-                  cl={['inherit', { hover: ['primary', 100] }]}
-                  bg={['transparent', { ':before': 'primary' }]}
-                  pos={['relative', { ':before': 'absolute' }]}
-                  sx={lineAnimation}
-                >
-                  <NavLink to={'/about'} onMouseOver={() => AboutUs.preload()}>
-                    Tìm hiểu
-                  </NavLink>
-                </Box>
-                <Box
-                  td={'none'}
-                  cl={['inherit', { hover: ['primary', 100] }]}
-                  bg={['transparent', { ':before': 'primary' }]}
-                  pos={['relative', { ':before': 'absolute' }]}
-                  sx={lineAnimation}
-                >
-                  <NavLink
-                    to={'/promotion'}
-                    onMouseOver={() => Promotion.preload()}
-                  >
-                    Khuyến mãi{' '}
-                  </NavLink>
-                </Box>
-                <Box
-                  td={'none'}
-                  cl={['inherit', { hover: ['primary', 100] }]}
-                  bg={['transparent', { ':before': 'primary' }]}
-                  pos={['relative', { ':before': 'absolute' }]}
-                  sx={lineAnimation}
-                >
-                  <NavLink
-                    to={'/book-table'}
-                    onMouseOver={() => BookTable.preload()}
-                  >
-                    Đặt bàn{' '}
-                  </NavLink>
-                </Box>
-                <Box
-                  td={'none'}
-                  cl={['inherit', { hover: ['primary', 100] }]}
-                  bg={['transparent', { ':before': 'primary' }]}
-                  pos={['relative', { ':before': 'absolute' }]}
-                  sx={lineAnimation}
-                >
-                  <NavLink
-                    to={'/order-online'}
-                    onMouseOver={() => Order.preload()}
-                  >
-                    Đặt hàng{' '}
-                  </NavLink>
-                </Box>
-                <Box
-                  td={'none'}
-                  cl={['inherit', { hover: ['primary', 100] }]}
-                  bg={['transparent', { ':before': 'primary' }]}
-                  pos={['relative', { ':before': 'absolute' }]}
-                  sx={lineAnimation}
-                >
-                  <NavLink to={'/menu'} onMouseOver={() => Menus.preload()}>
-                    Thực đơn{' '}
-                  </NavLink>
-                </Box>
-                <Box
-                  td={'none'}
-                  cl={['inherit', { hover: ['primary', 100] }]}
-                  bg={['transparent', { ':before': 'primary' }]}
-                  pos={['relative', { ':before': 'absolute' }]}
-                  sx={lineAnimation}
-                >
-                  <NavLink
-                    to={'/contact'}
-                    onMouseOver={() => Contact.preload()}
-                  >
-                    Liên hệ
-                  </NavLink>
-                </Box>
-              </Flex>
-            </Box>
-            {login ? (
+            {isTablet || isMobile ? (
               <>
-                <Center id='account-side' gap={fr(10)} cl={'#fff'}>
-                  <Box>
-                    <Link to={'/cart'}>
-                      <Badge label={itemCount} size='sm' cl={'#fff'}>
-                        <Icon>
-                          <ShoppingCartSimple weight='fill' />
-                        </Icon>
-                      </Badge>
-                    </Link>
-                  </Box>
-                  <Flex direction='column' gap={fr(2)}>
-                    <Box>
-                      <Icon
-                        onClick={() => setMenuOpen(!menuOpen)}
-                        cs={'pointer'}
-                      >
-                        <User weight='fill' />
-                      </Icon>
-                    </Box>
-                    <Menu
-                      w={fr(46)}
-                      pos={'absolute'}
-                      t={fr(15)}
-                      open={menuOpen}
-                    >
-                      <Menu.Label>Tài Khoản</Menu.Label>
-                      <Menu.Item
-                        align='center'
-                        as={Link}
-                        onClick={() => setMenuOpen(!menuOpen)}
-                        to={'/account/information'}
-                      >
-                        <Center justify='start' gap={fr(2)}>
-                          <Menu.Icon>
-                            <User />
-                          </Menu.Icon>
-                          Thông tin cá nhân
-                        </Center>
-                      </Menu.Item>
-                      <Menu.Item
-                        align='center'
-                        as={Link}
-                        onClick={() => setMenuOpen(!menuOpen)}
-                        to={'/account/orders'}
-                      >
-                        <Center justify='start' gap={fr(2)}>
-                          <Menu.Icon>
-                            <ListChecks />
-                          </Menu.Icon>
-                          Đơn hàng
-                        </Center>
-                      </Menu.Item>
-                      <Menu.Item
-                        align='center'
-                        as={Link}
-                        onClick={() => setMenuOpen(!menuOpen)}
-                        to={'/account/history-purchase'}
-                      >
-                        <Center justify='start' gap={fr(2)}>
-                          <Menu.Icon>
-                            <ClockCountdown />
-                          </Menu.Icon>
-                          Lịch sử mua hàng
-                        </Center>
-                      </Menu.Item>
-                      <Divider />
-                      <Menu.Label>Danger Zone</Menu.Label>
-                      <Menu.Item
-                        color='red'
-                        align='center'
-                        onClick={handleLogout}
-                      >
-                        <Menu.Icon>
-                          <SignOut />
-                        </Menu.Icon>
-                        Đăng xuất
-                      </Menu.Item>
-                    </Menu>
-                  </Flex>
-                </Center>
+                {isMobile ? (
+                  <Drawer
+                    open={right}
+                    closable
+                    onClose={() => setRight(false)}
+                    position='right'
+                    size={'xs'}
+                  >
+                    Press Esc key to close the Drawer. Or just click the
+                    backdrop.
+                  </Drawer>
+                ) : (
+                  <Drawer
+                    open={right}
+                    closable
+                    onClose={() => setRight(false)}
+                    position='right'
+                    size={'sm'}
+                  >
+                    Press Esc key to close the Drawer. Or just click the
+                    backdrop.
+                  </Drawer>
+                )}
+                <Flex align='center' justify='start'>
+                  <NavLink to={'/'} onMouseOver={() => Home.preload()}>
+                    <Center w={140} h={'100%'}>
+                      <Image
+                        w={'inherit'}
+                        src={LogoText}
+                        alt='Paramita Logo'
+                        fit='cover'
+                      />
+                    </Center>
+                  </NavLink>
+                </Flex>
+                <Flex align='center' justify='end'>
+                  <Icon
+                    size={fr(10)}
+                    cs={'pointer'}
+                    onClick={() => setRight(true)}
+                  >
+                    <List weight='bold' />
+                  </Icon>
+                </Flex>
               </>
             ) : (
-              <Box>
-                <Link to={'/login'} onMouseOver={() => Login.preload()}>
-                  <Center h={'100%'} w={'max-content'}>
-                    <Button
-                      variant='primary'
-                      ff={"'GeomanistMedium', sans-serif"}
-                      size='lg'
-                      br={'full'}
-                    >
-                      Đăng nhập
-                    </Button>
+              <>
+                <NavLink to={'/'} onMouseOver={() => Home.preload()}>
+                  <Center w={160} h={'100%'}>
+                    <Image
+                      w={160}
+                      src={LogoText}
+                      alt='Paramita Logo'
+                      fit='cover'
+                    />
                   </Center>
-                </Link>
-              </Box>
+                </NavLink>
+                <Box w={'100%'}>
+                  <Flex justify='around' align='center' h={'100%'}>
+                    <Box
+                      td={'none'}
+                      cl={['inherit', { hover: ['primary', 100] }]}
+                      bg={['transparent', { ':before': 'primary' }]}
+                      pos={['relative', { ':before': 'absolute' }]}
+                      sx={lineAnimation}
+                    >
+                      <NavLink
+                        to={'/about'}
+                        onMouseOver={() => AboutUs.preload()}
+                      >
+                        Tìm hiểu
+                      </NavLink>
+                    </Box>
+                    <Box
+                      td={'none'}
+                      cl={['inherit', { hover: ['primary', 100] }]}
+                      bg={['transparent', { ':before': 'primary' }]}
+                      pos={['relative', { ':before': 'absolute' }]}
+                      sx={lineAnimation}
+                    >
+                      <NavLink
+                        to={'/promotion'}
+                        onMouseOver={() => Promotion.preload()}
+                      >
+                        Khuyến mãi{' '}
+                      </NavLink>
+                    </Box>
+                    <Box
+                      td={'none'}
+                      cl={['inherit', { hover: ['primary', 100] }]}
+                      bg={['transparent', { ':before': 'primary' }]}
+                      pos={['relative', { ':before': 'absolute' }]}
+                      sx={lineAnimation}
+                    >
+                      <NavLink
+                        to={'/book-table'}
+                        onMouseOver={() => BookTable.preload()}
+                      >
+                        Đặt bàn{' '}
+                      </NavLink>
+                    </Box>
+                    <Box
+                      td={'none'}
+                      cl={['inherit', { hover: ['primary', 100] }]}
+                      bg={['transparent', { ':before': 'primary' }]}
+                      pos={['relative', { ':before': 'absolute' }]}
+                      sx={lineAnimation}
+                    >
+                      <NavLink
+                        to={'/order-online'}
+                        onMouseOver={() => Order.preload()}
+                      >
+                        Đặt hàng{' '}
+                      </NavLink>
+                    </Box>
+                    <Box
+                      td={'none'}
+                      cl={['inherit', { hover: ['primary', 100] }]}
+                      bg={['transparent', { ':before': 'primary' }]}
+                      pos={['relative', { ':before': 'absolute' }]}
+                      sx={lineAnimation}
+                    >
+                      <NavLink to={'/menu'} onMouseOver={() => Menus.preload()}>
+                        Thực đơn{' '}
+                      </NavLink>
+                    </Box>
+                    <Box
+                      td={'none'}
+                      cl={['inherit', { hover: ['primary', 100] }]}
+                      bg={['transparent', { ':before': 'primary' }]}
+                      pos={['relative', { ':before': 'absolute' }]}
+                      sx={lineAnimation}
+                    >
+                      <NavLink
+                        to={'/contact'}
+                        onMouseOver={() => Contact.preload()}
+                      >
+                        Liên hệ
+                      </NavLink>
+                    </Box>
+                  </Flex>
+                </Box>
+                {login ? (
+                  <>
+                    <Center id='account-side' gap={fr(10)} cl={'#fff'}>
+                      <Box>
+                        <Link to={'/cart'}>
+                          <Badge label={itemCount} size='sm' cl={'#fff'}>
+                            <Icon>
+                              <ShoppingCartSimple weight='fill' />
+                            </Icon>
+                          </Badge>
+                        </Link>
+                      </Box>
+                      <Flex direction='column' gap={fr(2)}>
+                        <Box>
+                          <Icon
+                            onClick={() => setMenuOpen(!menuOpen)}
+                            cs={'pointer'}
+                          >
+                            <User weight='fill' />
+                          </Icon>
+                        </Box>
+                        <Menu
+                          w={fr(46)}
+                          pos={'absolute'}
+                          t={fr(15)}
+                          open={menuOpen}
+                        >
+                          <Menu.Label>Tài Khoản</Menu.Label>
+                          <Menu.Item
+                            align='center'
+                            as={Link}
+                            onClick={() => setMenuOpen(!menuOpen)}
+                            to={'/account/information'}
+                          >
+                            <Center justify='start' gap={fr(2)}>
+                              <Menu.Icon>
+                                <User />
+                              </Menu.Icon>
+                              Thông tin cá nhân
+                            </Center>
+                          </Menu.Item>
+                          <Menu.Item
+                            align='center'
+                            as={Link}
+                            onClick={() => setMenuOpen(!menuOpen)}
+                            to={'/account/orders'}
+                          >
+                            <Center justify='start' gap={fr(2)}>
+                              <Menu.Icon>
+                                <ListChecks />
+                              </Menu.Icon>
+                              Đơn hàng
+                            </Center>
+                          </Menu.Item>
+                          <Menu.Item
+                            align='center'
+                            as={Link}
+                            onClick={() => setMenuOpen(!menuOpen)}
+                            to={'/account/history-purchase'}
+                          >
+                            <Center justify='start' gap={fr(2)}>
+                              <Menu.Icon>
+                                <ClockCountdown />
+                              </Menu.Icon>
+                              Lịch sử mua hàng
+                            </Center>
+                          </Menu.Item>
+                          <Divider />
+                          <Menu.Label>Danger Zone</Menu.Label>
+                          <Menu.Item
+                            color='red'
+                            align='center'
+                            onClick={handleLogout}
+                          >
+                            <Menu.Icon>
+                              <SignOut />
+                            </Menu.Icon>
+                            Đăng xuất
+                          </Menu.Item>
+                        </Menu>
+                      </Flex>
+                    </Center>
+                  </>
+                ) : (
+                  <Box>
+                    <Link to={'/login'} onMouseOver={() => Login.preload()}>
+                      <Center h={'100%'} w={'max-content'}>
+                        <Button
+                          variant='primary'
+                          ff={"'GeomanistMedium', sans-serif"}
+                          size='lg'
+                          br={'full'}
+                        >
+                          Đăng nhập
+                        </Button>
+                      </Center>
+                    </Link>
+                  </Box>
+                )}
+              </>
             )}
           </Flex>
         </Header>

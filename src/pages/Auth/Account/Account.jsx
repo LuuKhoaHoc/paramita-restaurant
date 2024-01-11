@@ -38,6 +38,7 @@ const Account = () => {
                 <Route path='history-purchase' element={<AccountHistory />} />
                 <Route path='history-point' element={<HistoryRewardPoint />} />
                 <Route path='change-password' element={<ChangePassword />} />
+                <Route path='*' element={<AccountInformation />} />
               </Routes>
             </Flex>
           </Grid.Item>

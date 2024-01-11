@@ -14,12 +14,20 @@ import { CartContext } from '~/contexts/CartContext'
 import { LogoIcon } from '~/images'
 
 const CheckoutReview = () => {
+  // Lấy cartItems và clearCart từ CartContext
   const { cartItems, clearCart } = useContext(CartContext)
+  // Lấy thông tin người dùng từ sessionStorage
   const checkoutInformation = JSON.parse(
     sessionStorage.getItem('checkout-information')
   )
+  // Tính tổng tiền
+  const totalPrice =
+    cartItems.reduce((acc, item) => {
+      return acc + item.price * item.quantity * 1000
+    }, 0) + checkoutInformation?.delivery
+  // Tạo state open để mở dialog
   const [open, setOpen] = useState(false)
-
+  // Hàm xử lý khi người dùng nhấn đặt hàng
   const handleInformation = () => {
     if (
       !checkoutInformation?.name ||
@@ -31,7 +39,13 @@ const CheckoutReview = () => {
     } else {
       localStorage.setItem(
         'orders',
-        JSON.stringify({ cart: cartItems, information: checkoutInformation })
+        JSON.stringify([
+          {
+            cart: cartItems,
+            information: checkoutInformation,
+            totalPrice: totalPrice
+          }
+        ])
       )
       localStorage.setItem('orderSuccess', 'true')
       sessionStorage.setItem(
@@ -41,7 +55,9 @@ const CheckoutReview = () => {
           name: 'paramita',
           phone: '0987654321',
           payment: 'tien-mat',
-          notes: ''
+          notes: '',
+          delivery: 15000,
+          voucher: 0
         })
       )
       clearCart()

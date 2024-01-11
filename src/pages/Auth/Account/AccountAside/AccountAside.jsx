@@ -30,7 +30,7 @@ const AccountAside = () => {
   const handleLogout = () => {
     sessionStorage.clear();
     localStorage.removeItem('orders')
-    localStorage.removeItem('ordersSuccess')
+    localStorage.removeItem('orderSuccess')
     localStorage.removeItem('login')
     navigate('/');
   }

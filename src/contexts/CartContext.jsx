@@ -11,7 +11,6 @@ export const CartContext = React.createContext({
 
 export const CartProvider = ({ children }) => {
   const [cartItems, setCartItems] = useState([])
-  console.log('🚀 ~ CartProvider ~ cartItems:', cartItems)
 
   // Load cart from sessionStorage when component mounts
   useEffect(() => {

@@ -128,7 +128,9 @@ const Login = () => {
                         name: username,
                         phone: '0987654321',
                         payment: 'tien-mat',
-                        notes: ''
+                        notes: '',
+                        delivery: 15000,
+                        voucher: 0
                       })
                     )
                     if (remember) {

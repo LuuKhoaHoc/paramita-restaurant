@@ -74,7 +74,12 @@ const Cart = () => {
               <Divider />
               <Flex fs={'xl'}>
                 <Text>Tổng cộng</Text>
-                <Text ml={'auto'}>{subTotal.toLocaleString('vi-VN')}đ</Text>
+                <Text ml={'auto'}>
+                  {subTotal.toLocaleString('vi-VN', {
+                    style: 'currency',
+                    currency: 'VND'
+                  })}
+                </Text>
               </Flex>
               <Flex ml={'auto'} align='center' gap={fr(4)} my={fr(5)}>
                 <Center

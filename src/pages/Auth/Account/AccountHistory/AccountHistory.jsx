@@ -1,9 +1,15 @@
 import { CaretRight } from '@phosphor-icons/react'
-import { Center, Flex, Icon, Image, Stack, Text, fr } from '@prismane/core'
-import React from 'react'
+import { Center, Flex, Icon, Image, Modal, Stack, Text, fr } from '@prismane/core'
+import React, { useState } from 'react'
+import { OrderInvoice } from '~/components'
 
 const AccountHistory = () => {
+  const [open, setOpen] = useState(false)
   return (
+    <>
+    <Modal w={'80vw'} open={open} onClose={() => setOpen(false)} closable>
+      <OrderInvoice />
+    </Modal>
     <Flex direction='column' grow pos={'relative'} m={fr(10)}>
       <Text
         pos={['relative', { ':before': 'absolute' }]}
@@ -30,6 +36,7 @@ const AccountHistory = () => {
           p={fr(2)}
           my={fr(2)}
           cs={'pointer'}
+          onClick={() => { setOpen(!open) }}
         >
           <Image
             src='https://www.viquekitchen.com/wp-content/uploads/2022/05/Banh-xeo-Xeo-cake-Trans-300x300.jpg'
@@ -92,6 +99,7 @@ const AccountHistory = () => {
         
       </Stack>
     </Flex>
+    </>
   )
 }
 

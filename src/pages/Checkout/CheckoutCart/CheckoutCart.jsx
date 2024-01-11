@@ -21,6 +21,9 @@ const CheckoutCart = () => {
       window.location.href = '/order-online'
     }, 5000)
   }
+  const checkoutInformation = JSON.parse(
+    sessionStorage.getItem('checkout-information')
+  )
   return (
     <>
       <Flex w={'100%'} justify='between'>
@@ -70,7 +73,10 @@ const CheckoutCart = () => {
               </Button>
             </Text>
             <Text ml={'auto'} fs={'lg'}>
-              {item.price.toLocaleString('vi-VN')}đ
+              {item.price.toLocaleString('vi-VN', {
+                style: 'currency',
+                currency: 'VND'
+              })}
             </Text>
             <Center></Center>
           </List.Item>
@@ -110,7 +116,12 @@ const CheckoutCart = () => {
         <Divider />
         <Flex justify='between'>
           <Text>Phí giao hàng</Text>
-          <Text>15.000đ</Text>
+          <Text>
+            {checkoutInformation.delivery.toLocaleString('vi-VN', {
+              style: 'currency',
+              currency: 'VND'
+            })}
+          </Text>
         </Flex>
         <Divider />
         <Flex>
@@ -136,7 +147,7 @@ const CheckoutCart = () => {
               cartItems.reduce(
                 (acc, item) => acc + item.price * item.quantity * 1000,
                 0
-              ) + 15000
+              ) + checkoutInformation.delivery
             ).toLocaleString('vi-VN')}
             đ
           </Text>

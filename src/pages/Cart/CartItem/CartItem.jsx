@@ -108,7 +108,12 @@ const CartItem = ({ image, title, price, selected, quantity }) => {
           />
         </Table.Cell>
         <Table.Cell ta={'center'}>
-          <Text fs={'lg'}>{subtotal.toLocaleString('vi-VN')}đ</Text>
+          <Text fs={'lg'}>
+            {subtotal.toLocaleString('vi-VN', {
+              style: 'currency',
+              currency: 'VND'
+            })}
+          </Text>
         </Table.Cell>
       </Table.Row>
     </>
