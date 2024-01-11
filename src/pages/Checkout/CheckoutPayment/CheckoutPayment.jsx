@@ -19,7 +19,7 @@ const CheckoutPayment = () => {
 
   const [name, setName] = useState(checkoutInformation.name)
   const [phone, setPhone] = useState(checkoutInformation.phone)
-  const [notes, setNotes] = useState('')
+  const [notes, setNotes] = useState(checkoutInformation.notes)
   const [paymentMethod, setPaymentMethod] = useState(
     checkoutInformation.payment
   )
@@ -69,6 +69,7 @@ const CheckoutPayment = () => {
           onChange={(e) => setPhone(e.target.value)}
         />
         <TextareaField
+          maxLength={120}
           variant='underlined'
           placeholder='Ghi chú thêm'
           value={notes}
@@ -108,21 +109,21 @@ const CheckoutPayment = () => {
           <Icon size={fr(8)}>
             <Money />
           </Icon>
-          <Text>Tiền mặt</Text>
+          <Text w={fr(20)}>Tiền mặt</Text>
         </Center>
         <Center w={'30%'} fs={'lg'} justify='between'>
           <Radio value='mo-mo' />
           <Icon size={fr(8)}>
             <PiggyBank />
           </Icon>
-          <Text>Momo</Text>
+          <Text w={fr(20)}>Momo</Text>
         </Center>
         <Center w={'30%'} fs={'lg'} justify='between'>
           <Radio value='ngan-hang' />
           <Icon size={fr(8)}>
             <Bank />
           </Icon>
-          <Text>Ngân hàng</Text>
+          <Text w={fr(20)}>Ngân hàng</Text>
         </Center>
       </Radio.Group>
     </Flex>

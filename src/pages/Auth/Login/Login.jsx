@@ -3,6 +3,7 @@ import {
   Box,
   Button,
   Card,
+  Checkbox,
   Flex,
   Form,
   PasswordField,
@@ -14,7 +15,7 @@ import { useAnimation, useForm, useScroll } from '@prismane/core/hooks'
 import p from '~/utils/zodToPrismane'
 import { z } from 'zod'
 import usernameAndEmail from '~/utils/usernameAndEmail'
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { LoginPic } from '~/images'
 import { Link } from 'react-router-dom'
 import { AlertCustom, MainPic } from '~/components'
@@ -23,8 +24,12 @@ import { Password, User } from '@phosphor-icons/react'
 const Login = () => {
   const username = 'paramita'
   const password = 'paramita'
+  const [remember, setRemember] = useState(false)
   const { scrollToId } = useScroll()
-  if (sessionStorage.getItem('login') === 'true') {
+  if (
+    sessionStorage.getItem('login') === 'true' ||
+    localStorage.getItem('login') === 'true'
+  ) {
     window.location.href = '/'
   }
   useEffect(() => scrollToId('login'), [])
@@ -120,16 +125,22 @@ const Login = () => {
                       'checkout-information',
                       JSON.stringify({
                         address: '',
-                        name: 'paramita',
+                        name: username,
                         phone: '0987654321',
                         payment: 'tien-mat',
                         notes: ''
                       })
                     )
-                  } else if (value.username !== username) {
-                    setError('username', 'Tài khoản không đúng')
-                  } else if (value.password !== password) {
-                    setError('password', 'Mật khẩu không đúng')
+                    if (remember) {
+                      localStorage.setItem('login', true)
+                    }
+                  } else {
+                    if (value.username !== username) {
+                      setError('username', 'Tài khoản không đúng')
+                    }
+                    if (value.password !== password) {
+                      setError('password', 'Mật khẩu không đúng')
+                    }
                   }
                 })
               }
@@ -152,9 +163,17 @@ const Login = () => {
                 placeholder='********'
                 icon={<Password weight='fill' />}
               />
-              <Text cl={['#0266BE', { hover: 'blue' }]}>
-                <Link to={'/forgot-password'}>Quên mật khẩu?</Link>
-              </Text>
+              <Flex justify='between'>
+                <Checkbox
+                  name='remember'
+                  label='Lưu đăng nhập'
+                  value={remember}
+                  onChange={(e) => setRemember(e.target.checked)}
+                />
+                <Text cl={['#0266BE', { hover: 'blue' }]}>
+                  <Link to={'/forgot-password'}>Quên mật khẩu?</Link>
+                </Text>
+              </Flex>
               <Button
                 size='lg'
                 variant='tertiary'

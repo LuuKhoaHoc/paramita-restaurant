@@ -64,7 +64,10 @@ const OrderItem = ({ image, title, price, description }) => {
     setOpen(false)
   }
   const handleOrder = () => {
-    if (sessionStorage.getItem('login') === 'true') {
+    if (
+      sessionStorage.getItem('login') === 'true' ||
+      localStorage.getItem('login') === 'true'
+    ) {
       handleSendItem()
     } else {
       setOpen(false)

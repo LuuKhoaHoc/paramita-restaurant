@@ -35,7 +35,7 @@ const Checkout = () => {
           <Icon size={fr(12)} cl={'primary'}>
             <Cardholder weight='fill' />
           </Icon>
-          <Text>Checkout</Text>
+        <Text>Checkout</Text>
         </Center>
         <Grid templateColumns={12}>
           <Grid.Item columnStart={3} columnEnd={11}>

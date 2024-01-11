@@ -4,12 +4,14 @@ export const CartContext = React.createContext({
   cartItems: [],
   addCartItem: () => {},
   removeCartItem: () => {},
+  clearCart: () => {},
   updateCartItemSelected: () => {},
   updateCartItemQuantity: () => {}
 })
 
 export const CartProvider = ({ children }) => {
   const [cartItems, setCartItems] = useState([])
+  console.log('🚀 ~ CartProvider ~ cartItems:', cartItems)
 
   // Load cart from sessionStorage when component mounts
   useEffect(() => {
@@ -34,7 +36,7 @@ export const CartProvider = ({ children }) => {
       updatedCartItems[existingItemIndex].quantity += 1
       setCartItems(updatedCartItems)
     } else {
-      setCartItems((prevItems) => [...prevItems, { ...item, quantity: 1 }])
+      setCartItems((prevItems) => [...prevItems, { ...item }])
     }
   }
 
@@ -42,6 +44,10 @@ export const CartProvider = ({ children }) => {
     setCartItems((prevItems) =>
       prevItems.filter((item) => item.title !== itemId)
     )
+  }
+
+  const clearCart = () => {
+    setCartItems([])
   }
 
   const updateCartItemSelected = (title, selectTitle, select) => {
@@ -74,6 +80,7 @@ export const CartProvider = ({ children }) => {
         cartItems,
         addCartItem,
         removeCartItem,
+        clearCart,
         updateCartItemQuantity,
         updateCartItemSelected
       }}

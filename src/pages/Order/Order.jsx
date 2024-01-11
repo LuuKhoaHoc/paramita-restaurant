@@ -85,7 +85,7 @@ const Order = () => {
   ]
 
   return (
-    <Toaster b={fr(15)}>
+    <Toaster position='top-right' t={fr(23)}>
       <Box pos={'relative'} mih={'100vh'}>
         <MainPic
           title={'Đặt hàng'}

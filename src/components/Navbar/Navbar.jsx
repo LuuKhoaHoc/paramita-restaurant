@@ -13,7 +13,6 @@ import {
   fr,
   Menu,
   Divider,
-  useThemeModeValue,
   Badge
 } from '@prismane/core'
 // img
@@ -49,12 +48,13 @@ const Navbar = () => {
   // State cho menu
   const [menuOpen, setMenuOpen] = useState(false)
   useEffect(() => {
-    if (sessionStorage.getItem('login') === 'true') {
+    if (
+      sessionStorage.getItem('login') === 'true' ||
+      localStorage.getItem('login') === 'true'
+    ) {
       setLogin(true)
     }
   }, [])
-  const textColor = useThemeModeValue('#371b04', '#d1e9d5')
-  const bgColor = useThemeModeValue('#fff2e5', '#1d2b1f')
   // animation line cho navLink
   const lineAnimation = {
     '&::before': {
@@ -77,8 +77,6 @@ const Navbar = () => {
   // Hàm xử lý navbar khi scroll
   const handleScroll = () => {
     const header = document.getElementById('header')
-    const accountSide = document.getElementById('account-side')
-
     if (document.documentElement.scrollTop > 10) {
       header.style.backgroundColor = '#371b04'
     }
@@ -93,6 +91,9 @@ const Navbar = () => {
   window.addEventListener('scroll', handleScroll)
   const handleLogout = () => {
     sessionStorage.clear()
+    localStorage.removeItem('orders')
+    localStorage.removeItem('ordersSuccess')
+    localStorage.removeItem('login')
     setLogin(false)
   }
 
@@ -125,6 +126,7 @@ const Navbar = () => {
               <Flex justify='around' align='center' h={'100%'}>
                 <Box
                   td={'none'}
+                  cl={['inherit', { hover: ['primary', 100] }]}
                   bg={['transparent', { ':before': 'primary' }]}
                   pos={['relative', { ':before': 'absolute' }]}
                   sx={lineAnimation}
@@ -135,6 +137,7 @@ const Navbar = () => {
                 </Box>
                 <Box
                   td={'none'}
+                  cl={['inherit', { hover: ['primary', 100] }]}
                   bg={['transparent', { ':before': 'primary' }]}
                   pos={['relative', { ':before': 'absolute' }]}
                   sx={lineAnimation}
@@ -148,6 +151,7 @@ const Navbar = () => {
                 </Box>
                 <Box
                   td={'none'}
+                  cl={['inherit', { hover: ['primary', 100] }]}
                   bg={['transparent', { ':before': 'primary' }]}
                   pos={['relative', { ':before': 'absolute' }]}
                   sx={lineAnimation}
@@ -161,6 +165,7 @@ const Navbar = () => {
                 </Box>
                 <Box
                   td={'none'}
+                  cl={['inherit', { hover: ['primary', 100] }]}
                   bg={['transparent', { ':before': 'primary' }]}
                   pos={['relative', { ':before': 'absolute' }]}
                   sx={lineAnimation}
@@ -174,6 +179,7 @@ const Navbar = () => {
                 </Box>
                 <Box
                   td={'none'}
+                  cl={['inherit', { hover: ['primary', 100] }]}
                   bg={['transparent', { ':before': 'primary' }]}
                   pos={['relative', { ':before': 'absolute' }]}
                   sx={lineAnimation}
@@ -184,6 +190,7 @@ const Navbar = () => {
                 </Box>
                 <Box
                   td={'none'}
+                  cl={['inherit', { hover: ['primary', 100] }]}
                   bg={['transparent', { ':before': 'primary' }]}
                   pos={['relative', { ':before': 'absolute' }]}
                   sx={lineAnimation}

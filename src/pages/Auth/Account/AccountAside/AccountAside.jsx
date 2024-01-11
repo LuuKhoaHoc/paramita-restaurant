@@ -29,6 +29,9 @@ const AccountAside = () => {
   const bgColor = useThemeModeValue('#fff2e5', '#1d2b1f')
   const handleLogout = () => {
     sessionStorage.clear();
+    localStorage.removeItem('orders')
+    localStorage.removeItem('ordersSuccess')
+    localStorage.removeItem('login')
     navigate('/');
   }
   return (

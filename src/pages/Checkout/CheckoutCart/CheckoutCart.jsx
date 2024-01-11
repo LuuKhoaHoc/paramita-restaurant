@@ -16,7 +16,7 @@ import { CountDown } from '~/components'
 import { CartContext } from '~/contexts/CartContext'
 const CheckoutCart = () => {
   const { cartItems, removeCartItem } = useContext(CartContext)
-  if (cartItems == []) {
+  if (sessionStorage.getItem('cartItems').length === 0) {
     setTimeout(() => {
       window.location.href = '/order-online'
     }, 5000)
