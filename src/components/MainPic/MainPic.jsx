@@ -47,7 +47,6 @@ const MainPic = ({
         w={'100%'}
         h={'100%'}
         direction='column'
-        ff={'BalihoScript'}
         cl={'white'}
         cs={'default'}
       >

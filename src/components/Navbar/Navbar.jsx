@@ -14,16 +14,20 @@ import {
   Menu,
   Divider,
   Badge,
-  Drawer
+  Drawer,
+  Avatar,
+  Text,
+  List
 } from '@prismane/core'
 // img
 import { LogoText } from '~/images'
 // utils
+import { useResponsive } from '~/utils/responsive'
 import lazyWithPreload from 'react-lazy-with-preload'
 import { useEffect, useState, useContext } from 'react'
 import {
   ClockCountdown,
-  List,
+  Sidebar,
   ListChecks,
   ShoppingCartSimple,
   SignOut,
@@ -40,11 +44,10 @@ const Order = lazyWithPreload(() => import('~/pages/Order/Order'))
 const Login = lazyWithPreload(() => import('~/pages/Auth/Login/Login'))
 
 import { CartContext } from '~/contexts/CartContext'
-import { useMediaQuery } from '@prismane/core/hooks'
 
 const Navbar = () => {
-  const isMobile = useMediaQuery('(max-width: 768px)')
-  const isTablet = useMediaQuery('(min-width: 769px) and (max-width: 1280px)')
+  // Responsive
+  const { isLaptop, isMobile, isTablet } = useResponsive()
   // Số lượng item trong cart
   const { cartItems } = useContext(CartContext)
   const itemCount = cartItems.reduce((total, item) => total + item.quantity, 0)
@@ -96,6 +99,7 @@ const Navbar = () => {
   }
 
   window.addEventListener('scroll', handleScroll)
+  // Hàm xử lí đăng xuất
   const handleLogout = () => {
     sessionStorage.clear()
     localStorage.removeItem('orders')
@@ -122,36 +126,181 @@ const Navbar = () => {
             w='100%'
             justify='between'
             h={fr(22.5)}
-            fs={'lg'}
+            fs={isLaptop ? 'base' : isTablet ? 'sm' : isMobile ? 'xs' : 'lg'}
           >
             {isTablet || isMobile ? (
               <>
-                {isMobile ? (
-                  <Drawer
-                    open={right}
-                    closable
-                    onClose={() => setRight(false)}
-                    position='right'
-                    size={'xs'}
-                  >
-                    Press Esc key to close the Drawer. Or just click the
-                    backdrop.
-                  </Drawer>
-                ) : (
-                  <Drawer
-                    open={right}
-                    closable
-                    onClose={() => setRight(false)}
-                    position='right'
-                    size={'sm'}
-                  >
-                    Press Esc key to close the Drawer. Or just click the
-                    backdrop.
-                  </Drawer>
-                )}
+                <Drawer
+                  open={right}
+                  closable
+                  onClose={() => setRight(false)}
+                  position='right'
+                  size={isTablet ? 'sm' : 'xs'}
+                >
+                  <Drawer.Header>
+                    <Text></Text>
+                  </Drawer.Header>
+                  <Flex direction='column' ff={'GeomanistMedium'}>
+                    <Flex align='center' justify='around'>
+                      <Avatar size={'sm'} color={'primary'}></Avatar>
+                      <Text fs={isTablet ? 'lg' : 'md'}>Paramita</Text>
+                    </Flex>
+                    <Divider my={isTablet ? fr(4) : fr(6)} />
+                    <List
+                      px={fr(4)}
+                      fs={isTablet ? 'base' : 'sm'}
+                      onClick={() => setRight(false)}
+                    >
+                      <List.Item
+                        align='center'
+                        justify='between'
+                        p={fr(2)}
+                        as={Link}
+                        to={'/account/information'}
+                      >
+                        <Icon>
+                          <User />
+                        </Icon>
+                        Thông tin cá nhân
+                      </List.Item>
+                      <List.Item
+                        align='center'
+                        justify='between'
+                        p={fr(2)}
+                        as={Link}
+                        to={'/account/orders'}
+                      >
+                        <Icon>
+                          <ListChecks />
+                        </Icon>
+                        Đơn hàng
+                      </List.Item>
+                      <List.Item
+                        align='center'
+                        justify='between'
+                        p={fr(2)}
+                        as={Link}
+                        to={'/account/history-purchase'}
+                      >
+                        <Icon>
+                          <ClockCountdown />
+                        </Icon>
+                        Lịch sử mua hàng
+                      </List.Item>
+                      <List.Item
+                        cl='red'
+                        align='center'
+                        justify='between'
+                        p={fr(2)}
+                        onClick={handleLogout}
+                      >
+                        <Icon>
+                          <SignOut />
+                        </Icon>
+                        Đăng xuất
+                      </List.Item>
+                    </List>
+
+                    <Divider my={isTablet ? fr(4) : fr(6)} />
+
+                    <List
+                      px={fr(4)}
+                      fs={isTablet ? 'lg' : 'md'}
+                      align='center'
+                      onClick={() => setRight(false)}
+                    >
+                      <List.Item
+                        cl={['inherit', { hover: ['primary', 100] }]}
+                        bg={['transparent', { ':before': 'primary' }]}
+                        pos={['relative', { ':before': 'absolute' }]}
+                        p={isTablet ? fr(4) : fr(6)}
+                        sx={lineAnimation}
+                      >
+                        <NavLink
+                          to={'/about'}
+                          onMouseOver={() => AboutUs.preload()}
+                        >
+                          Tìm hiểu
+                        </NavLink>
+                      </List.Item>
+                      <List.Item
+                        cl={['inherit', { hover: ['primary', 100] }]}
+                        bg={['transparent', { ':before': 'primary' }]}
+                        pos={['relative', { ':before': 'absolute' }]}
+                        p={isTablet ? fr(4) : fr(6)}
+                        sx={lineAnimation}
+                      >
+                        <NavLink
+                          to={'/promotion'}
+                          onMouseOver={() => Promotion.preload()}
+                        >
+                          Khuyến mãi{' '}
+                        </NavLink>
+                      </List.Item>
+                      <List.Item
+                        cl={['inherit', { hover: ['primary', 100] }]}
+                        bg={['transparent', { ':before': 'primary' }]}
+                        pos={['relative', { ':before': 'absolute' }]}
+                        p={isTablet ? fr(4) : fr(6)}
+                        sx={lineAnimation}
+                      >
+                        <NavLink
+                          to={'/book-table'}
+                          onMouseOver={() => BookTable.preload()}
+                        >
+                          Đặt bàn{' '}
+                        </NavLink>
+                      </List.Item>
+                      <List.Item
+                        cl={['inherit', { hover: ['primary', 100] }]}
+                        bg={['transparent', { ':before': 'primary' }]}
+                        pos={['relative', { ':before': 'absolute' }]}
+                        p={isTablet ? fr(4) : fr(6)}
+                        sx={lineAnimation}
+                      >
+                        <NavLink
+                          to={'/order-online'}
+                          onMouseOver={() => Order.preload()}
+                        >
+                          Đặt hàng{' '}
+                        </NavLink>
+                      </List.Item>
+                      <List.Item
+                        cl={['inherit', { hover: ['primary', 100] }]}
+                        bg={['transparent', { ':before': 'primary' }]}
+                        pos={['relative', { ':before': 'absolute' }]}
+                        p={isTablet ? fr(4) : fr(6)}
+                        sx={lineAnimation}
+                      >
+                        <NavLink
+                          to={'/menu'}
+                          onMouseOver={() => Menus.preload()}
+                        >
+                          Thực đơn{' '}
+                        </NavLink>
+                      </List.Item>
+                      <List.Item
+                        cl={['inherit', { hover: ['primary', 100] }]}
+                        bg={['transparent', { ':before': 'primary' }]}
+                        pos={['relative', { ':before': 'absolute' }]}
+                        p={isTablet ? fr(4) : fr(6)}
+                        sx={lineAnimation}
+                      >
+                        <NavLink
+                          to={'/contact'}
+                          onMouseOver={() => Contact.preload()}
+                        >
+                          Liên hệ
+                        </NavLink>
+                      </List.Item>
+                    </List>
+                  </Flex>
+                  <Drawer.Footer></Drawer.Footer>
+                </Drawer>
+
                 <Flex align='center' justify='start'>
                   <NavLink to={'/'} onMouseOver={() => Home.preload()}>
-                    <Center w={140} h={'100%'}>
+                    <Center w={isTablet ? 140 : isMobile ? 120 : ''} h={'100%'}>
                       <Image
                         w={'inherit'}
                         src={LogoText}
@@ -163,20 +312,20 @@ const Navbar = () => {
                 </Flex>
                 <Flex align='center' justify='end'>
                   <Icon
-                    size={fr(10)}
+                    size={isTablet ? fr(10) : isMobile ? fr(8) : ''}
                     cs={'pointer'}
                     onClick={() => setRight(true)}
                   >
-                    <List weight='bold' />
+                    <Sidebar weight='bold' />
                   </Icon>
                 </Flex>
               </>
             ) : (
               <>
                 <NavLink to={'/'} onMouseOver={() => Home.preload()}>
-                  <Center w={160} h={'100%'}>
+                  <Center w={isLaptop ? 140 : 160} h={'100%'}>
                     <Image
-                      w={160}
+                      w={'inherit'}
                       src={LogoText}
                       alt='Paramita Logo'
                       fit='cover'
@@ -186,7 +335,6 @@ const Navbar = () => {
                 <Box w={'100%'}>
                   <Flex justify='around' align='center' h={'100%'}>
                     <Box
-                      td={'none'}
                       cl={['inherit', { hover: ['primary', 100] }]}
                       bg={['transparent', { ':before': 'primary' }]}
                       pos={['relative', { ':before': 'absolute' }]}
@@ -200,7 +348,6 @@ const Navbar = () => {
                       </NavLink>
                     </Box>
                     <Box
-                      td={'none'}
                       cl={['inherit', { hover: ['primary', 100] }]}
                       bg={['transparent', { ':before': 'primary' }]}
                       pos={['relative', { ':before': 'absolute' }]}
@@ -214,7 +361,6 @@ const Navbar = () => {
                       </NavLink>
                     </Box>
                     <Box
-                      td={'none'}
                       cl={['inherit', { hover: ['primary', 100] }]}
                       bg={['transparent', { ':before': 'primary' }]}
                       pos={['relative', { ':before': 'absolute' }]}
@@ -228,7 +374,6 @@ const Navbar = () => {
                       </NavLink>
                     </Box>
                     <Box
-                      td={'none'}
                       cl={['inherit', { hover: ['primary', 100] }]}
                       bg={['transparent', { ':before': 'primary' }]}
                       pos={['relative', { ':before': 'absolute' }]}
@@ -242,7 +387,6 @@ const Navbar = () => {
                       </NavLink>
                     </Box>
                     <Box
-                      td={'none'}
                       cl={['inherit', { hover: ['primary', 100] }]}
                       bg={['transparent', { ':before': 'primary' }]}
                       pos={['relative', { ':before': 'absolute' }]}
@@ -253,7 +397,6 @@ const Navbar = () => {
                       </NavLink>
                     </Box>
                     <Box
-                      td={'none'}
                       cl={['inherit', { hover: ['primary', 100] }]}
                       bg={['transparent', { ':before': 'primary' }]}
                       pos={['relative', { ':before': 'absolute' }]}

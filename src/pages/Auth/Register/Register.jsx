@@ -99,7 +99,6 @@ const Register = () => {
       />
       <Flex
         id='register'
-        ff={'BalihoScript'}
         fs={'lg'}
         align='center'
         justify='center'
@@ -168,7 +167,6 @@ const Register = () => {
               variant='tertiary'
               color='primary'
               type='submit'
-              ff={'BalihoScript'}
               mx={'auto'}
               fillOnHover
             >

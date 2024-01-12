@@ -16,11 +16,7 @@ const SmallGallery = ({ images }) => {
       <Grid.Item columnStart={3} columnEnd={11}>
         <Box w={'100%'} pos={'relative'} my={fr(12)}>
           <Center direction='column'>
-            <Text
-              ff={'BalihoScript'}
-              fs={'xl'}
-              my={fr(4)}
-            >
+            <Text fs={'xl'} my={fr(4)}>
               As Belong With
             </Text>
             <Text fs={'3xl'} ff={'GeomanistBold'} tt={'uppercase'} mb={fr(4)}>

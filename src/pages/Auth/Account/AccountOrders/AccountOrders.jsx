@@ -41,7 +41,7 @@ const AccountOrder = () => {
           Đơn hàng
         </Text>
         <Stack>
-          {orders.map((item, index) => (
+          {orders?.map((item, index) => (
             <Flex
               key={index}
               bg={(theme) => (theme.mode === 'dark' ? '#1a1a1a' : '#fff')}

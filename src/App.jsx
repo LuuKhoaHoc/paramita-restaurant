@@ -42,17 +42,12 @@ import {
   CheckoutSuccess
 } from '~/routes'
 import { CartProvider } from '~/contexts/CartContext'
-import { useMediaQuery } from '@prismane/core/hooks'
 
 const imagesGallery = [Space1, Space2, Space3, Food1, Food2, HomePic2]
 
 const App = () => {
   const textColor = useThemeModeValue('#371b04', '#d1e9d5')
   const bgColor = useThemeModeValue('#fff2e5', '#1d2b1f')
-  const isMobile = useMediaQuery('(max-width: 768px)')
-  if (isMobile) {
-    
-  }
   return (
     <Suspense fallback={<Loading />}>
       <Box bg={bgColor} cl={textColor}>

@@ -19,7 +19,7 @@ const PromotionDetail = () => {
       <Box h={fr(22.5)} bg='#371b04' />
       <Grid templateColumns={12}>
         <Grid.Item columnStart={3} columnEnd={11}>
-          <Flex w={'100%'} ff={'BalihoScript'} my={fr(5)}>
+          <Flex w={'100%'} my={fr(5)}>
             <Box>
               <Text as={'h1'} ff={'GeomanistMedium'}>
                 Ưu đãi lớn - Giảm ngay 20% khi mua combo 500k

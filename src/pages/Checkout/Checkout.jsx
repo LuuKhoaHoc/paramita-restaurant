@@ -25,17 +25,12 @@ const Checkout = () => {
   return (
     <Box pos={'relative'} mih={'100vh'}>
       <Box h={fr(22.5)} bg='#371b04' />
-      <Box
-        w={'100%'}
-        h={'100%'}
-        ff={'"BalihoScript", sans-serif'}
-        pos={'relative'}
-      >
+      <Box w={'100%'} h={'100%'} pos={'relative'}>
         <Center fs={'4xl'} gap={fr(4)} p={fr(10)}>
           <Icon size={fr(12)} cl={'primary'}>
             <Cardholder weight='fill' />
           </Icon>
-        <Text>Checkout</Text>
+          <Text>Checkout</Text>
         </Center>
         <Grid templateColumns={12}>
           <Grid.Item columnStart={3} columnEnd={11}>

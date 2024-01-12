@@ -37,13 +37,7 @@ const FAQ = () => {
       <Box h={fr(22.5)} bg='#371b04' />
       <Grid templateColumns={12}>
         <Grid.Item columnStart={4} columnEnd={10}>
-          <Flex
-            w={'100%'}
-            ff={'BalihoScript'}
-            gap={fr(5)}
-            my={fr(5)}
-            direction='column'
-          >
+          <Flex w={'100%'} gap={fr(5)} my={fr(5)} direction='column'>
             <Text
               as={'h1'}
               fs={'3xl'}

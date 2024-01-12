@@ -77,7 +77,6 @@ const Login = () => {
       />
       <Flex
         id='login'
-        ff={'BalihoScript'}
         fs={'lg'}
         align='center'
         justify='center'
@@ -181,7 +180,6 @@ const Login = () => {
                 variant='tertiary'
                 color='primary'
                 type='submit'
-                ff={'BalihoScript'}
                 mx={'auto'}
                 fillOnHover
               >

@@ -60,12 +60,7 @@ const Home = () => {
         image={HomePic}
         sloganRight={'Tịnh tâm - Sống khoẻ - Yêu đời'}
       />
-      <Box
-        w={'100%'}
-        h={'100%'}
-        ff={'"BalihoScript", sans-serif'}
-        pos={'relative'}
-      >
+      <Box w={'100%'} h={'100%'} pos={'relative'}>
         <Grid templateColumns={12}>
           <Grid.Item columnStart={3} columnEnd={11}>
             <Flex

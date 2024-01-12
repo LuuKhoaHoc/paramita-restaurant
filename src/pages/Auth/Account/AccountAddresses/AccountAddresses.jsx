@@ -14,13 +14,7 @@ const AccountAddresses = () => {
   const [open, setOpen] = useState(false)
   return (
     <>
-      <Modal
-        w={'20vw'}
-        open={open}
-        onClose={() => setOpen(false)}
-        closable
-        ff={'BalihoScript'}
-      >
+      <Modal w={'20vw'} open={open} onClose={() => setOpen(false)} closable>
         <Modal.Header ff={'GeomanistMedium'}>
           <Text fs={'2xl'} ta={'center'}>
             Thêm địa chỉ

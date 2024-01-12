@@ -15,12 +15,7 @@ const Account = () => {
   return (
     <Box pos={'relative'} mih={'100vh'}>
       <Box h={fr(22.5)} bg='#371b04' />
-      <Box
-        w={'100%'}
-        h={'100%'}
-        ff={'"BalihoScript", sans-serif'}
-        pos={'relative'}
-      >
+      <Box w={'100%'} h={'100%'} pos={'relative'}>
         <Grid templateColumns={12}>
           <Grid.Item columnStart={3} columnEnd={11}>
             <Center p={fr(12)} fs={'2xl'} gap={fr(4)} ff={'GeomanistMedium'}>

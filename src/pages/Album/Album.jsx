@@ -66,12 +66,7 @@ const Album = () => {
         subtitle='Không gian trang nhã - Ẩm thực tinh tế'
         image={AlbumPic}
       />
-      <Box
-        w={'100%'}
-        h={'100%'}
-        ff={'"BalihoScript", sans-serif'}
-        pos={'relative'}
-      >
+      <Box w={'100%'} h={'100%'} pos={'relative'}>
         <Grid templateColumns={12}>
           <Grid.Item columnStart={3} columnEnd={11}>
             <Flex
@@ -82,7 +77,7 @@ const Album = () => {
               gap={fr(10)}
               my={fr(5)}
             >
-              <Text ff={'BalihoScript'} fs={'2xl'} my={fr(4)}>
+              <Text fs={'2xl'} my={fr(4)}>
                 Thưởng thức món ngon tại Nhà hàng chay Paramita không chỉ là
                 hương vị mà còn là trải nghiệm 5 giác quan đầy thư thái. Hãy
                 cùng chiêm ngưỡng vẻ đẹp của không gian và ẩm thực qua góc nhìn

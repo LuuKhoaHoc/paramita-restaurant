@@ -12,12 +12,7 @@ const Career = () => {
         title={'Tuyển dụng'}
         subtitle='Kết nối cùng Paramita'
       />
-      <Box
-        w={'100%'}
-        h={'100%'}
-        ff={'"BalihoScript", sans-serif'}
-        pos={'relative'}
-      >
+      <Box w={'100%'} h={'100%'} pos={'relative'}>
         <Grid templateColumns={12}>
           <Grid.Item columnStart={3} columnEnd={11}>
             <Flex pos={'relative'} gap={fr(8)} direction='column' my={fr(5)}>
@@ -38,14 +33,9 @@ const Career = () => {
                 <Image src={BangGo} alt='' h={fr(83)} br={'md'} bsh={'lg'} />
               </Flex>
             </Flex>
-            <Flex
-              pos={'relative'}
-              gap={fr(8)}
-              direction='column'
-              my={fr(5)}
-            >
-              <CareerPost/>
-              <CareerPost/>
+            <Flex pos={'relative'} gap={fr(8)} direction='column' my={fr(5)}>
+              <CareerPost />
+              <CareerPost />
             </Flex>
           </Grid.Item>
         </Grid>

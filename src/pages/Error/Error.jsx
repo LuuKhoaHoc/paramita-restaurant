@@ -14,7 +14,6 @@ const Error = () => {
       ff={'GeomanistLight'}
     >
       <Center
-        ff={'BalihoScript'}
         cl={(theme) =>
           theme.mode === 'dark' ? ['primary', 100] : ['primary', 600]
         }
@@ -40,7 +39,9 @@ const Error = () => {
         <Text>Xin lỗi, Paramita không tồn tại ở đây</Text>
         <Circle size={fr(2)} bg={['red']} />
       </Center>
-      <Button as={Link} to={'/'} size='lg' mt={fr(4)} br={'2xl'}>Quay về trang chủ</Button>
+      <Button as={Link} to={'/'} size='lg' mt={fr(4)} br={'2xl'}>
+        Quay về trang chủ
+      </Button>
     </Center>
   )
 }

@@ -22,13 +22,7 @@ const CheckoutSuccess = () => {
   return (
     <Box pos={'relative'} mih={'100vh'}>
       <Box h={fr(22.5)} bg='#371b04' />
-      <Box
-        w={'100%'}
-        h={'100%'}
-        ff={'"BalihoScript", sans-serif'}
-        pos={'relative'}
-        my={fr(5)}
-      >
+      <Box w={'100%'} h={'100%'} pos={'relative'} my={fr(5)}>
         <Center direction='column' gap={fr(4)} mb={fr(4)}>
           <Icon size={fr(25)} cl={'primary'}>
             <CheckCircle weight='bold' />

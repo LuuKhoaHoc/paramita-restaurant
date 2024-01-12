@@ -25,13 +25,7 @@ const CartItem = ({ image, title, price, selected, quantity }) => {
   const [open, setOpen] = useState(false)
   return (
     <>
-      <Modal
-        ff={'BalihoScript'}
-        w={fr(144)}
-        open={open}
-        onClose={() => setOpen(false)}
-        closable
-      >
+      <Modal w={fr(144)} open={open} onClose={() => setOpen(false)} closable>
         <Modal.Header ff={'GeomanistMedium'}>
           <Text
             fw='bold'

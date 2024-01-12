@@ -65,7 +65,6 @@ const ForgotPassword = () => {
       />
       <Flex
         id='forgot-password'
-        ff={'BalihoScript'}
         fs={'lg'}
         align='center'
         justify='center'
@@ -113,7 +112,6 @@ const ForgotPassword = () => {
               variant='tertiary'
               color='primary'
               type='submit'
-              ff={'BalihoScript'}
               mx={'auto'}
               fillOnHover
             >

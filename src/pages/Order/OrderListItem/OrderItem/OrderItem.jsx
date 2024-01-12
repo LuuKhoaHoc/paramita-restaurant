@@ -54,7 +54,7 @@ const OrderItem = ({ image, title, price, description }) => {
     addCartItem(item)
     toast({
       element: (
-        <Alert variant='success' ff={'BalihoScript'}>
+        <Alert variant='success'>
           <Alert.Title fs={'md'} ff={'Geomanist'}>
             Đã thêm món vào giỏ hàng thành công
           </Alert.Title>
@@ -73,7 +73,7 @@ const OrderItem = ({ image, title, price, description }) => {
       setOpen(false)
       toast({
         element: (
-          <Alert variant='warning' ff={'BalihoScript'}>
+          <Alert variant='warning'>
             <Alert.Title fs={'md'} ff={'Geomanist'}>
               Bạn cần đăng nhập để thêm vào giỏ hàng
             </Alert.Title>
@@ -89,7 +89,6 @@ const OrderItem = ({ image, title, price, description }) => {
         open={open}
         onClose={() => setOpen(false)}
         closable
-        ff={'BalihoScript'}
         of={'auto'}
       >
         <Modal.Header>

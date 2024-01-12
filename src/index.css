@@ -22,6 +22,9 @@
   src: local('GeomanistBold'),
     url('./fonts/Geomanist-Bold.otf') format('opentype');
 }
+* {
+  font-family: "'BalihoScript', sans-serif";
+}
 a {
   color: inherit;
   text-decoration: none;
@@ -34,4 +37,3 @@ a {
 .active {
   color: #39b54a;
 }
-

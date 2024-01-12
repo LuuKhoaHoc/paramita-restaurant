@@ -18,7 +18,6 @@ const OrderInvoice = () => {
       br={'xl'}
       direction='column'
       align='center'
-      ff={'"BalihoScript", sans-serif'}
     >
       <Text as={'h3'} fs={'xl'} ff={'Geomanist'} p={fr(5)}>
         Đơn hàng của bạn

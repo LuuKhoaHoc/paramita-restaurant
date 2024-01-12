@@ -66,13 +66,7 @@ const CheckoutReview = () => {
   }
   return (
     <>
-      <Dialog
-        ff={'BalihoScript'}
-        w={fr(96)}
-        open={open}
-        onClose={() => setOpen(false)}
-        closable
-      >
+      <Dialog w={fr(96)} open={open} onClose={() => setOpen(false)} closable>
         <Dialog.Header>
           <Text fs={'xl'} ff={'GeomanistMedium'} cl={'primary'}>
             Cảnh báo!
