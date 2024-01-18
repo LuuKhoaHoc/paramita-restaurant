@@ -1,6 +1,7 @@
 import { Box, Flex, Grid, Image, List, Text, fr } from '@prismane/core'
 import React from 'react'
 import { PromotionPic } from '~/images'
+import { useResponsive } from '~/utils/responsive'
 
 const PromotionDetail = () => {
   let strings = `Thời gian áp dụng: Từ 00h00 ngày 01/01/2023 đến 23h59 ngày 31/01/2023.
@@ -14,14 +15,21 @@ const PromotionDetail = () => {
     return inputString.split('\n')
   }
   const array = cutStringToArray(strings)
+  const { isLaptop, isTablet, isMobile } = useResponsive()
   return (
     <>
       <Box h={fr(22.5)} bg='#371b04' />
       <Grid templateColumns={12}>
-        <Grid.Item columnStart={3} columnEnd={11}>
-          <Flex w={'100%'} my={fr(5)}>
-            <Box>
-              <Text as={'h1'} ff={'GeomanistMedium'}>
+        <Grid.Item
+          columnStart={isTablet ? 2 : isMobile ? 1 : 3}
+          columnEnd={isTablet ? 12 : isMobile ? 13 : 11}
+        >
+          <Flex w={'100%'} my={fr(5)} direction='column'>
+            <Box mx={isMobile ? fr(3) : 0}>
+              <Image w={'100%'} br={'lg'} bsh={'lg'} src={PromotionPic} />
+            </Box>
+            <Box mx={isMobile ? fr(3) : 0}>
+              <Text as={'h1'} fs={isMobile ? 'xl' : 'inherit'} className='GeomanistMedium-font'>
                 Ưu đãi lớn - Giảm ngay 20% khi mua combo 500k
               </Text>
               <Text as={'p'} fs={'lg'} cl={'base'}>
@@ -39,9 +47,6 @@ const PromotionDetail = () => {
                 Chương trình có thể kết thúc sớm nếu hết ngân sách. Mong quý
                 khách ủng hộ và cùng nhau thưởng thức các món ngon của nhà hàng!
               </Text>
-            </Box>
-            <Box>
-              <Image h={fr(75)} br={'lg'} bsh={'lg'} src={PromotionPic} />
             </Box>
           </Flex>
         </Grid.Item>

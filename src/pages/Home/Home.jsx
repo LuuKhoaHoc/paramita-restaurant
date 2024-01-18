@@ -31,8 +31,10 @@ import 'react-multi-carousel/lib/styles.css'
 import { MainPic, StyledButton, DividerParamita } from '~/components'
 import { Star } from '@phosphor-icons/react'
 import { Link } from 'react-router-dom'
+import { useResponsive } from '~/utils/responsive'
 
 const Home = () => {
+  const { isLaptop, isTablet, isMobile } = useResponsive()
   const imagesFood = [
     { image: BanhXeo, title: 'Bánh xèo', rating: 5 },
     { image: BunHue, title: 'Bún Huế Paramita', rating: 4.5 },
@@ -62,14 +64,18 @@ const Home = () => {
       />
       <Box w={'100%'} h={'100%'} pos={'relative'}>
         <Grid templateColumns={12}>
-          <Grid.Item columnStart={3} columnEnd={11}>
+          <Grid.Item
+            columnStart={isTablet ? 2 : isMobile ? 1 : 3}
+            columnEnd={isTablet ? 12 : isMobile ? 13 : 11}
+          >
             <Flex
               pos={'relative'}
-              direction='row'
+              direction={isMobile ? 'column' : 'row'}
               justify='between'
               align='center'
-              gap={fr(10)}
+              gap={isMobile ? fr(4) : fr(8)}
               my={fr(5)}
+              mx={isMobile ? fr(2) : fr(0 )}
             >
               <Box>
                 <Animation
@@ -80,8 +86,24 @@ const Home = () => {
                   delay={0}
                 >
                   <Image
-                    w={fr(120)}
-                    h={fr(160)}
+                    w={
+                      isLaptop
+                        ? fr(100)
+                        : isTablet
+                        ? fr(80)
+                        : isMobile
+                        ? fr(60)
+                        : fr(120)
+                    }
+                    h={
+                      isLaptop
+                        ? fr(140)
+                        : isTablet
+                        ? fr(120)
+                        : isMobile
+                        ? fr(80)
+                        : fr(160)
+                    }
                     src={BangGo}
                     alt='restaurant-space'
                     br={'lg'}
@@ -92,19 +114,36 @@ const Home = () => {
               <Box>
                 <Flex
                   w={'100%'}
-                  h={fr(160)}
+                  h={
+                    isLaptop
+                      ? fr(140)
+                      : isTablet
+                      ? fr(120)
+                      : isMobile
+                      ? fr(100)
+                      : fr(160)
+                  }
                   direction='column'
                   justify='evenly'
                 >
                   <Text
                     as={'h2'}
-                    ff={'GeomanistLight'}
+                    className='GeomanistLight-font'
                     cl={'primary'}
-                    pos={'absolute'}
-                    t={0}
-                    l={fr(130)}
+                    fs={
+                      isLaptop
+                        ? 'xl'
+                        : isTablet
+                        ? 'lg'
+                        : isMobile
+                        ? 'base'
+                        : '2xl'
+                    }
                   >
-                    <Highlight cl={'#fff'}>Paramita</Highlight> có gì đặc biệt?
+                    <Highlight cl={'#fff'} className='GeomanistLight-font'>
+                      Paramita
+                    </Highlight>{' '}
+                    có gì đặc biệt?
                   </Text>
                   <Animation
                     animation={'slide-right'}
@@ -113,7 +152,18 @@ const Home = () => {
                     timing='ease-in-out'
                     delay={0}
                   >
-                    <Text as={'p'} fs={'2xl'}>
+                    <Text
+                      as={'p'}
+                      fs={
+                        isLaptop
+                          ? 'xl'
+                          : isTablet
+                          ? 'md'
+                          : isMobile
+                          ? 'sm'
+                          : '2xl'
+                      }
+                    >
                       Paramita sử dụng 100% nguyên liệu thuần thực vật, được
                       trồng theo phương pháp hữu cơ, đảm bảo an toàn cho sức
                       khoẻ và thân thiện với môi trường. Paramita có thực đơn đa
@@ -127,14 +177,22 @@ const Home = () => {
                     src={DividerLogo}
                     alt='divider'
                     fit='cover'
-                    w={fr(80)}
+                    w={
+                      isLaptop
+                        ? fr(80)
+                        : isTablet
+                        ? fr(60)
+                        : isMobile
+                        ? fr(40)
+                        : fr(80)
+                    }
                   />
                 </Flex>
               </Box>
             </Flex>
             <Flex
               pos={'relative'}
-              direction='row'
+              direction={isMobile ? 'column' : 'row'}
               justify='between'
               align='center'
               gap={fr(10)}
@@ -142,10 +200,27 @@ const Home = () => {
             >
               <Box>
                 <Flex
-                  h={fr(160)}
+                  w={'100%'}
+                  h={
+                    isLaptop
+                      ? fr(140)
+                      : isTablet
+                      ? fr(120)
+                      : isMobile
+                      ? fr(80)
+                      : fr(160)
+                  }
                   direction='column'
                   align='center'
-                  gap={fr(15)}
+                  gap={
+                    isLaptop
+                      ? fr(10)
+                      : isTablet
+                      ? fr(8)
+                      : isMobile
+                      ? fr(6)
+                      : fr(15)
+                  }
                 >
                   <Animation
                     animation={'slide-up'}
@@ -153,7 +228,18 @@ const Home = () => {
                     duration={2500}
                     delay={0}
                   >
-                    <Text as={'p'} fs={'2xl'}>
+                    <Text
+                      as={'p'}
+                      fs={
+                        isLaptop
+                          ? 'lg'
+                          : isTablet
+                          ? 'md'
+                          : isMobile
+                          ? 'base'
+                          : '2xl'
+                      }
+                    >
                       <Highlight cl={'#fff'}>
                         "Ba la mật chay - Hương vị thanh tịnh"
                       </Highlight>
@@ -165,7 +251,19 @@ const Home = () => {
                     duration={2200}
                     delay={0}
                   >
-                    <Text fs={'4xl'} ff={'GeomanistBold'} cl={'primary'}>
+                    <Text
+                      fs={
+                        isLaptop
+                          ? '3xl'
+                          : isTablet
+                          ? 'xl'
+                          : isMobile
+                          ? 'md'
+                          : '4xl'
+                      }
+                      ff={'GeomanistBold'}
+                      cl={'primary'}
+                    >
                       Ẩm thực chay thanh tịnh
                     </Text>
                   </Animation>
@@ -175,7 +273,24 @@ const Home = () => {
                     duration={2000}
                     delay={0}
                   >
-                    <Text as={'p'} fs={'xl'} px={fr(20)}>
+                    <Text
+                      as={'p'}
+                      h={isTablet ? fr(60) : isMobile ? fr(40) : fr(80)}
+                      fs={
+                        isLaptop
+                          ? 'lg'
+                          : isTablet
+                          ? 'base'
+                          : isMobile
+                          ? 'sm'
+                          : 'xl'
+                      }
+                      px={isTablet ? fr(5) : isMobile ? fr(2) : fr(10)}
+                      of={'hidden'}
+                      sx={{
+                        textOverflow: 'ellipsis'
+                      }}
+                    >
                       Paramita là một nhà hàng chay chuyên phục vụ những món ăn
                       mang đậm hương vị thanh tịnh của Phật giáo. Các món ăn ở
                       đây được chế biến từ những nguyên liệu tự nhiên, tươi
@@ -204,7 +319,24 @@ const Home = () => {
                   delay={0}
                 >
                   <Image
-                    h={fr(160)}
+                    w={
+                      isLaptop
+                        ? fr(100)
+                        : isTablet
+                        ? fr(80)
+                        : isMobile
+                        ? fr(60)
+                        : fr(120)
+                    }
+                    h={
+                      isLaptop
+                        ? fr(140)
+                        : isTablet
+                        ? fr(120)
+                        : isMobile
+                        ? fr(100)
+                        : fr(160)
+                    }
                     src={HomePic2}
                     alt='restaurant-space'
                     br={'lg'}
@@ -219,7 +351,7 @@ const Home = () => {
           </Grid.Item>
           <Grid.Item columnStart={1} columnEnd={13}>
             <Box w={'100%'} pos={'relative'} my={fr(5)}>
-              <Text ff={'GeomanistBold'} fs={'3xl'} ml={fr(10)}>
+              <Text ff={'GeomanistBold'} fs={isMobile ? 'lg' : '3xl'} ml={fr(10)}>
                 <Highlight bg={['primary', 100]} cl={'#fff'}>
                   Best seller #1
                 </Highlight>
@@ -249,25 +381,33 @@ const Home = () => {
                 desktop: {
                   breakpoint: {
                     max: 3000,
-                    min: 1024
+                    min: 1441
                   },
                   items: 5,
                   partialVisibilityGutter: 40
                 },
-                mobile: {
+                laptop: {
                   breakpoint: {
-                    max: 464,
-                    min: 0
+                    max: 1440,
+                    min: 1024
                   },
-                  items: 1,
+                  items: 3,
                   partialVisibilityGutter: 30
                 },
                 tablet: {
                   breakpoint: {
-                    max: 1024,
-                    min: 464
+                    max: 1023,
+                    min: 426
                   },
-                  items: 3,
+                  items: 2,
+                  partialVisibilityGutter: 30
+                },
+                mobile: {
+                  breakpoint: {
+                    max: 425,
+                    min: 0
+                  },
+                  items: 1,
                   partialVisibilityGutter: 30
                 }
               }}
@@ -277,9 +417,9 @@ const Home = () => {
               shouldResetAutoplay
               showDots={false}
               sliderClass=''
-              slidesToSlide={2}
+              slidesToSlide={1}
               swipeable
-              transitionDuration={1000}
+              transitionDuration={3000}
             >
               {imagesFood.map((item, index) => (
                 <Flex

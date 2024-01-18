@@ -10,7 +10,7 @@ const MenuListCategory = ({ listCategory }) => {
         <List.Item
           key={index}
           fs={'md'}
-          ff={'GeomanistLight'}
+          className='GeomanistLight-font'
           cl={[textColor, { hover: 'primary' }]}
           w={'max-content'}
         >

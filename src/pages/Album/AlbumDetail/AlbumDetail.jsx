@@ -64,7 +64,7 @@ const AlbumDetail = () => {
       <Grid templateColumns={12}>
         <Grid.Item columnStart={3} columnEnd={11}>
           <Flex w={'100%'} gap={fr(5)} my={fr(5)} direction='column'>
-            <Text fs={'2xl'} ff={'GeomanistLight'} tt={'capitalize'}>
+            <Text fs={'2xl'} className='GeomanistMedium-font' tt={'capitalize'}>
               {useLocation().state.title}
             </Text>
             <LightGallery

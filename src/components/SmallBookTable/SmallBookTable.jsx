@@ -2,8 +2,10 @@ import { Box, Flex, Grid, Image, Text, fr } from '@prismane/core'
 import { HomePic3 } from '../../images'
 import { StyledButton } from '../'
 import { Link } from 'react-router-dom'
+import { useResponsive } from '~/utils/responsive'
 
 const SmallBookTable = () => {
+  const { isLaptop, isMobile, isTablet } = useResponsive()
   return (
     <Grid templateColumns={12}>
       <Grid.Item columnStart={1} columnEnd={13}>
@@ -13,7 +15,7 @@ const SmallBookTable = () => {
             alt='restaurant-space'
             fit='cover'
             w={'100%'}
-            mah={fr(130)}
+            h={fr(130)}
             ft={'brightness(80%)'}
             pos={'absolute'}
           />
@@ -21,19 +23,24 @@ const SmallBookTable = () => {
             justify='center'
             align='center'
             direction='column'
-            gap={fr(5)}
-            w={'50%'}
-            h={'100%'}
+            gap={fr(3)}
+            w={isTablet ? '100%' : isMobile ? '100%' : '50%'}
+            h={fr(130)}
             pos={'relative'}
-            ff={"BalihoScript"}
+            ff={'BalihoScript'}
           >
-            <Text fs={'2xl'} cl={'#fff'}>
+            <Text fs={isMobile ? 'lg' : '2xl'} cl={'#fff'}>
               Hãy để Paramita giữ chỗ cho bạn
             </Text>
-            <Text cl={'#fff'} fs={'4xl'} ff={'GeomanistBold'}>
+            <Text cl={'#fff'} fs={ isMobile ? 'xl' : '4xl'} ff={'GeomanistBold'}>
               Đặt bàn thật đơn giản
             </Text>
-            <Text as={'p'} cl={'#fff'} fs={'xl'} w={'50%'}>
+            <Text
+              as={'p'}
+              cl={'#fff'}
+              fs={isLaptop ? 'lg' : isTablet ? 'md' : isMobile ? 'base' : 'xl'}
+              w={'50%'}
+            >
               Chào mừng bạn đến với Paramita! Chúng tôi rất vui khi được phục vụ
               bạn. Để tiết kiệm thời gian, bạn có thể đặt bàn trực tuyến với vài
               thao tác đơn giản. Hãy chọn ngày giờ phù hợp với lịch của mình và

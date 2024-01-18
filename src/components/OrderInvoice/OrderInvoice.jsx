@@ -19,7 +19,7 @@ const OrderInvoice = () => {
       direction='column'
       align='center'
     >
-      <Text as={'h3'} fs={'xl'} ff={'Geomanist'} p={fr(5)}>
+      <Text as={'h3'} fs={'xl'} className='Geomanist-font' p={fr(5)}>
         Đơn hàng của bạn
       </Text>
       <Box w={'90%'}>

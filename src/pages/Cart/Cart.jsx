@@ -38,12 +38,17 @@ const Cart = () => {
             <Flex gap={fr(4)} direction='column'>
               <Table>
                 <Table.Head ta={'center'}>
-                  <Table.Row fs={'lg'} ff={'Geomanist'}>
-                    <Table.Cell w={fr(180)}>Sản phẩm</Table.Cell>
-                    <Table.Cell>Tuỳ chọn</Table.Cell>
-                    <Table.Cell>Giá</Table.Cell>
-                    <Table.Cell>Số lượng</Table.Cell>
-                    <Table.Cell>Tạm tính</Table.Cell>
+                  <Table.Row fs={'lg'}>
+                    <Table.Cell 
+                    className='Geomanist-font'  w={fr(180)}>Sản phẩm</Table.Cell>
+                    <Table.Cell 
+                    className='Geomanist-font' >Tuỳ chọn</Table.Cell>
+                    <Table.Cell 
+                    className='Geomanist-font' >Giá</Table.Cell>
+                    <Table.Cell 
+                    className='Geomanist-font' >Số lượng</Table.Cell>
+                    <Table.Cell 
+                    className='Geomanist-font' >Tạm tính</Table.Cell>
                   </Table.Row>
                 </Table.Head>
                 <Table.Body>
@@ -91,7 +96,7 @@ const Cart = () => {
                 <Button
                   size='lg'
                   br={'full'}
-                  ff={'GeomanistMedium'}
+                  className='GeomanistMedium-font'
                   {...(data.length === 0
                     ? { disabled: true }
                     : {

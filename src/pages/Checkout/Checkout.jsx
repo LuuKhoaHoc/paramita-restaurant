@@ -43,14 +43,14 @@ const Checkout = () => {
                 mah={'70vh'}
               >
                 <Tabs defaultValue='first'>
-                  <Tabs.List justify='end' ff={'Geomanist'}>
-                    <Tabs.Tab px={fr(6)} py={fr(4)} value='first'>
+                  <Tabs.List justify='end' >
+                    <Tabs.Tab className='Geomanist-font' px={fr(6)} py={fr(4)} value='first'>
                       Vận chuyển
                     </Tabs.Tab>
-                    <Tabs.Tab px={fr(6)} py={fr(4)} value='second'>
+                    <Tabs.Tab className='Geomanist-font' px={fr(6)} py={fr(4)} value='second'>
                       Thanh toán
                     </Tabs.Tab>
-                    <Tabs.Tab px={fr(6)} py={fr(4)} value='third'>
+                    <Tabs.Tab className='Geomanist-font' px={fr(6)} py={fr(4)} value='third'>
                       Xác nhận
                     </Tabs.Tab>
                   </Tabs.List>

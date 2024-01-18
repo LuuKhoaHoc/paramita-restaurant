@@ -1,13 +1,5 @@
 // component
-import {
-  Divider,
-  Flex,
-  Grid,
-  Icon,
-  Text,
-  Transition,
-  fr,
-} from '@prismane/core'
+import { Divider, Flex, Grid, Icon, Text, Transition, fr } from '@prismane/core'
 import TextFooter from '~/components/Footer/TextFooter/TextFooter'
 import { Link } from 'react-router-dom'
 // icon
@@ -20,32 +12,28 @@ import {
   Phone,
   YoutubeLogo
 } from '@phosphor-icons/react'
+import { useResponsive } from '~/utils/responsive'
 // utils
 
 const Footer = () => {
+  const { isLaptop, isMobile, isTablet } = useResponsive()
   return (
     <Transition
       transition='all'
       timing='ease-in-out'
       w={'100%'}
-      h={fr(85)}
+      h={isMobile ? fr(120) : fr(85)}
       bg={(theme) => (theme.mode === 'dark' ? '#000' : '#fff2e5')}
       cl={(theme) => (theme.mode === 'dark' ? '#fff' : '#371b04')}
-      ff={'"GeomanistMedium", sans-serif'}
+      className='GeomanistMedium-font'
       pos={'relative'}
-      fs={'lg'}
+      fs={isTablet ? 'md' : isMobile ? 'sm' : 'lg'}
       b={0}
       bsh={'inner'}
     >
       <Grid templateColumns={12} w={'100%'} h={'100%'}>
         <Grid.Item columnStart={3} columnEnd={11}>
-          <Text
-            h={'100%'}
-            ta={'center'}
-            mt={10}
-            fs={'xl'}
-            ff={"'GeomanistMedium'"}
-          >
+          <Text h={'100%'} ta={'center'} mt={10} fs={'xl'}>
             Contact us
           </Text>
           <Flex
@@ -58,7 +46,7 @@ const Footer = () => {
             <Icon
               as={'a'}
               href='#'
-              size={fr(8)}
+              size={isMobile ? fr(7) : fr(8)}
               cl={(theme) =>
                 theme.mode === 'dark'
                   ? ['#fff', { hover: ['primary', 200] }]
@@ -70,7 +58,7 @@ const Footer = () => {
             <Icon
               as={'a'}
               href='#'
-              size={fr(8)}
+              size={isMobile ? fr(7) : fr(8)}
               cl={(theme) =>
                 theme.mode === 'dark'
                   ? ['#fff', { hover: ['primary', 200] }]
@@ -82,7 +70,7 @@ const Footer = () => {
             <Icon
               as={'a'}
               href='#'
-              size={fr(8)}
+              size={isMobile ? fr(7) : fr(8)}
               cl={(theme) =>
                 theme.mode === 'dark'
                   ? ['#fff', { hover: ['primary', 200] }]
@@ -94,7 +82,7 @@ const Footer = () => {
             <Icon
               as={'a'}
               href='#'
-              size={fr(8)}
+              size={isMobile ? fr(7) : fr(8)}
               cl={(theme) =>
                 theme.mode === 'dark'
                   ? ['#fff', { hover: ['primary', 200] }]
@@ -107,13 +95,12 @@ const Footer = () => {
         </Grid.Item>
 
         <Grid.Item
-          columnStart={3}
-          columnEnd={8}
-          ff={"'GeomanistMedium', sans-serif'"}
+          columnStart={isTablet ? 2 : isMobile ? 3 : 3}
+          columnEnd={isMobile ? 11 : 8}
         >
           <Flex direction='column' justify='between' align='left'>
             <Flex direction='row' align='center' gap={fr(3)}>
-              <Icon size={fr(9)}>
+              <Icon size={isMobile ? fr(7) : fr(9)}>
                 <Phone />
               </Icon>
               <Flex direction='column' gap={fr(1)}>
@@ -126,7 +113,7 @@ const Footer = () => {
               </Flex>
             </Flex>
             <Flex direction='row' align='center' gap={fr(3)}>
-              <Icon size={fr(9)}>
+              <Icon size={isMobile ? fr(7) : fr(9)}>
                 <Envelope />
               </Icon>
               <TextFooter as={'a'} href='mailto:hi@paramita.com'>
@@ -134,53 +121,81 @@ const Footer = () => {
               </TextFooter>
             </Flex>
             <Flex direction='row' gap={fr(3)}>
-              <Icon size={fr(9)}>
+              <Icon size={isMobile ? fr(7) : fr(9)}>
                 <MapPin />
               </Icon>
               <Flex direction='column' gap={fr(1)}>
-                <Text tt={'capitalize'}>
+                <Text className='GeomanistMedium-font' tt={'capitalize'}>
                   107 Nguyễn Thị Minh Khai, phường Bến Nghé, quận 1, TP.HCM
                 </Text>
-                <Text tt={'capitalize'}>
+                <Text className='GeomanistMedium-font' tt={'capitalize'}>
                   108 Lê Văn Sỹ, phường 13, quận 3, TP.HCM
                 </Text>
               </Flex>
             </Flex>
           </Flex>
         </Grid.Item>
-        <Grid.Item columnStart={9} columnEnd={11}>
-          <Flex direction='column' gap={fr(3)} justify='center' align='end'>
+        {isMobile && (
+          <Grid.Item columnStart={5} columnEnd={9}>
+            <Divider my={'auto'} />
+          </Grid.Item>
+        )}
+        <Grid.Item
+          columnStart={isMobile ? 3 : 8}
+          columnEnd={isMobile ? 11 : 11}
+        >
+          <Flex
+            direction='column'
+            gap={fr(3)}
+            justify='center'
+            align={isMobile ? 'center' : 'end'}
+          >
             <Link to={'/career'}>
-              <TextFooter>Tuyển dụng</TextFooter>
+              <TextFooter className='GeomanistMedium-font'>
+                Tuyển dụng
+              </TextFooter>
             </Link>
             <Link to={'/promotion'}>
-              <TextFooter>Khuyến mãi</TextFooter>
+              <TextFooter className='GeomanistMedium-font'>
+                Khuyến mãi
+              </TextFooter>
             </Link>
             <Link to={'/book-table'}>
-              <TextFooter>Đặt bàn</TextFooter>
+              <TextFooter className='GeomanistMedium-font'>Đặt bàn</TextFooter>
             </Link>
             <Link to={'/contact'}>
-              <TextFooter>Liên hệ</TextFooter>
+              <TextFooter className='GeomanistMedium-font'>Liên hệ</TextFooter>
             </Link>
             <Link to={'/album'}>
-              <TextFooter>Album</TextFooter>
+              <TextFooter className='GeomanistMedium-font'>Album</TextFooter>
             </Link>
           </Flex>
         </Grid.Item>
         <Grid.Item columnStart={5} columnEnd={9}>
           <Divider my={'auto'} />
         </Grid.Item>
-        <Grid.Item columnStart={4} columnEnd={10}>
-          <Flex direction='row' justify='between' align='center' fs={'md'}>
-            <Link to={'/privacy'}>
-              <TextFooter>Chính sách bảo mật</TextFooter>
-            </Link>
-            <Link to={'/term'}>
-              <TextFooter>Điều khoản sử dụng</TextFooter>
-            </Link>
-            <Link to={'/faq'}>
-              <TextFooter>FAQ</TextFooter>
-            </Link>
+        <Grid.Item columnStart={3} columnEnd={11}>
+          <Flex
+            direction='row'
+            justify='between'
+            align='center'
+            fs={isTablet ? 'base' : isMobile ? 'xs' : 'md'}
+          >
+            <TextFooter
+              as={Link}
+              to={'/privacy'}
+              className='GeomanistMedium-font'
+            >
+              Bảo mật
+            </TextFooter>
+
+            <TextFooter as={Link} to={'/term'} className='GeomanistMedium-font'>
+              Điều khoản
+            </TextFooter>
+
+            <TextFooter as={Link} to={'/faq'} className='GeomanistMedium-font'>
+              FAQ
+            </TextFooter>
           </Flex>
         </Grid.Item>
       </Grid>

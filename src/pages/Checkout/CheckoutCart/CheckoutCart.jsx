@@ -86,7 +86,7 @@ const CheckoutCart = () => {
         <Divider />
         <Text
           fs={'xl'}
-          ff={'GeomanistMedium'}
+          className='GeomanistMedium-font'
           cl={'primary'}
           m={fr(4)}
           pos={['relative', { ':before': 'absolute' }]}
@@ -117,7 +117,7 @@ const CheckoutCart = () => {
         <Flex justify='between'>
           <Text>Phí giao hàng</Text>
           <Text>
-            {checkoutInformation.delivery.toLocaleString('vi-VN', {
+            {checkoutInformation?.delivery.toLocaleString('vi-VN', {
               style: 'currency',
               currency: 'VND'
             })}
@@ -134,20 +134,21 @@ const CheckoutCart = () => {
           mx={fr(-4)}
           px={fr(4)}
           py={fr(5)}
-          ff={'GeomanistLight'}
           cl={'#fff'}
           sx={{
             borderBottomLeftRadius: '10px',
             borderBottomRightRadius: '10px'
           }}
         >
-          <Text as={'h3'}>Thành tiền</Text>
-          <Text as={'h3'}>
+          <Text as={'h3'} className='GeomanistLight-font'>
+            Thành tiền
+          </Text>
+          <Text as={'h3'} className='GeomanistLight-font'>
             {(
               cartItems.reduce(
                 (acc, item) => acc + item.price * item.quantity * 1000,
                 0
-              ) + checkoutInformation.delivery
+              ) + checkoutInformation?.delivery
             ).toLocaleString('vi-VN')}
             đ
           </Text>

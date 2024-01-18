@@ -4,6 +4,7 @@ import {
   Button,
   Center,
   Checkbox,
+  Divider,
   Flex,
   Form,
   Grid,
@@ -25,6 +26,7 @@ import { MainPic, DividerParamita } from '~/components'
 import { useForm } from '@prismane/core/hooks'
 import p from '~/utils/zodToPrismane'
 import { z } from 'zod'
+import { useResponsive } from '~/utils/responsive'
 
 const BookTable = () => {
   const { handleReset, handleSubmit, register } = useForm({
@@ -139,6 +141,7 @@ const BookTable = () => {
       window.removeEventListener('scroll', handleScroll)
     }
   }, [])
+  const { isMobile, isTablet, isLaptop } = useResponsive()
   return (
     <Box pos={'relative'} mih={'100vh'} of={'hidden'}>
       <MainPic
@@ -148,20 +151,29 @@ const BookTable = () => {
       />
       <Box w={'100%'} h={'100%'} pos={'relative'}>
         <Grid templateColumns={12}>
-          <Grid.Item columnStart={3} columnEnd={11}>
+          <Grid.Item
+            columnStart={isTablet ? 2 : isMobile ? 1 : 3}
+            columnEnd={isTablet ? 12 : isMobile ? 13 : 11}
+          >
             <Flex
-              direction='row'
+              direction={isTablet ? 'column' : isMobile ? 'column' : 'row'}
               justify='center'
               align='center'
               gap={fr(10)}
               my={fr(10)}
             >
-              <Box w={'70%'}>
-                <Text as={'h1'} tt={'uppercase'} mb={fr(4)} cl={'primary'}>
+              <Box w={isTablet ? '100%' : isMobile ? '100%' : '70%'}>
+                <Text
+                  as={'h1'}
+                  fs={isTablet ? 'xl' : isMobile ? 'lg' : 'inherit'}
+                  tt={'uppercase'}
+                  mb={fr(4)}
+                  cl={'primary'}
+                >
                   "Nhà hàng chay Paramita - đồng hành cùng mọi khoảnh khắc quý
                   giá của bạn! "
                 </Text>
-                <Flex direction='row' justify='center' gap={fr(4)} fs={'lg'}>
+                <Flex direction='row' justify='center' gap={fr(4)}>
                   <Box>
                     <Text as={'h2'}>Đặt chỗ bằng điện thoại</Text>
                     <Text as={'p'} fs={'xl'}>
@@ -186,7 +198,7 @@ const BookTable = () => {
                   </Box>
                 </Flex>
               </Box>
-              <Box w={'30%'}>
+              <Box w={isTablet ? '100%' : isMobile ? '100%' : '30%'}>
                 <Box bd={'1px solid'} bdc={'primary'}>
                   <Center direction='column' gap={fr(4)} m={fr(4)} fs={'lg'}>
                     <Text as={'h2'}>Thời gian mở cửa</Text>
@@ -202,7 +214,12 @@ const BookTable = () => {
                 </Box>
               </Box>
             </Flex>
-            <Flex direction='row' justify='center' align='center' gap={fr(10)}>
+            <Flex
+              direction={isTablet ? 'column' : isMobile ? 'column' : 'row'}
+              justify='center'
+              align='center'
+              gap={fr(10)}
+            >
               <Animation
                 animation={'slide-down'}
                 animated={scrollEvent}
@@ -290,7 +307,11 @@ const BookTable = () => {
                       {...register('checkbox')}
                       label='Tôi đồng ý với các điều khoản đặt cọc và hủy bàn của nhà hàng.'
                     />
-                    <Button size='lg' ff={'GeomanistMedium'} type='submit'>
+                    <Button
+                      size='lg'
+                      className='GeomanistMedium-font'
+                      type='submit'
+                    >
                       Đặt bàn ngay
                     </Button>
                   </Form>
@@ -314,9 +335,10 @@ const BookTable = () => {
                 </Box>
               </Animation>
             </Flex>
+            {isTablet || isMobile ? <Divider my={fr(10)}/> : <></>}
             <Flex
               pos={'relative'}
-              direction='row'
+              direction={isTablet ? 'column' : isMobile ? 'column' : 'row'}
               justify='between'
               align='center'
               gap={fr(10)}
@@ -342,7 +364,7 @@ const BookTable = () => {
               <Box>
                 <Flex
                   w={'100%'}
-                  h={fr(160)}
+                  h={isTablet ? fr(60) : isMobile ? fr(30) : fr(160)}
                   direction='column'
                   justify='center'
                   align='center'
@@ -355,8 +377,8 @@ const BookTable = () => {
                   >
                     <Text
                       as={'h1'}
-                      fs={'3xl'}
-                      ff={'GeomanistBold'}
+                      fs={isTablet ? '2xl' : isMobile ? 'lg' : '3xl'}
+                      className='GeomanistBold-font'
                       cl={'primary'}
                     >
                       "Hương thơm tinh khiết, hài hòa giữa hương và vị. Tiếp đón
@@ -369,7 +391,7 @@ const BookTable = () => {
                     duration={1500}
                     delay={0}
                   >
-                    <Text as={'p'} fs={'2xl'} ta='center'>
+                    <Text as={'p'} fs={isTablet ? 'lg' : isMobile ? 'md' : '2xl'} ta='center' tt={'uppercase'}>
                       NGÔI NHÀ CỦA NHỮNG KHOẢNH KHẮC SUM VẦY
                     </Text>
                   </Animation>

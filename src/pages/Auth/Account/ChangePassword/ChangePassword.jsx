@@ -1,10 +1,4 @@
-import {
-  Button,
-  Flex,
-  PasswordField,
-  Text,
-  fr
-} from '@prismane/core'
+import { Button, Flex, PasswordField, Text, fr } from '@prismane/core'
 import React from 'react'
 const ChangePassword = () => {
   return (
@@ -33,7 +27,13 @@ const ChangePassword = () => {
         <PasswordField label='Mật khẩu cũ' />
         <PasswordField label='Mật khẩu mới' />
         <PasswordField label='Xác nhận mật khẩu mới' />
-        <Button size='md' br={'full'} ff={'GeomanistLight'} ml={'auto'} mt={fr(4)}>
+        <Button
+          size='md'
+          br={'full'}
+          className='GeomanistLight-font'
+          ml={'auto'}
+          mt={fr(4)}
+        >
           <Text fs={'md'}>Cập nhật</Text>
         </Button>
       </Flex>

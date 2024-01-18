@@ -27,10 +27,10 @@ const CheckoutSuccess = () => {
           <Icon size={fr(25)} cl={'primary'}>
             <CheckCircle weight='bold' />
           </Icon>
-          <Text as={'h1'} ff={'GeomanistMedium'}>
+          <Text as={'h1'} className='GeomanistMedium-font'>
             Cảm ơn bạn đã mua hàng!
           </Text>
-          <Text as={'h2'} ff={'Geomanist'}>
+          <Text as={'h2'} className='Geomanist-font'>
             Đơn hàng của bạn đã được đặt thành công.
           </Text>
         </Center>

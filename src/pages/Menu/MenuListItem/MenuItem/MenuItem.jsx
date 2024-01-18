@@ -40,7 +40,7 @@ const MenuItem = ({ image, title, price, category }) => {
             as={'h3'}
             cl={[textColor, { hover: 'primary' }]}
             cs={'pointer'}
-            ff={'GeomanistMedium'}
+            fs={'xl'}
           >
             {title}
           </Text>

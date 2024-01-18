@@ -15,7 +15,7 @@ const AccountAddresses = () => {
   return (
     <>
       <Modal w={'20vw'} open={open} onClose={() => setOpen(false)} closable>
-        <Modal.Header ff={'GeomanistMedium'}>
+        <Modal.Header className='GeomanistMedium-font'>
           <Text fs={'2xl'} ta={'center'}>
             Thêm địa chỉ
           </Text>
@@ -45,7 +45,7 @@ const AccountAddresses = () => {
           <Button
             size='lg'
             br={'full'}
-            ff={'GeomanistMedium'}
+            className='GeomanistMedium-font'
             onClick={() => setOpen(false)}
           >
             Thêm

@@ -11,7 +11,7 @@ const Error = () => {
         theme.mode === 'dark' ? ['primary', 600] : ['primary', 100]
       }
       direction='column'
-      ff={'GeomanistLight'}
+      className='GeomanistLight-font'
     >
       <Center
         cl={(theme) =>

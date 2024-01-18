@@ -37,7 +37,7 @@ const CheckoutPayment = () => {
     <Flex w={'100%'} p={fr(8)} direction='column'>
       <Text
         fs={'lg'}
-        ff={'GeomanistMedium'}
+        className='GeomanistMedium-font'
         cl={'primary'}
         mb={fr(4)}
         pos={['relative', { ':before': 'absolute' }]}
@@ -78,7 +78,7 @@ const CheckoutPayment = () => {
       </Form>
       <Text
         fs={'lg'}
-        ff={'GeomanistMedium'}
+        className='GeomanistMedium-font'
         cl={'primary'}
         my={fr(4)}
         pos={['relative', { ':before': 'absolute' }]}

@@ -23,17 +23,39 @@
     url('./fonts/Geomanist-Bold.otf') format('opentype');
 }
 * {
-  font-family: "'BalihoScript', sans-serif";
-}
-a {
-  color: inherit;
-  text-decoration: none;
+  font-family: 'BalihoScript' !important;
 }
 .PrismaneCenter-root.active {
   .PrismaneCircle-root {
     background-color: #39b54a;
   }
 }
+.PrismaneTextField-root {
+  font-family: 'GeomanistMedium' !important;
+}
+.PrismaneTextField-label {
+  font-size: 1rem;
+}
+.PrismaneButton-text {
+  font-family: 'GeomanistMedium' !important;
+}
+.Geomanist-font {
+  font-family: 'Geomanist' !important;
+}
+.GeomanistLight-font {
+  font-family: 'GeomanistLight' !important;
+}
+.GeomanistMedium-font {
+  font-family: 'GeomanistMedium' !important;
+}
+.GeomanistBold-font {
+  font-family: 'GeomanistBold' !important;
+}
 .active {
   color: #39b54a;
+}
+a {
+  color: inherit;
+  text-decoration: none;
+  font-family: 'GeomanistMedium' !important;
 }

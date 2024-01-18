@@ -23,7 +23,11 @@ const Privacy = () => {
               bảo vệ thông tin cá nhân của quý khách.
             </Text>
             <Box>
-              <Text as={'h3'} tt={'capitalize'} ff={'GeomanistMedium'}>
+              <Text
+                as={'h3'}
+                tt={'capitalize'}
+                className='GeomanistMedium-font'
+              >
                 1. Thu thập thông tin
               </Text>
               <Text as={'p'} fs={'lg'}>
@@ -35,7 +39,11 @@ const Privacy = () => {
               </Text>
             </Box>
             <Box>
-              <Text as={'h3'} tt={'capitalize'} ff={'GeomanistMedium'}>
+              <Text
+                as={'h3'}
+                tt={'capitalize'}
+                className='GeomanistMedium-font'
+              >
                 2. Sử dụng thông tin
               </Text>
               <Text as={'p'} fs={'lg'}>
@@ -55,7 +63,11 @@ const Privacy = () => {
               </Text>
             </Box>
             <Box>
-              <Text as={'h3'} tt={'capitalize'} ff={'GeomanistMedium'}>
+              <Text
+                as={'h3'}
+                tt={'capitalize'}
+                className='GeomanistMedium-font'
+              >
                 3. Bảo mật thông tin
               </Text>
               <Text as={'p'} fs={'lg'}>
@@ -68,7 +80,11 @@ const Privacy = () => {
               </Text>
             </Box>
             <Box>
-              <Text as={'h3'} tt={'capitalize'} ff={'GeomanistMedium'}>
+              <Text
+                as={'h3'}
+                tt={'capitalize'}
+                className='GeomanistMedium-font'
+              >
                 4. Thời gian lưu trữ
               </Text>
               <Text as={'p'} fs={'lg'}>
@@ -77,7 +93,11 @@ const Privacy = () => {
               </Text>
             </Box>
             <Box>
-              <Text as={'h3'} tt={'capitalize'} ff={'GeomanistMedium'}>
+              <Text
+                as={'h3'}
+                tt={'capitalize'}
+                className='GeomanistMedium-font'
+              >
                 5. Liên hệ
               </Text>
               <Text as={'p'} fs={'lg'}>

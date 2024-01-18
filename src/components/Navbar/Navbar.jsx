@@ -27,7 +27,7 @@ import lazyWithPreload from 'react-lazy-with-preload'
 import { useEffect, useState, useContext } from 'react'
 import {
   ClockCountdown,
-  Sidebar,
+  List as ListIcon,
   ListChecks,
   ShoppingCartSimple,
   SignOut,
@@ -122,12 +122,13 @@ const Navbar = () => {
       <Grid.Item columnStart={3} columnEnd={11}>
         <Header z={1}>
           <Flex
-            ff={"'GeomanistMedium', sans-serif"}
+            className='GeomanistMedium-font'
             w='100%'
             justify='between'
             h={fr(22.5)}
             fs={isLaptop ? 'base' : isTablet ? 'sm' : isMobile ? 'xs' : 'lg'}
           >
+            {/* Responsive elements */}
             {isTablet || isMobile ? (
               <>
                 <Drawer
@@ -140,7 +141,7 @@ const Navbar = () => {
                   <Drawer.Header>
                     <Text></Text>
                   </Drawer.Header>
-                  <Flex direction='column' ff={'GeomanistMedium'}>
+                  <Flex direction='column' className='GeomanistMedium-font'>
                     <Flex align='center' justify='around'>
                       <Avatar size={'sm'} color={'primary'}></Avatar>
                       <Text fs={isTablet ? 'lg' : 'md'}>Paramita</Text>
@@ -188,6 +189,7 @@ const Navbar = () => {
                         Lịch sử mua hàng
                       </List.Item>
                       <List.Item
+                      className='Geomanist-font'
                         cl='red'
                         align='center'
                         justify='between'
@@ -213,7 +215,21 @@ const Navbar = () => {
                         cl={['inherit', { hover: ['primary', 100] }]}
                         bg={['transparent', { ':before': 'primary' }]}
                         pos={['relative', { ':before': 'absolute' }]}
-                        p={isTablet ? fr(4) : fr(6)}
+                        p={isTablet ? fr(4) : fr(5)}
+                        sx={lineAnimation}
+                      >
+                        <NavLink
+                          to={'/'}
+                          onMouseOver={() => Home.preload()}
+                        >
+                          Trang chủ
+                        </NavLink>
+                      </List.Item>
+                      <List.Item
+                        cl={['inherit', { hover: ['primary', 100] }]}
+                        bg={['transparent', { ':before': 'primary' }]}
+                        pos={['relative', { ':before': 'absolute' }]}
+                        p={isTablet ? fr(4) : fr(5)}
                         sx={lineAnimation}
                       >
                         <NavLink
@@ -227,7 +243,7 @@ const Navbar = () => {
                         cl={['inherit', { hover: ['primary', 100] }]}
                         bg={['transparent', { ':before': 'primary' }]}
                         pos={['relative', { ':before': 'absolute' }]}
-                        p={isTablet ? fr(4) : fr(6)}
+                        p={isTablet ? fr(4) : fr(5)}
                         sx={lineAnimation}
                       >
                         <NavLink
@@ -241,7 +257,7 @@ const Navbar = () => {
                         cl={['inherit', { hover: ['primary', 100] }]}
                         bg={['transparent', { ':before': 'primary' }]}
                         pos={['relative', { ':before': 'absolute' }]}
-                        p={isTablet ? fr(4) : fr(6)}
+                        p={isTablet ? fr(4) : fr(5)}
                         sx={lineAnimation}
                       >
                         <NavLink
@@ -255,7 +271,7 @@ const Navbar = () => {
                         cl={['inherit', { hover: ['primary', 100] }]}
                         bg={['transparent', { ':before': 'primary' }]}
                         pos={['relative', { ':before': 'absolute' }]}
-                        p={isTablet ? fr(4) : fr(6)}
+                        p={isTablet ? fr(4) : fr(5)}
                         sx={lineAnimation}
                       >
                         <NavLink
@@ -269,7 +285,7 @@ const Navbar = () => {
                         cl={['inherit', { hover: ['primary', 100] }]}
                         bg={['transparent', { ':before': 'primary' }]}
                         pos={['relative', { ':before': 'absolute' }]}
-                        p={isTablet ? fr(4) : fr(6)}
+                        p={isTablet ? fr(4) : fr(5)}
                         sx={lineAnimation}
                       >
                         <NavLink
@@ -283,7 +299,7 @@ const Navbar = () => {
                         cl={['inherit', { hover: ['primary', 100] }]}
                         bg={['transparent', { ':before': 'primary' }]}
                         pos={['relative', { ':before': 'absolute' }]}
-                        p={isTablet ? fr(4) : fr(6)}
+                        p={isTablet ? fr(4) : fr(5)}
                         sx={lineAnimation}
                       >
                         <NavLink
@@ -311,12 +327,12 @@ const Navbar = () => {
                   </NavLink>
                 </Flex>
                 <Flex align='center' justify='end'>
-                  <Icon
+                  <Icon 
                     size={isTablet ? fr(10) : isMobile ? fr(8) : ''}
                     cs={'pointer'}
                     onClick={() => setRight(true)}
                   >
-                    <Sidebar weight='bold' />
+                    <ListIcon  weight='bold' />
                   </Icon>
                 </Flex>
               </>
@@ -438,14 +454,20 @@ const Navbar = () => {
                           t={fr(15)}
                           open={menuOpen}
                         >
-                          <Menu.Label>Tài Khoản</Menu.Label>
+                          <Menu.Label className='GeomanistMedium-font'>
+                            Tài Khoản
+                          </Menu.Label>
                           <Menu.Item
                             align='center'
                             as={Link}
                             onClick={() => setMenuOpen(!menuOpen)}
                             to={'/account/information'}
                           >
-                            <Center justify='start' gap={fr(2)}>
+                            <Center
+                              justify='start'
+                              gap={fr(2)}
+                              className='GeomanistMedium-font'
+                            >
                               <Menu.Icon>
                                 <User />
                               </Menu.Icon>
@@ -458,7 +480,11 @@ const Navbar = () => {
                             onClick={() => setMenuOpen(!menuOpen)}
                             to={'/account/orders'}
                           >
-                            <Center justify='start' gap={fr(2)}>
+                            <Center
+                              justify='start'
+                              gap={fr(2)}
+                              className='GeomanistMedium-font'
+                            >
                               <Menu.Icon>
                                 <ListChecks />
                               </Menu.Icon>
@@ -471,7 +497,11 @@ const Navbar = () => {
                             onClick={() => setMenuOpen(!menuOpen)}
                             to={'/account/history-purchase'}
                           >
-                            <Center justify='start' gap={fr(2)}>
+                            <Center
+                              justify='start'
+                              gap={fr(2)}
+                              className='GeomanistMedium-font'
+                            >
                               <Menu.Icon>
                                 <ClockCountdown />
                               </Menu.Icon>
@@ -479,10 +509,13 @@ const Navbar = () => {
                             </Center>
                           </Menu.Item>
                           <Divider />
-                          <Menu.Label>Danger Zone</Menu.Label>
+                          <Menu.Label className='GeomanistMedium-font'>
+                            Danger Zone
+                          </Menu.Label>
                           <Menu.Item
                             color='red'
                             align='center'
+                            className='GeomanistMedium-font'
                             onClick={handleLogout}
                           >
                             <Menu.Icon>
@@ -500,7 +533,7 @@ const Navbar = () => {
                       <Center h={'100%'} w={'max-content'}>
                         <Button
                           variant='primary'
-                          ff={"'GeomanistMedium', sans-serif"}
+                          className='GeomanistMedium-font'
                           size='lg'
                           br={'full'}
                         >

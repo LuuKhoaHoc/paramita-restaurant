@@ -18,6 +18,7 @@ import { DividerParamita, MainPic } from '~/components'
 import Carousel from 'react-multi-carousel'
 import 'react-multi-carousel/lib/styles.css'
 import PromotionItem from '~/pages/Promotion/PromotionItem/PromotionItem'
+import { useResponsive } from '~/utils/responsive'
 
 const Promotion = () => {
   const imagesFood = [
@@ -30,7 +31,7 @@ const Promotion = () => {
     { image: DauHuNonChungTuong, title: 'Đậu hũ non chưng tương', rating: 5 },
     { image: Lau, title: 'Lẩu Paramita', rating: 4.5 }
   ]
-  const responsive = {
+  const responsiveCarousel = {
     desktop: {
       breakpoint: { max: 3000, min: 1024 },
       items: 1
@@ -44,13 +45,14 @@ const Promotion = () => {
       items: 1
     }
   }
+  const { isMobile, isTablet, isLaptop } = useResponsive()
   return (
     <Box pos={'relative'} mih={'100vh'}>
       <Carousel
         swipeable
         draggable={false}
         showDots={true}
-        responsive={responsive}
+        responsive={responsiveCarousel}
         infinite={true}
         autoPlay={true}
         autoPlaySpeed={4000}
@@ -60,23 +62,25 @@ const Promotion = () => {
       >
         <MainPic
           image={PromotionPic}
-          title={'Giảm giá đến 20%'}
-          subtitle='khi mua combo trên 500k'
+          title={'Paramita'}
+          subtitle='Giảm giá đến 20% cho hoá đơn trên 500k'
         />
         <MainPic
           image={PromotionPic}
-          title={'Giảm giá đến 20%'}
-          subtitle='khi mua combo trên 500k'
+          title={'Paramita'}
+          subtitle='Giảm giá đến 20% cho hoá đơn trên 500k'
         />
         <MainPic
           image={PromotionPic}
-          title={'Giảm giá đến 20%'}
-          subtitle='khi mua combo trên 500k'
+          title={'Paramita'}
+          subtitle='Giảm giá đến 20% cho hoá đơn trên 500k'
         />
       </Carousel>
       <Box w={'100%'} h={'100%'} pos={'relative'}>
         <Grid templateColumns={12}>
-          <Grid.Item columnStart={3} columnEnd={11}>
+          <Grid.Item 
+          columnStart={isTablet ? 2 : isMobile ? 1 : 3}
+          columnEnd={isTablet ? 12 : isMobile ? 13 : 11}>
             <Flex
               pos={'relative'}
               direction='column'

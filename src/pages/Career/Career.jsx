@@ -16,7 +16,7 @@ const Career = () => {
         <Grid templateColumns={12}>
           <Grid.Item columnStart={3} columnEnd={11}>
             <Flex pos={'relative'} gap={fr(8)} direction='column' my={fr(5)}>
-              <Text as={'h2'} ff={'GeomanistMedium'}>
+              <Text as={'h2'} className='GeomanistMedium-font'>
                 Giới thiệu ngắn gọn về công ty, văn hóa doanh nghiệp.
               </Text>
               <Flex justify='around'>

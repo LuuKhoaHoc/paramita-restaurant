@@ -154,8 +154,10 @@ const AccountInformation = () => {
           placeholder='hi@paramita.com'
         />
         <NativeDateField label='Sinh nhật' />
-        <Button size='md' br={'full'} ff={'GeomanistLight'} ml={'auto'}>
-          <Text fs={'md'}>Cập nhật</Text>
+        <Button size='md' br={'full'} ml={'auto'}>
+          <Text fs={'md'} className='GeomanistLight-font'>
+            Cập nhật
+          </Text>
         </Button>
       </Form>
     </Flex>

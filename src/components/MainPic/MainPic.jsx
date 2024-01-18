@@ -15,6 +15,7 @@ import { TypeAnimation } from 'react-type-animation'
 import { CaretDown } from '@phosphor-icons/react'
 
 import React, { useState } from 'react'
+import { useResponsive } from '~/utils/responsive'
 
 const MainPic = ({
   title,
@@ -26,6 +27,7 @@ const MainPic = ({
   color
 }) => {
   const [onHovered, setOnHovered] = useState(false)
+  const { isLaptop, isTablet, isMobile } = useResponsive()
   return (
     <Box w={'100%'} h={'100vh'} pos={'relative'}>
       <Transition
@@ -51,7 +53,12 @@ const MainPic = ({
         cs={'default'}
       >
         {sloganLeft ? (
-          <Text fs={'2xl'} mb={-50} mr={300} z={10}>
+          <Text
+            fs={isMobile ? 'md' : 'xl'}
+            mb={-50}
+            mr={isMobile ? 200 : 300}
+            z={10}
+          >
             <TypeAnimation
               sequence={[sloganLeft, 1000]}
               speed={75}
@@ -62,7 +69,12 @@ const MainPic = ({
           ''
         )}
         {sloganRight ? (
-          <Text fs={'lg'} mb={-50} ml={250} z={10}>
+          <Text
+            fs={isTablet ? 'lg' : isMobile ? 'base' : 'xl'}
+            mb={-50}
+            ml={isMobile ? 150 : 250}
+            z={10}
+          >
             <TypeAnimation
               sequence={[sloganRight, 1000]}
               speed={75}
@@ -73,7 +85,12 @@ const MainPic = ({
           ''
         )}
         {sloganCenter ? (
-          <Text fs={'3xl'} mb={-50} ls={5} z={10}>
+          <Text
+            fs={isTablet ? '2xl' : isMobile ? 'lg' : '3xl'}
+            mb={-50}
+            ls={5}
+            z={10}
+          >
             <TypeAnimation
               sequence={[sloganCenter, 1000]}
               speed={75}
@@ -83,11 +100,22 @@ const MainPic = ({
         ) : (
           ''
         )}
-        <Text fs={'8xl'} cl={color} z={10}>
+        <Text
+          fs={isTablet ? '7xl' : isMobile ? '6xl' : '8xl'}
+          cl={color}
+          my={isTablet ? fr(5) : isMobile ? fr(10) : 0}
+          z={10}
+        >
           {title}
         </Text>
         {subtitle === 'Paramita' || subtitle === 'Restaurant' ? (
-          <Text ls={30} fs={'3xl'} ml={30} mt={-40} z={10}>
+          <Text
+            ls={isMobile ? 20 : 30}
+            fs={isTablet ? '2xl' : isMobile ? 'lg' : '3xl'}
+            ml={30}
+            mt={-40}
+            z={10}
+          >
             <TypeAnimation
               sequence={[subtitle, 1000]}
               speed={1}
@@ -95,7 +123,14 @@ const MainPic = ({
             />
           </Text>
         ) : (
-          <Text ls={5} fs={'3xl'} ml={30} mt={-20} z={10}>
+          <Text
+            ls={5}
+            fs={isTablet ? '2xl' : isMobile ? 'lg' : '3xl'}
+            ta={isMobile ? 'center' : 'left'}
+            ml={30}
+            mt={-20}
+            z={10}
+          >
             <TypeAnimation
               sequence={[subtitle, 1000]}
               speed={75}
@@ -122,7 +157,7 @@ const MainPic = ({
             cl={'black'}
             direction='column'
           >
-            <Text ta={'center'} mt={10} fs={'xs'} ff={"'GeomanistMedium'"}>
+            <Text ta={'center'} mt={10} fs={'xs'} className='Geomanist-font'>
               SCROLL {'\n'} DOWN
             </Text>
             <Icon size={'xs'}>

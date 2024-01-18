@@ -28,11 +28,11 @@ const AccountAside = () => {
   const textColor = useThemeModeValue('#371b04', '#d1e9d5')
   const bgColor = useThemeModeValue('#fff2e5', '#1d2b1f')
   const handleLogout = () => {
-    sessionStorage.clear();
+    sessionStorage.clear()
     localStorage.removeItem('orders')
     localStorage.removeItem('orderSuccess')
     localStorage.removeItem('login')
-    navigate('/');
+    navigate('/')
   }
   return (
     <Box w={fr(95)} bg={bgColor} bsh={'xl'} br={'xl'} m={fr(10)}>
@@ -54,7 +54,6 @@ const AccountAside = () => {
           br={'xl'}
           pos={'relative'}
           cl={'#fff'}
-          ff={'GeomanistMedium'}
           sx={{
             background: 'linear-gradient(180deg, #6ad078 0%, #004209 100%)'
           }}
@@ -64,7 +63,6 @@ const AccountAside = () => {
             gap={fr(2)}
             w={fr(30)}
             h={fr(10)}
-            // br={'lg'}
             t={0}
             r={16}
             sx={{
@@ -73,30 +71,31 @@ const AccountAside = () => {
             }}
           >
             <CaretDoubleDown weight='duotone' />
-            <Text fs={'sm'}>Tích điểm</Text>
+            <Text fs={'sm'} className='GeomanistMedium-font'>
+              Tích điểm
+            </Text>
           </Center>
           <Flex direction='column' gap={fr(2)} pt={fr(8)} px={fr(4)}>
-            <Text as={'p'} fs={'xl'}>
+            <Text as={'p'} fs={'xl'} className='GeomanistMedium-font'>
               Paramita
             </Text>
-            <Text as={'p'} fs={'lg'}>
+            <Text as={'p'} fs={'lg'} className='GeomanistMedium-font'>
               450 điểm - Vàng
             </Text>
-            <Flex
-              fs={'sm'}
-              ff={'GeomanistLight'}
-              cl={['base', 50]}
-              w={'100%'}
-              justify='between'
-            >
-              <Text>Vàng</Text>
-              <Text>Kim cương</Text>
+            <Flex fs={'sm'} cl={['base', 50]} w={'100%'} justify='between'>
+              <Text className='GeomanistLight-font'>Vàng</Text>
+              <Text className='GeomanistLight-font'>Kim cương</Text>
             </Flex>
             <Progress w={'100%'} value={65} label='65%' size={'md'} />
           </Flex>
         </Box>
         <Center mt={fr(4)}>
-          <Text cl={textColor} ta={'center'} lh={fr(5)} ff={'GeomanistLight'}>
+          <Text
+            cl={textColor}
+            ta={'center'}
+            lh={fr(5)}
+            className='GeomanistLight-font'
+          >
             Còn 1554 điểm nữa bạn sẽ thăng hạng. Đổi quà không ảnh hưởng tới
             việc thăng hạng của bạn Hãy dùng điểm này để đổi ưu đãi nhé.
           </Text>

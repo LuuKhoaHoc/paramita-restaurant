@@ -26,13 +26,14 @@ const CartItem = ({ image, title, price, selected, quantity }) => {
   return (
     <>
       <Modal w={fr(144)} open={open} onClose={() => setOpen(false)} closable>
-        <Modal.Header ff={'GeomanistMedium'}>
+        <Modal.Header>
           <Text
             fw='bold'
             fs='3xl'
             cl={(theme) =>
               theme.mode === 'dark' ? ['base', 300] : ['base', 900]
             }
+            className='GeomanistMedium-font'
           >
             Tuỳ chọn
           </Text>
@@ -57,7 +58,7 @@ const CartItem = ({ image, title, price, selected, quantity }) => {
         <Modal.Footer>
           <Button
             br={'full'}
-            ff={'Geomanist'}
+            className='Geomanist-font'
             size='md'
             onClick={() => setOpen(false)}
           >

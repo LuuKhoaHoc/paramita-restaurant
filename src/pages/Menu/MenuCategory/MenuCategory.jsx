@@ -83,7 +83,7 @@ const MenuCategory = () => {
               <MenuListCategory listCategory={listCategory} />
               <Divider orientation='vertical' />
               <Flex direction='column' gap={fr(4)}>
-                <Text fs={'xl'} ff={'GeomanistMedium'}>
+                <Text fs={'xl'} className='GeomanistMedium-font'>
                   {state?.category}
                 </Text>
                 <MenuListItem items={imagesFood} />

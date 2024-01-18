@@ -68,13 +68,13 @@ const CheckoutReview = () => {
     <>
       <Dialog w={fr(96)} open={open} onClose={() => setOpen(false)} closable>
         <Dialog.Header>
-          <Text fs={'xl'} ff={'GeomanistMedium'} cl={'primary'}>
+          <Text fs={'xl'} className='GeomanistMedium-font' cl={'primary'}>
             Cảnh báo!
           </Text>
         </Dialog.Header>
         <Text fs='lg'>Vui lòng điền đầy đủ thông tin trước khi đặt hàng!!</Text>
         <Dialog.Footer>
-          <Button variant='tertiary' ff={'GeomanistMedium'}>
+          <Button variant='tertiary' className='GeomanistMedium-font'>
             Xác nhận
           </Button>
         </Dialog.Footer>
@@ -89,12 +89,12 @@ const CheckoutReview = () => {
           bsh={'md'}
           br={'full'}
         />
-        <Text ff={'GeomanistMedium'} fs={'xl'}>
+        <Text className='GeomanistMedium-font' fs={'xl'}>
           Xác nhận đơn hàng
         </Text>
         <Flex w={'80%'} direction='column'>
           <Flex direction='column'>
-            <Text as={'p'} ff={'GeomanistMedium'}>
+            <Text as={'p'} className='GeomanistMedium-font'>
               Thông tin người nhận
             </Text>
             <Text fs={'md'} ta={'center'}>
@@ -109,7 +109,7 @@ const CheckoutReview = () => {
           </Flex>
 
           <Flex direction='column'>
-            <Text as={'p'} ff={'GeomanistMedium'}>
+            <Text as={'p'} className='GeomanistMedium-font'>
               Thanh toán
             </Text>
             <Flex justify='center' align='center' gap={fr(4)}>
@@ -134,7 +134,7 @@ const CheckoutReview = () => {
             </Flex>
           </Flex>
           <Flex direction='column'>
-            <Text as={'p'} ff={'GeomanistMedium'}>
+            <Text as={'p'} className='GeomanistMedium-font'>
               Vận chuyển
             </Text>
             <Text fs={'md'} ta={'center'}>
@@ -146,7 +146,7 @@ const CheckoutReview = () => {
           size='lg'
           br={'full'}
           variant='secondary'
-          ff={'GeomanistMedium'}
+          className='GeomanistMedium-font'
           onClick={() => handleInformation()}
         >
           Đặt hàng

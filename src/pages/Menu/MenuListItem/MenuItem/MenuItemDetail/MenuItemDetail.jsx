@@ -76,7 +76,7 @@ const MenuItemDetail = () => {
       <Box w={'100%'} h={'100%'} pos={'relative'}>
         <Grid templateColumns={12}>
           <Grid.Item columnStart={3} columnEnd={11}>
-            <Breadcrumb m={fr(6)} fs={'lg'}>
+            <Breadcrumb m={fr(6)} fs={'md'}>
               <Breadcrumb.Item as={Link} to={'/menu'}>
                 Menu
               </Breadcrumb.Item>
@@ -111,7 +111,7 @@ const MenuItemDetail = () => {
                   cl={'#fff'}
                   size='lg'
                   icon={<Package weight='duotone' />}
-                  ff={'GeomanistMedium'}
+                  className='GeomanistMedium-font'
                 >
                   Đặt giao tận nơi
                 </Button>
@@ -119,7 +119,7 @@ const MenuItemDetail = () => {
             </Flex>
             <Divider />
             <Box my={fr(6)}>
-              <Text as={'h3'} ff={'GeomanistMedium'} mb={fr(2)}>
+              <Text as={'h3'} className='GeomanistMedium-font' mb={fr(2)}>
                 Mô tả món ăn
               </Text>
               <Text fs={'md'}>
@@ -131,7 +131,7 @@ const MenuItemDetail = () => {
             </Box>
             <Divider />
             <Box my={fr(6)}>
-              <Text as={'h3'} ff={'GeomanistMedium'} mb={fr(2)}>
+              <Text as={'h3'} className='GeomanistMedium-font' mb={fr(2)}>
                 Món ăn liên quan
               </Text>
               <Flex justify='between'>

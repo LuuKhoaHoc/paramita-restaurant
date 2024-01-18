@@ -18,7 +18,12 @@ const Account = () => {
       <Box w={'100%'} h={'100%'} pos={'relative'}>
         <Grid templateColumns={12}>
           <Grid.Item columnStart={3} columnEnd={11}>
-            <Center p={fr(12)} fs={'2xl'} gap={fr(4)} ff={'GeomanistMedium'}>
+            <Center
+              p={fr(12)}
+              fs={'2xl'}
+              gap={fr(4)}
+              className='GeomanistMedium-font'
+            >
               <Icon cl={'primary'} size={fr(10)}>
                 <UserCircle weight='fill' />
               </Icon>{' '}

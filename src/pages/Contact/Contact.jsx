@@ -59,7 +59,7 @@ const Contact = () => {
                   </Text>
                 </Box>
                 <Box w={fr(100)}>
-                  <Text as={'h1'}>
+                  <Text as={'h2'} mb={fr(8)}>
                     Số điện thoại:{' '}
                     <Link
                       href='tel:0123456789'
@@ -68,7 +68,7 @@ const Contact = () => {
                       +84 (0)123-456-789
                     </Link>
                   </Text>
-                  <Text as={'h1'}>
+                  <Text as={'h2'} mb={fr(8)}>
                     Email:{' '}
                     <Link
                       href='mailto:hi@paramita.com'
@@ -140,7 +140,7 @@ const Contact = () => {
                   }
                 }}
               >
-                <Form>
+                <Form onSubmit={(e) => e.preventDefault()}>
                   <TextField
                     label='Họ và tên'
                     variant='outlined'
@@ -165,7 +165,7 @@ const Contact = () => {
                     size='md'
                   />
                   <Button
-                    ff={'GeomanistMedium'}
+                    className='GeomanistMedium-font'
                     type='submit'
                     size='md'
                     iconPosition='right'

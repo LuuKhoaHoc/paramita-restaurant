@@ -70,17 +70,17 @@ const CheckoutShipping = () => {
       <Center w={'100%'} h={'fit-content'} my={fr(4)}>
         <Flex direction='column' gap={fr(4)} w={fr(96)}>
           <TextField
+            className='GeomanistMedium-font'
             variant='underlined'
             placeholder='Search...'
             value={query}
             onChange={(e) => setQuery(e.target.value)}
           />
-          <List mah={fr(38)} of={'auto'} 
-          >
+          <List mah={fr(38)} of={'auto'}>
             {accountAddress.map((item, index) => (
               <List.Item
                 key={index}
-                cl={theme => theme.mode === 'dark' ? 'white' : 'black'}
+                cl={(theme) => (theme.mode === 'dark' ? 'white' : 'black')}
                 onClick={handleSetInput}
                 fs={'md'}
                 bg={['transparent', { hover: ['base', 100] }]}
@@ -101,11 +101,7 @@ const CheckoutShipping = () => {
                 br={'md'}
                 cs={'pointer'}
               >
-                <Button
-                  variant='text'
-
-                  icon={<ClockCounterClockwise />}
-                >
+                <Button variant='text' icon={<ClockCounterClockwise />}>
                   {item}{' '}
                 </Button>
               </List.Item>
@@ -113,31 +109,37 @@ const CheckoutShipping = () => {
           </List>
         </Flex>
       </Center>
-      <Box mx={fr(2)} mb={fr(4)}>
-        <Text ff={'GeomanistMedium'} fs={'xl'}>
+      <Box
+        mx={fr(4)}
+        
+      >
+        <Text className='GeomanistMedium-font' fs={'xl'}>
           Địa chỉ khác
         </Text>
         <Form
-          ff={'Geomanist'}
-          mt={fr(4)}
+          mt={fr(2)}
+          mx={fr(2)}
           onSubmit={(e) => {
             handleSubmit(e, (v) => handleSetInputByForm(v))
           }}
           onReset={() => handleReset()}
         >
           <TextField
+            className='GeomanistMedium-font'
             variant='underlined'
             label='Địa chỉ'
             placeholder='Nhập địa chỉ'
             {...register('address')}
           />
           <TextField
+            className='GeomanistMedium-font'
             variant='underlined'
             label='Quận huyện'
             placeholder='Nhập quận huyện'
             {...register('district')}
           />
           <TextField
+            className='GeomanistMedium-font'
             variant='underlined'
             label='Tỉnh Thành'
             placeholder='Nhập tỉnh thành'
@@ -145,12 +147,12 @@ const CheckoutShipping = () => {
           />
           <Flex gap={fr(2)}>
             <Button br={'full'} variant='tertiary' type='submit'>
-              <Text ff={'Geomanist'} fs={'md'}>
+              <Text className='Geomanist-font' fs={'md'}>
                 Thêm địa chỉ
               </Text>
             </Button>
             <Button br={'full'} variant='tertiary' type='reset'>
-              <Text ff={'Geomanist'} fs={'md'}>
+              <Text className='Geomanist-font' fs={'md'}>
                 Xoá
               </Text>
             </Button>

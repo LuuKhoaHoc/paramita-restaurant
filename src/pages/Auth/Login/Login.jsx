@@ -102,6 +102,9 @@ const Login = () => {
               },
               '.PrismaneCheckbox-error': {
                 fontSize: fr(4)
+              },
+              '.PrismaneField-field' : {
+                fontFamily: 'Geomanist !important'
               }
             }}
           >
@@ -171,7 +174,7 @@ const Login = () => {
                   value={remember}
                   onChange={(e) => setRemember(e.target.checked)}
                 />
-                <Text cl={['#0266BE', { hover: 'blue' }]}>
+                <Text fs={'md'} cl={['#0266BE', { hover: 'blue' }]}>
                   <Link to={'/forgot-password'}>Quên mật khẩu?</Link>
                 </Text>
               </Flex>

@@ -9,17 +9,27 @@ import lgThumbnail from 'lightgallery/plugins/thumbnail'
 import lgAutoPlay from 'lightgallery/plugins/autoplay'
 // img
 import { Box, Center, Grid, Highlight, Image, Text, fr } from '@prismane/core'
+import { useResponsive } from '~/utils/responsive'
 
 const SmallGallery = ({ images }) => {
+  const { isLaptop, isTablet, isMobile } = useResponsive()
   return (
     <Grid templateColumns={12}>
-      <Grid.Item columnStart={3} columnEnd={11}>
+      <Grid.Item
+        columnStart={isTablet ? 2 : isMobile ? 1 : 3}
+        columnEnd={isTablet ? 12 : isMobile ? 13 : 11}
+      >
         <Box w={'100%'} pos={'relative'} my={fr(12)}>
           <Center direction='column'>
-            <Text fs={'xl'} my={fr(4)}>
+            <Text fs={isTablet ? 'lg' : isMobile ? 'md' : 'xl'} my={fr(4)}>
               As Belong With
             </Text>
-            <Text fs={'3xl'} ff={'GeomanistBold'} tt={'uppercase'} mb={fr(4)}>
+            <Text
+              fs={isTablet ? '2xl' : isMobile ? 'xl' : '3xl'}
+              ff={'GeomanistBold'}
+              tt={'uppercase'}
+              mb={fr(4)}
+            >
               <Highlight bg={['primary', 100]} cl={'#fff'}>
                 @Paramita
               </Highlight>
@@ -47,7 +57,7 @@ const SmallGallery = ({ images }) => {
                   bsh={'md'}
                   fit='cover'
                   // w={fr(100)}
-                  h={fr(84)}
+                  h={isTablet ? fr(60) : isMobile ? fr(40) : fr(80)}
                   sx={{
                     transition: 'transform 0.3s',
                     '&:hover': {
