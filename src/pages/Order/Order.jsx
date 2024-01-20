@@ -16,6 +16,7 @@ import {
   DauHuNonChungTuong,
   Lau
 } from '~/images'
+import { useResponsive } from '~/utils/responsive'
 
 const Order = () => {
   const listFood = [
@@ -83,7 +84,7 @@ const Order = () => {
     'Trà thảo mộc',
     'Món thêm'
   ]
-
+  const { isMobile, isTablet, isLaptop } = useResponsive()
   return (
     <Toaster position='top-right' t={fr(23)}>
       <Box pos={'relative'} mih={'100vh'}>
@@ -94,13 +95,16 @@ const Order = () => {
         />
         <Box w={'100%'} h={'100%'} pos={'relative'}>
           <Grid templateColumns={12}>
-            <Grid.Item columnStart={3} columnEnd={11}>
+            <Grid.Item
+              columnStart={isTablet ? 2 : isMobile ? 1 : 3}
+              columnEnd={isTablet ? 12 : isMobile ? 13 : 11}
+            >
               <Flex direction='column' justify='between' align='center'>
                 <Flex gap={fr(4)} align='center'>
                   <Icon size={fr(10)} cl={'primary'}>
                     <Leaf weight='fill' />
                   </Icon>
-                  <Text fs={'3xl'}>Các món từ nhà Paramita</Text>
+                  <Text fs={isTablet ? '2xl' : isMobile ? 'xl' : '3xl'}>Các món từ nhà Paramita</Text>
                 </Flex>
                 <OrderListCategory listCategory={listCategory} />
                 <OrderListItem listFood={listFood} />

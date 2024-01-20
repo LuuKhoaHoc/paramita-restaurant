@@ -17,8 +17,10 @@ import {
 import React, { useContext, useState } from 'react'
 import { QuantityItem } from '~/components'
 import { CartContext } from '~/contexts/CartContext'
+import { useResponsive } from '~/utils/responsive'
 
 const OrderItem = ({ image, title, price, description }) => {
+  const { isMobile, isTablet } = useResponsive()
   const { addCartItem } = useContext(CartContext)
   const toast = useToast()
   const [open, setOpen] = useState(false)
@@ -85,7 +87,8 @@ const OrderItem = ({ image, title, price, description }) => {
   return (
     <>
       <Modal
-        h={'90vh'}
+        w={isTablet ? '60vh' : isMobile ? '70vh' : '50vh'}
+        h={isTablet ? '80vh' : isMobile ? '80vh' : '90vh'}
         open={open}
         onClose={() => setOpen(false)}
         closable
@@ -97,17 +100,18 @@ const OrderItem = ({ image, title, price, description }) => {
           </Text>
         </Modal.Header>
         <Image
-          w={fr(90)}
-          h={fr(90)}
+          w={isMobile ? fr(40) : fr(90)}
+          h={isMobile ? fr(40) : fr(90)}
           br={'lg'}
           bsh={'md'}
           src={image}
           alt={title}
           mx={'auto'}
         />
-        <Text fs={'2xl'}>{title}</Text>
-        <Text fs={'lg'} h={fr(20)}>
-          {description}
+        <Text fs={isMobile ? 'lg' :'2xl'}>{title}</Text>
+        <Text fs={isMobile ? 'base' : 'lg'} >
+          Lorem ipsum dolor sit amet consectetur, adipisicing elit. Quisquam voluptatibus vero quibusdam delectus neque deserunt nesciunt voluptatem praesentium debitis molestias suscipit magnam non maiores sint eum, reiciendis cum! Id, quibusdam?
+          {/* {description} */}
         </Text>
         <Flex justify='between' align='center' fs={'lg'} mb={fr(2)}>
           <Text>{price}</Text>
@@ -169,8 +173,8 @@ const OrderItem = ({ image, title, price, description }) => {
       <Flex
         direction='column'
         ta={'left'}
-        w={fr(44)}
-        h={fr(70)}
+        w={isMobile ? fr(34) : fr(44)}
+        h={isMobile ? fr(60) : fr(70)}
         bsh={'md'}
         br={'xl'}
         p={fr(2)}
@@ -179,9 +183,10 @@ const OrderItem = ({ image, title, price, description }) => {
         <Image
           src={image}
           alt={title}
-          h={fr(42)}
-          w={fr(42)}
+          w={'90%'}
+          h={'90%'}
           pl={fr(1)}
+          mx={'auto'}
           br={'xl'}
         />
         <Text fs={'md'} my={fr(2)} h={fr(16)}>

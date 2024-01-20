@@ -162,7 +162,7 @@ const BookTable = () => {
               gap={fr(10)}
               my={fr(10)}
             >
-              <Box w={isTablet ? '100%' : isMobile ? '100%' : '70%'}>
+              <Box w={isTablet ? '100%' : isMobile ? '90%' : '70%'}>
                 <Text
                   as={'h1'}
                   fs={isTablet ? 'xl' : isMobile ? 'lg' : 'inherit'}
@@ -173,10 +173,13 @@ const BookTable = () => {
                   "Nhà hàng chay Paramita - đồng hành cùng mọi khoảnh khắc quý
                   giá của bạn! "
                 </Text>
-                <Flex direction='row' justify='center' gap={fr(4)}>
-                  <Box>
+                <Flex direction='row' gap={fr(4)}>
+                  <Box w={isTablet ? '50%' : isMobile ? '50%' : '100%'}>
                     <Text as={'h2'}>Đặt chỗ bằng điện thoại</Text>
-                    <Text as={'p'} fs={'xl'}>
+                    <Text
+                      as={'p'}
+                      fs={isTablet ? 'lg' : isMobile ? 'md' : 'xl'}
+                    >
                       Để được tư vấn và giữ chỗ tại khu vực yêu thích trong nhà
                       hàng, Quý khách vui lòng gọi Hotline{' '}
                       <Link w={'fit-content'} href='tel: +84 xxx xxx xxx'>
@@ -186,9 +189,12 @@ const BookTable = () => {
                       khách đã quan tâm đến dịch vụ của nhà hàng!
                     </Text>
                   </Box>
-                  <Box>
+                  <Box w={isTablet ? '50%' : isMobile ? '50%' : '100%'}>
                     <Text as={'h2'}>Đặt chỗ sự kiện & nhóm</Text>
-                    <Text as={'p'} fs={'xl'}>
+                    <Text
+                      as={'p'}
+                      fs={isTablet ? 'lg' : isMobile ? 'md' : 'xl'}
+                    >
                       Với không gian ấm cúng và riêng tư cho mọi sự kiện và họp
                       nhóm, hãy liên hệ Paramita để được tư vấn và giữ chỗ
                       trước. Chúng mình có đội ngũ chuyên biệt tổ chức những sự
@@ -198,7 +204,7 @@ const BookTable = () => {
                   </Box>
                 </Flex>
               </Box>
-              <Box w={isTablet ? '100%' : isMobile ? '100%' : '30%'}>
+              <Box w={isTablet ? '100%' : isMobile ? '90%' : '30%'}>
                 <Box bd={'1px solid'} bdc={'primary'}>
                   <Center direction='column' gap={fr(4)} m={fr(4)} fs={'lg'}>
                     <Text as={'h2'}>Thời gian mở cửa</Text>
@@ -224,7 +230,7 @@ const BookTable = () => {
                 animation={'slide-down'}
                 animated={scrollEvent}
                 duration={1500}
-                w={'50%'}
+                w={isTablet ? '100%' : isMobile ? '90%' : '50%'}
               >
                 <Box
                   p={fr(4)}
@@ -321,7 +327,7 @@ const BookTable = () => {
                 animation={'slide-right'}
                 animated={scrollEvent}
                 duration={1500}
-                w={'50%'}
+                w={isTablet ? '100%' : isMobile ? '90%' : '50%'}
               >
                 <Box>
                   <Image
@@ -335,7 +341,7 @@ const BookTable = () => {
                 </Box>
               </Animation>
             </Flex>
-            {isTablet || isMobile ? <Divider my={fr(10)}/> : <></>}
+            {isTablet || isMobile ? <Divider my={fr(10)} /> : <></>}
             <Flex
               pos={'relative'}
               direction={isTablet ? 'column' : isMobile ? 'column' : 'row'}
@@ -344,59 +350,61 @@ const BookTable = () => {
               gap={fr(10)}
               my={fr(5)}
             >
-              <Box>
+              <Animation
+                animation={'slide-left'}
+                animated={scrollEvent}
+                duration={1000}
+                delay={0}
+                w={isMobile ? '90%' : '100%'}
+              >
+                <Image
+                  w={isMobile ? '100%' : fr(160)}
+                  src={Space6}
+                  alt='restaurant-space'
+                  br={'lg'}
+                  bsh={'md'}
+                  fit='cover'
+                />
+              </Animation>
+              <Flex
+                w={isMobile ? '90%' : '100%'}
+                h={isTablet ? fr(60) : isMobile ? fr(30) : fr(160)}
+                direction='column'
+                justify='center'
+                align='center'
+              >
                 <Animation
-                  animation={'slide-left'}
+                  animation={'fade'}
                   animated={scrollEvent}
                   duration={1000}
                   delay={0}
                 >
-                  <Image
-                    w={fr(160)}
-                    src={Space6}
-                    alt='restaurant-space'
-                    br={'lg'}
-                    bsh={'md'}
-                    fit='cover'
-                  />
+                  <Text
+                    as={'h1'}
+                    fs={isTablet ? '2xl' : isMobile ? 'lg' : '3xl'}
+                    className='GeomanistBold-font'
+                    cl={'primary'}
+                  >
+                    "Hương thơm tinh khiết, hài hòa giữa hương và vị. Tiếp đón
+                    bạn là nụ cười ấm áp, thân thiện."
+                  </Text>
                 </Animation>
-              </Box>
-              <Box>
-                <Flex
-                  w={'100%'}
-                  h={isTablet ? fr(60) : isMobile ? fr(30) : fr(160)}
-                  direction='column'
-                  justify='center'
-                  align='center'
+                <Animation
+                  animation={'slide-right'}
+                  animated={scrollEvent}
+                  duration={1500}
+                  delay={0}
                 >
-                  <Animation
-                    animation={'fade'}
-                    animated={scrollEvent}
-                    duration={1000}
-                    delay={0}
+                  <Text
+                    as={'p'}
+                    fs={isTablet ? 'lg' : isMobile ? 'md' : '2xl'}
+                    ta='center'
+                    tt={'uppercase'}
                   >
-                    <Text
-                      as={'h1'}
-                      fs={isTablet ? '2xl' : isMobile ? 'lg' : '3xl'}
-                      className='GeomanistBold-font'
-                      cl={'primary'}
-                    >
-                      "Hương thơm tinh khiết, hài hòa giữa hương và vị. Tiếp đón
-                      bạn là nụ cười ấm áp, thân thiện."
-                    </Text>
-                  </Animation>
-                  <Animation
-                    animation={'slide-right'}
-                    animated={scrollEvent}
-                    duration={1500}
-                    delay={0}
-                  >
-                    <Text as={'p'} fs={isTablet ? 'lg' : isMobile ? 'md' : '2xl'} ta='center' tt={'uppercase'}>
-                      NGÔI NHÀ CỦA NHỮNG KHOẢNH KHẮC SUM VẦY
-                    </Text>
-                  </Animation>
-                </Flex>
-              </Box>
+                    NGÔI NHÀ CỦA NHỮNG KHOẢNH KHẮC SUM VẦY
+                  </Text>
+                </Animation>
+              </Flex>
             </Flex>
           </Grid.Item>
           <Grid.Item columnStart={1} columnEnd={13}>

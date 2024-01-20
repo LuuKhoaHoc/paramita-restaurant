@@ -4,8 +4,10 @@ import { itemToURL } from '~/utils/stringToURL'
 
 import React from 'react'
 import { Center, Circle, Image, Text, fr, Flex } from '@prismane/core'
+import { useResponsive } from '~/utils/responsive'
 
 const OrderListCategory = ({ listCategory }) => {
+  const { isMobile, isTablet } = useResponsive()
   return (
     <Flex
       w={'100%'}
@@ -20,12 +22,15 @@ const OrderListCategory = ({ listCategory }) => {
           direction='column'
           as={NavLink}
           to={'/order-online/' + itemToURL(item)}
-          m={fr(8)}
+          m={isTablet ? fr(5) : isMobile ? fr(3) : fr(8)}
         >
-          <Circle size={fr(20)} bg={'#d1e9d5'}>
-            <Image w={fr(11)} h={fr(11)} src={LogoIcon} />
+          <Circle
+            size={isTablet ? fr(15) : isMobile ? fr(12) : fr(20)}
+            bg={'#d1e9d5'}
+          >
+            <Image w={'50%'} h={'50%'} src={LogoIcon} />
           </Circle>
-          <Text fs={'md'}>{item}</Text>
+          <Text fs={isTablet ? 'base' : isMobile ? 'base' : 'md'}>{item}</Text>
         </Center>
       ))}
     </Flex>
