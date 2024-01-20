@@ -189,7 +189,7 @@ const Navbar = () => {
                         Lịch sử mua hàng
                       </List.Item>
                       <List.Item
-                      className='Geomanist-font'
+                        className='GeomanistMedium-font'
                         cl='red'
                         align='center'
                         justify='between'
@@ -202,9 +202,7 @@ const Navbar = () => {
                         Đăng xuất
                       </List.Item>
                     </List>
-
                     <Divider my={isTablet ? fr(4) : fr(6)} />
-
                     <List
                       px={fr(4)}
                       fs={isTablet ? 'lg' : 'md'}
@@ -215,13 +213,10 @@ const Navbar = () => {
                         cl={['inherit', { hover: ['primary', 100] }]}
                         bg={['transparent', { ':before': 'primary' }]}
                         pos={['relative', { ':before': 'absolute' }]}
-                        p={isTablet ? fr(4) : fr(5)}
+                        p={isTablet ? fr(4) : fr(3)}
                         sx={lineAnimation}
                       >
-                        <NavLink
-                          to={'/'}
-                          onMouseOver={() => Home.preload()}
-                        >
+                        <NavLink to={'/'} onMouseOver={() => Home.preload()}>
                           Trang chủ
                         </NavLink>
                       </List.Item>
@@ -229,7 +224,7 @@ const Navbar = () => {
                         cl={['inherit', { hover: ['primary', 100] }]}
                         bg={['transparent', { ':before': 'primary' }]}
                         pos={['relative', { ':before': 'absolute' }]}
-                        p={isTablet ? fr(4) : fr(5)}
+                        p={isTablet ? fr(4) : fr(3)}
                         sx={lineAnimation}
                       >
                         <NavLink
@@ -243,7 +238,7 @@ const Navbar = () => {
                         cl={['inherit', { hover: ['primary', 100] }]}
                         bg={['transparent', { ':before': 'primary' }]}
                         pos={['relative', { ':before': 'absolute' }]}
-                        p={isTablet ? fr(4) : fr(5)}
+                        p={isTablet ? fr(4) : fr(3)}
                         sx={lineAnimation}
                       >
                         <NavLink
@@ -257,7 +252,7 @@ const Navbar = () => {
                         cl={['inherit', { hover: ['primary', 100] }]}
                         bg={['transparent', { ':before': 'primary' }]}
                         pos={['relative', { ':before': 'absolute' }]}
-                        p={isTablet ? fr(4) : fr(5)}
+                        p={isTablet ? fr(4) : fr(3)}
                         sx={lineAnimation}
                       >
                         <NavLink
@@ -271,7 +266,7 @@ const Navbar = () => {
                         cl={['inherit', { hover: ['primary', 100] }]}
                         bg={['transparent', { ':before': 'primary' }]}
                         pos={['relative', { ':before': 'absolute' }]}
-                        p={isTablet ? fr(4) : fr(5)}
+                        p={isTablet ? fr(4) : fr(3)}
                         sx={lineAnimation}
                       >
                         <NavLink
@@ -285,7 +280,7 @@ const Navbar = () => {
                         cl={['inherit', { hover: ['primary', 100] }]}
                         bg={['transparent', { ':before': 'primary' }]}
                         pos={['relative', { ':before': 'absolute' }]}
-                        p={isTablet ? fr(4) : fr(5)}
+                        p={isTablet ? fr(4) : fr(3)}
                         sx={lineAnimation}
                       >
                         <NavLink
@@ -299,7 +294,7 @@ const Navbar = () => {
                         cl={['inherit', { hover: ['primary', 100] }]}
                         bg={['transparent', { ':before': 'primary' }]}
                         pos={['relative', { ':before': 'absolute' }]}
-                        p={isTablet ? fr(4) : fr(5)}
+                        p={isTablet ? fr(4) : fr(3)}
                         sx={lineAnimation}
                       >
                         <NavLink
@@ -327,12 +322,12 @@ const Navbar = () => {
                   </NavLink>
                 </Flex>
                 <Flex align='center' justify='end'>
-                  <Icon 
+                  <Icon
                     size={isTablet ? fr(10) : isMobile ? fr(8) : ''}
                     cs={'pointer'}
                     onClick={() => setRight(true)}
                   >
-                    <ListIcon  weight='bold' />
+                    <ListIcon weight='bold' />
                   </Icon>
                 </Flex>
               </>
