@@ -15,8 +15,10 @@ import {
 import { MainPic } from '~/components'
 import MenuListCategory from '~/pages/Menu/MenuListCategory/MenuListCategory'
 import MenuListItem from '~/pages/Menu/MenuListItem/MenuListItem'
+import { useResponsive } from '~/utils/responsive'
 
 const Menu = () => {
+  const { isMobile, isTablet, isLaptop } = useResponsive()
   const imagesFood = [
     { image: BanhXeo, title: 'Bánh xèo', price: 5, category: 'Món chính' },
     {
@@ -76,7 +78,10 @@ const Menu = () => {
       <MainPic image={Menus} title={'Menu'} subtitle='Nơi hương vị thăng hoa' />
       <Box w={'100%'} h={'100%'} pos={'relative'}>
         <Grid templateColumns={12}>
-          <Grid.Item columnStart={4} columnEnd={11}>
+          <Grid.Item
+            columnStart={isTablet ? 2 : isMobile ? 1 : 3}
+            columnEnd={isTablet ? 12 : isMobile ? 13 : 12}
+          >
             <Flex direction='row' gap={fr(15)} my={fr(10)}>
               <MenuListCategory listCategory={listCategory} />
               <Divider orientation='vertical' />

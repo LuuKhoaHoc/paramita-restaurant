@@ -1,12 +1,14 @@
 import { Box, Flex, Image, Text, fr, useThemeModeValue } from '@prismane/core'
 import { Link } from 'react-router-dom'
+import { useResponsive } from '~/utils/responsive'
 import { itemToURL } from '~/utils/stringToURL'
 
 const MenuItem = ({ image, title, price, category }) => {
+  const { isTablet, isMo } = useResponsive()
   const textColor = useThemeModeValue('#371b04', '#d1e9d5')
   return (
     <Flex direction='column' gap={fr(2)} mb={fr(10)}>
-      <Box w={fr(65)} h={fr(65)}>
+      <Box w={isTablet ? fr(57) : fr(56)} h={isTablet ? fr(40) : fr(56)}>
         <Link
           to={'/menu/' + itemToURL(category) + '/' + itemToURL(title)}
           state={{
@@ -21,12 +23,12 @@ const MenuItem = ({ image, title, price, category }) => {
             alt='image'
             bsh={'md'}
             br={'lg'}
-            w={fr(65)}
-            h={fr(65)}
+            w={isTablet ? fr(57) : fr(56)}
+            h={isTablet ? fr(57) : fr(56)}
           />
         </Link>
       </Box>
-      <Box mt={fr(2)} w={fr(65)}>
+      <Box mt={fr(2)} w={isTablet ? fr(57) : fr(56)}>
         <Link
           to={'/menu/' + itemToURL(category) + '/' + itemToURL(title)}
           state={{
