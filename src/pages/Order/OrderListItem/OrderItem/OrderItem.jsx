@@ -87,7 +87,7 @@ const OrderItem = ({ image, title, price, description }) => {
   return (
     <>
       <Modal
-        w={isTablet ? '60vh' : isMobile ? '70vh' : '50vh'}
+        w={ isMobile ? '40vh' : '50vh'}
         h={isTablet ? '80vh' : isMobile ? '80vh' : '90vh'}
         open={open}
         onClose={() => setOpen(false)}
@@ -100,16 +100,16 @@ const OrderItem = ({ image, title, price, description }) => {
           </Text>
         </Modal.Header>
         <Image
-          w={isMobile ? fr(40) : fr(90)}
-          h={isMobile ? fr(40) : fr(90)}
+          w={isTablet ? fr(60) : isMobile ? fr(40) : fr(90)}
+          h={isTablet ? fr(60) : isMobile ? fr(40) : fr(90)}
           br={'lg'}
           bsh={'md'}
           src={image}
           alt={title}
           mx={'auto'}
         />
-        <Text fs={isMobile ? 'lg' :'2xl'}>{title}</Text>
-        <Text fs={isMobile ? 'base' : 'lg'} >
+        <Text fs={isTablet ? 'xl' : isMobile ? 'lg' :'2xl'}>{title}</Text>
+        <Text fs={isTablet ? 'md' : isMobile ? 'base' : 'lg'} >
           Lorem ipsum dolor sit amet consectetur, adipisicing elit. Quisquam voluptatibus vero quibusdam delectus neque deserunt nesciunt voluptatem praesentium debitis molestias suscipit magnam non maiores sint eum, reiciendis cum! Id, quibusdam?
           {/* {description} */}
         </Text>
@@ -136,7 +136,7 @@ const OrderItem = ({ image, title, price, description }) => {
         <List p={fr(2)}>
           {optionList.map((option, index) => (
             <List.Item key={index} my={fr(2)} justify='between'>
-              <Text fs={'lg'}>{option.title}</Text>
+              <Text fs={isTablet ? 'md' : isMobile ? 'base' : 'lg'}>{option.title}</Text>
               <Radio.Group
                 name='answer'
                 value={option.selected}
@@ -162,7 +162,7 @@ const OrderItem = ({ image, title, price, description }) => {
           full
           shadow
           icon={<ShoppingCart weight='bold' />}
-          size='lg'
+          size={isMobile ? 'md' : 'lg'}
           br={'full'}
           className='GeomanistMedium-font'
           onClick={handleOrder}
