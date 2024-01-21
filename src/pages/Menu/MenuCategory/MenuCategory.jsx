@@ -16,8 +16,10 @@ import { MainPic } from '~/components'
 import MenuListCategory from '~/pages/Menu/MenuListCategory/MenuListCategory'
 import MenuListItem from '~/pages/Menu/MenuListItem/MenuListItem'
 import { useLocation } from 'react-router-dom'
+import { useResponsive } from '~/utils/responsive'
 
 const MenuCategory = () => {
+  const { isMobile, isTablet, isLaptop } = useResponsive()
   const { state } = useLocation()
   const imagesFood = [
     { image: BanhXeo, title: 'Bánh xèo', price: 5, category: 'Món chính' },
@@ -78,8 +80,16 @@ const MenuCategory = () => {
       <MainPic image={Menus} title={'Menu'} subtitle='Nơi hương vị thăng hoa' />
       <Box w={'100%'} h={'100%'} pos={'relative'}>
         <Grid templateColumns={12}>
-          <Grid.Item columnStart={4} columnEnd={11}>
-            <Flex direction='row' gap={fr(15)} my={fr(10)}>
+          <Grid.Item
+            columnStart={isTablet ? 2 : isMobile ? 1 : 3}
+            columnEnd={isTablet ? 12 : isMobile ? 13 : 12}
+          >
+            <Flex
+              direction='row'
+              gap={isTablet ? fr(10) : isMobile ? fr(5) : fr(15)}
+              my={fr(10)}
+              mx={isMobile ? fr(3) : 0}
+            >
               <MenuListCategory listCategory={listCategory} />
               <Divider orientation='vertical' />
               <Flex direction='column' gap={fr(4)}>

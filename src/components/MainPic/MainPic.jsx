@@ -151,18 +151,28 @@ const MainPic = ({
           <Circle
             as={'a'}
             href='#'
-            size={60}
+            size={isMobile ? 40 : 60}
             bg='white'
             td={'none'}
             cl={'black'}
             direction='column'
           >
-            <Text ta={'center'} mt={10} fs={'xs'} className='Geomanist-font'>
-              SCROLL {'\n'} DOWN
-            </Text>
-            <Icon size={'xs'}>
-              <CaretDown weight='fill' />
-            </Icon>
+            {isMobile ? (
+              <>
+                <Icon size={'xs'}>
+                  <CaretDown weight='fill' />
+                </Icon>
+              </>
+            ) : (
+              <>
+                <Text ta={'center'} mt={10} fs='xs' className='Geomanist-font'>
+                  SCROLL {'\n'} DOWN
+                </Text>
+                <Icon size={'xs'}>
+                  <CaretDown weight='fill' />
+                </Icon>
+              </>
+            )}
           </Circle>
         </Animation>
       </Center>

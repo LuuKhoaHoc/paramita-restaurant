@@ -82,7 +82,12 @@ const Menu = () => {
             columnStart={isTablet ? 2 : isMobile ? 1 : 3}
             columnEnd={isTablet ? 12 : isMobile ? 13 : 12}
           >
-            <Flex direction='row' gap={fr(15)} my={fr(10)}>
+            <Flex
+              direction='row'
+              gap={isTablet ? fr(10) : isMobile ? fr(5) : fr(15)}
+              my={fr(10)}
+              mx={isMobile ? fr(3) : 0}
+            >
               <MenuListCategory listCategory={listCategory} />
               <Divider orientation='vertical' />
               <MenuListItem items={imagesFood} />
