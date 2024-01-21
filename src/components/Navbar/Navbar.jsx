@@ -142,66 +142,88 @@ const Navbar = () => {
                     <Text></Text>
                   </Drawer.Header>
                   <Flex direction='column' className='GeomanistMedium-font'>
-                    <Flex align='center' justify='around'>
-                      <Avatar size={'sm'} color={'primary'}></Avatar>
-                      <Text fs={isTablet ? 'lg' : 'md'}>Paramita</Text>
-                    </Flex>
-                    <Divider my={isTablet ? fr(4) : fr(6)} />
-                    <List
-                      px={fr(4)}
-                      fs={isTablet ? 'base' : 'sm'}
-                      onClick={() => setRight(false)}
-                    >
-                      <List.Item
-                        align='center'
-                        justify='between'
-                        p={fr(2)}
-                        as={Link}
-                        to={'/account/information'}
-                      >
-                        <Icon>
-                          <User />
-                        </Icon>
-                        Thông tin cá nhân
-                      </List.Item>
-                      <List.Item
-                        align='center'
-                        justify='between'
-                        p={fr(2)}
-                        as={Link}
-                        to={'/account/orders'}
-                      >
-                        <Icon>
-                          <ListChecks />
-                        </Icon>
-                        Đơn hàng
-                      </List.Item>
-                      <List.Item
-                        align='center'
-                        justify='between'
-                        p={fr(2)}
-                        as={Link}
-                        to={'/account/history-purchase'}
-                      >
-                        <Icon>
-                          <ClockCountdown />
-                        </Icon>
-                        Lịch sử mua hàng
-                      </List.Item>
-                      <List.Item
-                        className='GeomanistMedium-font'
-                        cl='red'
-                        align='center'
-                        justify='between'
-                        p={fr(2)}
-                        onClick={handleLogout}
-                      >
-                        <Icon>
-                          <SignOut />
-                        </Icon>
-                        Đăng xuất
-                      </List.Item>
-                    </List>
+                    {!login ? (
+                      <Center>
+                        <Box>
+                    <Link to={'/login'} onMouseOver={() => Login.preload()}>
+                      <Center h={'100%'} w={'max-content'}>
+                        <Button
+                          variant='primary'
+                          className='GeomanistMedium-font'
+                          size='lg'
+                          br={'full'}
+                        >
+                          Đăng nhập
+                        </Button>
+                      </Center>
+                    </Link>
+                  </Box>
+                      </Center>
+                    ) : (
+                      <>
+                        <Flex align='center' justify='around'>
+                          <Avatar size={'sm'} color={'primary'}></Avatar>
+                          <Text fs={isTablet ? 'lg' : 'md'}>Paramita</Text>
+                        </Flex>
+                        <Divider my={isTablet ? fr(4) : fr(6)} />
+                        <List
+                          px={fr(4)}
+                          fs={isTablet ? 'base' : 'sm'}
+                          onClick={() => setRight(false)}
+                        >
+                          <List.Item
+                            align='center'
+                            justify='between'
+                            p={fr(2)}
+                            as={Link}
+                            to={'/account/information'}
+                          >
+                            <Icon>
+                              <User />
+                            </Icon>
+                            Thông tin cá nhân
+                          </List.Item>
+                          <List.Item
+                            align='center'
+                            justify='between'
+                            p={fr(2)}
+                            as={Link}
+                            to={'/account/orders'}
+                          >
+                            <Icon>
+                              <ListChecks />
+                            </Icon>
+                            Đơn hàng
+                          </List.Item>
+                          <List.Item
+                            align='center'
+                            justify='between'
+                            p={fr(2)}
+                            as={Link}
+                            to={'/account/history-purchase'}
+                          >
+                            <Icon>
+                              <ClockCountdown />
+                            </Icon>
+                            Lịch sử mua hàng
+                          </List.Item>
+                          <List.Item
+                            className='GeomanistMedium-font'
+                            cl='red'
+                            align='center'
+                            justify='between'
+                            p={fr(2)}
+                            onClick={handleLogout}
+                          >
+                            <Icon>
+                              <SignOut />
+                            </Icon>
+                            Đăng xuất
+                          </List.Item>
+                        </List>
+                      </>
+                    )}
+
                     <Divider my={isTablet ? fr(4) : fr(6)} />
                     <List
                       px={fr(4)}
