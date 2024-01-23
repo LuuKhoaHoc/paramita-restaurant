@@ -18,8 +18,10 @@ import { Footer, MainPic } from '~/components'
 import p from '~/utils/zodToPrismane'
 import { z } from 'zod'
 import { Envelope, Password, User } from '@phosphor-icons/react'
+import { useResponsive } from '~/utils/responsive'
 
 const Register = () => {
+  const { isLaptop, isMobile, isTablet } = useResponsive()
   if (sessionStorage.getItem('login') === 'true') {
     window.location.href = '/'
   }
@@ -106,9 +108,9 @@ const Register = () => {
         bg={'primary'}
       >
         <Card
-          m={50}
-          p={50}
-          py={30}
+          m={isTablet ? fr(15) : isMobile ? fr(8) : fr(18)}
+          p={isTablet ? fr(15) : isMobile ? fr(10) : fr(18)}
+          py={fr(8)}
           br={'2xl'}
           bsh={'xl'}
           sx={{
@@ -118,13 +120,13 @@ const Register = () => {
             '.PrismaneCheckbox-error': {
               fontSize: fr(4)
             },
-            '.PrismaneField-field' : {
+            '.PrismaneField-field': {
               fontFamily: 'Geomanist !important'
             }
           }}
         >
           <Card.Header>
-            <Text fs={'3xl'} mx={'auto'}>
+            <Text fs={isMobile ? '2xl' : '3xl'} mx={'auto'}>
               Đăng ký
             </Text>
           </Card.Header>
@@ -141,7 +143,6 @@ const Register = () => {
               label='Tên tài khoản'
               placeholder='paramita'
               icon={<User />}
-              sx={{}}
             />
             <TextField
               {...register('email')}
@@ -150,7 +151,6 @@ const Register = () => {
               label='Email'
               placeholder='xinchao@paramita.com'
               icon={<Envelope />}
-              sx={{}}
             />
             <PasswordField
               {...register('password')}
@@ -159,7 +159,6 @@ const Register = () => {
               label='Mật khẩu'
               placeholder='********'
               icon={<Password weight='fill' />}
-              sx={{}}
             />
             <Checkbox
               {...register('checkbox')}

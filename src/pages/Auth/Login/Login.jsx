@@ -20,8 +20,10 @@ import { LoginPic } from '~/images'
 import { Link } from 'react-router-dom'
 import { AlertCustom, MainPic } from '~/components'
 import { Password, User } from '@phosphor-icons/react'
+import { useResponsive } from '~/utils/responsive'
 
 const Login = () => {
+  const { isLaptop, isMobile, isTablet } = useResponsive()
   const username = 'paramita'
   const password = 'paramita'
   const [remember, setRemember] = useState(false)
@@ -91,9 +93,9 @@ const Login = () => {
           onScroll={() => animate()}
         >
           <Card
-            m={50}
-            p={50}
-            py={30}
+            m={isTablet ? fr(15) : isMobile ? fr(8) : fr(18)}
+            p={isTablet ? fr(15) : isMobile ? fr(10) : fr(18)}
+            py={fr(8)}
             br={'2xl'}
             bsh={'xl'}
             sx={{
@@ -103,13 +105,18 @@ const Login = () => {
               '.PrismaneCheckbox-error': {
                 fontSize: fr(4)
               },
-              '.PrismaneField-field' : {
+              '@media (max-width: 26.5625rem)': {
+                '.PrismaneTextField-label, .PrismanePasswordField-label': {
+                  fontSize: fr(4)
+                }
+              },
+              '.PrismaneField-field': {
                 fontFamily: 'Geomanist !important'
               }
             }}
           >
             <Card.Header>
-              <Text fs={'3xl'} mx={'auto'}>
+              <Text fs={isMobile ? '2xl' : '3xl'} mx={'auto'}>
                 Đăng nhập
               </Text>
             </Card.Header>
@@ -174,8 +181,14 @@ const Login = () => {
                   value={remember}
                   onChange={(e) => setRemember(e.target.checked)}
                 />
-                <Text fs={'md'} cl={['#0266BE', { hover: 'blue' }]}>
-                  <Link to={'/forgot-password'}>Quên mật khẩu?</Link>
+                <Text
+                  as={Link}
+                  to={'/forgot-password'}
+                  fs={isMobile ? 'base' : 'md'}
+                  lh={fr(7.5)}
+                  cl={['#0266BE', { hover: 'blue' }]}
+                >
+                  Quên mật khẩu?
                 </Text>
               </Flex>
               <Button

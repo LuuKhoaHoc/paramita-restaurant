@@ -19,8 +19,10 @@ import { MainPic } from '~/components'
 import { ArrowLeft } from '@phosphor-icons/react/dist/ssr'
 import { z } from 'zod'
 import { Envelope } from '@phosphor-icons/react'
+import { useResponsive } from '~/utils/responsive'
 
 const ForgotPassword = () => {
+  const { isLaptop, isMobile, isTablet } = useResponsive()
   const navigate = useNavigate()
   const { scrollToId } = useScroll()
   useEffect(() => {
@@ -72,8 +74,8 @@ const ForgotPassword = () => {
         bg={'primary'}
       >
         <Card
-          m={50}
-          p={70}
+          m={isTablet ? fr(15) : isMobile ? fr(8) : fr(18)}
+          p={isTablet ? fr(15) : isMobile ? fr(10) : fr(18)}
           br={'2xl'}
           bsh={'xl'}
           sx={{
