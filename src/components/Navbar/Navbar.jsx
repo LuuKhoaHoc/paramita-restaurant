@@ -51,6 +51,10 @@ const Navbar = () => {
   // Số lượng item trong cart
   const { cartItems } = useContext(CartContext)
   const itemCount = cartItems.reduce((total, item) => total + item.quantity, 0)
+  // Tổng tiền trong cart
+  const subTotal = cartItems.reduce((acc, item) => {
+    return acc + item.price * item.quantity * 1000
+  }, 0)
   // Kiểm tra đăng nhập
   const [login, setLogin] = useState(false)
   // State cho menu
@@ -179,7 +183,7 @@ const Navbar = () => {
                             align='center'
                             justify='between'
                             p={fr(2)}
-                            as={Link}
+                            as={NavLink}
                             to={'/account/information'}
                           >
                             <Icon>
@@ -191,7 +195,7 @@ const Navbar = () => {
                             align='center'
                             justify='between'
                             p={fr(2)}
-                            as={Link}
+                            as={NavLink}
                             to={'/account/orders'}
                           >
                             <Icon>
@@ -203,7 +207,7 @@ const Navbar = () => {
                             align='center'
                             justify='between'
                             p={fr(2)}
-                            as={Link}
+                            as={NavLink}
                             to={'/account/history-purchase'}
                           >
                             <Icon>
@@ -332,7 +336,25 @@ const Navbar = () => {
                       </List.Item>
                     </List>
                   </Flex>
-                  <Drawer.Footer></Drawer.Footer>
+                  <Drawer.Footer>
+                    <Center
+                      as={Link}
+                      to={'/cart'}
+                      bg={'primary'}
+                      br={'lg'}
+                      p={fr(4)}
+                      mx={'auto'}
+                      cl={'#fff'}
+                      gap={fr(2)}
+                      onClick={() => setRight(false)}
+                    >
+                      <Icon>
+                        <ShoppingCartSimple />
+                      </Icon>
+                      <Text>Giỏ hàng - {itemCount} món</Text>
+                      <Text>{subTotal.toLocaleString('vi-VN')}đ</Text>
+                    </Center>
+                  </Drawer.Footer>
                 </Drawer>
 
                 <Flex align='center' justify='start'>

@@ -10,16 +10,22 @@ import AccountHistory from '~/pages/Auth/Account/AccountHistory/AccountHistory'
 import ChangePassword from '~/pages/Auth/Account/ChangePassword/ChangePassword'
 import AccountAside from '~/pages/Auth/Account/AccountAside/AccountAside'
 import HistoryRewardPoint from '~/pages/Auth/Account/HistoryRewardPoint/HistoryRewardPoint'
+import { useResponsive } from '~/utils/responsive'
 
 const Account = () => {
+  const { isLaptop, isMobile, isTablet } = useResponsive()
   return (
     <Box pos={'relative'} mih={'100vh'}>
       <Box h={fr(22.5)} bg='#371b04' />
       <Box w={'100%'} h={'100%'} pos={'relative'}>
         <Grid templateColumns={12}>
-          <Grid.Item columnStart={3} columnEnd={11}>
+          <Grid.Item
+            columnStart={isTablet ? 2 : isMobile ? 1 : 3}
+            columnEnd={isTablet ? 12 : isMobile ? 13 : 11}
+          >
             <Center
-              p={fr(12)}
+              px={fr(12)}
+              py={fr(6)}
               fs={'2xl'}
               gap={fr(4)}
               className='GeomanistMedium-font'
@@ -29,7 +35,7 @@ const Account = () => {
               </Icon>{' '}
               <Text>Tài khoản của bạn</Text>
             </Center>
-            <Flex>
+            <Flex direction={isTablet ? 'column' : isMobile ? 'column' : 'row'}>
               <AccountAside />
               <Routes>
                 <Route path='information' element={<AccountInformation />} />
