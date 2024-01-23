@@ -197,6 +197,7 @@ const Home = () => {
               align='center'
               gap={fr(10)}
               my={fr(5)}
+              mb={isTablet ? fr(25) : fr(0)}
             >
               <Box>
                 <Flex
@@ -275,7 +276,7 @@ const Home = () => {
                   >
                     <Text
                       as={'p'}
-                      h={isTablet ? fr(60) : isMobile ? fr(40) : fr(80)}
+                      // h={isTablet ? fr(60) : isMobile ? fr(40) : fr(80)}
                       fs={
                         isLaptop
                           ? 'lg'
@@ -286,10 +287,7 @@ const Home = () => {
                           : 'xl'
                       }
                       px={isTablet ? fr(5) : isMobile ? fr(2) : fr(10)}
-                      of={'hidden'}
-                      sx={{
-                        textOverflow: 'ellipsis'
-                      }}
+                
                     >
                       Paramita là một nhà hàng chay chuyên phục vụ những món ăn
                       mang đậm hương vị thanh tịnh của Phật giáo. Các món ăn ở

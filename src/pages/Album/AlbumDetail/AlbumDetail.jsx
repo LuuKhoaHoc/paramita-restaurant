@@ -9,6 +9,7 @@ import 'lightgallery/css/lg-autoplay.css'
 // import plugins
 import lgThumbnail from 'lightgallery/plugins/thumbnail'
 import lgAutoPlay from 'lightgallery/plugins/autoplay'
+import { useResponsive } from '~/utils/responsive'
 
 const AlbumDetail = () => {
   const imagesCategory = [
@@ -58,48 +59,64 @@ const AlbumDetail = () => {
       title: 'Workshop dạy nấu ăn'
     }
   ]
+  const { isTablet, isMobile } = useResponsive()
   return (
     <>
       <Box h={fr(22.5)} bg='#371b04' />
       <Grid templateColumns={12}>
-        <Grid.Item columnStart={3} columnEnd={11}>
-          <Flex w={'100%'} gap={fr(5)} my={fr(5)} direction='column'>
-            <Text fs={'2xl'} className='GeomanistMedium-font' tt={'capitalize'}>
+        <Grid.Item
+          columnStart={isTablet ? 2 : isMobile ? 1 : 3}
+          columnEnd={isTablet ? 12 : isMobile ? 13 : 11}
+        >
+          <Flex
+            // w={'100%'}
+            gap={fr(5)}
+            my={fr(5)}
+            mx={isMobile ? fr(5) : fr(0)}
+            direction='column'
+          >
+            <Text
+              fs={isMobile ? 'xl' : '2xl'}
+              className='GeomanistMedium-font'
+              tt={'capitalize'}
+            >
               {useLocation().state.title}
             </Text>
-            <LightGallery
-              autoplay
-              speed={500}
-              startAnimationDuration={1000}
-              mode='lg-slide'
-              plugins={[lgThumbnail, lgAutoPlay]}
-            >
-              {imagesCategory.map((item, index) => (
-                <a
-                  key={index}
-                  className='gallery-item'
-                  data-src={item.image}
-                  href={item.image}
-                >
-                  <Image
-                    className='img-responsive'
-                    src={item.image}
-                    m={fr(1)}
-                    br={'md'}
-                    bsh={'md'}
-                    fit='cover'
-                    w={fr(100)}
-                    h={fr(75)}
-                    sx={{
-                      transition: 'transform 0.3s',
-                      '&:hover': {
-                        transform: 'scale(1.1)'
-                      }
-                    }}
-                  />
-                </a>
-              ))}
-            </LightGallery>
+            <Box>
+              <LightGallery
+                autoplay
+                speed={500}
+                startAnimationDuration={1000}
+                mode='lg-slide'
+                plugins={[lgThumbnail, lgAutoPlay]}
+              >
+                {imagesCategory.map((item, index) => (
+                  <a
+                    key={index}
+                    className='gallery-item'
+                    data-src={item.image}
+                    href={item.image}
+                  >
+                    <Image
+                      className='img-responsive'
+                      src={item.image}
+                      m={fr(1)}
+                      br={'md'}
+                      bsh={'md'}
+                      fit='cover'
+                      w={isTablet ? fr(78) : isMobile ? fr(46) : fr(118)}
+                      h={isTablet ? fr(45) : isMobile ? fr(30) : fr(75)}
+                      sx={{
+                        transition: 'transform 0.3s',
+                        '&:hover': {
+                          transform: 'scale(1.1)'
+                        }
+                      }}
+                    />
+                  </a>
+                ))}
+              </LightGallery>
+            </Box>
           </Flex>
         </Grid.Item>
       </Grid>

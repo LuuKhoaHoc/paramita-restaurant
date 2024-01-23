@@ -1,19 +1,25 @@
 import { Box, Flex, List, Text, fr } from '@prismane/core'
 import React from 'react'
+import { useResponsive } from '~/utils/responsive'
 
 const CareerPost = () => {
+  const { isMobile } = useResponsive()
   return (
     <Box>
-      <Text as={'h1'}>Tuyển dụng</Text>
-      <Text as={'h2'}>Vị trí đầu bếp</Text>
+      <Text as={'h1'} fs={isMobile ? 'lg' : 'inherit'}>
+        Tuyển dụng
+      </Text>
+      <Text as={'h2'} fs={isMobile ? 'lg' : 'inherit'}>
+        Vị trí đầu bếp
+      </Text>
       <Flex
         direction='column'
-        w={fr(245)}
+        // w={fr(245)}
         h={fr(220)}
         of={'auto'}
         p={fr(8)}
         br={'lg'}
-        fs={'xl'}
+        fs={isMobile ? 'md' : 'xl'}
       >
         <Text as={'p'}>Nhà hàng chay Paramita</Text>
         <Text as={'p'}>Vị trí: Đầu bếp</Text>

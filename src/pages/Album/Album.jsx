@@ -6,8 +6,10 @@ import React, { useState } from 'react'
 import { MainPic, DividerParamita } from '~/components'
 import { Link } from 'react-router-dom'
 import { itemToURL } from '~/utils/stringToURL'
+import { useResponsive } from '~/utils/responsive'
 
 const Album = () => {
+  const { isLaptop, isMobile, isTablet } = useResponsive()
   const imagesCategory = [
     {
       image:
@@ -68,7 +70,10 @@ const Album = () => {
       />
       <Box w={'100%'} h={'100%'} pos={'relative'}>
         <Grid templateColumns={12}>
-          <Grid.Item columnStart={3} columnEnd={11}>
+          <Grid.Item
+            columnStart={isTablet ? 2 : isMobile ? 1 : 3}
+            columnEnd={isTablet ? 12 : isMobile ? 13 : 11}
+          >
             <Flex
               pos={'relative'}
               direction='column'
@@ -76,14 +81,20 @@ const Album = () => {
               align='center'
               gap={fr(10)}
               my={fr(5)}
+              mx={isMobile ? fr(5) : fr(0)}
             >
-              <Text fs={'2xl'} my={fr(4)}>
+              <Text fs={isTablet ? 'xl' : isMobile ? 'lg' : '2xl'} my={fr(4)}>
                 Thưởng thức món ngon tại Nhà hàng chay Paramita không chỉ là
                 hương vị mà còn là trải nghiệm 5 giác quan đầy thư thái. Hãy
                 cùng chiêm ngưỡng vẻ đẹp của không gian và ẩm thực qua góc nhìn
                 ảnh nghệ thuật của chúng tôi.
               </Text>
-              <Text fs={'3xl'} ff={'GeomanistBold'} tt={'uppercase'} mb={fr(4)}>
+              <Text
+                fs={isTablet ? '2xl' : isMobile ? 'xl' : '3xl'}
+                ff={'GeomanistBold'}
+                tt={'uppercase'}
+                mb={fr(4)}
+              >
                 <Highlight bg={['primary', 100]} cl={'#fff'}>
                   @Paramita
                 </Highlight>
@@ -99,8 +110,8 @@ const Album = () => {
                   <Box
                     key={index}
                     pos={'relative'}
-                    w={fr(83)}
-                    h={fr(53)}
+                    w={isTablet ? fr(70) : isMobile ? fr(60) : fr(83)}
+                    h={isTablet ? fr(45) : isMobile ? fr(40) : fr(53)}
                     br={'md'}
                     sx={{
                       backgroundImage: `url(${item.image})`,

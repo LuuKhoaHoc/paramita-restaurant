@@ -3,7 +3,7 @@ import { Button, fr } from '@prismane/core'
 import { useResponsive } from '~/utils/responsive'
 
 const StyledButton = ({ children, ...props }) => {
-  const { isLaptop, isTablet, isMobile } = useResponsive()
+  const { isMobile } = useResponsive()
   return (
     <Button
       size={ isMobile ? 'md' : 'lg'}
