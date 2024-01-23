@@ -145,19 +145,23 @@ const Navbar = () => {
                     {!login ? (
                       <Center>
                         <Box>
-                    <Link to={'/login'} onMouseOver={() => Login.preload()}>
-                      <Center h={'100%'} w={'max-content'}>
-                        <Button
-                          variant='primary'
-                          className='GeomanistMedium-font'
-                          size='lg'
-                          br={'full'}
-                        >
-                          Đăng nhập
-                        </Button>
-                      </Center>
-                    </Link>
-                  </Box>
+                          <Link
+                            to={'/login'}
+                            onMouseOver={() => Login.preload()}
+                          >
+                            <Center h={'100%'} w={'max-content'}>
+                              <Button
+                                variant='primary'
+                                className='GeomanistMedium-font'
+                                size='lg'
+                                br={'full'}
+                                onClick={() => setRight(false)}
+                              >
+                                Đăng nhập
+                              </Button>
+                            </Center>
+                          </Link>
+                        </Box>
                       </Center>
                     ) : (
                       <>
