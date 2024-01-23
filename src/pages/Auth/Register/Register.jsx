@@ -120,9 +120,6 @@ const Register = () => {
             '.PrismaneCheckbox-error': {
               fontSize: fr(4)
             },
-            '.PrismaneField-field': {
-              fontFamily: 'Geomanist !important'
-            }
           }}
         >
           <Card.Header>

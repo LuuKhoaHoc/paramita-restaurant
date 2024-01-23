@@ -110,9 +110,6 @@ const Login = () => {
                   fontSize: fr(4)
                 }
               },
-              '.PrismaneField-field': {
-                fontFamily: 'Geomanist !important'
-              }
             }}
           >
             <Card.Header>
@@ -156,6 +153,11 @@ const Login = () => {
                 })
               }
               onReset={handleReset}
+              onError={() => {
+                console.log('error')
+                setError('username', 'Tài khoản không đúng')
+                setError('password', 'Mật khẩu không đúng')
+              }}
               my={30}
             >
               <TextField

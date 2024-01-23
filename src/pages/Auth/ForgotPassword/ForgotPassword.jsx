@@ -81,9 +81,6 @@ const ForgotPassword = () => {
           sx={{
             '.PrismaneTextField-label, .PrismanePinField-label': {
               fontSize: fr(5)
-            },
-            '.PrismaneField-field': {
-              fontFamily: 'Geomanist !important'
             }
           }}
         >
