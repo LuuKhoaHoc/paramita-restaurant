@@ -1,11 +1,13 @@
 import { Button, Flex, PasswordField, Text, fr } from '@prismane/core'
 import React from 'react'
+import { useResponsive } from '~/utils/responsive'
 const ChangePassword = () => {
+  const { isTablet, isMobile } = useResponsive()
   return (
     <Flex direction='column' grow pos={'relative'} m={fr(10)}>
       <Text
         pos={['relative', { ':before': 'absolute' }]}
-        fs={'4xl'}
+        fs={isMobile ? '2xl' : '4xl'}
         sx={{
           '&::before': {
             content: '',

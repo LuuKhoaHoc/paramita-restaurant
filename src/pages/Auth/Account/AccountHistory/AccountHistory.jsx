@@ -1,104 +1,113 @@
 import { CaretRight } from '@phosphor-icons/react'
-import { Center, Flex, Icon, Image, Modal, Stack, Text, fr } from '@prismane/core'
+import {
+  Center,
+  Flex,
+  Icon,
+  Image,
+  Modal,
+  Stack,
+  Text,
+  fr
+} from '@prismane/core'
+import { useId } from '@prismane/core/hooks'
 import React, { useState } from 'react'
 import { OrderInvoice } from '~/components'
+import { useResponsive } from '~/utils/responsive'
 
 const AccountHistory = () => {
+  const id = useId()
+  const orders = JSON.parse(localStorage.getItem('orders'))
+  // const lastIndex = orders?.length - 1
+  // const cart = orders[lastIndex]?.cart
+  // const information = orders[lastIndex]?.information
+  // const total = orders[lastIndex]?.totalPrice
+  // const subTotal = cart?.reduce((acc, item) => {
+  //   return acc + item.price * item.quantity * 1000
+  // }, 0)
+  const { isTablet, isMobile } = useResponsive()
   const [open, setOpen] = useState(false)
   return (
     <>
-    <Modal w={'80vw'} open={open} onClose={() => setOpen(false)} closable>
-      <OrderInvoice />
-    </Modal>
-    <Flex direction='column' grow pos={'relative'} m={fr(10)}>
-      <Text
-        pos={['relative', { ':before': 'absolute' }]}
-        fs={'4xl'}
-        sx={{
-          '&::before': {
-            content: '',
-            width: '25%',
-            height: '2px',
-            borderRadius: '2px',
-            backgroundColor: '#39b54a',
-            bottom: '0px',
-            left: 0
-          }
-        }}
-      >
-        Lịch sử mua hàng
-      </Text>
-      <Stack>
-        <Flex
-          bg={'#fff'}
-          br={'base'}
-          bsh={'md'}
-          p={fr(2)}
-          my={fr(2)}
-          cs={'pointer'}
-          onClick={() => { setOpen(!open) }}
+      <Modal w={'80vw'} open={open} onClose={() => setOpen(false)} closable>
+        {/* <OrderInvoice /> */}
+      </Modal>
+      <Flex direction='column' grow pos={'relative'} m={fr(10)}>
+        <Text
+          pos={['relative', { ':before': 'absolute' }]}
+          fs={isMobile ? '2xl' : '4xl'}
+          sx={{
+            '&::before': {
+              content: '',
+              width: '25%',
+              height: '2px',
+              borderRadius: '2px',
+              backgroundColor: '#39b54a',
+              bottom: '0px',
+              left: 0
+            }
+          }}
         >
-          <Image
-            src='https://www.viquekitchen.com/wp-content/uploads/2022/05/Banh-xeo-Xeo-cake-Trans-300x300.jpg'
-            alt='banh-xeo'
-            w={fr(32)}
-            h={fr(32)}
-          />
-          <Flex direction='column' ml={fr(2)} grow>
-            <Text as={'h2'}>e828ca0e-5adc-433e-9521-98d6e9d28b61</Text>
-            <Text fs={'md'}>14/2/2024</Text>
-            <Text fs={'xl'} cl={'primary'}>
-              Kết thúc
-            </Text>
-            <Text tt={'capitalize'} fs={'md'}>
-              184 Lê Đại Hành, quận 11, TP Hồ Chí Minh
-            </Text>
-          </Flex>
-          <Center gap={fr(4)}>
-            <Text fs={'xl'} cl={'primary'}>
-              100.000 đ
-            </Text>
-            <Icon size={fr(6)}>
-              <CaretRight />
-            </Icon>
-          </Center>
-        </Flex>
-        <Flex
-          bg={'#fff'}
-          br={'base'}
-          bsh={'md'}
-          p={fr(2)}
-          my={fr(2)}
-          cs={'pointer'}
-        >
-          <Image
-            src='https://www.viquekitchen.com/wp-content/uploads/2022/05/Bun-Hue-Transparent-300x300.jpg'
-            alt='bun-hue'
-            w={fr(32)}
-            h={fr(32)}
-          />
-          <Flex direction='column' ml={fr(2)} grow>
-            <Text as={'h2'}>42c6b1ab-feed-4ec0-ade4-03f11444b208</Text>
-            <Text fs={'md'}>2/2/2024</Text>
-            <Text fs={'xl'} cl={'primary'}>
-              Kết thúc
-            </Text>
-            <Text tt={'capitalize'} fs={'md'}>
-              184 Lê Đại Hành, quận 11, TP Hồ Chí Minh
-            </Text>
-          </Flex>
-          <Center gap={fr(4)}>
-            <Text fs={'xl'} cl={'primary'}>
-              88.000 đ
-            </Text>
-            <Icon size={fr(6)}>
-              <CaretRight />
-            </Icon>
-          </Center>
-        </Flex>
-        
-      </Stack>
-    </Flex>
+          Lịch sử mua hàng
+        </Text>
+        <Stack align='center'>
+          {/* {orders?.map((item, index) => (
+            <Flex
+              key={index}
+              bg={(theme) => (theme.mode === 'dark' ? '#1a1a1a' : '#fff')}
+              br={'lg'}
+              bsh={'md'}
+              p={fr(2)}
+              my={fr(2)}
+              cs={'pointer'}
+              align='center'
+              onClick={() => {
+                setOpen(!open)
+              }}
+            >
+              <Flex align='center'>
+                <Image
+                  src={item.image}
+                  alt='order'
+                  w={isMobile ? fr(20) : fr(32)}
+                  h={isMobile ? fr(20) : fr(32)}
+                  br={'lg'}
+                />
+                <Flex direction='column' ml={isMobile ? fr(1) : fr(2)}>
+                  <Text as={'h2'} fs={isMobile ? 'md' : 'inherit'}>
+                    #{id}
+                  </Text>
+                  <Text fs={isMobile ? 'sm' : 'md'}>{item.date}</Text>
+                  <Text fs={isMobile ? 'md' : 'xl'} cl={'primary'}>
+                    {item.status}
+                  </Text>
+                  <Text tt={'capitalize'} fs={isMobile ? 'sm' : 'md'}>
+                    {item.address}
+                  </Text>
+                  {isMobile && (
+                    <Text fs={isMobile ? 'md' : 'xl'} cl={'primary'}>
+                      {item.total.toLocaleString('vi-VN', {
+                        style: 'currency',
+                        currency: 'VND'
+                      })}
+                    </Text>
+                  )}
+                </Flex>
+              </Flex>
+              {!isMobile && (
+                <Text fs={isMobile ? 'md' : 'xl'} cl={'primary'}>
+                  {item.total.toLocaleString('vi-VN', {
+                    style: 'currency',
+                    currency: 'VND'
+                  })}
+                </Text>
+              )}
+              <Icon size={isMobile ? fr(4) : fr(6)}>
+                <CaretRight />
+              </Icon>
+            </Flex>
+          ))} */}
+        </Stack>
+      </Flex>
     </>
   )
 }

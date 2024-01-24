@@ -46,7 +46,6 @@ const AccountOrder = () => {
           {orders?.map((item, index) => (
             <Flex
               key={index}
-              // w={isMobile ? '90%' : '100%'}
               bg={(theme) => (theme.mode === 'dark' ? '#1a1a1a' : '#fff')}
               br={'lg'}
               bsh={'md'}

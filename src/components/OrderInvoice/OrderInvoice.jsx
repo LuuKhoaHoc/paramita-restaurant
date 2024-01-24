@@ -25,9 +25,9 @@ const OrderInvoice = () => {
       <Box w={'90%'}>
         <Flex direction='column' mb={fr(2)}>
           <Text fs={'lg'}>Mã đơn hàng: #{id}</Text>
-          <Text fs={'lg'}>Tên khách hàng: {information.name}</Text>
-          <Text fs={'lg'}>Số điện thoại: {information.phone}</Text>
-          <Text fs={'lg'}>Địa chỉ giao hàng: {information.address}</Text>
+          <Text fs={'lg'}>Tên khách hàng: {information?.name}</Text>
+          <Text fs={'lg'}>Số điện thoại: {information?.phone}</Text>
+          <Text fs={'lg'}>Địa chỉ giao hàng: {information?.address}</Text>
           <Flex gap={fr(2)} fs={'lg'}>
             <Text>Phương thức thanh toán: </Text>
             <Text>
@@ -51,7 +51,7 @@ const OrderInvoice = () => {
             <Text>Tạm tính</Text>
           </List.Item>
           <Divider />
-          {cart.map((item, index) => (
+          {cart?.map((item, index) => (
             <Box key={index}>
               <List.Item justify='around' py={fr(2)} align='center'>
                 <Text>{index + 1}</Text>

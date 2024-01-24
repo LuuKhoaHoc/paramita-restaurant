@@ -10,10 +10,12 @@ import {
 import { useForm } from '@prismane/core/hooks'
 import React from 'react'
 import { z } from 'zod'
+import { useResponsive } from '~/utils/responsive'
 import usernameAndEmail from '~/utils/usernameAndEmail'
 import p from '~/utils/zodToPrismane'
 
 const AccountInformation = () => {
+  const { isTablet, isMobile } = useResponsive()
   const { handleSubmit, handleReset, register } = useForm({
     fields: {
       firstName: {
@@ -103,7 +105,7 @@ const AccountInformation = () => {
     >
       <Text
         pos={['relative', { ':before': 'absolute' }]}
-        fs={'4xl'}
+        fs={isMobile ? '2xl' : '4xl'}
         sx={{
           '&::before': {
             content: '',

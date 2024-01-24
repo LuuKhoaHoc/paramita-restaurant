@@ -10,11 +10,13 @@ import {
   fr
 } from '@prismane/core'
 import { Pen, X } from '@phosphor-icons/react'
+import { useResponsive } from '~/utils/responsive'
 const AccountAddresses = () => {
+  const { isTablet, isMobile } = useResponsive()
   const [open, setOpen] = useState(false)
   return (
     <>
-      <Modal w={'20vw'} open={open} onClose={() => setOpen(false)} closable>
+      <Modal w={isMobile ? '80vw' : '20vw'} open={open} onClose={() => setOpen(false)} closable>
         <Modal.Header className='GeomanistMedium-font'>
           <Text fs={'2xl'} ta={'center'}>
             Thêm địa chỉ
@@ -55,7 +57,7 @@ const AccountAddresses = () => {
       <Flex direction='column' grow pos={'relative'} m={fr(10)}>
         <Text
           pos={['relative', { ':before': 'absolute' }]}
-          fs={'4xl'}
+          fs={isMobile ? '2xl' : '4xl'}
           sx={{
             '&::before': {
               content: '',
@@ -72,7 +74,7 @@ const AccountAddresses = () => {
         </Text>
         <Stack gap={fr(10)}>
           <Flex pos={'relative'} justify='between'>
-            <Text fs={'xl'}>Địa chỉ giao hàng</Text>
+            <Text fs={isMobile ? 'lg' : 'xl'}>Địa chỉ giao hàng</Text>
             <Text
               fs={'md'}
               cs={'pointer'}

@@ -117,42 +117,42 @@ const AccountAside = () => {
             <List.Item as={NavLink} to={'/account/information'}>
               <Button
                 variant='tertiary'
-                size={isMobile ? 'xs' : 'lg'}
+                size={isMobile ? 'sm' : 'lg'}
                 br={fr(3)}
                 cl={textColor}
               >
-                <User size={isMobile ? fr(5) : fr(7)} weight='duotone' />
+                <User size={isMobile ? fr(6) : fr(7)} weight='duotone' />
               </Button>
             </List.Item>
             <List.Item as={NavLink} to={'/account/addresses'}>
               <Button
                 variant='tertiary'
-                size={isMobile ? 'xs' : 'lg'}
+                size={isMobile ? 'sm' : 'lg'}
                 br={fr(3)}
                 cl={textColor}
               >
-                <MapPin size={isMobile ? fr(5) : fr(7)} weight='duotone' />
+                <MapPin size={isMobile ? fr(6) : fr(7)} weight='duotone' />
               </Button>
             </List.Item>
             <List.Item as={NavLink} to={'/account/orders'}>
               <Button
                 variant='tertiary'
-                size={isMobile ? 'xs' : 'lg'}
+                size={isMobile ? 'sm' : 'lg'}
                 br={fr(3)}
                 cl={textColor}
               >
-                <ListChecks size={isMobile ? fr(5) : fr(7)} weight='duotone' />
+                <ListChecks size={isMobile ? fr(6) : fr(7)} weight='duotone' />
               </Button>
             </List.Item>
             <List.Item as={NavLink} to={'/account/history-purchase'}>
               <Button
                 variant='tertiary'
-                size={isMobile ? 'xs' : 'lg'}
+                size={isMobile ? 'sm' : 'lg'}
                 br={fr(3)}
                 cl={textColor}
               >
                 <ClockCountdown
-                  size={isMobile ? fr(5) : fr(7)}
+                  size={isMobile ? fr(6) : fr(7)}
                   weight='duotone'
                 />
               </Button>
@@ -160,12 +160,12 @@ const AccountAside = () => {
             <List.Item as={NavLink} to={'/account/history-point'}>
               <Button
                 variant='tertiary'
-                size={isMobile ? 'xs' : 'lg'}
+                size={isMobile ? 'sm' : 'lg'}
                 br={fr(3)}
                 cl={textColor}
               >
                 <CaretCircleDoubleUp
-                  size={isMobile ? fr(5) : fr(7)}
+                  size={isMobile ? fr(6) : fr(7)}
                   weight='duotone'
                 />
               </Button>
@@ -173,11 +173,11 @@ const AccountAside = () => {
             <List.Item as={NavLink} to={'/account/change-password'}>
               <Button
                 variant='tertiary'
-                size={isMobile ? 'xs' : 'lg'}
+                size={isMobile ? 'sm' : 'lg'}
                 br={fr(3)}
                 cl={textColor}
               >
-                <Lock size={isMobile ? fr(5) : fr(7)} weight='duotone' />
+                <Lock size={isMobile ? fr(6) : fr(7)} weight='duotone' />
               </Button>
             </List.Item>
             <List.Item
@@ -186,11 +186,11 @@ const AccountAside = () => {
             >
               <Button
                 variant='tertiary'
-                size={isMobile ? 'xs' : 'lg'}
+                size={isMobile ? 'sm' : 'lg'}
                 br={fr(3)}
                 cl={textColor}
               >
-                <SignOut size={isMobile ? fr(5) : fr(7)} weight='duotone' />
+                <SignOut size={isMobile ? fr(6) : fr(7)} weight='duotone' />
               </Button>
             </List.Item>
           </List>
