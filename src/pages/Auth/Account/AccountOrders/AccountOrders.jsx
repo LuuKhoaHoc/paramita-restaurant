@@ -12,8 +12,10 @@ import {
 import { useId } from '@prismane/core/hooks'
 import React, { useState } from 'react'
 import { OrderInvoice } from '~/components'
+import { useResponsive } from '~/utils/responsive'
 
 const AccountOrder = () => {
+  const { isTablet, isMobile } = useResponsive()
   const id = useId()
   const [open, setOpen] = useState(false)
   const orders = JSON.parse(localStorage.getItem('orders'))
@@ -25,7 +27,7 @@ const AccountOrder = () => {
       <Flex direction='column' grow pos={'relative'} m={fr(10)}>
         <Text
           pos={['relative', { ':before': 'absolute' }]}
-          fs={'4xl'}
+          fs={isMobile ? '2xl' : '4xl'}
           sx={{
             '&::before': {
               content: '',
@@ -40,48 +42,62 @@ const AccountOrder = () => {
         >
           Đơn hàng
         </Text>
-        <Stack>
+        <Stack align='center'>
           {orders?.map((item, index) => (
             <Flex
               key={index}
+              // w={isMobile ? '90%' : '100%'}
               bg={(theme) => (theme.mode === 'dark' ? '#1a1a1a' : '#fff')}
               br={'lg'}
               bsh={'md'}
               p={fr(2)}
               my={fr(2)}
               cs={'pointer'}
+              align='center'
               onClick={() => {
                 setOpen(!open)
               }}
             >
-              <Image
-                src={item.cart[0].image}
-                alt='order'
-                w={fr(32)}
-                h={fr(32)}
-                br={'lg'}
-              />
-              <Flex direction='column' ml={fr(2)} grow>
-                <Text as={'h2'}>#{id}</Text>
-                <Text fs={'md'}>14/2/2024</Text>
-                <Text fs={'xl'} cl={'primary'}>
-                  Đang thực hiện
-                </Text>
-                <Text tt={'capitalize'} fs={'md'}>
-                  {item.information.address}
-                </Text>
+              <Flex align='center'>
+                <Image
+                  src={item.cart[0].image}
+                  alt='order'
+                  w={isMobile ? fr(20) : fr(32)}
+                  h={isMobile ? fr(20) : fr(32)}
+                  br={'lg'}
+                />
+                <Flex direction='column' ml={isMobile ? fr(1) : fr(2)}>
+                  <Text as={'h2'} fs={isMobile ? 'md' : 'inherit'}>
+                    #{id}
+                  </Text>
+                  <Text fs={isMobile ? 'sm' : 'md'}>14/2/2024</Text>
+                  <Text fs={isMobile ? 'md' : 'xl'} cl={'primary'}>
+                    Đang thực hiện
+                  </Text>
+                  <Text tt={'capitalize'} fs={isMobile ? 'sm' : 'md'}>
+                    {item.information.address}
+                  </Text>
+                  {isMobile && (
+                    <Text fs={isMobile ? 'md' : 'xl'} cl={'primary'}>
+                    {item.totalPrice.toLocaleString('vi-VN', {
+                      style: 'currency',
+                      currency: 'VND'
+                    })}
+                  </Text>
+                  )}
+                </Flex>
               </Flex>
-              <Center gap={fr(4)}>
-                <Text fs={'xl'} cl={'primary'}>
+              {!isMobile && (
+                <Text fs={isMobile ? 'md' : 'xl'} cl={'primary'}>
                   {item.totalPrice.toLocaleString('vi-VN', {
                     style: 'currency',
                     currency: 'VND'
                   })}
                 </Text>
-                <Icon size={fr(6)}>
-                  <CaretRight />
-                </Icon>
-              </Center>
+              )}
+              <Icon size={isMobile ? fr(4) : fr(6)}>
+                <CaretRight />
+              </Icon>
             </Flex>
           ))}
         </Stack>

@@ -43,7 +43,7 @@ const AccountAside = () => {
       {isMobile || isTablet ? (
         <>
           <Box
-            w={'90%'}
+            w={isTablet ? fr(100) : isMobile ? fr(80) : '100%'}
             mx={'auto'}
             mt={fr(4)}
             pb={fr(4)}
@@ -107,43 +107,90 @@ const AccountAside = () => {
               </Text>
             </Center>
           </Box>
-          <List direction='row' justify='around' my={fr(4)}>
+          <List
+            direction='row'
+            gap={isMobile ? fr(2) : fr(4)}
+            wrap='wrap'
+            justify='center'
+            my={fr(4)}
+          >
             <List.Item as={NavLink} to={'/account/information'}>
-              <Button variant='tertiary' cl={textColor}>
-                <User size={fr(9)} weight='duotone' />
+              <Button
+                variant='tertiary'
+                size={isMobile ? 'xs' : 'lg'}
+                br={fr(3)}
+                cl={textColor}
+              >
+                <User size={isMobile ? fr(5) : fr(7)} weight='duotone' />
               </Button>
             </List.Item>
             <List.Item as={NavLink} to={'/account/addresses'}>
-              <Button variant='tertiary' cl={textColor}>
-                <MapPin size={fr(9)} weight='duotone' />
+              <Button
+                variant='tertiary'
+                size={isMobile ? 'xs' : 'lg'}
+                br={fr(3)}
+                cl={textColor}
+              >
+                <MapPin size={isMobile ? fr(5) : fr(7)} weight='duotone' />
               </Button>
             </List.Item>
             <List.Item as={NavLink} to={'/account/orders'}>
-              <Button variant='tertiary' cl={textColor}>
-                <ListChecks size={fr(9)} weight='duotone' />
+              <Button
+                variant='tertiary'
+                size={isMobile ? 'xs' : 'lg'}
+                br={fr(3)}
+                cl={textColor}
+              >
+                <ListChecks size={isMobile ? fr(5) : fr(7)} weight='duotone' />
               </Button>
             </List.Item>
             <List.Item as={NavLink} to={'/account/history-purchase'}>
-              <Button variant='tertiary' cl={textColor}>
-                <ClockCountdown size={fr(9)} weight='duotone' />
+              <Button
+                variant='tertiary'
+                size={isMobile ? 'xs' : 'lg'}
+                br={fr(3)}
+                cl={textColor}
+              >
+                <ClockCountdown
+                  size={isMobile ? fr(5) : fr(7)}
+                  weight='duotone'
+                />
               </Button>
             </List.Item>
             <List.Item as={NavLink} to={'/account/history-point'}>
-              <Button variant='tertiary' cl={textColor}>
-                <CaretCircleDoubleUp size={fr(9)} weight='duotone' />
+              <Button
+                variant='tertiary'
+                size={isMobile ? 'xs' : 'lg'}
+                br={fr(3)}
+                cl={textColor}
+              >
+                <CaretCircleDoubleUp
+                  size={isMobile ? fr(5) : fr(7)}
+                  weight='duotone'
+                />
               </Button>
             </List.Item>
             <List.Item as={NavLink} to={'/account/change-password'}>
-              <Button variant='tertiary' cl={textColor}>
-                <Lock size={fr(9)} weight='duotone' />
+              <Button
+                variant='tertiary'
+                size={isMobile ? 'xs' : 'lg'}
+                br={fr(3)}
+                cl={textColor}
+              >
+                <Lock size={isMobile ? fr(5) : fr(7)} weight='duotone' />
               </Button>
             </List.Item>
             <List.Item
               onClick={() => handleLogout()}
               sx={{ '&:hover': { color: 'red' } }}
             >
-              <Button variant='tertiary' cl={textColor}>
-                <SignOut size={fr(9)} weight='duotone' />
+              <Button
+                variant='tertiary'
+                size={isMobile ? 'xs' : 'lg'}
+                br={fr(3)}
+                cl={textColor}
+              >
+                <SignOut size={isMobile ? fr(5) : fr(7)} weight='duotone' />
               </Button>
             </List.Item>
           </List>
