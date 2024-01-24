@@ -9,7 +9,7 @@ import {
   fr
 } from '@prismane/core'
 import React from 'react'
-
+import { useResponsive } from '~/utils/responsive'
 const AccordionItem = ({ value, control, panel }) => {
   return (
     <Accordion.Item value={value}>
@@ -32,22 +32,32 @@ const AccordionItem = ({ value, control, panel }) => {
 }
 
 const FAQ = () => {
+  const { isLaptop, isMobile, isTablet } = useResponsive()
   return (
     <>
       <Box h={fr(22.5)} bg='#371b04' />
       <Grid templateColumns={12}>
-        <Grid.Item columnStart={4} columnEnd={10}>
-          <Flex w={'100%'} gap={fr(5)} my={fr(5)} direction='column'>
+        <Grid.Item
+          columnStart={isTablet ? 2 : isMobile ? 1 : 4}
+          columnEnd={isTablet ? 12 : isMobile ? 13 : 10}
+        >
+          <Flex
+            w={isMobile ? '90%' : '100%'}
+            gap={fr(5)}
+            my={fr(5)}
+            mx={isMobile ? fr(4) : fr(0)}
+            direction='column'
+          >
             <Text
               as={'h1'}
-              fs={'3xl'}
+              fs={isMobile ? 'xl' : '3xl'}
               ff={'GeomanistBold'}
               ta={'center'}
               tt={'uppercase'}
             >
               FAQ
             </Text>
-            <Accordion defaultValue='first' fs={'xl'}>
+            <Accordion defaultValue='first' fs={isMobile ? 'md' : 'xl'}>
               <AccordionItem
                 value={'first'}
                 control={'Nhà hàng có những giờ hoạt động nào trong ngày?'}

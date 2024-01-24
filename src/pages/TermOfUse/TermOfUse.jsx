@@ -1,16 +1,27 @@
 import { Box, Flex, Grid, List, Table, Text, fr } from '@prismane/core'
 import React from 'react'
+import { useResponsive } from '~/utils/responsive'
 
 const TermOfUse = () => {
+  const { isLaptop, isMobile, isTablet } = useResponsive()
   return (
     <>
       <Box h={fr(22.5)} bg='#371b04' />
       <Grid templateColumns={12}>
-        <Grid.Item columnStart={4} columnEnd={10}>
-          <Flex w={'100%'} gap={fr(5)} my={fr(5)} direction='column'>
+        <Grid.Item
+          columnStart={isTablet ? 2 : isMobile ? 1 : 4}
+          columnEnd={isTablet ? 12 : isMobile ? 13 : 10}
+        >
+          <Flex
+            w={isMobile ? '90%' : '100%'}
+            gap={fr(5)}
+            my={fr(5)}
+            mx={isMobile ? fr(4) : fr(0)}
+            direction='column'
+          >
             <Text
               as={'h1'}
-              fs={'3xl'}
+              fs={isMobile ? 'xl' : '3xl'}
               ff={'GeomanistBold'}
               ta={'center'}
               tt={'uppercase'}
@@ -20,8 +31,8 @@ const TermOfUse = () => {
             <Table bd={'1px solid'} bdc={'primary'} br={'xl'}>
               <Table.Body>
                 <Table.Row>
-                  <Table.Cell fs={'lg'}>
-                    <Text as={'p'} fs={'xl'}>
+                  <Table.Cell fs={isMobile ? 'md' : 'lg'}>
+                    <Text as={'p'} fs={'lg'}>
                       Điều khoản sử dụng website
                     </Text>
                     Khi truy cập và sử dụng website của nhà hàng Paramita, quý
@@ -34,7 +45,7 @@ const TermOfUse = () => {
                   </Table.Cell>
                 </Table.Row>
                 <Table.Row>
-                  <Table.Cell fs={'lg'}>
+                  <Table.Cell fs={isMobile ? 'md' : 'lg'}>
                     <Text as={'p'} fs={'lg'}>
                       Tài khoản người dùng
                     </Text>
@@ -54,7 +65,7 @@ const TermOfUse = () => {
                   </Table.Cell>
                 </Table.Row>
                 <Table.Row>
-                  <Table.Cell fs={'lg'}>
+                  <Table.Cell fs={isMobile ? 'md' : 'lg'}>
                     <Text as={'p'} fs={'lg'}>
                       Đặt bàn & Đặt món
                     </Text>
@@ -70,7 +81,7 @@ const TermOfUse = () => {
                   </Table.Cell>
                 </Table.Row>
                 <Table.Row>
-                  <Table.Cell fs={'lg'}>
+                  <Table.Cell fs={isMobile ? 'md' : 'lg'}>
                     <Text as={'p'} fs={'lg'}>
                       Hủy/thay đổi đơn hàng
                     </Text>
@@ -86,7 +97,7 @@ const TermOfUse = () => {
                   </Table.Cell>
                 </Table.Row>
                 <Table.Row>
-                  <Table.Cell fs={'lg'}>
+                  <Table.Cell fs={isMobile ? 'md' : 'lg'}>
                     <Text as={'p'} fs={'lg'}>
                       Thanh toán và hoàn tiền
                     </Text>
@@ -102,7 +113,7 @@ const TermOfUse = () => {
                   </Table.Cell>
                 </Table.Row>
                 <Table.Row>
-                  <Table.Cell fs={'lg'}>
+                  <Table.Cell fs={isMobile ? 'md' : 'lg'}>
                     <Text as={'p'} fs={'lg'}>
                       Giao nhận
                     </Text>
@@ -120,7 +131,7 @@ const TermOfUse = () => {
                   </Table.Cell>
                 </Table.Row>
                 <Table.Row>
-                  <Table.Cell fs={'lg'}>
+                  <Table.Cell fs={isMobile ? 'md' : 'lg'}>
                     <Text as={'p'} fs={'lg'}>
                       Chúng tôi mong nhận được sự hợp tác từ quý khách để cùng
                       cải thiện dịch vụ. <br />

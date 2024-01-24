@@ -1,36 +1,50 @@
 import { Box, Flex, Grid, Highlight, List, Text, fr } from '@prismane/core'
 import React from 'react'
+import { useResponsive } from '~/utils/responsive'
 
 const Privacy = () => {
+  const { isLaptop, isMobile, isTablet } = useResponsive()
+
   return (
     <>
       <Box h={fr(22.5)} bg='#371b04' />
       <Grid templateColumns={12}>
-        <Grid.Item columnStart={4} columnEnd={10}>
-          <Flex w={'100%'} gap={fr(5)} my={fr(5)} direction='column'>
+        <Grid.Item
+          columnStart={isTablet ? 2 : isMobile ? 1 : 4}
+          columnEnd={isTablet ? 12 : isMobile ? 13 : 10}
+        >
+          <Flex
+            w={isMobile ? '90%' : '100%'}
+            gap={fr(5)}
+            mx={isMobile ? fr(4) : fr(0)}
+            my={fr(5)}
+            direction='column'
+            justify='center'
+          >
             <Text
               as={'h1'}
-              fs={'3xl'}
+              fs={isMobile ? 'xl' : '3xl'}
               ff={'GeomanistBold'}
               ta={'center'}
               tt={'uppercase'}
             >
               Chính sách bảo mật thông tin
             </Text>
-            <Text as={'p'} fs={'xl'}>
+            <Text as={'p'} fs={isMobile ? 'md' : 'xl'}>
               Paramita cam kết bảo mật tuyệt đối các thông tin của khách hàng.
               Chính sách bảo mật này mô tả cách chúng tôi thu thập, sử dụng và
               bảo vệ thông tin cá nhân của quý khách.
             </Text>
-            <Box>
+            <Box fs={isMobile ? 'base' : 'lg'}>
               <Text
                 as={'h3'}
                 tt={'capitalize'}
+                fs={isMobile ? 'md' : 'inherit'}
                 className='GeomanistMedium-font'
               >
                 1. Thu thập thông tin
               </Text>
-              <Text as={'p'} fs={'lg'}>
+              <Text as={'p'}>
                 Chúng tôi thu thập các thông tin do khách hàng cung cấp khi đặt
                 bàn, đặt món hoặc khi khách tương tác với nhà hàng qua website,
                 email, điện thoại... Các thông tin này bao gồm họ tên, số điện
@@ -38,15 +52,16 @@ const Privacy = () => {
                 tin về cách khách hàng sử dụng dịch vụ của nhà hàng.
               </Text>
             </Box>
-            <Box>
+            <Box fs={isMobile ? 'base' : 'lg'}>
               <Text
                 as={'h3'}
                 tt={'capitalize'}
+                fs={isMobile ? 'md' : 'inherit'}
                 className='GeomanistMedium-font'
               >
                 2. Sử dụng thông tin
               </Text>
-              <Text as={'p'} fs={'lg'}>
+              <Text as={'p'}>
                 Chúng tôi sử dụng thông tin khách hàng để:
                 <List.Unordered ml={fr(10)}>
                   <List.Item>Xử lý đơn đặt hàng, giao hàng</List.Item>
@@ -62,7 +77,7 @@ const Privacy = () => {
                 </List.Unordered>
               </Text>
             </Box>
-            <Box>
+            <Box fs={isMobile ? 'base' : 'lg'}>
               <Text
                 as={'h3'}
                 tt={'capitalize'}
@@ -70,7 +85,7 @@ const Privacy = () => {
               >
                 3. Bảo mật thông tin
               </Text>
-              <Text as={'p'} fs={'lg'}>
+              <Text as={'p'}>
                 Chúng tôi cam kết không chia sẻ thông tin cá nhân của khách hàng
                 cho bất kỳ bên thứ ba nào, trừ khi được khách hàng đồng ý hoặc
                 theo yêu cầu của các cơ quan pháp luật. Dữ liệu cá nhân của
@@ -79,7 +94,7 @@ const Privacy = () => {
                 này.
               </Text>
             </Box>
-            <Box>
+            <Box fs={isMobile ? 'base' : 'lg'}>
               <Text
                 as={'h3'}
                 tt={'capitalize'}
@@ -92,7 +107,7 @@ const Privacy = () => {
                 khách hàng có yêu cầu hủy hoặc tự thực hiện hủy bỏ.
               </Text>
             </Box>
-            <Box>
+            <Box fs={isMobile ? 'base' : 'lg'}>
               <Text
                 as={'h3'}
                 tt={'capitalize'}
