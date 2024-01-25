@@ -57,7 +57,7 @@ const OrderItem = ({ image, title, price, description }) => {
     toast({
       element: (
         <Alert variant='success'>
-          <Alert.Title fs={'md'} className='Geomanist-font'>
+          <Alert.Title fs={isMobile ? 'sm' : 'md'} className='Geomanist-font'>
             Đã thêm món vào giỏ hàng thành công
           </Alert.Title>
         </Alert>
@@ -87,12 +87,13 @@ const OrderItem = ({ image, title, price, description }) => {
   return (
     <>
       <Modal
-        w={ isMobile ? '40vh' : '50vh'}
+        w={isMobile ? '40vh' : '50vh'}
         h={isTablet ? '80vh' : isMobile ? '80vh' : '90vh'}
         open={open}
         onClose={() => setOpen(false)}
         closable
         of={'auto'}
+        cl={(theme) => (theme.mode === 'dark' ? 'white' : 'black')}
       >
         <Modal.Header>
           <Text fw='bold' fs='lg' className='GeomanistMedium-font'>
@@ -108,9 +109,12 @@ const OrderItem = ({ image, title, price, description }) => {
           alt={title}
           mx={'auto'}
         />
-        <Text fs={isTablet ? 'xl' : isMobile ? 'lg' :'2xl'}>{title}</Text>
-        <Text fs={isTablet ? 'md' : isMobile ? 'base' : 'lg'} >
-          Lorem ipsum dolor sit amet consectetur, adipisicing elit. Quisquam voluptatibus vero quibusdam delectus neque deserunt nesciunt voluptatem praesentium debitis molestias suscipit magnam non maiores sint eum, reiciendis cum! Id, quibusdam?
+        <Text fs={isTablet ? 'xl' : isMobile ? 'lg' : '2xl'}>{title}</Text>
+        <Text fs={isTablet ? 'md' : isMobile ? 'base' : 'lg'}>
+          Lorem ipsum dolor sit amet consectetur, adipisicing elit. Quisquam
+          voluptatibus vero quibusdam delectus neque deserunt nesciunt
+          voluptatem praesentium debitis molestias suscipit magnam non maiores
+          sint eum, reiciendis cum! Id, quibusdam?
           {/* {description} */}
         </Text>
         <Flex justify='between' align='center' fs={'lg'} mb={fr(2)}>
@@ -136,7 +140,9 @@ const OrderItem = ({ image, title, price, description }) => {
         <List p={fr(2)}>
           {optionList.map((option, index) => (
             <List.Item key={index} my={fr(2)} justify='between'>
-              <Text fs={isTablet ? 'md' : isMobile ? 'base' : 'lg'}>{option.title}</Text>
+              <Text fs={isTablet ? 'md' : isMobile ? 'base' : 'lg'}>
+                {option.title}
+              </Text>
               <Radio.Group
                 name='answer'
                 value={option.selected}
@@ -178,7 +184,7 @@ const OrderItem = ({ image, title, price, description }) => {
         bsh={'md'}
         br={'xl'}
         p={fr(2)}
-        bg={['sepia', 50]}
+        bg={(theme) => (theme.mode === 'dark' ? '#1f2937' : ['sepia', 50])}
       >
         <Image
           src={image}
