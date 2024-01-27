@@ -1,0 +1,239 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model categories {
+  category_id Int    @id
+  name        String @db.VarChar(255)
+  menu        menu[]
+}
+
+model contents {
+  content_id  Int     @id
+  title       String  @db.VarChar(255)
+  slogan      String? @db.VarChar(255)
+  description String  @db.Text
+}
+
+model customer_address {
+  address_id  Int       @id @default(autoincrement())
+  customer_id Int
+  address     String    @db.VarChar(255)
+  customers   customers @relation(fields: [customer_id], references: [customer_id], onUpdate: Restrict, map: "customer_address_ibfk_1")
+
+  @@index([customer_id], map: "customer_id")
+}
+
+model customer_level {
+  level_id    Int         @id
+  name        String      @db.VarChar(255)
+  description String      @db.Text
+  discount    Decimal     @db.Decimal(2, 2)
+  points      Int
+  benefits    String      @db.VarChar(255)
+  customers   customers[]
+}
+
+model customers {
+  customer_id      Int                @id @default(autoincrement())
+  name             String             @db.VarChar(255)
+  phone            String             @db.Char(11)
+  address          String             @db.VarChar(255)
+  birthday         DateTime           @db.Date
+  point            Int                @db.SmallInt
+  level_id         Int
+  status           Boolean            @default(false)
+  username         String             @db.VarChar(255)
+  password         String             @db.VarChar(255)
+  customer_address customer_address[]
+  customer_level   customer_level     @relation(fields: [level_id], references: [level_id], onUpdate: Restrict, map: "customers_ibfk_1")
+  invoices         invoices[]
+  orders           orders[]
+  point_history    point_history[]
+  reservations     reservations[]
+  reviews          reviews[]
+  vouchers         vouchers[]
+
+  @@index([level_id], map: "level_id")
+}
+
+model employees {
+  employee_id Int       @id @default(autoincrement())
+  name        String    @db.VarChar(255)
+  gender      String    @db.VarChar(50)
+  email       String    @db.VarChar(255)
+  phone       String    @db.Char(11)
+  birthday    DateTime  @db.Date
+  position_id Int
+  status      Boolean   @default(false)
+  is_admin    Boolean   @default(false)
+  username    String    @db.VarChar(255)
+  password    String    @db.VarChar(255)
+  positions   positions @relation(fields: [position_id], references: [position_id], onUpdate: Restrict, map: "employees_ibfk_1")
+
+  @@index([position_id], map: "position_id")
+}
+
+model invoice_details {
+  invoice_detail_id Int     @id @default(autoincrement())
+  invoice_id        Int
+  item_id           Int
+  quantity          Int     @db.TinyInt
+  unit_price        Decimal @db.Decimal(10, 2)
+  total_price       Decimal @db.Decimal(10, 2)
+}
+
+model invoices {
+  invoice_id     Int       @id @default(autoincrement())
+  invoice_time   DateTime  @db.Date
+  customer_id    Int
+  voucher_code   String?   @db.VarChar(255)
+  payment_method String    @db.VarChar(255)
+  payment_status String    @db.VarChar(255)
+  note           String?   @db.VarChar(255)
+  customers      customers @relation(fields: [customer_id], references: [customer_id], onUpdate: Restrict, map: "invoices_ibfk_1")
+
+  @@index([customer_id], map: "customer_id")
+}
+
+model menu {
+  item_id                                   Int             @id @default(autoincrement())
+  name                                      String          @db.VarChar(255)
+  description                               String          @db.Text
+  price                                     Decimal         @db.Decimal(10, 2)
+  image                                     String          @db.Text
+  category_id                               Int
+  categories                                categories      @relation(fields: [category_id], references: [category_id], onUpdate: Restrict, map: "menu_ibfk_1")
+  order_details_menu_item_idToorder_details order_details   @relation("menu_item_idToorder_details", fields: [item_id], references: [item_id], onUpdate: Restrict, map: "menu_ibfk_6")
+  order_details_order_details_item_idTomenu order_details[] @relation("order_details_item_idTomenu")
+
+  @@index([category_id], map: "category_id")
+}
+
+model order_details {
+  order_detail_id                  Int     @id @default(autoincrement())
+  order_id                         Int
+  item_id                          Int
+  quantity                         Int
+  unit_price                       Decimal @db.Decimal(10, 2)
+  total_price                      Decimal @db.Decimal(10, 2)
+  menu_menu_item_idToorder_details menu?   @relation("menu_item_idToorder_details")
+  orders                           orders  @relation(fields: [order_id], references: [order_id], onUpdate: Restrict, map: "order_details_ibfk_1")
+  menu_order_details_item_idTomenu menu    @relation("order_details_item_idTomenu", fields: [item_id], references: [item_id], onUpdate: Restrict, map: "order_details_ibfk_4")
+
+  @@index([item_id], map: "item_id")
+  @@index([order_id], map: "order_id")
+}
+
+model orders {
+  order_id         Int             @id @default(autoincrement())
+  customer_id      Int
+  status           String          @db.VarChar(255)
+  shipping_address String          @db.VarChar(255)
+  shipping_method  String          @db.VarChar(255)
+  shipping_cost    Decimal         @db.Decimal(10, 2)
+  payment_method   String          @db.VarChar(255)
+  payment_status   String          @db.VarChar(255)
+  created_at       DateTime        @db.DateTime(0)
+  updated_at       DateTime        @db.DateTime(0)
+  order_details    order_details[]
+  customers        customers       @relation(fields: [customer_id], references: [customer_id], onUpdate: Restrict, map: "orders_ibfk_1")
+  point_history    point_history[]
+
+  @@index([customer_id], map: "customer_id")
+}
+
+model point_history {
+  point_history_id Int       @id @default(autoincrement())
+  customer_id      Int
+  order_id         Int?
+  voucher_id       Int?
+  points_earned    Int?      @db.TinyInt
+  points_deducted  Int?      @db.TinyInt
+  transaction_date DateTime  @db.Date
+  customers        customers @relation(fields: [customer_id], references: [customer_id], onUpdate: Restrict, map: "point_history_ibfk_1")
+  orders           orders?   @relation(fields: [order_id], references: [order_id], onDelete: Restrict, onUpdate: Restrict, map: "point_history_ibfk_11")
+  vouchers         vouchers? @relation(fields: [voucher_id], references: [voucher_id], onDelete: Restrict, onUpdate: Restrict, map: "point_history_ibfk_12")
+
+  @@index([customer_id], map: "customer_id")
+  @@index([order_id], map: "order_id")
+  @@index([voucher_id], map: "voucher_id")
+}
+
+model positions {
+  position_id Int         @id
+  name        String      @db.VarChar(255)
+  salary      Decimal     @db.Decimal(10, 2)
+  employees   employees[]
+}
+
+model promotions {
+  promotion_id Int      @id
+  name         String   @db.VarChar(255)
+  description  String   @db.Text
+  start_date   DateTime @db.Date
+  end_date     DateTime @db.Date
+  target       String   @db.VarChar(255)
+  conditions   String   @db.Text
+  discount     Decimal  @db.Decimal(10, 2)
+  status       String   @db.VarChar(255)
+}
+
+model reservations {
+  reservation_id                       Int       @id @default(autoincrement())
+  customer_id                          Int
+  table_id                             Int
+  description                          String    @db.Text
+  status                               String    @db.VarChar(255)
+  customers                            customers @relation(fields: [customer_id], references: [customer_id], onUpdate: Restrict, map: "reservations_ibfk_1")
+  tables_reservations_table_idTotables tables    @relation("reservations_table_idTotables", fields: [table_id], references: [table_id], onUpdate: Restrict, map: "reservations_ibfk_5")
+  tables_tables_table_idToreservations tables?   @relation("tables_table_idToreservations")
+
+  @@index([customer_id], map: "customer_id")
+  @@index([table_id], map: "table_id")
+}
+
+model revenue {
+  revenue_id Int      @id
+  date       DateTime @db.Date
+  revenue    Decimal  @db.Decimal(10, 2)
+  cost       Decimal  @db.Decimal(10, 2)
+}
+
+model reviews {
+  review_id   Int       @id @default(autoincrement())
+  customer_id Int
+  content     String    @db.Text
+  rating      Boolean
+  created_at  DateTime  @default(now()) @db.Timestamp(0)
+  customers   customers @relation(fields: [customer_id], references: [customer_id], onUpdate: Restrict, map: "reviews_ibfk_1")
+
+  @@index([customer_id], map: "customer_id")
+}
+
+model tables {
+  table_id                                   Int            @id
+  name                                       String         @db.VarChar(255)
+  capacity                                   Int
+  status                                     String         @db.VarChar(255)
+  reservations_reservations_table_idTotables reservations[] @relation("reservations_table_idTotables")
+  reservations_tables_table_idToreservations reservations   @relation("tables_table_idToreservations", fields: [table_id], references: [table_id], onUpdate: Restrict, map: "tables_ibfk_1")
+}
+
+model vouchers {
+  voucher_id    Int             @id @default(autoincrement())
+  customer_id   Int
+  code          String          @db.VarChar(255)
+  discount      Decimal         @db.Decimal(10, 2)
+  expire_date   DateTime        @db.Date
+  status        String          @db.VarChar(255)
+  point_history point_history[]
+  customers     customers       @relation(fields: [customer_id], references: [customer_id], onUpdate: Restrict, map: "vouchers_ibfk_1")
+
+  @@index([customer_id], map: "customer_id")
+}
