@@ -171,7 +171,7 @@ const Navbar = () => {
                       <>
                         <Flex align='center' justify='around'>
                           <Avatar size={'sm'} color={'primary'}></Avatar>
-                          <Text fs={isTablet ? 'lg' : 'md'}>Paramita</Text>
+                          <Text cl={'primary'} fs={isTablet ? 'lg' : 'md'}>Paramita</Text>
                         </Flex>
                         <Divider my={isTablet ? fr(4) : fr(6)} />
                         <List
@@ -243,7 +243,7 @@ const Navbar = () => {
                         cl={['inherit', { hover: ['primary', 100] }]}
                         bg={['transparent', { ':before': 'primary' }]}
                         pos={['relative', { ':before': 'absolute' }]}
-                        p={isTablet ? fr(4) : fr(3)}
+                        p={fr(3)}
                         sx={lineAnimation}
                       >
                         <NavLink to={'/'} onMouseOver={() => Home.preload()}>
@@ -254,7 +254,7 @@ const Navbar = () => {
                         cl={['inherit', { hover: ['primary', 100] }]}
                         bg={['transparent', { ':before': 'primary' }]}
                         pos={['relative', { ':before': 'absolute' }]}
-                        p={isTablet ? fr(4) : fr(3)}
+                        p={fr(3)}
                         sx={lineAnimation}
                       >
                         <NavLink
@@ -268,7 +268,7 @@ const Navbar = () => {
                         cl={['inherit', { hover: ['primary', 100] }]}
                         bg={['transparent', { ':before': 'primary' }]}
                         pos={['relative', { ':before': 'absolute' }]}
-                        p={isTablet ? fr(4) : fr(3)}
+                        p={fr(3)}
                         sx={lineAnimation}
                       >
                         <NavLink
@@ -282,7 +282,7 @@ const Navbar = () => {
                         cl={['inherit', { hover: ['primary', 100] }]}
                         bg={['transparent', { ':before': 'primary' }]}
                         pos={['relative', { ':before': 'absolute' }]}
-                        p={isTablet ? fr(4) : fr(3)}
+                        p={fr(3)}
                         sx={lineAnimation}
                       >
                         <NavLink
@@ -296,7 +296,7 @@ const Navbar = () => {
                         cl={['inherit', { hover: ['primary', 100] }]}
                         bg={['transparent', { ':before': 'primary' }]}
                         pos={['relative', { ':before': 'absolute' }]}
-                        p={isTablet ? fr(4) : fr(3)}
+                        p={fr(3)}
                         sx={lineAnimation}
                       >
                         <NavLink
@@ -310,7 +310,7 @@ const Navbar = () => {
                         cl={['inherit', { hover: ['primary', 100] }]}
                         bg={['transparent', { ':before': 'primary' }]}
                         pos={['relative', { ':before': 'absolute' }]}
-                        p={isTablet ? fr(4) : fr(3)}
+                        p={fr(3)}
                         sx={lineAnimation}
                       >
                         <NavLink
@@ -324,7 +324,7 @@ const Navbar = () => {
                         cl={['inherit', { hover: ['primary', 100] }]}
                         bg={['transparent', { ':before': 'primary' }]}
                         pos={['relative', { ':before': 'absolute' }]}
-                        p={isTablet ? fr(4) : fr(3)}
+                        p={fr(3)}
                         sx={lineAnimation}
                       >
                         <NavLink
@@ -351,7 +351,7 @@ const Navbar = () => {
                       <Icon>
                         <ShoppingCartSimple />
                       </Icon>
-                      <Text>Giỏ hàng - {itemCount} món</Text>
+                      <Text> {itemCount} món - </Text>
                       <Text>{subTotal.toLocaleString('vi-VN')}đ</Text>
                     </Center>
                   </Drawer.Footer>

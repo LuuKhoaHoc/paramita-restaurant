@@ -14,7 +14,9 @@ import React, { useContext } from 'react'
 import { Link } from 'react-router-dom'
 import { CountDown } from '~/components'
 import { CartContext } from '~/contexts/CartContext'
+import { useResponsive } from '~/utils/responsive'
 const CheckoutCart = () => {
+  const {isTablet, isMobile} = useResponsive()
   const { cartItems, removeCartItem } = useContext(CartContext)
   if (sessionStorage.getItem('cartItems').length === 0) {
     setTimeout(() => {
@@ -26,7 +28,7 @@ const CheckoutCart = () => {
   )
   return (
     <>
-      <Flex w={'100%'} justify='between'>
+      <Flex w={'100%'} justify='between' align='center'>
         <Center my={fr(4)}>
           <Icon size={fr(8)} cl={'primary'}>
             <ShoppingCart weight='fill' />
@@ -39,6 +41,7 @@ const CheckoutCart = () => {
           br={'full'}
           variant='secondary'
           my={fr(4)}
+          size={isTablet ? 'sm' : 'base'}
         >
           Thêm món
         </Button>
@@ -66,17 +69,17 @@ const CheckoutCart = () => {
               to={'/cart'}
               p={fr(1)}
             />
-            <Text fs={'lg'} ml={fr(4)}>
+            <Text fs={isTablet ? 'md' : 'lg'} ml={fr(4)}>
               {item.quantity} x {item.title}
               <Button variant='text' onClick={() => removeCartItem(item.title)}>
                 Xoá
               </Button>
             </Text>
-            <Text ml={'auto'} fs={'lg'}>
+            <Text ml={'auto'} fs={isTablet ? 'md' : 'lg'}>
               {item.price.toLocaleString('vi-VN', {
                 style: 'currency',
                 currency: 'VND'
-              })}
+              })}đ
             </Text>
             <Center></Center>
           </List.Item>
@@ -85,7 +88,7 @@ const CheckoutCart = () => {
       <Stack direction='column' w={'100%'} justify='end'>
         <Divider />
         <Text
-          fs={'xl'}
+          fs={isTablet ? 'md' : 'xl'}
           className='GeomanistMedium-font'
           cl={'primary'}
           m={fr(4)}
@@ -133,17 +136,17 @@ const CheckoutCart = () => {
           w={'100%'}
           mx={fr(-4)}
           px={fr(4)}
-          py={fr(5)}
+          py={isTablet ? fr(3) : fr(5)}
           cl={'#fff'}
           sx={{
             borderBottomLeftRadius: '10px',
             borderBottomRightRadius: '10px'
           }}
         >
-          <Text as={'h3'} className='GeomanistLight-font'>
+          <Text as={'h3'} fs={isTablet ? 'base' : 'inherit'} className='GeomanistLight-font'>
             Thành tiền
           </Text>
-          <Text as={'h3'} className='GeomanistLight-font'>
+          <Text as={'h3'} fs={isTablet ? 'base' : 'inherit'} className='GeomanistLight-font'>
             {(
               cartItems.reduce(
                 (acc, item) => acc + item.price * item.quantity * 1000,

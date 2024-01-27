@@ -1,8 +1,10 @@
 import React from 'react'
 import { Flex, Text, Box, Divider, List, Image, fr } from '@prismane/core'
 import { useId } from '@prismane/core/hooks'
+import { useResponsive } from '~/utils/responsive'
 
 const OrderInvoice = () => {
+  const { isTablet, isMobile } = useResponsive()
   const id = useId()
   const orders = JSON.parse(localStorage.getItem('orders'))
   const lastIndex = orders.length - 1
@@ -19,16 +21,21 @@ const OrderInvoice = () => {
       direction='column'
       align='center'
     >
-      <Text as={'h3'} fs={'xl'} className='Geomanist-font' p={fr(5)}>
+      <Text
+        as={'h3'}
+        fs={isMobile ? 'lg' : 'xl'}
+        className='GeomanistMedium-font'
+        p={fr(5)}
+      >
         Đơn hàng của bạn
       </Text>
       <Box w={'90%'}>
-        <Flex direction='column' mb={fr(2)}>
-          <Text fs={'lg'}>Mã đơn hàng: #{id}</Text>
-          <Text fs={'lg'}>Tên khách hàng: {information?.name}</Text>
-          <Text fs={'lg'}>Số điện thoại: {information?.phone}</Text>
-          <Text fs={'lg'}>Địa chỉ giao hàng: {information?.address}</Text>
-          <Flex gap={fr(2)} fs={'lg'}>
+        <Flex direction='column' mb={fr(2)} fs={isMobile ? 'base' : 'lg'}>
+          <Text>Mã đơn hàng: #{id}</Text>
+          <Text>Tên khách hàng: {information?.name}</Text>
+          <Text>Số điện thoại: {information?.phone}</Text>
+          <Text>Địa chỉ giao hàng: {information?.address}</Text>
+          <Flex gap={fr(2)}>
             <Text>Phương thức thanh toán: </Text>
             <Text>
               {
@@ -41,11 +48,18 @@ const OrderInvoice = () => {
             </Text>
           </Flex>
         </Flex>
-        <Divider />
+        {/* <Divider /> */}
         <List>
-          <List.Item justify='around' fs={'lg'} py={fr(2)}>
-            <Text mr={fr(4)}>STT</Text>
-            <Text w={fr(86)}>Sản phẩm</Text>
+          <List.Item
+            justify='around'
+            fs={isTablet ? 'md' : isMobile ? 'sm' : 'lg'}
+            py={fr(2)}
+            fw={'semibold'}
+          >
+            <Text mr={isMobile ? fr(0) : fr(4)}>STT</Text>
+            <Text w={isTablet ? fr(60) : isMobile ? fr(35) : fr(86)}>
+              Sản phẩm
+            </Text>
             <Text>Giá</Text>
             <Text>Số lượng</Text>
             <Text>Tạm tính</Text>
@@ -53,27 +67,34 @@ const OrderInvoice = () => {
           <Divider />
           {cart?.map((item, index) => (
             <Box key={index}>
-              <List.Item justify='around' py={fr(2)} align='center'>
+              <List.Item
+                justify='around'
+                py={fr(2)}
+                align='center'
+                fs={isTablet ? 'md' : isMobile ? 'sm' : 'lg'}
+              >
                 <Text>{index + 1}</Text>
-                <Flex align='center' gap={fr(2)} w={fr(86)}>
+                <Flex align='center' w={isTablet ? fr(60) : isMobile ? 'fit-content' : fr(86)}>
                   <Image
                     src={item.image}
-                    w={fr(20)}
-                    h={fr(20)}
+                    w={isTablet ? fr(16) : isMobile ? fr(10) : fr(20)}
+                    h={isTablet ? fr(16) : isMobile ? fr(10) : fr(20)}
                     alt={item.title}
                     br={'lg'}
                   />
                   <Box>
-                    <Text fs={'lg'}>{item.title}</Text>
-                    <Flex>
-                      <Text>{item.optionList[0].title}</Text>
-                      <Text>{item.optionList[0].selected}</Text>
-                    </Flex>
+                    <Text>{item.title}</Text>
+                    <Box>
+                      <Text>
+                        {item.optionList[0].title} -{' '}
+                        {item.optionList[0].selected}
+                      </Text>
+                    </Box>
                   </Box>
                 </Flex>
-                <Text fs={'lg'}>{item.price}đ</Text>
+                <Text>{item.price}đ</Text>
                 <Text>{item.quantity}</Text>
-                <Text fs={'lg'}>
+                <Text>
                   {(item.price * item.quantity * 1000).toLocaleString('vi-VN', {
                     style: 'currency',
                     currency: 'VND'
@@ -84,7 +105,7 @@ const OrderInvoice = () => {
             </Box>
           ))}
         </List>
-        <Flex direction='column' align='end' fs={'lg'} gap={fr(2)} my={fr(2)}>
+        <Flex direction='column' align='end' fs={isMobile ? 'base' : 'lg'} gap={fr(2)} my={fr(2)}>
           <Text>
             Tổng cộng:{' '}
             {subTotal.toLocaleString('vi-VN', {
@@ -108,7 +129,7 @@ const OrderInvoice = () => {
               })
             }
           </Text>
-          <Text fs={'xl'} cl={'primary'}>
+          <Text fs={isMobile ? 'md' : 'xl'} cl={'primary'}>
             Tổng thanh toán:{' '}
             {total.toLocaleString('vi-VN', {
               style: 'currency',

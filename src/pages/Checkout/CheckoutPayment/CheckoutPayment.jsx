@@ -11,8 +11,10 @@ import {
   fr
 } from '@prismane/core'
 import React, { useEffect, useState } from 'react'
+import { useResponsive } from '~/utils/responsive'
 
 const CheckoutPayment = () => {
+  const { isTablet, isMobile } = useResponsive()
   const checkoutInformation = JSON.parse(
     sessionStorage.getItem('checkout-information')
   )
@@ -36,7 +38,7 @@ const CheckoutPayment = () => {
   return (
     <Flex w={'100%'} p={fr(8)} direction='column'>
       <Text
-        fs={'lg'}
+        fs={isTablet ? 'md' : 'lg'}
         className='GeomanistMedium-font'
         cl={'primary'}
         mb={fr(4)}
@@ -77,7 +79,7 @@ const CheckoutPayment = () => {
         />
       </Form>
       <Text
-        fs={'lg'}
+        fs={isTablet ? 'md' : 'lg'}
         className='GeomanistMedium-font'
         cl={'primary'}
         my={fr(4)}
@@ -98,27 +100,27 @@ const CheckoutPayment = () => {
       </Text>
       <Radio.Group
         direction='column'
-        w={'100%'}
+        w={!isMobile && !isTablet ? '50%' : '100%'}
         gap={fr(5)}
         name='answer'
         value={paymentMethod}
         onChange={(e) => setPaymentMethod(e.target.value)}
       >
-        <Center w={'30%'} fs={'lg'} justify='between'>
+        <Center w={'100%' } fs={isTablet ? 'base' : 'lg'} justify='between'>
           <Radio value='tien-mat' />
           <Icon size={fr(8)}>
             <Money />
           </Icon>
           <Text w={fr(20)}>Tiền mặt</Text>
         </Center>
-        <Center w={'30%'} fs={'lg'} justify='between'>
+        <Center w={'100%' } fs={isTablet ? 'base' : 'lg'} justify='between'>
           <Radio value='mo-mo' />
           <Icon size={fr(8)}>
             <PiggyBank />
           </Icon>
           <Text w={fr(20)}>Momo</Text>
         </Center>
-        <Center w={'30%'} fs={'lg'} justify='between'>
+        <Center w={'100%' } fs={isTablet ? 'base' : 'lg'} justify='between'>
           <Radio value='ngan-hang' />
           <Icon size={fr(8)}>
             <Bank />
