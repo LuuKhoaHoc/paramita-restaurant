@@ -21,7 +21,7 @@ const AccountOrder = () => {
   const orders = JSON.parse(localStorage.getItem('orders'))
   return (
     <>
-      <Modal w={'80vw'} open={open} onClose={() => setOpen(false)} closable>
+      <Modal w={isMobile ? '100vw' : '80vw'} open={open} onClose={() => setOpen(false)} closable>
         <OrderInvoice />
       </Modal>
       <Flex direction='column' grow pos={'relative'} m={fr(10)}>

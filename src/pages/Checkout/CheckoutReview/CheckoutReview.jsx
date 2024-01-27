@@ -12,8 +12,10 @@ import {
 import React, { useContext, useState } from 'react'
 import { CartContext } from '~/contexts/CartContext'
 import { LogoIcon } from '~/images'
+import { useResponsive } from '~/utils/responsive'
 
 const CheckoutReview = () => {
+  const { isTablet, isMobile } = useResponsive()
   // Lấy cartItems và clearCart từ CartContext
   const { cartItems, clearCart } = useContext(CartContext)
   // Lấy thông tin người dùng từ sessionStorage
@@ -66,7 +68,12 @@ const CheckoutReview = () => {
   }
   return (
     <>
-      <Dialog w={fr(96)} open={open} onClose={() => setOpen(false)} closable>
+      <Dialog
+        w={!isTablet && !isMobile ? fr(96) : '60vw'}
+        open={open}
+        onClose={() => setOpen(false)}
+        closable
+      >
         <Dialog.Header>
           <Text fs={'xl'} className='GeomanistMedium-font' cl={'primary'}>
             Cảnh báo!
@@ -79,12 +86,12 @@ const CheckoutReview = () => {
           </Button>
         </Dialog.Footer>
       </Dialog>
-      <Center direction='column' w={'100%'} gap={fr(5)}>
+      <Center direction='column' w={'100%'} gap={fr(5)} my={fr(4)}>
         <Image
           src={LogoIcon}
           alt='logo'
-          w={fr(40)}
-          h={fr(40)}
+          w={isTablet ? fr(32): fr(40)}
+          h={isTablet ? fr(32): fr(40)}
           fit='cover'
           bsh={'md'}
           br={'full'}
@@ -94,7 +101,7 @@ const CheckoutReview = () => {
         </Text>
         <Flex w={'80%'} direction='column'>
           <Flex direction='column'>
-            <Text as={'p'} className='GeomanistMedium-font'>
+            <Text as={'small'} cl={'base'} className='GeomanistMedium-font'>
               Thông tin người nhận
             </Text>
             <Text fs={'md'} ta={'center'}>
@@ -109,7 +116,7 @@ const CheckoutReview = () => {
           </Flex>
 
           <Flex direction='column'>
-            <Text as={'p'} className='GeomanistMedium-font'>
+            <Text as={'small'} cl={'base'} className='GeomanistMedium-font'>
               Thanh toán
             </Text>
             <Flex justify='center' align='center' gap={fr(4)}>
@@ -134,7 +141,7 @@ const CheckoutReview = () => {
             </Flex>
           </Flex>
           <Flex direction='column'>
-            <Text as={'p'} className='GeomanistMedium-font'>
+            <Text as={'small'} cl={'base'} className='GeomanistMedium-font'>
               Vận chuyển
             </Text>
             <Text fs={'md'} ta={'center'}>

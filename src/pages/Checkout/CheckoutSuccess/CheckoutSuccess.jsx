@@ -30,12 +30,15 @@ const CheckoutSuccess = () => {
           <Text as={'h1'} className='GeomanistMedium-font'>
             Cảm ơn bạn đã mua hàng!
           </Text>
-          <Text as={'h2'} className='Geomanist-font'>
+          <Text as={'h2'} className='GeomanistLight-font'>
             Đơn hàng của bạn đã được đặt thành công.
           </Text>
         </Center>
         <Grid templateColumns={12}>
-          <Grid.Item columnStart={3} columnEnd={11}>
+          <Grid.Item
+            columnStart={isTablet ? 2 : isMobile ? 1 : 3}
+            columnEnd={isTablet ? 12 : isMobile ? 13 : 11}
+          >
             <OrderInvoice />
           </Grid.Item>
         </Grid>

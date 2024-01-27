@@ -14,8 +14,10 @@ import {
 } from '@prismane/core'
 import React, { useContext, useState } from 'react'
 import { CartContext } from '~/contexts/CartContext'
+import { useResponsive } from '~/utils/responsive'
 
 const CartItem = ({ image, title, price, selected, quantity }) => {
+  const { isTablet, isMobile } = useResponsive()
   const { removeCartItem, updateCartItemQuantity, updateCartItemSelected } =
     useContext(CartContext)
   const subtotal = price * quantity * 1000
@@ -25,7 +27,7 @@ const CartItem = ({ image, title, price, selected, quantity }) => {
   const [open, setOpen] = useState(false)
   return (
     <>
-      <Modal w={fr(144)} open={open} onClose={() => setOpen(false)} closable>
+      <Modal w={'70vw'} open={open} onClose={() => setOpen(false)} closable>
         <Modal.Header>
           <Text
             fw='bold'
@@ -39,6 +41,20 @@ const CartItem = ({ image, title, price, selected, quantity }) => {
           </Text>
         </Modal.Header>
         <Flex w={'100%'} direction='column' px={fr(4)} mx={fr(-4)}>
+          {isMobile && (
+            <Flex align='center' justify='between'>
+              <Text fs={'lg'}>{price}đ</Text>
+              <NumberField
+                w={'fit-content'}
+                value={quantity}
+                onChange={(e) => {
+                  const newQuantity = +e.target.value
+                  updateCartItemQuantity(title, newQuantity)
+                }}
+                min={1}
+              />
+            </Flex>
+          )}
           {selected.map((option, index) => (
             <Flex justify='between' key={index}>
               <Text fs={'lg'}>{option.title}</Text>
@@ -77,7 +93,13 @@ const CartItem = ({ image, title, price, selected, quantity }) => {
             >
               <X />
             </Icon>
-            <Image src={image} w={fr(20)} h={fr(20)} alt={title} br={'lg'} />
+            <Image
+              src={image}
+              w={isTablet ? fr(16) : isMobile ? fr(0) : fr(20)}
+              h={isTablet ? fr(16) : isMobile ? fr(0) : fr(20)}
+              alt={title}
+              br={'lg'}
+            />
             <Text fs={'lg'}>{title}</Text>
           </Flex>
         </Table.Cell>
@@ -88,20 +110,30 @@ const CartItem = ({ image, title, price, selected, quantity }) => {
             </Icon>
           </Center>
         </Table.Cell>
-        <Table.Cell ta={'center'}>
-          <Text fs={'lg'}>{price}đ</Text>
-        </Table.Cell>
-        <Table.Cell ta={'center'}>
-          <NumberField
-            w={'fit-content'}
-            value={quantity}
-            onChange={(e) => {
-              const newQuantity = +e.target.value
-              updateCartItemQuantity(title, newQuantity)
-            }}
-            min={1}
-          />
-        </Table.Cell>
+        {!isMobile && (
+          <Table.Cell ta={'center'}>
+            <Text fs={'lg'}>
+              {price.toLocaleString('vi-VN', {
+                style: 'currency',
+                currency: 'VND'
+              })}
+              đ
+            </Text>
+          </Table.Cell>
+        )}
+        {!isMobile && (
+          <Table.Cell ta={'center'}>
+            <NumberField
+              w={70}
+              value={quantity}
+              onChange={(e) => {
+                const newQuantity = +e.target.value
+                updateCartItemQuantity(title, newQuantity)
+              }}
+              min={1}
+            />
+          </Table.Cell>
+        )}
         <Table.Cell ta={'center'}>
           <Text fs={'lg'}>
             {subtotal.toLocaleString('vi-VN', {

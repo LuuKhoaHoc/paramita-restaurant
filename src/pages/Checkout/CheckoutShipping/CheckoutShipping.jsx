@@ -12,8 +12,10 @@ import {
 } from '@prismane/core'
 import { useForm, useSearch } from '@prismane/core/hooks'
 import React, { useEffect } from 'react'
+import { useResponsive } from '~/utils/responsive'
 
 const CheckoutShipping = () => {
+  const { isTablet, isMobile } = useResponsive()
   const checkoutInformation = JSON.parse(
     sessionStorage.getItem('checkout-information')
   )
@@ -68,7 +70,7 @@ const CheckoutShipping = () => {
   return (
     <>
       <Center w={'100%'} h={'fit-content'} my={fr(4)}>
-        <Flex direction='column' gap={fr(4)} w={fr(96)}>
+        <Flex direction='column' gap={fr(4)}>
           <TextField
             className='GeomanistMedium-font'
             variant='underlined'
@@ -82,7 +84,6 @@ const CheckoutShipping = () => {
                 key={index}
                 cl={(theme) => (theme.mode === 'dark' ? 'white' : 'black')}
                 onClick={handleSetInput}
-                fs={'md'}
                 bg={['transparent', { hover: ['base', 100] }]}
                 br={'md'}
                 cs={'pointer'}
@@ -96,7 +97,6 @@ const CheckoutShipping = () => {
               <List.Item
                 key={index}
                 onClick={handleSetInput}
-                fs={'md'}
                 bg={['transparent', { hover: ['base', 100] }]}
                 br={'md'}
                 cs={'pointer'}
@@ -109,15 +109,12 @@ const CheckoutShipping = () => {
           </List>
         </Flex>
       </Center>
-      <Box
-        mx={fr(4)}
-        
-      >
-        <Text className='GeomanistMedium-font' fs={'xl'}>
+      <Box mx={fr(4)}>
+        <Text className='GeomanistMedium-font' fs={isTablet ? 'md' :'xl'}>
           Địa chỉ khác
         </Text>
         <Form
-          mt={fr(2)}
+          my={fr(2)}
           mx={fr(2)}
           onSubmit={(e) => {
             handleSubmit(e, (v) => handleSetInputByForm(v))
@@ -125,6 +122,7 @@ const CheckoutShipping = () => {
           onReset={() => handleReset()}
         >
           <TextField
+            size={isTablet ? 'xs' : 'md'}
             className='GeomanistMedium-font'
             variant='underlined'
             label='Địa chỉ'
@@ -132,6 +130,7 @@ const CheckoutShipping = () => {
             {...register('address')}
           />
           <TextField
+            size={isTablet ? 'xs' : 'md'}
             className='GeomanistMedium-font'
             variant='underlined'
             label='Quận huyện'
@@ -139,6 +138,7 @@ const CheckoutShipping = () => {
             {...register('district')}
           />
           <TextField
+            size={isTablet ? 'xs' : 'md'}
             className='GeomanistMedium-font'
             variant='underlined'
             label='Tỉnh Thành'
@@ -147,12 +147,12 @@ const CheckoutShipping = () => {
           />
           <Flex gap={fr(2)}>
             <Button br={'full'} variant='tertiary' type='submit'>
-              <Text className='Geomanist-font' fs={'md'}>
+              <Text className='GeomanistMedium-font' fs={isTablet ? 'sm' : 'base'}>
                 Thêm địa chỉ
               </Text>
             </Button>
             <Button br={'full'} variant='tertiary' type='reset'>
-              <Text className='Geomanist-font' fs={'md'}>
+              <Text className='GeomanistMedium-font' fs={isTablet ? 'sm' : 'base'}>
                 Xoá
               </Text>
             </Button>

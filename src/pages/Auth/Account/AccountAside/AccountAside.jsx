@@ -43,7 +43,7 @@ const AccountAside = () => {
       {isMobile || isTablet ? (
         <>
           <Box
-            w={isTablet ? fr(100) : isMobile ? fr(80) : '100%'}
+            w={isTablet ? fr(100) : isMobile ? fr(75) : '100%'}
             mx={'auto'}
             mt={fr(4)}
             pb={fr(4)}
