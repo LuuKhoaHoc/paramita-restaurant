@@ -61,7 +61,7 @@ model customers {
 
   @@index([level_id], map: "level_id")
 }
-
+// TODO: Thêm created, updated
 model employees {
   employee_id Int       @id @default(autoincrement())
   name        String    @db.VarChar(255)
@@ -118,7 +118,7 @@ model menu {
 model order_details {
   order_detail_id                  Int     @id @default(autoincrement())
   order_id                         Int
-  item_id                          Int
+  item_id                          Int     @unique
   quantity                         Int
   unit_price                       Decimal @db.Decimal(10, 2)
   total_price                      Decimal @db.Decimal(10, 2)
@@ -187,7 +187,7 @@ model promotions {
 model reservations {
   reservation_id                       Int       @id @default(autoincrement())
   customer_id                          Int
-  table_id                             Int
+  table_id                             Int       @unique
   description                          String    @db.Text
   status                               String    @db.VarChar(255)
   customers                            customers @relation(fields: [customer_id], references: [customer_id], onUpdate: Restrict, map: "reservations_ibfk_1")
@@ -204,7 +204,8 @@ model revenue {
   revenue    Decimal  @db.Decimal(10, 2)
   cost       Decimal  @db.Decimal(10, 2)
 }
-
+//TODO: Sửa rating thành tinyint hoặc enum
+//TODO: Thêm status cho reviews 
 model reviews {
   review_id   Int       @id @default(autoincrement())
   customer_id Int

@@ -1,0 +1,189 @@
+type Category {
+  id: ID!
+  name: String!
+  items: [Menu!]!
+}
+
+type Menu {
+  id: ID!
+  name: String!
+  description: String!
+  price: Float!
+  image: String!
+  category: Category!
+}
+
+type Content {
+  id: ID!
+  title: String!
+  slogan: String
+  description: String!
+}
+
+type Customer {
+  id: ID!
+  name: String!
+  phone: String!
+  address: CustomerAddress!
+  birthday: DateTime!
+  points: Int!
+  level: CustomerLevel!
+  status: Boolean!
+  username: String!
+  password: String!
+  invoice: [Invoice!]
+  orders: [Order!]
+  pointsHistory: [PointsHistory!]
+  reservations: [Reservation!]
+  reviews: [Review!]
+  vouchers: [Voucher!]
+}
+
+type CustomerAddress {
+  id: ID!
+  customer: Customer!
+  address: String!
+}
+
+type CustomerLevel {
+  id: ID!
+  name: String!
+  description: String!
+  discount: Float!
+  points: Int!
+  benefits: [String!]
+  customers: [Customer!]
+}
+
+type Invoice {
+  id: ID!
+  date: DateTime!
+  customer: Customer!
+  voucher: Voucher
+  paymentMethod: PaymentMethod!
+  paymentStatus: Boolean!
+  note: String
+  invoiceDetails: [InvoiceDetail!]!
+}
+
+type InvoiceDetail {
+  id: ID!
+  invoice: Invoice!
+  item: Menu!
+  quantity: Int!
+  price: Float!
+  total: Float!
+}
+
+type Order {
+  id: ID!
+  customer: Customer!
+  customer: Customer!
+  status: Boolean!
+  address: String!
+  shippingMethod: String!
+  shippingFee: Float!
+  paymentMethod: String!
+  paymentStatus: Boolean!
+  createdDate: DateTime!
+  updatedDate: DateTime!
+  orderDetails: [OrderDetail!]!
+}
+
+type OrderDetail {
+  id: ID!
+  order: Order!
+  item: Menu!
+  quantity: Int!
+  price: Float!
+  total: Float!
+}
+
+type PointsHistory {
+  id: ID!
+  customer: Customer!
+  order: Order
+  voucher: Voucher
+  earnedPoints: Int
+  deductedPoints: Int
+  transactionDate: DateTime!
+}
+
+type Reservation {
+  id: ID!
+  customer: Customer!
+  table: Table!
+  description: String!
+  status: Boolean!
+  # reservationDate: DateTime!
+}
+
+type Table {
+  id: ID!
+  name: String!
+  capacity: Int!
+  status: Boolean!
+}
+# TODO: Sửa lại kiểu dữ liệu của rating
+type Review {
+  id: ID!
+  customer: Customer!
+  content: String!
+  rating: Boolean!
+  status: Boolean!
+  createdDate: DateTime!
+}
+
+type Promotion {
+  id: ID!
+  name: String!
+  description: String!
+  startDate: DateTime!
+  endDate: DateTime!
+  target: String!
+  condition: String!
+  discount: Float!
+  status: Boolean!
+}
+
+type Revenue {
+  id: ID!
+  date: DateTime!
+  revenue: Float!
+  cost: Float!
+}
+
+type Voucher {
+  id: ID!
+  customer: Customer!
+  code: String!
+  discount: Float!
+  expireDate: DateTime!
+  status: Boolean!
+}
+
+type Employee {
+  id: ID!
+  name: String!
+  gender: String!
+  email: String!
+  phone: String!
+  # address: String!
+  birthday: DateTime!
+  status: Boolean!
+  isAdmin: Boolean!
+  username: String!
+  password: String!
+  position: Position!
+  createdDate: DateTime!
+  updatedDate: DateTime!
+}
+
+type Position {
+  id: ID!
+  name: String!
+  salary: Float!
+  employees: [Employee!]
+}
+
+scalar DateTime
