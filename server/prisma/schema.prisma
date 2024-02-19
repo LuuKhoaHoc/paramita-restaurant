@@ -45,11 +45,13 @@ model customers {
   phone            String             @db.Char(11)
   address          String             @db.VarChar(255)
   birthday         DateTime           @db.Date
-  point            Int                @db.SmallInt
-  level_id         Int
+  point            Int                @default(0) @db.SmallInt
+  level_id         Int                @default(0)
   status           Boolean            @default(false)
   username         String             @db.VarChar(255)
   password         String             @db.VarChar(255)
+  created_at       DateTime           @db.DateTime(0)
+  updated_at       DateTime           @db.DateTime(0)
   customer_address customer_address[]
   customer_level   customer_level     @relation(fields: [level_id], references: [level_id], onUpdate: Restrict, map: "customers_ibfk_1")
   invoices         invoices[]
@@ -233,7 +235,9 @@ model tables {
 model vouchers {
   voucher_id    Int             @id @default(autoincrement())
   customer_id   Int
+  name          String          @db.VarChar(255)
   code          String          @db.VarChar(255)
+  description String          @db.Text
   discount      Decimal         @db.Decimal(10, 2)
   expire_date   DateTime        @db.Date
   status        String          @db.VarChar(255)
