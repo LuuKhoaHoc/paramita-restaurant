@@ -1,11 +1,256 @@
+# Mutation
 type Mutation {
-
+  createCategory(name: String!): Category
+  updateCategory(id: ID!, name: String!): Category!
+  deleteCategory(id: ID!): Category!
+  createMenu(data: MenuInput!): Menu
+  updateMenu(id: ID!, data: MenuInput!): Menu!
+  deleteMenu(id: ID!): Menu!
+  createContent(data: ContentInput!): Content
+  updateContent(id: ID!, data: ContentInput!): Content!
+  deleteContent(id: ID!): Content
+  createCustomer(data: CustomerInput!): Customer
+  updateCustomer(id: ID!, data: CustomerInput!): Customer!
+  deleteCustomer(id: ID!): Customer!
+  createCustomerAddress(customerId: ID!, address: String!): CustomerAddress!
+  updateCustomerAddress(
+    id: ID!
+    customerId: ID!
+    address: String!
+  ): CustomerAddress!
+  deleteCustomerAddress(id: ID!): CustomerAddress!
+  createCustomerLevel(data: CustomerLevelInput): CustomerLevel!
+  updateCustomerLevel(id: ID!, data: CustomerLevelInput): CustomerLevel!
+  deleteCustomerLevel(id: ID!): CustomerLevel!
+  createInvoice(data: InvoiceInput): Invoice!
+  updateInvoice(id: ID!, data: InvoiceInput): Invoice!
+  deleteInvoice(id: ID!): Invoice!
+  createInvoiceDetail(data: InvoiceDetailInput): InvoiceDetail!
+  updateInvoiceDetail(id: ID!, data: InvoiceDetailInput): InvoiceDetail!
+  deleteInvoiceDetail(id: ID!): InvoiceDetail!
+  createOrder(data: OrderInput): Order!
+  updateOrder(id: ID!, data: OrderInput): Order!
+  deleteOrder(id: ID!): Order!
+  createOrderDetail(data: OrderDetailInput): OrderDetail!
+  updateOrderDetail(id: ID!, data: OrderDetailInput): OrderDetail!
+  deleteOrderDetail(id: ID!): OrderDetail!
+  createPointsHistory(data: PointsHistoryInput): PointsHistory!
+  updatePointsHistory(id: ID!, data: PointsHistoryInput): PointsHistory!
+  deletePointsHistory(id: ID!): PointsHistory!
+  createPromotion(data: PromotionInput): Promotion!
+  updatePromotion(id: ID!, data: PromotionInput): Promotion!
+  deletePromotion(id: ID!): Promotion!
+  createRevenue(data: RevenueInput): Revenue!
+  updateRevenue(id: ID!, data: RevenueInput): Revenue!
+  deleteRevenue(id: ID!): Revenue!
+  createTable(data: TableInput): Table!
+  updateTable(id: ID!, data: TableInput): Table!
+  deleteTable(id: ID!): Table!
+  createReservation(data: ReservationInput): Reservation!
+  updateReservation(id: ID!, data: ReservationInput): Reservation!
+  deleteReservation(id: ID!): Reservation!
+  createReview(data: ReviewInput): Review!
+  updateReview(id: ID!, data: ReviewInput): Review!
+  deleteReview(id: ID!): Review!
+  createVoucher(data: VoucherInput): Voucher!
+  updateVoucher(id: ID!, data: VoucherInput): Voucher!
+  deleteVoucher(id: ID!): Voucher!
+  createEmployee(data: EmployeeInput): Employee!
+  updateEmployee(id: ID!, data: EmployeeInput): Employee!
+  deleteEmployee(id: ID!): Employee!
+  createPosition(data: PositionInput): Position!
+  updatePosition(id: ID!, data: PositionInput): Position!
+  deletePosition(id: ID!): Position!
 }
+
+input MenuInput {
+  categoryId: ID!
+  name: String!
+  description: String!
+  price: Float!
+  image: String!
+}
+
+input ContentInput {
+  title: String!
+  slogan: String
+  description: String!
+}
+
+input CustomerInput {
+  name: String!
+  phone: String!
+  birthday: DateTime!
+  points: Int!
+  levelId: ID!
+  status: Boolean!
+  username: String!
+  password: String!
+}
+
+input CustomerLevelInput {
+  name: String!
+  description: String!
+  discount: Float!
+  points: Int!
+  benefits: String!
+}
+
+input InvoiceInput {
+  date: DateTime!
+  customerId: ID!
+  paymentMethod: String!
+  paymentStatus: Boolean!
+  note: String
+}
+
+input InvoiceDetailInput {
+  invoiceId: ID!
+  itemId: ID!
+  quantity: Int!
+  price: Float!
+  total: Float!
+}
+
+input OrderInput {
+  date: DateTime!
+  customerId: ID!
+  status: Boolean!
+  address: String!
+  paymentMethod: String!
+  shippingFee: Float!
+  paymentMethod: String!
+  paymentStatus: Boolean!
+  note: String
+}
+
+input OrderDetailInput {
+  orderId: ID!
+  item: Menu!
+  quantity: Int!
+  price: Float!
+  total: Float!
+}
+
+input PointsHistoryInput {
+  customerId: ID!
+  order: Order
+  voucher: Voucher
+  earnedPoints: Int
+  deductedPoints: Int
+  transactionDate: DateTime!
+}
+
+input PromotionInput {
+  name: String!
+  description: String!
+  startDate: DateTime!
+  endDate: DateTime!
+  target: String!
+  condition: String!
+  discount: Float!
+  status: Boolean!
+}
+
+input RevenueInput {
+  date: DateTime!
+  revenue: Float!
+  cost: Float!
+}
+
+input TableInput {
+  name: String!
+  capacity: Int!
+  status: Boolean!
+}
+
+input ReservationInput {
+  customerId: ID!
+  tableId: ID!
+  description: String!
+  reservationDate: DateTime!
+  status: Boolean!
+}
+
+input ReviewInput {
+  customerId: ID!
+  content: String!
+  rating: Int!
+  status: Boolean!
+}
+
+input VoucherInput {
+  customerId: ID!
+  name: String!
+  code: String!
+  description: String!
+  discount: Float!
+  expireDate: DateTime!
+  status: Boolean!
+}
+
+input EmployeeInput {
+  name: String!
+  gender: String!
+  email: String!
+  phone: String!
+  address: String!
+  birthday: DateTime!
+  positionId: ID!
+  status: Boolean!
+  username: String!
+  password: String!
+}
+
+input PositionInput {
+  name: String!
+  description: String!
+  salary: Float!
+}
+
+#Query
 
 type Query {
-  
+  category(id: ID!): Category
+  menu(id: ID!): Menu
+  content(id: ID!): Content
+  customer(id: ID!): Customer
+  customerLevel(id: ID!): CustomerLevel
+  invoice(id: ID!): Invoice
+  invoiceDetail(id: ID!): InvoiceDetail
+  order(id: ID!): Order
+  orderDetail(id: ID!): OrderDetail
+  pointsHistory(id: ID!): PointsHistory
+  promotion(id: ID!): Promotion
+  revenue(id: ID!): Revenue
+  table(id: ID!): Table
+  reservation(id: ID!): Reservation
+  review(id: ID!): Review
+  voucher(id: ID!): Voucher
+  employee(id: ID!): Employee
+  position(id: ID!): Position
+
+  categoryList: [Category!]!
+  menuList: [Menu!]!
+  contentList: [Content!]!
+  customerList: [Customer!]!
+  customerLevelList: [CustomerLevel!]!
+  invoiceList: [Invoice!]!
+  invoiceDetailList: [InvoiceDetail!]!
+  orderList: [Order!]!
+  orderDetailList: [OrderDetail!]!
+  pointsHistoryList: [PointsHistory!]!
+  promotionList: [Promotion!]!
+  revenueList: [Revenue!]!
+  tableList: [Table!]!
+  reservationList: [Reservation!]!
+  reviewList: [Review!]!
+  voucherList: [Voucher!]!
+  employeeList: [Employee!]!
+  positionList: [Position!]!
 }
 
+# TypeDefs
 type Category {
   id: ID!
   name: String!
@@ -39,6 +284,8 @@ type Customer {
   status: Boolean!
   username: String!
   password: String!
+  createdDate: DateTime!
+  updatedDate: DateTime!
   invoice: [Invoice!]
   orders: [Order!]
   pointsHistory: [PointsHistory!]
@@ -162,7 +409,9 @@ type Revenue {
 type Voucher {
   id: ID!
   customer: Customer!
+  name: String!
   code: String!
+  description: String!
   discount: Float!
   expireDate: DateTime!
   status: Boolean!
@@ -181,7 +430,6 @@ type Employee {
   isAdmin: Boolean!
   username: String!
   password: String!
-  position: Position!
   createdDate: DateTime!
   updatedDate: DateTime!
 }
@@ -189,6 +437,7 @@ type Employee {
 type Position {
   id: ID!
   name: String!
+  description: String!
   salary: Float!
   employees: [Employee!]
 }
