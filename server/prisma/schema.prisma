@@ -92,23 +92,25 @@ model positions {
 }
 
 model invoice_details {
-  invoice_detail_id Int     @id @default(autoincrement())
-  invoice_id        Int
-  item_id           Int
-  quantity          Int     @db.TinyInt
-  unit_price        Decimal @db.Decimal(10, 2)
-  total_price       Decimal @db.Decimal(10, 2)
+  invoice_detail_id  Int       @id @default(autoincrement())
+  invoice_id         Int
+  item_id            Int
+  quantity           Int       @db.TinyInt
+  unit_price         Decimal   @db.Decimal(10, 2)
+  total_price        Decimal   @db.Decimal(10, 2)
+  invoices           invoices? @relation(fields: [invoice_id], references: [invoice_id])
 }
 
 model invoices {
-  invoice_id     Int       @id @default(autoincrement())
-  invoice_time   DateTime  @db.Date
-  customer_id    Int
-  voucher_code   String?   @db.VarChar(255)
-  payment_method String    @db.VarChar(255)
-  payment_status String    @db.VarChar(255)
-  note           String?   @db.VarChar(255)
-  customers      customers @relation(fields: [customer_id], references: [customer_id], onUpdate: Restrict, map: "invoices_ibfk_1")
+  invoice_id      Int               @id @default(autoincrement())
+  invoice_time    DateTime          @db.Date
+  customer_id     Int
+  voucher_code    String?           @db.VarChar(255)
+  payment_method  String            @db.VarChar(255)
+  payment_status  String            @db.VarChar(255)
+  note            String?           @db.VarChar(255)
+  invoice_details invoice_details[]
+  customers       customers         @relation(fields: [customer_id], references: [customer_id], onUpdate: Restrict, map: "invoices_ibfk_1")
 
   @@index([customer_id], map: "customer_id")
 }
@@ -237,7 +239,7 @@ model vouchers {
   customer_id   Int
   name          String          @db.VarChar(255)
   code          String          @db.VarChar(255)
-  description String          @db.Text
+  description   String          @db.Text
   discount      Decimal         @db.Decimal(10, 2)
   expire_date   DateTime        @db.Date
   status        String          @db.VarChar(255)
