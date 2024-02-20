@@ -212,10 +212,11 @@ input PositionInput {
 
 type Query {
   category(id: ID!): Category
-  menu(id: ID!): Menu
+  item(id: ID!): Menu
   content(id: ID!): Content
   customer(id: ID!): Customer
   customerLevel(id: ID!): CustomerLevel
+  customerAddress(id: ID!): CustomerAddress
   invoice(id: ID!): Invoice
   invoiceDetail(id: ID!): InvoiceDetail
   order(id: ID!): Order
@@ -235,6 +236,7 @@ type Query {
   contentList: [Content!]!
   customerList: [Customer!]!
   customerLevelList: [CustomerLevel!]!
+  customerAddressList: [CustomerAddress!]!
   invoiceList: [Invoice!]!
   invoiceDetailList: [InvoiceDetail!]!
   orderList: [Order!]!
