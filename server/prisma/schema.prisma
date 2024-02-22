@@ -8,7 +8,7 @@ datasource db {
 }
 
 model categories {
-  category_id Int    @id
+  category_id Int    @id @default(autoincrement())
   name        String @db.VarChar(255)
   menu        menu[]
 }
@@ -70,16 +70,16 @@ model employees {
   gender      String    @db.VarChar(50)
   email       String    @db.VarChar(255)
   phone       String    @db.Char(11)
-  address     String    @db.VarChar(255)
   birthday    DateTime  @db.Date
   position_id Int
   status      Boolean   @default(false)
   is_admin    Boolean   @default(false)
   username    String    @db.VarChar(255)
   password    String    @db.VarChar(255)
-  positions   positions @relation(fields: [position_id], references: [position_id], onUpdate: Restrict, map: "employees_ibfk_1")
+  address     String    @db.VarChar(255)
   created_at  DateTime  @db.DateTime(0)
   updated_at  DateTime  @db.DateTime(0)
+  positions   positions @relation(fields: [position_id], references: [position_id], onUpdate: Restrict, map: "employees_ibfk_1")
 
   @@index([position_id], map: "position_id")
 }
@@ -92,13 +92,15 @@ model positions {
 }
 
 model invoice_details {
-  invoice_detail_id  Int       @id @default(autoincrement())
-  invoice_id         Int
-  item_id            Int
-  quantity           Int       @db.TinyInt
-  unit_price         Decimal   @db.Decimal(10, 2)
-  total_price        Decimal   @db.Decimal(10, 2)
-  invoices           invoices? @relation(fields: [invoice_id], references: [invoice_id])
+  invoice_detail_id Int      @id @default(autoincrement())
+  invoice_id        Int
+  item_id           Int
+  quantity          Int      @db.TinyInt
+  unit_price        Decimal  @db.Decimal(10, 2)
+  total_price       Decimal  @db.Decimal(10, 2)
+  invoices          invoices @relation(fields: [invoice_id], references: [invoice_id])
+
+  @@index([invoice_id], map: "invoice_details_invoice_id_fkey")
 }
 
 model invoices {
@@ -116,15 +118,15 @@ model invoices {
 }
 
 model menu {
-  item_id                                   Int             @id @default(autoincrement())
-  name                                      String          @db.VarChar(255)
-  description                               String          @db.Text
-  price                                     Decimal         @db.Decimal(10, 2)
-  image                                     String          @db.Text
+  item_id                                   Int            @id @default(autoincrement())
+  name                                      String         @db.VarChar(255)
+  description                               String         @db.Text
+  price                                     Decimal        @db.Decimal(10, 2)
+  image                                     String         @db.Text
   category_id                               Int
-  categories                                categories      @relation(fields: [category_id], references: [category_id], onUpdate: Restrict, map: "menu_ibfk_1")
-  order_details_menu_item_idToorder_details order_details   @relation("menu_item_idToorder_details", fields: [item_id], references: [item_id], onUpdate: Restrict, map: "menu_ibfk_6")
-  order_details_order_details_item_idTomenu order_details[] @relation("order_details_item_idTomenu")
+  categories                                categories     @relation(fields: [category_id], references: [category_id], onUpdate: Restrict, map: "menu_ibfk_1")
+  order_details_menu_item_idToorder_details order_details  @relation("menu_item_idToorder_details", fields: [item_id], references: [item_id], onUpdate: Restrict, map: "menu_ibfk_6")
+  order_details_order_details_item_idTomenu order_details? @relation("order_details_item_idTomenu")
 
   @@index([category_id], map: "category_id")
 }
@@ -196,8 +198,8 @@ model reservations {
   customer_id                          Int
   table_id                             Int       @unique
   description                          String    @db.Text
-  reservation_date                     DateTime  @db.Date
   status                               String    @db.VarChar(255)
+  reservation_date                     DateTime  @db.Date
   customers                            customers @relation(fields: [customer_id], references: [customer_id], onUpdate: Restrict, map: "reservations_ibfk_1")
   tables_reservations_table_idTotables tables    @relation("reservations_table_idTotables", fields: [table_id], references: [table_id], onUpdate: Restrict, map: "reservations_ibfk_5")
   tables_tables_table_idToreservations tables?   @relation("tables_table_idToreservations")
@@ -217,32 +219,32 @@ model reviews {
   review_id   Int       @id @default(autoincrement())
   customer_id Int
   content     String    @db.Text
-  rating      Int       @db.TinyInt
-  status      String    @db.VarChar(255)
+  rating      Boolean
   created_at  DateTime  @default(now()) @db.Timestamp(0)
+  status      String    @db.VarChar(255)
   customers   customers @relation(fields: [customer_id], references: [customer_id], onUpdate: Restrict, map: "reviews_ibfk_1")
 
   @@index([customer_id], map: "customer_id")
 }
 
 model tables {
-  table_id                                   Int            @id
-  name                                       String         @db.VarChar(255)
+  table_id                                   Int           @id
+  name                                       String        @db.VarChar(255)
   capacity                                   Int
-  status                                     String         @db.VarChar(255)
-  reservations_reservations_table_idTotables reservations[] @relation("reservations_table_idTotables")
-  reservations_tables_table_idToreservations reservations   @relation("tables_table_idToreservations", fields: [table_id], references: [table_id], onUpdate: Restrict, map: "tables_ibfk_1")
+  status                                     String        @db.VarChar(255)
+  reservations_reservations_table_idTotables reservations? @relation("reservations_table_idTotables")
+  reservations_tables_table_idToreservations reservations  @relation("tables_table_idToreservations", fields: [table_id], references: [table_id], onUpdate: Restrict, map: "tables_ibfk_1")
 }
 
 model vouchers {
   voucher_id    Int             @id @default(autoincrement())
   customer_id   Int
-  name          String          @db.VarChar(255)
   code          String          @db.VarChar(255)
-  description   String          @db.Text
   discount      Decimal         @db.Decimal(10, 2)
   expire_date   DateTime        @db.Date
   status        String          @db.VarChar(255)
+  description   String          @db.Text
+  name          String          @db.VarChar(255)
   point_history point_history[]
   customers     customers       @relation(fields: [customer_id], references: [customer_id], onUpdate: Restrict, map: "vouchers_ibfk_1")
 

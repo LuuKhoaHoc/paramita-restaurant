@@ -1,6 +1,10 @@
+import { context } from './../context'
 import { Context } from '../context'
+import { TSIDGenerator, getTsid } from 'tsid-ts'
+const tsid = getTsid().timestamp
 
 export const resolvers = {
+  // Query
   Query: {
     categoryList: async (_parent: any, _args: any, context: Context) => {
       return context.prisma.categories.findMany()
@@ -175,10 +179,62 @@ export const resolvers = {
     positionList: async (_parent: any, _args: any, context: Context) => {
       return context.prisma.positions.findMany()
     },
-    position: async(_parent, args: { id: number }, context: Context) => {
+    position: async (_parent, args: { id: number }, context: Context) => {
       return context.prisma.positions.findUnique({
         where: { position_id: args.id || undefined }
       })
     }
+  },
+  // Mutation
+  Mutation: {
+    createCategory: async (
+      _parent: any,
+      args: { data: CategoryInput },
+      context: Context
+    ) => {
+      return context.prisma.categories.create({
+        data: {
+          category_id: tsid,
+          name: args.data.name
+        }
+      })
+    },
+    createCategoryWithMenu: async (
+      _parent: any,
+      args: { data: CategoryInput, menu: Menu[] },
+      context: Context
+    ) => {
+      return context.prisma.categories.create({
+        data: {
+          category_id: tsid,
+          name: args.data.name,
+          menu: {
+            createMany: {
+              data: args.menu.map((menu) => {
+                return {
+                  item_id: tsid,
+                  name: menu.name,
+                  description: menu.description,
+                  price: menu.price,
+                  image: menu.image
+                }
+              })
+            
+            }
+          }
+        }
+      })
+    }
   }
+}
+
+interface Menu {
+  name: string
+  description: string
+  price: number
+  image: string
+}
+interface CategoryInput {
+  name: string
+  menu?: Menu[]
 }
