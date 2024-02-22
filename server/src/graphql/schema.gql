@@ -80,6 +80,7 @@ input ContentInput {
 input CustomerInput {
   name: String!
   phone: String!
+  email: String!
   birthday: DateTime!
   points: Int!
   levelId: ID!
@@ -279,6 +280,7 @@ type Customer {
   id: ID!
   name: String!
   phone: String!
+  email: String!
   address: [CustomerAddress]!
   birthday: DateTime!
   points: Int!
