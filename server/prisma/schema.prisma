@@ -45,8 +45,8 @@ model customers {
   phone            String             @db.Char(11)
   email            String             @db.VarChar(255)
   birthday         DateTime           @db.Date
-  points            Int                @default(0) @db.SmallInt
-  level_id         Int                @default(0)
+  points           Int                @default(0) @db.SmallInt
+  level_id         Int
   status           Boolean            @default(false)
   username         String             @db.VarChar(255)
   password         String             @db.VarChar(255)
