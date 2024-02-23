@@ -1,6 +1,5 @@
-import { context } from './../context'
 import { Context } from '../context'
-import { TSIDGenerator, getTsid } from 'tsid-ts'
+import { getTsid } from 'tsid-ts'
 const tsid = getTsid().timestamp
 
 export const resolvers = {
@@ -187,6 +186,7 @@ export const resolvers = {
   },
   // Mutation
   Mutation: {
+    // Category
     createCategory: async (
       _parent: any,
       args: { data: CategoryInput },
@@ -199,36 +199,282 @@ export const resolvers = {
         }
       })
     },
-    createCategoryWithMenu: async (
+    // Sau này kt lại xem có cần thiết sử dụng không
+    // createCategoryWithMenu: async (
+    //   _parent: any,
+    //   args: { data: CategoryInput; menu: Menu[] },
+    //   context: Context
+    // ) => {
+    //   return context.prisma.categories.create({
+    //     data: {
+    //       category_id: tsid,
+    //       name: args.data.name,
+    //       menu: {
+    //         createMany: {
+    //           data: args.menu.map((menu) => {
+    //             return {
+    //               item_id: tsid,
+    //               name: menu.name,
+    //               description: menu.description,
+    //               price: menu.price,
+    //               image: menu.image
+    //             }
+    //           })
+    //         }
+    //       }
+    //     }
+    //   })
+    // },
+    updateCategory: async (
       _parent: any,
-      args: { data: CategoryInput, menu: Menu[] },
+      args: { id: number; data: CategoryInput },
       context: Context
     ) => {
-      return context.prisma.categories.create({
+      return context.prisma.categories.update({
+        where: { category_id: args.id },
         data: {
-          category_id: tsid,
-          name: args.data.name,
-          menu: {
-            createMany: {
-              data: args.menu.map((menu) => {
-                return {
-                  item_id: tsid,
-                  name: menu.name,
-                  description: menu.description,
-                  price: menu.price,
-                  image: menu.image
-                }
-              })
-            
-            }
-          }
+          name: args.data.name
         }
+      })
+    },
+    deleteCategory: async (
+      _parent: any,
+      args: { id: number },
+      context: Context
+    ) => {
+      return context.prisma.categories.delete({
+        where: { category_id: args.id }
+      })
+    },
+    // Menu
+    createMenu: async (
+      _parent: any,
+      args: { category_id: number; data: MenuInput },
+      context: Context
+    ) => {
+      return context.prisma.menu.create({
+        data: {
+          item_id: tsid,
+          category_id: args.category_id,
+          name: args.data.name,
+          description: args.data.description,
+          price: args.data.price,
+          image: args.data.image
+        }
+      })
+    },
+    updateMenu: async (
+      _parent: any,
+      args: { id: number; cat_id: number; data: MenuInput },
+      context: Context
+    ) => {
+      return context.prisma.menu.update({
+        where: { item_id: args.id },
+        data: {
+          name: args.data.name,
+          category_id: args.cat_id,
+          description: args.data.description,
+          price: args.data.price,
+          image: args.data.image
+        }
+      })
+    },
+    deleteMenu: async (
+      _parent: any,
+      args: { id: number },
+      context: Context
+    ) => {
+      return context.prisma.menu.delete({
+        where: { item_id: args.id }
+      })
+    },
+    // Content
+    createContent: async (
+      _parent: any,
+      args: { data: ContentInput },
+      context: Context
+    ) => {
+      return context.prisma.contents.create({
+        data: {
+          content_id: tsid,
+          title: args.data.title,
+          slogan: args.data?.slogan,
+          description: args.data.description
+        }
+      })
+    },
+    updateContent: async (
+      _parent: any,
+      args: { id: number; data: ContentInput },
+      context: Context
+    ) => {
+      return context.prisma.contents.update({
+        where: { content_id: args.id },
+        data: {
+          title: args.data.title,
+          slogan: args.data?.slogan,
+          description: args.data.description
+        }
+      })
+    },
+    deleteContent: async (
+      _parent: any,
+      args: { id: number },
+      context: Context
+    ) => {
+      return context.prisma.contents.delete({
+        where: { content_id: args.id }
+      })
+    },
+    // Customer
+    createCustomer: async (
+      _parent: any,
+      args: { data: CustomerInput },
+      context: Context
+    ) => {
+      return context.prisma.customers.create({
+        data: {
+          customer_id: tsid,
+          name: args.data.name,
+          phone: args.data.phone,
+          email: args.data.email,
+          birthday: args.data.birthday,
+          points: args.data.points,
+          level_id: args.data.level_id,
+          status: args.data.status,
+          username: args.data.username,
+          password: args.data.password
+        }
+      })
+    },
+    updateCustomer: async (
+      _parent: any,
+      args: { id: number; data: CustomerInput },
+      context: Context
+    ) => {
+      return context.prisma.customers.update({
+        where: { customer_id: args.id },
+        data: {
+          name: args.data.name,
+          phone: args.data.phone,
+          email: args.data.email,
+          birthday: args.data.birthday,
+          points: args.data.points,
+          level_id: args.data.level_id,
+          status: args.data.status,
+          username: args.data.username,
+          password: args.data.password
+        }
+      })
+    },
+    deleteCustomer: async (
+      _parent: any,
+      args: { id: number },
+      context: Context
+    ) => {
+      return context.prisma.customers.delete({
+        where: { customer_id: args.id }
+      })
+    },
+    // Customer address
+    createCustomerAddress: async (
+      _parent: any,
+      args: { data: CustomerAddressInput },
+      context: Context
+    ) => {
+      return context.prisma.customer_address.create({
+        data: {
+          customer_id: args.data.customer_id,
+          address: args.data.address
+        }
+      })
+    },
+    updateCustomerAddress: async (
+      _parent: any,
+      args: { id: number; data: CustomerAddressInput },
+      context: Context
+    ) => {
+      return context.prisma.customer_address.update({
+        where: { address_id: args.id },
+        data: {
+          customer_id: args.data.customer_id,
+          address: args.data.address
+        }
+      })
+    },
+    deleteCustomerAddress: async (
+      _parent: any,
+      args: { id: number },
+      context: Context
+    ) => {
+      return context.prisma.customer_address.delete({
+        where: { address_id: args.id }
+      })
+    },
+    // Customer Level
+    createCustomerLevel: async (_parent: any, args: { data: CustomerLevelInput }, context: Context) => {
+      return context.prisma.customer_level.create({
+        data: {
+          level_id: tsid,
+          name: args.data.name,
+          description: args.data.description,
+          discount: args.data.discount,
+          points: args.data.points,
+          benefits: args.data.benefits
+        }
+      })
+    },
+    updateCustomerLevel: async (_parent: any, args: { id: number; data: CustomerLevelInput }, context: Context) => {
+      return context.prisma.customer_level.update({
+        where: {level_id: args.id},
+        data: {
+          name: args.data.name,
+          description: args.data.description,
+          discount: args.data.discount,
+          points: args.data.points,
+          benefits: args.data.benefits
+        }
+      })
+    },
+    deleteCustomerLevel: async (_parent: any, args: { id: number }, context: Context) => {
+      return context.prisma.customer_level.delete({
+        where: {level_id: args.id}
       })
     }
   }
 }
 
-interface Menu {
+// Interface
+
+interface CustomerLevelInput {
+  name: string
+  description: string
+  discount: number
+  points: number
+  benefits: string
+}
+interface CustomerAddressInput {
+  customer_id: number
+  address: string
+}
+interface CustomerInput {
+  name: string
+  phone: string
+  email: string
+  addresses: CustomerAddressInput[]
+  birthday: Date
+  points: number
+  level_id: number
+  status: boolean
+  username: string
+  password: string
+}
+interface ContentInput {
+  title: string
+  slogan?: string
+  description: string
+}
+interface MenuInput {
   name: string
   description: string
   price: number
@@ -236,5 +482,5 @@ interface Menu {
 }
 interface CategoryInput {
   name: string
-  menu?: Menu[]
+  menu?: MenuInput[]
 }
