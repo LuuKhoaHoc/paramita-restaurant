@@ -412,7 +412,11 @@ export const resolvers = {
       })
     },
     // Customer Level
-    createCustomerLevel: async (_parent: any, args: { data: CustomerLevelInput }, context: Context) => {
+    createCustomerLevel: async (
+      _parent: any,
+      args: { data: CustomerLevelInput },
+      context: Context
+    ) => {
       return context.prisma.customer_level.create({
         data: {
           level_id: tsid,
@@ -424,9 +428,13 @@ export const resolvers = {
         }
       })
     },
-    updateCustomerLevel: async (_parent: any, args: { id: number; data: CustomerLevelInput }, context: Context) => {
+    updateCustomerLevel: async (
+      _parent: any,
+      args: { id: number; data: CustomerLevelInput },
+      context: Context
+    ) => {
       return context.prisma.customer_level.update({
-        where: {level_id: args.id},
+        where: { level_id: args.id },
         data: {
           name: args.data.name,
           description: args.data.description,
@@ -436,16 +444,706 @@ export const resolvers = {
         }
       })
     },
-    deleteCustomerLevel: async (_parent: any, args: { id: number }, context: Context) => {
+    deleteCustomerLevel: async (
+      _parent: any,
+      args: { id: number },
+      context: Context
+    ) => {
       return context.prisma.customer_level.delete({
-        where: {level_id: args.id}
+        where: { level_id: args.id }
+      })
+    },
+    // Invoice Detail
+    createInvoiceDetail: async (
+      _parent: any,
+      args: { data: InvoiceDetailInput },
+      context: Context
+    ) => {
+      return context.prisma.invoice_details.create({
+        data: {
+          invoice_detail_id: tsid,
+          invoice_id: args.data.invoiceId,
+          item_id: args.data.itemId,
+          quantity: args.data.quantity,
+          unit_price: args.data.price,
+          total_price: args.data.total
+        }
+      })
+    },
+    updateInvoiceDetail: async (
+      _parent: any,
+      args: { id: number; data: InvoiceDetailInput },
+      context: Context
+    ) => {
+      return context.prisma.invoice_details.update({
+        where: { invoice_detail_id: args.id },
+        data: {
+          invoice_id: args.data.invoiceId,
+          item_id: args.data.itemId,
+          quantity: args.data.quantity,
+          unit_price: args.data.price,
+          total_price: args.data.total
+        }
+      })
+    },
+    deleteInvoiceDetail: async (
+      _parent: any,
+      args: { id: number },
+      context: Context
+    ) => {
+      return context.prisma.invoice_details.delete({
+        where: { invoice_detail_id: args.id }
+      })
+    },
+    // Invoice
+    createInvoice: async (
+      _parent: any,
+      args: {
+        data: InvoiceInput
+        invoiceDetailId?: number
+      },
+      context: Context
+    ) => {
+      return context.prisma.invoices.create({
+        data: {
+          invoice_id: tsid,
+          customer_id: args.data.customerId,
+          invoice_time: args.data.date,
+          voucher_code: args.data.voucherCode,
+          payment_method: args.data.paymentMethod,
+          payment_status: args.data.paymentStatus,
+          invoice_details: {
+            connect: {
+              invoice_detail_id: args.invoiceDetailId
+            }
+          },
+          note: args.data?.note
+        }
+      })
+    },
+    updateInvoice: async (
+      _parent: any,
+      args: { id: number; data: InvoiceInput; invoiceDetailId?: number },
+      context: Context
+    ) => {
+      return context.prisma.invoices.update({
+        where: { invoice_id: args.id },
+        data: {
+          customer_id: args.data.customerId,
+          invoice_time: args.data.date,
+          invoice_details: {
+            connect: { invoice_detail_id: args.invoiceDetailId }
+          },
+          voucher_code: args.data.voucherCode,
+          payment_method: args.data.paymentMethod,
+          payment_status: args.data.paymentStatus,
+          note: args.data?.note
+        }
+      })
+    },
+    deleteInvoice: async (
+      _parent: any,
+      args: { id: number },
+      context: Context
+    ) => {
+      return context.prisma.invoices.delete({ where: { invoice_id: args.id } })
+    },
+    // Order Detail
+    createOrderDetail: async (
+      _parent: any,
+      args: { data: OrderDetailInput },
+      context: Context
+    ) => {
+      return context.prisma.order_details.create({
+        data: {
+          order_detail_id: tsid,
+          order_id: args.data.orderId,
+          item_id: args.data.itemId,
+          quantity: args.data.quantity,
+          unit_price: args.data.price,
+          total_price: args.data.total
+        }
+      })
+    },
+    updateOrderDetail: async (
+      _parent: any,
+      args: { id: number; data: OrderDetailInput },
+      context: Context
+    ) => {
+      return context.prisma.order_details.update({
+        where: { order_detail_id: args.id },
+        data: {
+          order_id: args.data.orderId,
+          item_id: args.data.itemId,
+          quantity: args.data.quantity,
+          unit_price: args.data.price,
+          total_price: args.data.total
+        }
+      })
+    },
+    deleteOrderDetail: async (
+      _parent: any,
+      args: { id: number },
+      context: Context
+    ) => {
+      return context.prisma.order_details.delete({
+        where: { order_detail_id: args.id }
+      })
+    },
+    // Order
+    createOrder: async (
+      _parent: any,
+      args: { orderDetailId?: number; data: OrderInput },
+      context: Context
+    ) => {
+      return context.prisma.orders.create({
+        data: {
+          order_id: tsid,
+          customer_id: args.data.customerId,
+          status: args.data.status,
+          shipping_address: args.data.address,
+          shipping_method: args.data.shippingMethod,
+          payment_method: args.data.paymentMethod,
+          payment_status: args.data.paymentStatus,
+          shipping_cost: args.data.shippingFee,
+          order_details: {
+            connect: {
+              order_detail_id: args.orderDetailId
+            }
+          }
+        }
+      })
+    },
+    updateOrder: async (
+      _parent: any,
+      args: { id: number; orderDetailId?: number; data: OrderInput },
+      context: Context
+    ) => {
+      return context.prisma.orders.update({
+        where: { order_id: args.id },
+        data: {
+          customer_id: args.data.customerId,
+          status: args.data.status,
+          shipping_address: args.data.address,
+          shipping_method: args.data.shippingMethod,
+          payment_method: args.data.paymentMethod,
+          payment_status: args.data.paymentStatus,
+          shipping_cost: args.data.shippingFee,
+          order_details: {
+            connect: { order_detail_id: args.orderDetailId }
+          }
+        }
+      })
+    },
+    deleteOrder: async (
+      _parent: any,
+      args: { id: number },
+      context: Context
+    ) => {
+      return context.prisma.orders.delete({ where: { order_id: args.id } })
+    },
+    // PointHistory
+    createPointHistory: async (
+      _parent: any,
+      args: { data: PointsHistoryInput },
+      context: Context
+    ) => {
+      return context.prisma.point_history.create({
+        data: {
+          point_history_id: tsid,
+          transaction_date: args.data.transactionDate,
+          customer_id: args.data.customerId,
+          order_id: args.data?.orderId,
+          voucher_id: args.data?.voucherId,
+          points_earned: args.data?.earnedPoints,
+          points_deducted: args.data?.deductedPoints
+        }
+      })
+    },
+    updatePointHistory: async (
+      _parent: any,
+      args: { id: number; data: PointsHistoryInput },
+      context: Context
+    ) => {
+      return context.prisma.point_history.update({
+        where: { point_history_id: args.id },
+        data: {
+          transaction_date: args.data.transactionDate,
+          customer_id: args.data.customerId,
+          order_id: args.data?.orderId,
+          voucher_id: args.data?.voucherId,
+          points_earned: args.data?.earnedPoints,
+          points_deducted: args.data?.deductedPoints
+        }
+      })
+    },
+    deletePointHistory: async (
+      _parent: any,
+      args: { id: number },
+      context: Context
+    ) => {
+      return context.prisma.point_history.delete({
+        where: { point_history_id: args.id }
+      })
+    },
+    // Promotion
+    createPromotion: async (
+      _parent: any,
+      args: { data: PromotionInput },
+      context: Context
+    ) => {
+      return context.prisma.promotions.create({
+        data: {
+          promotion_id: tsid,
+          name: args.data.name,
+          description: args.data.description,
+          start_date: args.data.startDate,
+          end_date: args.data.endDate,
+          target: args.data.target,
+          conditions: args.data.condition,
+          discount: args.data.discount,
+          status: args.data.status
+        }
+      })
+    },
+    updatePromotion: async (
+      _parent: any,
+      args: { id: number; data: PromotionInput },
+      context: Context
+    ) => {
+      return context.prisma.promotions.update({
+        where: { promotion_id: args.id },
+        data: {
+          name: args.data.name,
+          description: args.data.description,
+          start_date: args.data.startDate,
+          end_date: args.data.endDate,
+          target: args.data.target,
+          conditions: args.data.condition,
+          discount: args.data.discount,
+          status: args.data.status
+        }
+      })
+    },
+    deletePromotion: async (
+      _parent: any,
+      args: { id: number },
+      context: Context
+    ) => {
+      return context.prisma.promotions.delete({
+        where: { promotion_id: args.id }
+      })
+    },
+    // Revenue
+    createRevenue: async (
+      _parent: any,
+      args: { data: RevenueInput },
+      context: Context
+    ) => {
+      return context.prisma.revenue.create({
+        data: {
+          revenue_id: tsid,
+          date: args.data.date,
+          revenue: args.data.revenue,
+          cost: args.data.cost
+        }
+      })
+    },
+    updateRevenue: async (
+      _parent: any,
+      args: { id: number; data: RevenueInput },
+      context: Context
+    ) => {
+      return context.prisma.revenue.update({
+        where: { revenue_id: args.id },
+        data: {
+          date: args.data.date,
+          revenue: args.data.revenue,
+          cost: args.data.cost
+        }
+      })
+    },
+    deleteRevenue: async (
+      _parent: any,
+      args: { id: number },
+      context: Context
+    ) => {
+      return context.prisma.revenue.delete({
+        where: { revenue_id: args.id }
+      })
+    },
+    // Table
+    createTable: async (
+      _parent: any,
+      args: { data: TableInput },
+      context: Context
+    ) => {
+      return context.prisma.tables.create({
+        data: {
+          table_id: tsid,
+          name: args.data.name,
+          capacity: args.data.capacity,
+          status: args.data.status
+        }
+      })
+    },
+    updateTable: async (
+      _parent: any,
+      args: { id: number; data: TableInput },
+      context: Context
+    ) => {
+      return context.prisma.tables.update({
+        where: { table_id: args.id },
+        data: {
+          name: args.data.name,
+          capacity: args.data.capacity,
+          status: args.data.status
+        }
+      })
+    },
+    deleteTable: async (
+      _parent: any,
+      args: { id: number },
+      context: Context
+    ) => {
+      return context.prisma.tables.delete({
+        where: { table_id: args.id }
+      })
+    },
+    // Reservation
+    createReservation: async (
+      _parent: any,
+      args: { data: ReservationInput },
+      context: Context
+    ) => {
+      return context.prisma.reservations.create({
+        data: {
+          reservation_id: tsid,
+          customer_id: args.data.customerId,
+          table_id: args.data.tableId,
+          description: args.data.description,
+          reservation_date: args.data.reservationDate,
+          status: args.data.status
+        }
+      })
+    },
+    updateReservation: async (
+      _parent: any,
+      args: { id: number; data: ReservationInput },
+      context: Context
+    ) => {
+      return context.prisma.reservations.update({
+        where: { reservation_id: args.id },
+        data: {
+          customer_id: args.data.customerId,
+          table_id: args.data.tableId,
+          description: args.data.description,
+          reservation_date: args.data.reservationDate,
+          status: args.data.status
+        }
+      })
+    },
+    deleteReservation: async (
+      _parent: any,
+      args: { id: number },
+      context: Context
+    ) => {
+      return context.prisma.reservations.delete({
+        where: { reservation_id: args.id }
+      })
+    },
+    // Review
+    createReview: async (
+      _parent: any,
+      args: { data: ReviewInput },
+      context: Context
+    ) => {
+      return context.prisma.reviews.create({
+        data: {
+          review_id: tsid,
+          customer_id: args.data.customerId,
+          content: args.data.content,
+          rating: args.data.rating,
+          status: args.data.status
+        }
+      })
+    },
+    updateReview: async (
+      _parent: any,
+      args: { id: number; data: ReviewInput },
+      context: Context
+    ) => {
+      return context.prisma.reviews.update({
+        where: { review_id: args.id },
+        data: {
+          customer_id: args.data.customerId,
+          content: args.data.content,
+          rating: args.data.rating,
+          status: args.data.status
+        }
+      })
+    },
+    deleteReview: async (
+      _parent: any,
+      args: { id: number },
+      context: Context
+    ) => {
+      return context.prisma.reviews.delete({
+        where: { review_id: args.id }
+      })
+    },
+    // Voucher
+    createVoucher: async (
+      _parent: any,
+      args: { data: VoucherInput },
+      context: Context
+    ) => {
+      return context.prisma.vouchers.create({
+        data: {
+          voucher_id: tsid,
+          customer_id: args.data.customerId,
+          name: args.data.name,
+          code: args.data.code,
+          description: args.data.description,
+          discount: args.data.discount,
+          expire_date: args.data.expiredDate,
+          status: args.data.status
+        }
+      })
+    },
+    updateVoucher: async (
+      _parent: any,
+      args: { id: number; data: VoucherInput },
+      context: Context
+    ) => {
+      return context.prisma.vouchers.update({
+        where: { voucher_id: args.id },
+        data: {
+          customer_id: args.data.customerId,
+          name: args.data.name,
+          code: args.data.code,
+          description: args.data.description,
+          discount: args.data.discount,
+          expire_date: args.data.expiredDate,
+          status: args.data.status
+        }
+      })
+    },
+    deleteVoucher: async (
+      _parent: any,
+      args: { id: number },
+      context: Context
+    ) => {
+      return context.prisma.vouchers.delete({
+        where: { voucher_id: args.id }
+      })
+    },
+    // Employee
+    createEmployee: async (
+      _parent: any,
+      args: { data: EmployeeInput },
+      context: Context
+    ) => {
+      return context.prisma.employees.create({
+        data: {
+          employee_id: tsid,
+          name: args.data.name,
+          email: args.data.email,
+          phone: args.data.phone,
+          address: args.data.address,
+          birthday: args.data.birthday,
+          gender: args.data.gender,
+          status: args.data.status,
+          is_admin: args.data.isAdmin,
+          position_id: args.data.positionId,
+          username: args.data.username,
+          password: args.data.password
+        }
+      })
+    },
+    updateEmployee: async (
+      _parent: any,
+      args: { id: number; data: EmployeeInput },
+      context: Context
+    ) => {
+      return context.prisma.employees.update({
+        where: { employee_id: args.id },
+        data: {
+          employee_id: tsid,
+          name: args.data.name,
+          email: args.data.email,
+          phone: args.data.phone,
+          address: args.data.address,
+          birthday: args.data.birthday,
+          gender: args.data.gender,
+          status: args.data.status,
+          is_admin: args.data.isAdmin,
+          position_id: args.data.positionId,
+          username: args.data.username,
+          password: args.data.password
+        }
+      })
+    },
+    deleteEmployee: async (
+      _parent: any,
+      args: { id: number },
+      context: Context
+    ) => {
+      return context.prisma.employees.delete({
+        where: { employee_id: args.id }
+      })
+    },
+    // Position
+    createPosition: async (
+      _parent: any,
+      args: { employeeId?: number; data: PositionInput },
+      context: Context
+    ) => {
+      return context.prisma.positions.create({
+        data: {
+          position_id: tsid,
+          name: args.data.name,
+          salary: args.data.salary,
+          employees: {
+            connect: { employee_id: args.employeeId }
+          }
+        }
+      })
+    },
+    updatePosition: async (
+      _parent: any,
+      args: { id: number; employeeId?: number; data: PositionInput },
+      context: Context
+    ) => {
+      return context.prisma.positions.update({
+        where: {
+          position_id: args.id
+        },
+        data: {
+          name: args.data.name,
+          salary: args.data.salary,
+          employees: {
+            connect: { employee_id: args.employeeId }
+          }
+        }
+      })
+    },
+    deletePosition: async (
+      _parent: any,
+      args: { id: number },
+      context: Context
+    ) => {
+      return context.prisma.positions.delete({
+        where: { position_id: args.id }
       })
     }
   }
 }
 
 // Interface
-
+interface PositionInput {
+  name: string
+  description: string
+  salary: number
+}
+interface EmployeeInput {
+  name: string
+  gender: string
+  email: string
+  phone: string
+  address: string
+  birthday: Date
+  positionId: number
+  isAdmin: boolean
+  status: boolean
+  username: string
+  password: string
+}
+interface VoucherInput {
+  customerId: number
+  name: string
+  code: string
+  description: string
+  discount: number
+  expiredDate: Date
+  status: string
+}
+interface ReviewInput {
+  customerId: number
+  content: string
+  rating: number
+  status: string
+}
+interface ReservationInput {
+  customerId: number
+  tableId: number
+  description: string
+  reservationDate: Date
+  status: string
+}
+interface TableInput {
+  name: string
+  capacity: number
+  status: string
+}
+interface RevenueInput {
+  date: Date
+  revenue: number
+  cost: number
+}
+interface PromotionInput {
+  name: string
+  description: string
+  startDate: Date
+  endDate: Date
+  target: string
+  condition: string
+  discount: number
+  status: string
+}
+interface PointsHistoryInput {
+  customerId: number
+  orderId: number
+  voucherId?: number
+  earnedPoints: number
+  deductedPoints: number
+  transactionDate: Date
+}
+interface OrderDetailInput {
+  orderId: number
+  itemId: number
+  quantity: number
+  price: number
+  total: number
+}
+interface OrderInput {
+  date: Date
+  customerId: number
+  status: string
+  address: string
+  shippingFee: number
+  shippingMethod: string
+  paymentMethod: string
+  paymentStatus: string
+  note?: string
+  orderDetails: OrderDetailInput[]
+}
+interface InvoiceDetailInput {
+  invoiceId: number
+  itemId: number
+  quantity: number
+  price: number
+  total: number
+}
+interface InvoiceInput {
+  date: Date
+  customerId: number
+  voucherCode?: string
+  paymentMethod: string
+  paymentStatus: string
+  note?: string
+  invoiceDetails: InvoiceDetailInput[]
+}
 interface CustomerLevelInput {
   name: string
   description: string
