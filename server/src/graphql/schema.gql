@@ -118,8 +118,8 @@ input OrderInput {
   customerId: ID!
   status: Boolean!
   address: String!
-  paymentMethod: String!
   shippingFee: Float!
+  shippingMethod: String!
   paymentMethod: String!
   paymentStatus: Boolean!
   note: String
@@ -127,7 +127,7 @@ input OrderInput {
 
 input OrderDetailInput {
   orderId: ID!
-  item: Menu!
+  itemId: ID! 
   quantity: Int!
   price: Float!
   total: Float!
@@ -135,8 +135,8 @@ input OrderDetailInput {
 
 input PointsHistoryInput {
   customerId: ID!
-  order: Order
-  voucher: Voucher
+  orderId: ID!
+  voucherId: ID!
   earnedPoints: Int
   deductedPoints: Int
   transactionDate: DateTime!
@@ -150,7 +150,7 @@ input PromotionInput {
   target: String!
   condition: String!
   discount: Float!
-  status: Boolean!
+  status: String!
 }
 
 input RevenueInput {
@@ -162,7 +162,7 @@ input RevenueInput {
 input TableInput {
   name: String!
   capacity: Int!
-  status: Boolean!
+  status: String!
 }
 
 input ReservationInput {
