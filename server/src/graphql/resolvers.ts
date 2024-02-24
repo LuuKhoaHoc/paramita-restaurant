@@ -1,3 +1,4 @@
+import { DateTimeResolver } from 'graphql-scalars'
 import { Context } from '../context'
 import { getTsid } from 'tsid-ts'
 const tsid = getTsid().timestamp
@@ -103,15 +104,15 @@ export const resolvers = {
         where: { order_detail_id: args.id || undefined }
       })
     },
-    pointHistoryList: async (_parent: any, _args: any, context: Context) => {
-      return context.prisma.point_history.findMany()
+    pointsHistoryList: async (_parent: any, _args: any, context: Context) => {
+      return context.prisma.point_histories.findMany()
     },
-    pointHistory: async (
+    pointsHistory: async (
       parent: any,
       args: { id: number },
       context: Context
     ) => {
-      return context.prisma.point_history.findUnique({
+      return context.prisma.point_histories.findUnique({
         where: { point_history_id: args.id || undefined }
       })
     },
@@ -643,12 +644,12 @@ export const resolvers = {
       return context.prisma.orders.delete({ where: { order_id: args.id } })
     },
     // PointHistory
-    createPointHistory: async (
+    createPointsHistory: async (
       _parent: any,
       args: { data: PointsHistoryInput },
       context: Context
     ) => {
-      return context.prisma.point_history.create({
+      return context.prisma.point_histories.create({
         data: {
           point_history_id: tsid,
           transaction_date: args.data.transactionDate,
@@ -660,12 +661,12 @@ export const resolvers = {
         }
       })
     },
-    updatePointHistory: async (
+    updatePointsHistory: async (
       _parent: any,
       args: { id: number; data: PointsHistoryInput },
       context: Context
     ) => {
-      return context.prisma.point_history.update({
+      return context.prisma.point_histories.update({
         where: { point_history_id: args.id },
         data: {
           transaction_date: args.data.transactionDate,
@@ -677,12 +678,12 @@ export const resolvers = {
         }
       })
     },
-    deletePointHistory: async (
+    deletePointsHistory: async (
       _parent: any,
       args: { id: number },
       context: Context
     ) => {
-      return context.prisma.point_history.delete({
+      return context.prisma.point_histories.delete({
         where: { point_history_id: args.id }
       })
     },
@@ -1037,6 +1038,134 @@ export const resolvers = {
         where: { position_id: args.id }
       })
     }
+  },
+  DateTime: DateTimeResolver,
+  // Relationship
+  Category: {
+    menu: (parent: any, _args: any, context: Context) => {
+      return context.prisma.menu.findMany({
+        where: { category_id: parent?.category_id }
+      })
+    }
+  },
+  Menu: {
+    category: (parent: any, _args: any, context: Context) => {
+      return context.prisma.categories
+        .findUnique({
+          where: { category_id: parent?.category_id }
+        })
+        .menu()
+    }
+  },
+  Customer: {
+    level: (parent: any, _args: any, context: Context) => {
+      return context.prisma.customer_level.findUnique({
+        where: { level_id: parent?.level_id }
+      })
+    },
+    address: (parent: any, _args: any, context: Context) => {
+      return context.prisma.customer_address.findMany({
+        where: { customer_id: parent?.customer_id }
+      })
+    }
+  },
+  CustomerLevel: {
+    customers: (parent: any, _args: any, context: Context) => {
+      return context.prisma.customers.findMany({
+        where: { level_id: parent?.level_id }
+      })
+    }
+  },
+  CustomerAddress: {
+    customer: (parent: any, _args: any, context: Context) => {
+      return context.prisma.customers.findUnique({
+        where: { customer_id: parent?.customer_id }
+      })
+    }
+  },
+  Invoice: {
+    customer: (parent: any, _args: any, context: Context) => {
+      return context.prisma.customers
+        .findUnique({
+          where: { customer_id: parent?.customer_id }
+        })
+        .invoices()
+    }
+  },
+  InvoiceDetail: {
+    invoice: (parent: any, _args: any, context: Context) => {
+      return context.prisma.invoices
+        .findUnique({
+          where: { invoice_id: parent?.invoice_id }
+        })
+        .invoice_details()
+    }
+  },
+  Order: {
+    customer: (parent: any, _args: any, context: Context) => {
+      return context.prisma.customers
+        .findUnique({
+          where: { customer_id: parent?.customer_id }
+        })
+        .orders()
+    }
+  },
+  OrderDetail: {
+    order: (parent: any, _args: any, context: Context) => {
+      return context.prisma.orders
+        .findUnique({
+          where: { order_id: parent?.order_id }
+        })
+        .order_details()
+    }
+  },
+  PointsHistory: {
+    customer: (parent: any, _args: any, context: Context) => {
+      return context.prisma.customers
+        .findUnique({
+          where: { customer_id: parent?.customer_id }
+        })
+        .point_histories()
+    }
+  },
+  Reservation: {
+    table: (parent: any, _args: any, context: Context) => {
+      return context.prisma.tables.findUnique({
+        where: { table_id: parent?.table_id }
+      })
+    }
+  },
+  Review: {
+    customer: (parent: any, _args: any, context: Context) => {
+      return context.prisma.customers
+        .findUnique({
+          where: { customer_id: parent?.customer_id }
+        })
+        .reviews()
+    }
+  },
+  Voucher: {
+    customer: (parent: any, _args: any, context: Context) => {
+      return context.prisma.customers
+        .findUnique({
+          where: { customer_id: parent?.customer_id }
+        })
+        .vouchers()
+    }
+  },
+  Employee: {
+    position: (parent: any, _args: any, context: Context) => {
+      return context.prisma.positions.findUnique({
+        where: { position_id: parent?.position_id }
+      })
+    }
+  },
+  Position: {
+    employees: (parent: any, _args: any, context: Context) => {
+      return context.prisma.employees.findMany({
+        where: { position_id: parent?.position_id }
+      })
+    }
   }
 }
 
@@ -1179,6 +1308,7 @@ interface MenuInput {
   image: string
 }
 interface CategoryInput {
+  id: number
   name: string
   menu?: MenuInput[]
 }

@@ -257,7 +257,7 @@ type Query {
 type Category {
   id: ID!
   name: String!
-  items: [Menu!]!
+  menu: [Menu!]
 }
 
 type Menu {
@@ -319,7 +319,7 @@ type Invoice {
   date: DateTime!
   customer: Customer!
   voucher: Voucher
-  paymentMethod: PaymentMethod!
+  paymentMethod: String!
   paymentStatus: Boolean!
   note: String
   invoiceDetails: [InvoiceDetail!]!

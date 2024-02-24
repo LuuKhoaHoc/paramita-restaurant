@@ -56,7 +56,7 @@ model customers {
   customer_level   customer_level     @relation(fields: [level_id], references: [level_id], onUpdate: Restrict, map: "customers_ibfk_1")
   invoices         invoices[]
   orders           orders[]
-  point_histories    point_histories[]
+  point_histories  point_histories[]
   reservations     reservations[]
   reviews          reviews[]
   vouchers         vouchers[]
@@ -145,18 +145,18 @@ model order_details {
 }
 
 model orders {
-  order_id         Int             @id @default(autoincrement())
+  order_id         Int               @id @default(autoincrement())
   customer_id      Int
-  status           String          @db.VarChar(255)
-  shipping_address String          @db.VarChar(255)
-  shipping_method  String          @db.VarChar(255)
-  shipping_cost    Decimal         @db.Decimal(10, 2)
-  payment_method   String          @db.VarChar(255)
-  payment_status   String          @db.VarChar(255)
-  created_at       DateTime        @default(now())
-  updated_at       DateTime        @updatedAt
+  status           String            @db.VarChar(255)
+  shipping_address String            @db.VarChar(255)
+  shipping_method  String            @db.VarChar(255)
+  shipping_cost    Decimal           @db.Decimal(10, 2)
+  payment_method   String            @db.VarChar(255)
+  payment_status   String            @db.VarChar(255)
+  created_at       DateTime          @default(now())
+  updated_at       DateTime          @updatedAt
   order_details    order_details[]
-  customers        customers       @relation(fields: [customer_id], references: [customer_id], onUpdate: Restrict, map: "orders_ibfk_1")
+  customers        customers         @relation(fields: [customer_id], references: [customer_id], onUpdate: Restrict, map: "orders_ibfk_1")
   point_history    point_histories[]
 
   @@index([customer_id], map: "customer_id")
@@ -177,7 +177,7 @@ model point_histories {
   @@index([customer_id], map: "customer_id")
   @@index([order_id], map: "order_id")
   @@index([voucher_id], map: "voucher_id")
-	@@map("point_history")
+  @@map("point_history")
 }
 
 model promotions {
@@ -236,16 +236,16 @@ model tables {
 }
 
 model vouchers {
-  voucher_id    Int             @id @default(autoincrement())
+  voucher_id    Int               @id @default(autoincrement())
   customer_id   Int
-  name          String          @db.VarChar(255)
-  code          String          @db.VarChar(255)
-  description   String          @db.Text
-  discount      Decimal         @db.Decimal(10, 2)
-  expire_date   DateTime        @db.Date
-  status        String          @db.VarChar(255)
+  name          String            @db.VarChar(255)
+  code          String            @db.VarChar(255)
+  description   String            @db.Text
+  discount      Decimal           @db.Decimal(10, 2)
+  expire_date   DateTime          @db.Date
+  status        String            @db.VarChar(255)
   point_history point_histories[]
-  customers     customers       @relation(fields: [customer_id], references: [customer_id], onUpdate: Restrict, map: "vouchers_ibfk_1")
+  customers     customers         @relation(fields: [customer_id], references: [customer_id], onUpdate: Restrict, map: "vouchers_ibfk_1")
 
   @@index([customer_id], map: "customer_id")
 }
