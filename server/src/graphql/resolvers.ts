@@ -1,7 +1,6 @@
 import { DateTimeResolver } from 'graphql-scalars'
 import { Context } from '../context'
 import { getTsid } from 'tsid-ts'
-const tsid = getTsid().timestamp
 
 export const resolvers = {
   // Query
@@ -10,8 +9,9 @@ export const resolvers = {
       return context.prisma.categories.findMany()
     },
     category: async (_parent: any, args: { id: number }, context: Context) => {
+      console.log(args.id)
       return context.prisma.categories.findUnique({
-        where: { category_id: args.id || undefined }
+        where: { category_id: args.id }
       })
     },
     menuList: async (_parent: any, _args: any, context: Context) => {
@@ -193,9 +193,15 @@ export const resolvers = {
       args: { data: CategoryInput },
       context: Context
     ) => {
+      if (!args.data) {
+        throw new Error(
+          "Missing required 'data' argument in createCategory mutation."
+        )
+      }
+      const tsid = getTsid().timestamp.toString()
       return context.prisma.categories.create({
         data: {
-          category_id: tsid,
+          tsid,
           name: args.data.name
         }
       })
@@ -253,9 +259,15 @@ export const resolvers = {
       args: { category_id: number; data: MenuInput },
       context: Context
     ) => {
+      if (!args.data) {
+        throw new Error(
+          "Missing required 'data' argument in createCategory mutation."
+        )
+      }
+      const tsid = getTsid().timestamp.toString()
       return context.prisma.menu.create({
         data: {
-          item_id: tsid,
+          tsid,
           category_id: args.category_id,
           name: args.data.name,
           description: args.data.description,
@@ -295,9 +307,15 @@ export const resolvers = {
       args: { data: ContentInput },
       context: Context
     ) => {
+      if (!args.data) {
+        throw new Error(
+          "Missing required 'data' argument in createCategory mutation."
+        )
+      }
+      const tsid = getTsid().timestamp.toString()
       return context.prisma.contents.create({
         data: {
-          content_id: tsid,
+          tsid,
           title: args.data.title,
           slogan: args.data?.slogan,
           description: args.data.description
@@ -333,9 +351,15 @@ export const resolvers = {
       args: { data: CustomerInput },
       context: Context
     ) => {
+      if (!args.data) {
+        throw new Error(
+          "Missing required 'data' argument in createCategory mutation."
+        )
+      }
+      const tsid = getTsid().timestamp.toString()
       return context.prisma.customers.create({
         data: {
-          customer_id: tsid,
+          tsid,
           name: args.data.name,
           phone: args.data.phone,
           email: args.data.email,
@@ -383,9 +407,16 @@ export const resolvers = {
       args: { data: CustomerAddressInput },
       context: Context
     ) => {
+      if (!args.data) {
+        throw new Error(
+          "Missing required 'data' argument in createCategory mutation."
+        )
+      }
+      const tsid = getTsid().timestamp.toString()
       return context.prisma.customer_address.create({
         data: {
           customer_id: args.data.customer_id,
+          tsid,
           address: args.data.address
         }
       })
@@ -418,9 +449,15 @@ export const resolvers = {
       args: { data: CustomerLevelInput },
       context: Context
     ) => {
+      if (!args.data) {
+        throw new Error(
+          "Missing required 'data' argument in createCategory mutation."
+        )
+      }
+      const tsid = getTsid().timestamp.toString()
       return context.prisma.customer_level.create({
         data: {
-          level_id: tsid,
+          tsid,
           name: args.data.name,
           description: args.data.description,
           discount: args.data.discount,
@@ -460,9 +497,15 @@ export const resolvers = {
       args: { data: InvoiceDetailInput },
       context: Context
     ) => {
+      if (!args.data) {
+        throw new Error(
+          "Missing required 'data' argument in createCategory mutation."
+        )
+      }
+      const tsid = getTsid().timestamp.toString()
       return context.prisma.invoice_details.create({
         data: {
-          invoice_detail_id: tsid,
+          tsid,
           invoice_id: args.data.invoiceId,
           item_id: args.data.itemId,
           quantity: args.data.quantity,
@@ -505,9 +548,15 @@ export const resolvers = {
       },
       context: Context
     ) => {
+      if (!args.data) {
+        throw new Error(
+          "Missing required 'data' argument in createCategory mutation."
+        )
+      }
+      const tsid = getTsid().timestamp.toString()
       return context.prisma.invoices.create({
         data: {
-          invoice_id: tsid,
+          tsid,
           customer_id: args.data.customerId,
           invoice_time: args.data.date,
           voucher_code: args.data.voucherCode,
@@ -555,9 +604,15 @@ export const resolvers = {
       args: { data: OrderDetailInput },
       context: Context
     ) => {
+      if (!args.data) {
+        throw new Error(
+          "Missing required 'data' argument in createCategory mutation."
+        )
+      }
+      const tsid = getTsid().timestamp.toString()
       return context.prisma.order_details.create({
         data: {
-          order_detail_id: tsid,
+          tsid,
           order_id: args.data.orderId,
           item_id: args.data.itemId,
           quantity: args.data.quantity,
@@ -597,9 +652,15 @@ export const resolvers = {
       args: { orderDetailId?: number; data: OrderInput },
       context: Context
     ) => {
+      if (!args.data) {
+        throw new Error(
+          "Missing required 'data' argument in createCategory mutation."
+        )
+      }
+      const tsid = getTsid().timestamp.toString()
       return context.prisma.orders.create({
         data: {
-          order_id: tsid,
+          tsid,
           customer_id: args.data.customerId,
           status: args.data.status,
           shipping_address: args.data.address,
@@ -649,9 +710,15 @@ export const resolvers = {
       args: { data: PointsHistoryInput },
       context: Context
     ) => {
+      if (!args.data) {
+        throw new Error(
+          "Missing required 'data' argument in createCategory mutation."
+        )
+      }
+      const tsid = getTsid().timestamp.toString()
       return context.prisma.point_histories.create({
         data: {
-          point_history_id: tsid,
+          tsid,
           transaction_date: args.data.transactionDate,
           customer_id: args.data.customerId,
           order_id: args.data?.orderId,
@@ -693,9 +760,15 @@ export const resolvers = {
       args: { data: PromotionInput },
       context: Context
     ) => {
+      if (!args.data) {
+        throw new Error(
+          "Missing required 'data' argument in createCategory mutation."
+        )
+      }
+      const tsid = getTsid().timestamp.toString()
       return context.prisma.promotions.create({
         data: {
-          promotion_id: tsid,
+          tsid,
           name: args.data.name,
           description: args.data.description,
           start_date: args.data.startDate,
@@ -741,9 +814,15 @@ export const resolvers = {
       args: { data: RevenueInput },
       context: Context
     ) => {
+      if (!args.data) {
+        throw new Error(
+          "Missing required 'data' argument in createCategory mutation."
+        )
+      }
+      const tsid = getTsid().timestamp.toString()
       return context.prisma.revenue.create({
         data: {
-          revenue_id: tsid,
+          tsid,
           date: args.data.date,
           revenue: args.data.revenue,
           cost: args.data.cost
@@ -779,9 +858,15 @@ export const resolvers = {
       args: { data: TableInput },
       context: Context
     ) => {
+      if (!args.data) {
+        throw new Error(
+          "Missing required 'data' argument in createCategory mutation."
+        )
+      }
+      const tsid = getTsid().timestamp.toString()
       return context.prisma.tables.create({
         data: {
-          table_id: tsid,
+          tsid,
           name: args.data.name,
           capacity: args.data.capacity,
           status: args.data.status
@@ -817,9 +902,15 @@ export const resolvers = {
       args: { data: ReservationInput },
       context: Context
     ) => {
+      if (!args.data) {
+        throw new Error(
+          "Missing required 'data' argument in createCategory mutation."
+        )
+      }
+      const tsid = getTsid().timestamp.toString()
       return context.prisma.reservations.create({
         data: {
-          reservation_id: tsid,
+          tsid,
           customer_id: args.data.customerId,
           table_id: args.data.tableId,
           description: args.data.description,
@@ -859,9 +950,15 @@ export const resolvers = {
       args: { data: ReviewInput },
       context: Context
     ) => {
+      if (!args.data) {
+        throw new Error(
+          "Missing required 'data' argument in createCategory mutation."
+        )
+      }
+      const tsid = getTsid().timestamp.toString()
       return context.prisma.reviews.create({
         data: {
-          review_id: tsid,
+          tsid,
           customer_id: args.data.customerId,
           content: args.data.content,
           rating: args.data.rating,
@@ -899,9 +996,15 @@ export const resolvers = {
       args: { data: VoucherInput },
       context: Context
     ) => {
+      if (!args.data) {
+        throw new Error(
+          "Missing required 'data' argument in createCategory mutation."
+        )
+      }
+      const tsid = getTsid().timestamp.toString()
       return context.prisma.vouchers.create({
         data: {
-          voucher_id: tsid,
+          tsid,
           customer_id: args.data.customerId,
           name: args.data.name,
           code: args.data.code,
@@ -945,9 +1048,15 @@ export const resolvers = {
       args: { data: EmployeeInput },
       context: Context
     ) => {
+      if (!args.data) {
+        throw new Error(
+          "Missing required 'data' argument in createCategory mutation."
+        )
+      }
+      const tsid = getTsid().timestamp.toString()
       return context.prisma.employees.create({
         data: {
-          employee_id: tsid,
+          tsid,
           name: args.data.name,
           email: args.data.email,
           phone: args.data.phone,
@@ -970,7 +1079,6 @@ export const resolvers = {
       return context.prisma.employees.update({
         where: { employee_id: args.id },
         data: {
-          employee_id: tsid,
           name: args.data.name,
           email: args.data.email,
           phone: args.data.phone,
@@ -1000,9 +1108,15 @@ export const resolvers = {
       args: { employeeId?: number; data: PositionInput },
       context: Context
     ) => {
+      if (!args.data) {
+        throw new Error(
+          "Missing required 'data' argument in createCategory mutation."
+        )
+      }
+      const tsid = getTsid().timestamp.toString()
       return context.prisma.positions.create({
         data: {
-          position_id: tsid,
+          tsid,
           name: args.data.name,
           salary: args.data.salary,
           employees: {

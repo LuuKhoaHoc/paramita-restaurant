@@ -8,13 +8,15 @@ datasource db {
 }
 
 model categories {
-  category_id Int    @id
+  category_id Int    @id @default(autoincrement())
+  tsid        String @db.VarChar(13)
   name        String @db.VarChar(255)
   menu        menu[]
 }
 
 model contents {
-  content_id  Int     @id
+  content_id  Int     @id @default(autoincrement())
+  tsid        String  @db.VarChar(13)
   title       String  @db.VarChar(255)
   slogan      String? @db.VarChar(255)
   description String  @db.Text
@@ -22,6 +24,7 @@ model contents {
 
 model customer_address {
   address_id  Int       @id @default(autoincrement())
+  tsid        String    @db.VarChar(13)
   customer_id Int
   address     String    @db.VarChar(255)
   customers   customers @relation(fields: [customer_id], references: [customer_id], onUpdate: Restrict, map: "customer_address_ibfk_1")
@@ -30,7 +33,8 @@ model customer_address {
 }
 
 model customer_level {
-  level_id    Int         @id
+  level_id    Int         @id @default(autoincrement())
+  tsid        String      @db.VarChar(13)
   name        String      @db.VarChar(255)
   description String      @db.Text
   discount    Decimal     @db.Decimal(2, 2)
@@ -41,6 +45,7 @@ model customer_level {
 
 model customers {
   customer_id      Int                @id @default(autoincrement())
+  tsid             String             @db.VarChar(13)
   name             String             @db.VarChar(255)
   phone            String             @db.Char(11)
   email            String             @db.VarChar(255)
@@ -66,6 +71,7 @@ model customers {
 
 model employees {
   employee_id Int       @id @default(autoincrement())
+  tsid        String    @db.VarChar(13)
   name        String    @db.VarChar(255)
   gender      String    @db.VarChar(50)
   email       String    @db.VarChar(255)
@@ -85,7 +91,8 @@ model employees {
 }
 
 model positions {
-  position_id Int         @id
+  position_id Int         @id @default(autoincrement())
+  tsid        String      @db.VarChar(13)
   name        String      @db.VarChar(255)
   salary      Decimal     @db.Decimal(10, 2)
   employees   employees[]
@@ -93,6 +100,7 @@ model positions {
 
 model invoice_details {
   invoice_detail_id Int       @id @default(autoincrement())
+  tsid              String    @db.VarChar(13)
   invoice_id        Int
   item_id           Int
   quantity          Int       @db.TinyInt
@@ -103,6 +111,7 @@ model invoice_details {
 
 model invoices {
   invoice_id      Int               @id @default(autoincrement())
+  tsid            String            @db.VarChar(13)
   invoice_time    DateTime          @db.Date
   customer_id     Int
   voucher_code    String?           @db.VarChar(255)
@@ -111,12 +120,14 @@ model invoices {
   note            String?           @db.VarChar(255)
   invoice_details invoice_details[]
   customers       customers         @relation(fields: [customer_id], references: [customer_id], onUpdate: Restrict, map: "invoices_ibfk_1")
+  point_histories point_histories[]
 
   @@index([customer_id], map: "customer_id")
 }
 
 model menu {
   item_id                                   Int             @id @default(autoincrement())
+  tsid                                      String          @db.VarChar(13)
   name                                      String          @db.VarChar(255)
   description                               String          @db.Text
   price                                     Decimal         @db.Decimal(10, 2)
@@ -131,6 +142,7 @@ model menu {
 
 model order_details {
   order_detail_id                  Int     @id @default(autoincrement())
+  tsid                             String  @db.VarChar(13)
   order_id                         Int
   item_id                          Int     @unique
   quantity                         Int
@@ -146,6 +158,7 @@ model order_details {
 
 model orders {
   order_id         Int               @id @default(autoincrement())
+  tsid             String            @db.VarChar(13)
   customer_id      Int
   status           String            @db.VarChar(255)
   shipping_address String            @db.VarChar(255)
@@ -164,8 +177,10 @@ model orders {
 
 model point_histories {
   point_history_id Int       @id @default(autoincrement())
+  tsid             String    @db.VarChar(13)
   customer_id      Int
   order_id         Int?
+  invoice_id       Int?
   voucher_id       Int?
   points_earned    Int?      @db.TinyInt
   points_deducted  Int?      @db.TinyInt
@@ -173,15 +188,18 @@ model point_histories {
   customers        customers @relation(fields: [customer_id], references: [customer_id], onUpdate: Restrict, map: "point_history_ibfk_1")
   orders           orders?   @relation(fields: [order_id], references: [order_id], onDelete: Restrict, onUpdate: Restrict, map: "point_history_ibfk_11")
   vouchers         vouchers? @relation(fields: [voucher_id], references: [voucher_id], onDelete: Restrict, onUpdate: Restrict, map: "point_history_ibfk_12")
+  invoices         invoices? @relation(fields: [invoice_id], references: [invoice_id], onDelete: Restrict, onUpdate: Restrict, map: "point_history_ibfk_13")
 
   @@index([customer_id], map: "customer_id")
   @@index([order_id], map: "order_id")
   @@index([voucher_id], map: "voucher_id")
+  @@index([invoice_id], map: "invoice_id")
   @@map("point_history")
 }
 
 model promotions {
-  promotion_id Int      @id
+  promotion_id Int      @id @default(autoincrement())
+  tsid         String   @db.VarChar(13)
   name         String   @db.VarChar(255)
   description  String   @db.Text
   start_date   DateTime @db.Date
@@ -193,22 +211,22 @@ model promotions {
 }
 
 model reservations {
-  reservation_id                       Int       @id @default(autoincrement())
-  customer_id                          Int
-  table_id                             Int       @unique
-  description                          String    @db.Text
-  reservation_date                     DateTime  @db.Date
-  status                               String    @db.VarChar(255)
-  customers                            customers @relation(fields: [customer_id], references: [customer_id], onUpdate: Restrict, map: "reservations_ibfk_1")
-  tables_reservations_table_idTotables tables    @relation("reservations_table_idTotables", fields: [table_id], references: [table_id], onUpdate: Restrict, map: "reservations_ibfk_5")
-  tables_tables_table_idToreservations tables?   @relation("tables_table_idToreservations")
+  reservation_id   Int       @id @default(autoincrement())
+  tsid             String    @db.VarChar(13)
+  customer_id      Int
+  table_id         Int       @unique
+  description      String    @db.Text
+  reservation_date DateTime  @db.Date
+  status           String    @db.VarChar(255)
+  customers        customers @relation(fields: [customer_id], references: [customer_id], onUpdate: Restrict, map: "reservations_ibfk_1")
+  table            tables    @relation(fields: [table_id], references: [table_id])
 
   @@index([customer_id], map: "customer_id")
-  @@index([table_id], map: "table_id")
 }
 
 model revenue {
-  revenue_id Int      @id
+  revenue_id Int      @id @default(autoincrement())
+  tsid       String   @db.VarChar(13)
   date       DateTime @db.Date
   revenue    Decimal  @db.Decimal(10, 2)
   cost       Decimal  @db.Decimal(10, 2)
@@ -216,6 +234,7 @@ model revenue {
 
 model reviews {
   review_id   Int       @id @default(autoincrement())
+  tsid        String    @db.VarChar(13)
   customer_id Int
   content     String    @db.Text
   rating      Int       @db.TinyInt
@@ -227,16 +246,17 @@ model reviews {
 }
 
 model tables {
-  table_id                                   Int            @id
-  name                                       String         @db.VarChar(255)
-  capacity                                   Int
-  status                                     String         @db.VarChar(255)
-  reservations_reservations_table_idTotables reservations[] @relation("reservations_table_idTotables")
-  reservations_tables_table_idToreservations reservations   @relation("tables_table_idToreservations", fields: [table_id], references: [table_id], onUpdate: Restrict, map: "tables_ibfk_1")
+  table_id     Int           @id @default(autoincrement())
+  tsid         String        @db.VarChar(13)
+  name         String        @db.VarChar(255)
+  capacity     Int
+  status       String        @db.VarChar(255)
+  reservations reservations?
 }
 
 model vouchers {
   voucher_id    Int               @id @default(autoincrement())
+  tsid          String            @db.VarChar(13)
   customer_id   Int
   name          String            @db.VarChar(255)
   code          String            @db.VarChar(255)
