@@ -9,7 +9,6 @@ export const resolvers = {
       return context.prisma.categories.findMany()
     },
     category: async (_parent: any, args: { id: number }, context: Context) => {
-      console.log(args.id)
       return context.prisma.categories.findUnique({
         where: { category_id: args.id }
       })

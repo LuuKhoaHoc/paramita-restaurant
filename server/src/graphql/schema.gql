@@ -262,14 +262,14 @@ type Query {
 
 # TypeDefs
 type Category {
-  id: Int!
+  category_id: Int!
   tsid: String!
   name: String!
   menu: [Menu!]
 }
 
 type Menu {
-  id: Int!
+  item_id: Int!
   tsid: String!
   name: String!
   description: String!
@@ -279,7 +279,7 @@ type Menu {
 }
 
 type Content {
-  id: Int!
+  content_id: Int!
   tsid: String!
   title: String!
   slogan: String
@@ -287,7 +287,7 @@ type Content {
 }
 
 type Customer {
-  id: Int!
+  customer_id: Int!
   tsid: String!
   name: String!
   phone: String!
@@ -310,14 +310,14 @@ type Customer {
 }
 
 type CustomerAddress {
-  id: Int!
+  level_id: Int!
   tsid: String!
   customer: Customer!
   address: String!
 }
 
 type CustomerLevel {
-  id: Int!
+  address_id: Int!
   tsid: String!
   name: String!
   description: String!
@@ -328,7 +328,7 @@ type CustomerLevel {
 }
 
 type Invoice {
-  id: Int!
+  invoice_id: Int!
   tsid: String!
   date: DateTime!
   customer: Customer!
@@ -340,7 +340,7 @@ type Invoice {
 }
 
 type InvoiceDetail {
-  id: Int!
+  invoice_detail_id: Int!
   tsid: String!
   invoice: Invoice!
   item: Menu!
@@ -350,7 +350,7 @@ type InvoiceDetail {
 }
 
 type Order {
-  id: Int!
+  order_id: Int!
   tsid: String!
   customer: Customer!
   status: String!
@@ -365,7 +365,7 @@ type Order {
 }
 
 type OrderDetail {
-  id: Int!
+  order_detail_id: Int!
   tsid: String!
   order: Order!
   item: Menu!
@@ -375,7 +375,7 @@ type OrderDetail {
 }
 
 type PointsHistory {
-  id: Int!
+  points_history_id: Int!
   tsid: String!
   customer: Customer!
   order: Order
@@ -386,7 +386,7 @@ type PointsHistory {
 }
 
 type Reservation {
-  id: Int!
+  reservation_id: Int!
   tsid: String!
   customer: Customer!
   table: Table!
@@ -396,14 +396,14 @@ type Reservation {
 }
 
 type Table {
-  id: Int!
+  table_id: Int!
   tsid: String!
   name: String!
   capacity: Int!
   status: String!
 }
 type Review {
-  id: Int!
+  review_id: Int!
   tsid: String!
   customer: Customer!
   content: String!
@@ -413,7 +413,7 @@ type Review {
 }
 
 type Promotion {
-  id: Int!
+  promotion_id: Int!
   tsid: String!
   name: String!
   description: String!
@@ -426,7 +426,7 @@ type Promotion {
 }
 
 type Revenue {
-  id: Int!
+  revenue_id: Int!
   tsid: String!
   date: DateTime!
   revenue: Float!
@@ -434,7 +434,7 @@ type Revenue {
 }
 
 type Voucher {
-  id: Int!
+  voucher_id: Int!
   tsid: String!
   customer: Customer!
   name: String!
