@@ -1,7 +1,7 @@
 # Mutation
 type Mutation {
-  createCategory(name: String!): Category
-  updateCategory(id: ID!, name: String!): Category!
+  createCategory(data: CategoryInput!): Category
+  updateCategory(id: ID!, data: CategoryInput!): Category!
   deleteCategory(id: ID!): Category!
   createMenu(data: MenuInput!): Menu
   updateMenu(id: ID!, data: MenuInput!): Menu!
@@ -12,11 +12,10 @@ type Mutation {
   createCustomer(data: CustomerInput!): Customer
   updateCustomer(id: ID!, data: CustomerInput!): Customer!
   deleteCustomer(id: ID!): Customer!
-  createCustomerAddress(customerId: ID!, address: String!): CustomerAddress!
+  createCustomerAddress(data: CustomerAddressInput!): CustomerAddress!
   updateCustomerAddress(
     id: ID!
-    customerId: ID!
-    address: String!
+    data: CustomerAddressInput!
   ): CustomerAddress!
   deleteCustomerAddress(id: ID!): CustomerAddress!
   createCustomerLevel(data: CustomerLevelInput): CustomerLevel!
@@ -63,6 +62,9 @@ type Mutation {
   deletePosition(id: ID!): Position!
 }
 
+input CategoryInput {
+  name: String!
+}
 input MenuInput {
   categoryId: ID!
   name: String!
@@ -87,6 +89,11 @@ input CustomerInput {
   status: Boolean!
   username: String!
   password: String!
+}
+
+input CustomerAddressInput {
+  customerId: ID!
+  address: String!
 }
 
 input CustomerLevelInput {
@@ -127,7 +134,7 @@ input OrderInput {
 
 input OrderDetailInput {
   orderId: ID!
-  itemId: ID! 
+  itemId: ID!
   quantity: Int!
   price: Float!
   total: Float!
@@ -212,25 +219,25 @@ input PositionInput {
 #Query
 
 type Query {
-  category(id: ID!): Category
-  item(id: ID!): Menu
-  content(id: ID!): Content
-  customer(id: ID!): Customer
-  customerLevel(id: ID!): CustomerLevel
-  customerAddress(id: ID!): CustomerAddress
-  invoice(id: ID!): Invoice
-  invoiceDetail(id: ID!): InvoiceDetail
-  order(id: ID!): Order
-  orderDetail(id: ID!): OrderDetail
-  pointsHistory(id: ID!): PointsHistory
-  promotion(id: ID!): Promotion
-  revenue(id: ID!): Revenue
-  table(id: ID!): Table
-  reservation(id: ID!): Reservation
-  review(id: ID!): Review
-  voucher(id: ID!): Voucher
-  employee(id: ID!): Employee
-  position(id: ID!): Position
+  category(id: Int!): Category
+  item(id: Int!): Menu
+  content(id: Int!): Content
+  customer(id: Int!): Customer
+  customerLevel(id: Int!): CustomerLevel
+  customerAddress(id: Int!): CustomerAddress
+  invoice(id: Int!): Invoice
+  invoiceDetail(id: Int!): InvoiceDetail
+  order(id: Int!): Order
+  orderDetail(id: Int!): OrderDetail
+  pointsHistory(id: Int!): PointsHistory
+  promotion(id: Int!): Promotion
+  revenue(id: Int!): Revenue
+  table(id: Int!): Table
+  reservation(id: Int!): Reservation
+  review(id: Int!): Review
+  voucher(id: Int!): Voucher
+  employee(id: Int!): Employee
+  position(id: Int!): Position
 
   categoryList: [Category!]!
   menuList: [Menu!]!
@@ -255,13 +262,15 @@ type Query {
 
 # TypeDefs
 type Category {
-  id: ID!
+  id: Int!
+  tsid: String!
   name: String!
   menu: [Menu!]
 }
 
 type Menu {
-  id: ID!
+  id: Int!
+  tsid: String!
   name: String!
   description: String!
   price: Float!
@@ -270,14 +279,16 @@ type Menu {
 }
 
 type Content {
-  id: ID!
+  id: Int!
+  tsid: String!
   title: String!
   slogan: String
   description: String!
 }
 
 type Customer {
-  id: ID!
+  id: Int!
+  tsid: String!
   name: String!
   phone: String!
   email: String!
@@ -299,13 +310,15 @@ type Customer {
 }
 
 type CustomerAddress {
-  id: ID!
+  id: Int!
+  tsid: String!
   customer: Customer!
   address: String!
 }
 
 type CustomerLevel {
-  id: ID!
+  id: Int!
+  tsid: String!
   name: String!
   description: String!
   discount: Float!
@@ -315,7 +328,8 @@ type CustomerLevel {
 }
 
 type Invoice {
-  id: ID!
+  id: Int!
+  tsid: String!
   date: DateTime!
   customer: Customer!
   voucher: Voucher
@@ -326,7 +340,8 @@ type Invoice {
 }
 
 type InvoiceDetail {
-  id: ID!
+  id: Int!
+  tsid: String!
   invoice: Invoice!
   item: Menu!
   quantity: Int!
@@ -335,9 +350,10 @@ type InvoiceDetail {
 }
 
 type Order {
-  id: ID!
+  id: Int!
+  tsid: String!
   customer: Customer!
-  status: Boolean!
+  status: String!
   address: String!
   shippingMethod: String!
   shippingFee: Float!
@@ -349,7 +365,8 @@ type Order {
 }
 
 type OrderDetail {
-  id: ID!
+  id: Int!
+  tsid: String!
   order: Order!
   item: Menu!
   quantity: Int!
@@ -358,7 +375,8 @@ type OrderDetail {
 }
 
 type PointsHistory {
-  id: ID!
+  id: Int!
+  tsid: String!
   customer: Customer!
   order: Order
   voucher: Voucher
@@ -368,31 +386,35 @@ type PointsHistory {
 }
 
 type Reservation {
-  id: ID!
+  id: Int!
+  tsid: String!
   customer: Customer!
   table: Table!
   description: String!
   reservationDate: DateTime!
-  status: Boolean!
+  status: String!
 }
 
 type Table {
-  id: ID!
+  id: Int!
+  tsid: String!
   name: String!
   capacity: Int!
-  status: Boolean!
+  status: String!
 }
 type Review {
-  id: ID!
+  id: Int!
+  tsid: String!
   customer: Customer!
   content: String!
   rating: Int!
-  status: Boolean!
+  status: String!
   createdDate: DateTime!
 }
 
 type Promotion {
-  id: ID!
+  id: Int!
+  tsid: String!
   name: String!
   description: String!
   startDate: DateTime!
@@ -400,29 +422,32 @@ type Promotion {
   target: String!
   condition: String!
   discount: Float!
-  status: Boolean!
+  status: String!
 }
 
 type Revenue {
-  id: ID!
+  id: Int!
+  tsid: String!
   date: DateTime!
   revenue: Float!
   cost: Float!
 }
 
 type Voucher {
-  id: ID!
+  id: Int!
+  tsid: String!
   customer: Customer!
   name: String!
   code: String!
   description: String!
   discount: Float!
   expireDate: DateTime!
-  status: Boolean!
+  status: String!
 }
 
 type Employee {
-  id: ID!
+  id: Int!
+  tsid: String!
   name: String!
   gender: String!
   email: String!
@@ -439,7 +464,8 @@ type Employee {
 }
 
 type Position {
-  id: ID!
+  id: Int!
+  tsid: String!
   name: String!
   description: String!
   salary: Float!
