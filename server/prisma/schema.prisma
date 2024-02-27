@@ -21,6 +21,15 @@ model contents {
   image       String? @db.Text
   slogan      String? @db.VarChar(255)
   description String  @db.Text
+  position    Int?    @db.TinyInt
+  page_id     Int?
+  pages       pages?  @relation(fields: [page_id], references: [page_id])
+}
+
+model pages {
+  page_id  Int        @id @default(autoincrement())
+  name     String     @unique @db.VarChar(255)
+  contents contents[]
 }
 
 model customer_address {

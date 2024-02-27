@@ -1,72 +1,75 @@
 # Mutation
 type Mutation {
   createCategory(data: CategoryInput!): Category
-  updateCategory(id: ID!, data: CategoryInput!): Category!
-  deleteCategory(id: ID!): Category!
+  updateCategory(id: Int!, data: CategoryInput!): Category!
+  deleteCategory(id: Int!): Category!
   createMenu(data: MenuInput!): Menu
-  updateMenu(id: ID!, data: MenuInput!): Menu!
-  deleteMenu(id: ID!): Menu!
+  updateMenu(id: Int!, data: MenuInput!): Menu!
+  deleteMenu(id: Int!): Menu!
   createContent(data: ContentInput!): Content
-  updateContent(id: ID!, data: ContentInput!): Content!
-  deleteContent(id: ID!): Content
+  updateContent(id: Int!, data: ContentInput!): Content!
+  deleteContent(id: Int!): Content
+  createPage(data: PageInput!): Page
+  updatePage(id: Int!, data: PageInput!): Page!
+  deletePage(id: Int!): Page!
   createCustomer(data: CustomerInput!): Customer
-  updateCustomer(id: ID!, data: CustomerInput!): Customer!
-  deleteCustomer(id: ID!): Customer!
+  updateCustomer(id: Int!, data: CustomerInput!): Customer!
+  deleteCustomer(id: Int!): Customer!
   createCustomerAddress(data: CustomerAddressInput!): CustomerAddress!
   updateCustomerAddress(
-    id: ID!
+    id: Int!
     data: CustomerAddressInput!
   ): CustomerAddress!
-  deleteCustomerAddress(id: ID!): CustomerAddress!
+  deleteCustomerAddress(id: Int!): CustomerAddress!
   createCustomerLevel(data: CustomerLevelInput): CustomerLevel!
-  updateCustomerLevel(id: ID!, data: CustomerLevelInput): CustomerLevel!
-  deleteCustomerLevel(id: ID!): CustomerLevel!
+  updateCustomerLevel(id: Int!, data: CustomerLevelInput): CustomerLevel!
+  deleteCustomerLevel(id: Int!): CustomerLevel!
   createInvoice(data: InvoiceInput): Invoice!
-  updateInvoice(id: ID!, data: InvoiceInput): Invoice!
-  deleteInvoice(id: ID!): Invoice!
+  updateInvoice(id: Int!, data: InvoiceInput): Invoice!
+  deleteInvoice(id: Int!): Invoice!
   createInvoiceDetail(data: InvoiceDetailInput): InvoiceDetail!
-  updateInvoiceDetail(id: ID!, data: InvoiceDetailInput): InvoiceDetail!
-  deleteInvoiceDetail(id: ID!): InvoiceDetail!
+  updateInvoiceDetail(id: Int!, data: InvoiceDetailInput): InvoiceDetail!
+  deleteInvoiceDetail(id: Int!): InvoiceDetail!
   createOrder(data: OrderInput): Order!
-  updateOrder(id: ID!, data: OrderInput): Order!
-  deleteOrder(id: ID!): Order!
+  updateOrder(id: Int!, data: OrderInput): Order!
+  deleteOrder(id: Int!): Order!
   createOrderDetail(data: OrderDetailInput): OrderDetail!
-  updateOrderDetail(id: ID!, data: OrderDetailInput): OrderDetail!
-  deleteOrderDetail(id: ID!): OrderDetail!
+  updateOrderDetail(id: Int!, data: OrderDetailInput): OrderDetail!
+  deleteOrderDetail(id: Int!): OrderDetail!
   createPointsHistory(data: PointsHistoryInput): PointsHistory!
-  updatePointsHistory(id: ID!, data: PointsHistoryInput): PointsHistory!
-  deletePointsHistory(id: ID!): PointsHistory!
+  updatePointsHistory(id: Int!, data: PointsHistoryInput): PointsHistory!
+  deletePointsHistory(id: Int!): PointsHistory!
   createPromotion(data: PromotionInput): Promotion!
-  updatePromotion(id: ID!, data: PromotionInput): Promotion!
-  deletePromotion(id: ID!): Promotion!
+  updatePromotion(id: Int!, data: PromotionInput): Promotion!
+  deletePromotion(id: Int!): Promotion!
   createRevenue(data: RevenueInput): Revenue!
-  updateRevenue(id: ID!, data: RevenueInput): Revenue!
-  deleteRevenue(id: ID!): Revenue!
+  updateRevenue(id: Int!, data: RevenueInput): Revenue!
+  deleteRevenue(id: Int!): Revenue!
   createTable(data: TableInput): Table!
-  updateTable(id: ID!, data: TableInput): Table!
-  deleteTable(id: ID!): Table!
+  updateTable(id: Int!, data: TableInput): Table!
+  deleteTable(id: Int!): Table!
   createReservation(data: ReservationInput): Reservation!
-  updateReservation(id: ID!, data: ReservationInput): Reservation!
-  deleteReservation(id: ID!): Reservation!
+  updateReservation(id: Int!, data: ReservationInput): Reservation!
+  deleteReservation(id: Int!): Reservation!
   createReview(data: ReviewInput): Review!
-  updateReview(id: ID!, data: ReviewInput): Review!
-  deleteReview(id: ID!): Review!
+  updateReview(id: Int!, data: ReviewInput): Review!
+  deleteReview(id: Int!): Review!
   createVoucher(data: VoucherInput): Voucher!
-  updateVoucher(id: ID!, data: VoucherInput): Voucher!
-  deleteVoucher(id: ID!): Voucher!
+  updateVoucher(id: Int!, data: VoucherInput): Voucher!
+  deleteVoucher(id: Int!): Voucher!
   createEmployee(data: EmployeeInput): Employee!
-  updateEmployee(id: ID!, data: EmployeeInput): Employee!
-  deleteEmployee(id: ID!): Employee!
+  updateEmployee(id: Int!, data: EmployeeInput): Employee!
+  deleteEmployee(id: Int!): Employee!
   createPosition(data: PositionInput): Position!
-  updatePosition(id: ID!, data: PositionInput): Position!
-  deletePosition(id: ID!): Position!
+  updatePosition(id: Int!, data: PositionInput): Position!
+  deletePosition(id: Int!): Position!
 }
 
 input CategoryInput {
   name: String!
 }
 input MenuInput {
-  categoryId: ID!
+  categoryId: Int!
   name: String!
   description: String!
   price: Float!
@@ -74,10 +77,16 @@ input MenuInput {
 }
 
 input ContentInput {
-  title: String!
+  title: String
   slogan: String
   image: String
-  description: String!
+  description: String
+  position: Int
+  pageId: Int!
+}
+
+input PageInput {
+  name: String!
 }
 
 input CustomerInput {
@@ -86,14 +95,14 @@ input CustomerInput {
   email: String!
   birthday: DateTime!
   points: Int!
-  levelId: ID!
+  levelId: Int!
   status: Boolean!
   username: String!
   password: String!
 }
 
 input CustomerAddressInput {
-  customerId: ID!
+  customerId: Int!
   address: String!
 }
 
@@ -107,15 +116,15 @@ input CustomerLevelInput {
 
 input InvoiceInput {
   date: DateTime!
-  customerId: ID!
+  customerId: Int!
   paymentMethod: String!
   paymentStatus: Boolean!
   note: String
 }
 
 input InvoiceDetailInput {
-  invoiceId: ID!
-  itemId: ID!
+  invoiceId: Int!
+  itemId: Int!
   quantity: Int!
   price: Float!
   total: Float!
@@ -123,7 +132,7 @@ input InvoiceDetailInput {
 
 input OrderInput {
   date: DateTime!
-  customerId: ID!
+  customerId: Int!
   status: Boolean!
   address: String!
   shippingFee: Float!
@@ -134,17 +143,17 @@ input OrderInput {
 }
 
 input OrderDetailInput {
-  orderId: ID!
-  itemId: ID!
+  orderId: Int!
+  itemId: Int!
   quantity: Int!
   price: Float!
   total: Float!
 }
 
 input PointsHistoryInput {
-  customerId: ID!
-  orderId: ID!
-  voucherId: ID!
+  customerId: Int!
+  orderId: Int!
+  voucherId: Int!
   earnedPoints: Int
   deductedPoints: Int
   transactionDate: DateTime!
@@ -174,22 +183,22 @@ input TableInput {
 }
 
 input ReservationInput {
-  customerId: ID!
-  tableId: ID!
+  customerId: Int!
+  tableId: Int!
   description: String!
   reservationDate: DateTime!
   status: Boolean!
 }
 
 input ReviewInput {
-  customerId: ID!
+  customerId: Int!
   content: String!
   rating: Int!
   status: Boolean!
 }
 
 input VoucherInput {
-  customerId: ID!
+  customerId: Int!
   name: String!
   code: String!
   description: String!
@@ -205,7 +214,7 @@ input EmployeeInput {
   phone: String!
   address: String!
   birthday: DateTime!
-  positionId: ID!
+  positionId: Int!
   status: Boolean!
   username: String!
   password: String!
@@ -223,6 +232,7 @@ type Query {
   category(id: Int!): Category
   item(id: Int!): Menu
   content(id: Int!): Content
+  page(name: String!): Page
   customer(id: Int!): Customer
   customerLevel(id: Int!): CustomerLevel
   customerAddress(id: Int!): CustomerAddress
@@ -243,6 +253,7 @@ type Query {
   categoryList: [Category!]!
   menuList: [Menu!]!
   contentList: [Content!]!
+  pageList: [Page!]!
   customerList: [Customer!]!
   customerLevelList: [CustomerLevel!]!
   customerAddressList: [CustomerAddress!]!
@@ -286,6 +297,14 @@ type Content {
   slogan: String
   image: String
   description: String!
+  position: Int
+  page: Page
+}
+
+type Page {
+  page_id: Int!
+  name: String!
+  content: [Content!]
 }
 
 type Customer {

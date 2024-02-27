@@ -10,7 +10,7 @@ export const resolvers = {
     },
     category: async (_parent: any, args: { id: number }, context: Context) => {
       return context.prisma.categories.findUnique({
-        where: { category_id: args.id }
+        where: { category_id: args.id || undefined }
       })
     },
     menuList: async (_parent: any, _args: any, context: Context) => {
@@ -27,6 +27,14 @@ export const resolvers = {
     content: async (_parent: any, args: { id: number }, context: Context) => {
       return context.prisma.contents.findUnique({
         where: { content_id: args.id || undefined }
+      })
+    },
+    pageList: async (_parent: any, _args: any, context: Context) => {
+      return context.prisma.pages.findMany()
+    },
+    page: async (_parent: any, args: { name: string }, context: Context) => {
+      return context.prisma.pages.findUnique({
+        where: { name: args.name || undefined }
       })
     },
     customerList: async (_parent: any, _args: any, context: Context) => {
@@ -317,7 +325,9 @@ export const resolvers = {
           tsid,
           title: args.data.title,
           slogan: args.data?.slogan,
-          description: args.data.description
+          description: args.data.description,
+          position: args.data.position,
+          page_id: args.data.pageId
         }
       })
     },
@@ -331,7 +341,9 @@ export const resolvers = {
         data: {
           title: args.data.title,
           slogan: args.data?.slogan,
-          description: args.data.description
+          description: args.data.description,
+          position: args.data?.position,
+          page_id: args.data?.pageId
         }
       })
     },
@@ -344,6 +356,44 @@ export const resolvers = {
         where: { content_id: args.id }
       })
     },
+    // Page
+    createPage: async (
+      _parent: any,
+      args: { data: PageInput },
+      context: Context
+    ) => {
+      if (!args.data) {
+        throw new Error(
+          "Missing required 'data' argument in createPage mutation."
+        )
+      }
+      return context.prisma.pages.create({
+        data: {
+          name: args.data.name
+        }
+      })
+    },
+    updatePage: async (
+      _parent: any,
+      args: { id: number; data: PageInput },
+      context: Context
+    ) => {
+      return context.prisma.pages.update({
+        where: { page_id: args.id },
+        data: {
+          name: args.data.name
+        }
+      })
+    },
+    deletePage: async (
+      _parent: any,
+      args: { id: number },
+      context: Context
+    ) => {
+      return context.prisma.pages.delete({
+        where: { page_id: args.id }
+      })
+    },
     // Customer
     createCustomer: async (
       _parent: any,
@@ -352,7 +402,7 @@ export const resolvers = {
     ) => {
       if (!args.data) {
         throw new Error(
-          "Missing required 'data' argument in createCategory mutation."
+          "Missing required 'data' argument in createCustomer mutation."
         )
       }
       const tsid = getTsid().timestamp.toString()
@@ -364,7 +414,7 @@ export const resolvers = {
           email: args.data.email,
           birthday: args.data.birthday,
           points: args.data.points,
-          level_id: args.data.level_id,
+          level_id: args.data.levelId,
           status: args.data.status,
           username: args.data.username,
           password: args.data.password
@@ -384,7 +434,7 @@ export const resolvers = {
           email: args.data.email,
           birthday: args.data.birthday,
           points: args.data.points,
-          level_id: args.data.level_id,
+          level_id: args.data.levelId,
           status: args.data.status,
           username: args.data.username,
           password: args.data.password
@@ -414,7 +464,7 @@ export const resolvers = {
       const tsid = getTsid().timestamp.toString()
       return context.prisma.customer_address.create({
         data: {
-          customer_id: args.data.customer_id,
+          customer_id: args.data.customerId,
           tsid,
           address: args.data.address
         }
@@ -428,7 +478,7 @@ export const resolvers = {
       return context.prisma.customer_address.update({
         where: { address_id: args.id },
         data: {
-          customer_id: args.data.customer_id,
+          customer_id: args.data.customerId,
           address: args.data.address
         }
       })
@@ -1170,6 +1220,20 @@ export const resolvers = {
         .menu()
     }
   },
+  Content: {
+    page: (parent: any, _args: any, context: Context) => {
+      return context.prisma.pages.findUnique({
+        where: { page_id: parent?.page_id }
+      })
+    }
+  },
+  Page: {
+    content: (parent: any, _args: any, context: Context) => {
+      return context.prisma.contents.findMany({
+        where: { page_id: parent?.page_id }
+      })
+    }
+  },
   Customer: {
     level: (parent: any, _args: any, context: Context) => {
       return context.prisma.customer_level.findUnique({
@@ -1394,7 +1458,7 @@ interface CustomerLevelInput {
   benefits: string
 }
 interface CustomerAddressInput {
-  customer_id: number
+  customerId: number
   address: string
 }
 interface CustomerInput {
@@ -1404,15 +1468,21 @@ interface CustomerInput {
   addresses: CustomerAddressInput[]
   birthday: Date
   points: number
-  level_id: number
+  levelId: number
   status: boolean
   username: string
   password: string
 }
+interface PageInput {
+  name: string
+}
 interface ContentInput {
   title: string
   slogan?: string
+  image? : string
   description: string
+  position?: number
+  pageId? : number
 }
 interface MenuInput {
   name: string
@@ -1421,7 +1491,6 @@ interface MenuInput {
   image: string
 }
 interface CategoryInput {
-  id: number
   name: string
   menu?: MenuInput[]
 }
