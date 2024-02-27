@@ -1,6 +1,6 @@
 import React from 'react'
 import { Box, Flex, Grid, Icon, Text, Toaster, fr } from '@prismane/core'
-import { MainPic } from '~/components'
+import { Loading, MainPic } from '~/components'
 import { Leaf } from '@phosphor-icons/react'
 import OrderListCategory from '~/pages/Order/OrderListCategory/OrderListCategory'
 import OrderListItem from '~/pages/Order/OrderListItem/OrderListItem'
@@ -17,8 +17,28 @@ import {
   Lau
 } from '~/images'
 import { useResponsive } from '~/utils/responsive'
+import { gql, useQuery } from '@apollo/client'
+
+const GET_CONTENTS = gql`
+  query {
+    page(name: "Order") {
+      page_id
+      name
+      content {
+        title
+        slogan
+        description
+        image
+        position
+      }
+    }
+  }
+`
+
+
 
 const Order = () => {
+  const { loading, error, data} = useQuery(GET_CONTENTS)
   const listFood = [
     {
       image: BanhXeo,
@@ -69,28 +89,15 @@ const Order = () => {
       description: 'Món Lẩu thơm ngon'
     }
   ]
-
-  const listCategory = [
-    'Tất cả',
-    'Bữa sáng',
-    'Tráng miệng',
-    'Rau, gỏi',
-    'Món chính',
-    'Lẩu',
-    'Món Âu',
-    'Thức uống',
-    'Cà phê',
-    'Nước ép',
-    'Trà thảo mộc',
-    'Món thêm'
-  ]
   const { isMobile, isTablet, isLaptop } = useResponsive()
+  if (loading) return <Loading/>
+
   return (
     <Toaster position='top-right' t={fr(23)}>
       <Box pos={'relative'} mih={'100vh'}>
         <MainPic
-          title={'Đặt hàng'}
-          subtitle='Mang Paramita về nhà bạn'
+          title={data?.page?.content[0]?.title}
+          subtitle={data?.page?.content[0]?.description}
           image={Orders}
         />
         <Box w={'100%'} h={'100%'} pos={'relative'}>
@@ -104,9 +111,11 @@ const Order = () => {
                   <Icon size={fr(10)} cl={'primary'}>
                     <Leaf weight='fill' />
                   </Icon>
-                  <Text fs={isTablet ? '2xl' : isMobile ? 'xl' : '3xl'}>Các món từ nhà Paramita</Text>
+                  <Text fs={isTablet ? '2xl' : isMobile ? 'xl' : '3xl'}>
+                    Các món từ nhà Paramita
+                  </Text>
                 </Flex>
-                <OrderListCategory listCategory={listCategory} />
+                <OrderListCategory />
                 <OrderListItem listFood={listFood} />
               </Flex>
             </Grid.Item>

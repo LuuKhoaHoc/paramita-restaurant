@@ -103,7 +103,7 @@ const Home = () => {
                   timing='ease-in-out'
                   delay={0}
                 >
-                    {/*TODO: Thêm image nếu có */}
+                  {/*TODO: Thêm image nếu có */}
                   <Image
                     w={
                       isLaptop
@@ -131,77 +131,75 @@ const Home = () => {
                 </Animation>
               </Box>
               <Box>
-                {data?.page?.content[1] && (
-                  <Flex
-                    w={'100%'}
-                    h={
+                <Flex
+                  w={'100%'}
+                  h={
+                    isLaptop
+                      ? fr(140)
+                      : isTablet
+                      ? fr(120)
+                      : isMobile
+                      ? fr(100)
+                      : fr(160)
+                  }
+                  direction='column'
+                  justify='evenly'
+                >
+                  <Text
+                    as={'h2'}
+                    className='GeomanistLight-font'
+                    cl={'primary'}
+                    fs={
                       isLaptop
-                        ? fr(140)
+                        ? 'xl'
                         : isTablet
-                        ? fr(120)
+                        ? 'lg'
                         : isMobile
-                        ? fr(100)
-                        : fr(160)
+                        ? 'base'
+                        : '2xl'
                     }
-                    direction='column'
-                    justify='evenly'
+                  >
+                    <Highlight cl={'#fff'} className='GeomanistLight-font'>
+                      {data?.page?.content[1]?.title}
+                    </Highlight>
+                  </Text>
+                  <Animation
+                    animation={'slide-right'}
+                    animated={scrollEvent}
+                    duration={1500}
+                    timing='ease-in-out'
+                    delay={0}
                   >
                     <Text
-                      as={'h2'}
-                      className='GeomanistLight-font'
-                      cl={'primary'}
+                      as={'p'}
                       fs={
                         isLaptop
                           ? 'xl'
                           : isTablet
-                          ? 'lg'
+                          ? 'md'
                           : isMobile
-                          ? 'base'
+                          ? 'sm'
                           : '2xl'
                       }
                     >
-                      <Highlight cl={'#fff'} className='GeomanistLight-font'>
-                        {data?.page?.content[1]?.title}
-                      </Highlight>
+                      {data?.page?.content[1]?.description}
                     </Text>
-                    <Animation
-                      animation={'slide-right'}
-                      animated={scrollEvent}
-                      duration={1500}
-                      timing='ease-in-out'
-                      delay={0}
-                    >
-                      <Text
-                        as={'p'}
-                        fs={
-                          isLaptop
-                            ? 'xl'
-                            : isTablet
-                            ? 'md'
-                            : isMobile
-                            ? 'sm'
-                            : '2xl'
-                        }
-                      >
-                        {data?.page?.content[1]?.description}
-                      </Text>
-                    </Animation>
-                    <Image
-                      src={DividerLogo}
-                      alt='divider'
-                      fit='cover'
-                      w={
-                        isLaptop
-                          ? fr(80)
-                          : isTablet
-                          ? fr(60)
-                          : isMobile
-                          ? fr(40)
-                          : fr(80)
-                      }
-                    />
-                  </Flex>
-                )}
+                  </Animation>
+                  <Image
+                    src={DividerLogo}
+                    alt='divider'
+                    fit='cover'
+                    w={
+                      isLaptop
+                        ? fr(80)
+                        : isTablet
+                        ? fr(60)
+                        : isMobile
+                        ? fr(40)
+                        : fr(80)
+                    }
+                  />
+                </Flex>
               </Box>
             </Flex>
             <Flex

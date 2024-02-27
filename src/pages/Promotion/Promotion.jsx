@@ -19,6 +19,23 @@ import Carousel from 'react-multi-carousel'
 import 'react-multi-carousel/lib/styles.css'
 import PromotionItem from '~/pages/Promotion/PromotionItem/PromotionItem'
 import { useResponsive } from '~/utils/responsive'
+import { gql, useQuery } from '@apollo/client'
+
+const GET_CONTENTS = gql`
+  query {
+    page(name: "Promotion") {
+      page_id
+      name
+      content {
+        title
+        slogan
+        description
+        image
+        position
+      }
+    }
+  }
+`
 
 const Promotion = () => {
   const imagesFood = [
@@ -46,6 +63,7 @@ const Promotion = () => {
     }
   }
   const { isMobile, isTablet, isLaptop } = useResponsive()
+  const { loading, error, data } = useQuery(GET_CONTENTS)
   return (
     <Box pos={'relative'} mih={'100vh'}>
       <Carousel
@@ -60,27 +78,26 @@ const Promotion = () => {
         transitionDuration={500}
         removeArrowOnDeviceType={['tablet', 'mobile']}
       >
+        {data?.page?.content?.map((item, index) => (
+          <MainPic
+            key={index}
+            image={PromotionPic}
+            title={item.title}
+            subtitle={item.description}
+          />
+        ))}
         <MainPic
           image={PromotionPic}
-          title={'Paramita'}
-          subtitle='Giảm giá đến 20% cho hoá đơn trên 500k'
-        />
-        <MainPic
-          image={PromotionPic}
-          title={'Paramita'}
-          subtitle='Giảm giá đến 20% cho hoá đơn trên 500k'
-        />
-        <MainPic
-          image={PromotionPic}
-          title={'Paramita'}
-          subtitle='Giảm giá đến 20% cho hoá đơn trên 500k'
+          title='Paramita'
+          subtitle='Khuyến mãi cực sốc'
         />
       </Carousel>
       <Box w={'100%'} h={'100%'} pos={'relative'}>
         <Grid templateColumns={12}>
-          <Grid.Item 
-          columnStart={isTablet ? 2 : isMobile ? 1 : 3}
-          columnEnd={isTablet ? 12 : isMobile ? 13 : 11}>
+          <Grid.Item
+            columnStart={isTablet ? 2 : isMobile ? 1 : 3}
+            columnEnd={isTablet ? 12 : isMobile ? 13 : 11}
+          >
             <Flex
               pos={'relative'}
               direction='column'

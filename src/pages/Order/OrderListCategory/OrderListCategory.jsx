@@ -5,8 +5,19 @@ import { itemToURL } from '~/utils/stringToURL'
 import React from 'react'
 import { Center, Circle, Image, Text, fr, Flex } from '@prismane/core'
 import { useResponsive } from '~/utils/responsive'
+import {gql, useQuery} from '@apollo/client'
 
-const OrderListCategory = ({ listCategory }) => {
+const GET_CATEGORYLIST = gql`
+  query {
+    categoryList {
+      name
+    }
+  }
+`
+
+const OrderListCategory = () => {
+  const { loading, error, data } = useQuery(GET_CATEGORYLIST)
+  const listCategory = data?.categoryList.map((item) => item.name) || []
   const { isMobile, isTablet } = useResponsive()
   return (
     <Flex

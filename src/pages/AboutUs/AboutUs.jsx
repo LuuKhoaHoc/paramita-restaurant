@@ -25,10 +25,29 @@ import React, { useEffect, useState } from 'react'
 // component
 import { MainPic, DividerParamita } from '~/components'
 import { useResponsive } from '~/utils/responsive'
+import {useQuery, gql} from '@apollo/client'
+
+const GET_CONTENTS = gql `
+  query {
+    page(name: "About Us") {
+    page_id
+    name
+    content {
+      title
+      slogan
+      description
+      image
+      position
+    }
+  }
+  }
+`
 
 const AboutUs = () => {
   const { isLaptop, isMobile, isTablet } = useResponsive()
   const [scrollEvent, setScrollEvent] = useState(false)
+  // data from api
+  const { loading, error, data } = useQuery(GET_CONTENTS)
   useEffect(() => {
     const handleScroll = () => {
       setScrollEvent(true)
@@ -41,9 +60,9 @@ const AboutUs = () => {
   return (
     <Box pos={'relative'} mih={'100vh'} of={'hidden'}>
       <MainPic
-        title={'Paramita'}
+        title={data?.page?.content[0]?.title}
         image={AboutUsPic}
-        sloganLeft={'Câu chuyện của'}
+        sloganLeft={data?.page?.content[0]?.slogan}
       />
       <Box w={'100%'} h={'100%'} pos={'relative'}>
         <Grid templateColumns={12}>
@@ -65,6 +84,7 @@ const AboutUs = () => {
                   duration={1000}
                   delay={0}
                 >
+                  {/* TODO: Thêm ảnh nếu có */}
                   <Image
                     w={
                       isLaptop
@@ -119,7 +139,7 @@ const AboutUs = () => {
                       ff={'GeomanistBold'}
                       cl={'primary'}
                     >
-                      <Highlight cl={'#fff'}>Từ trái tim yêu thương</Highlight>
+                      <Highlight cl={'#fff'}>{data?.page?.content[1]?.title}</Highlight>
                     </Text>
                   </Animation>
                   <Animation
@@ -133,10 +153,8 @@ const AboutUs = () => {
                       fs={isTablet ? 'xl' : isMobile ? 'md' : '2xl'}
                       ta='center'
                     >
-                      "Paramita được lấy cảm hứng từ giá trị từ bi và trí tuệ
-                      của Phật giáo để đem lại cho thực khách món ăn ngon lành
-                      cùng trải nghiệm yên bình."
-                    </Text>
+                      "{data?.page?.content[1]?.description}"
+                      </Text>
                   </Animation>
                 </Flex>
               </Box>
@@ -184,7 +202,7 @@ const AboutUs = () => {
                     ff={'GeomanistBold'}
                     cl={'primary'}
                   >
-                    <Highlight cl={'#fff'}>Thanh lọc tinh thần</Highlight>
+                    <Highlight cl={'#fff'}>{data?.page?.content[2]?.title}</Highlight>
                   </Text>
                 </Animation>
                 <Animation
@@ -198,9 +216,7 @@ const AboutUs = () => {
                     fs={isTablet ? 'xl' : isMobile ? 'md' : '2xl'}
                     ta='center'
                   >
-                    "Thực phẩm là liều thuốc, là năng lượng nuôi dưỡng cuộc
-                    sống. Chúng tôi mong muốn đem tới cho cộng đồng một không
-                    gian ăn uống lành mạnh, thanh lọc."
+                    "{data?.page?.content[1]?.description}"
                   </Text>
                 </Animation>
               </Flex>
@@ -216,6 +232,7 @@ const AboutUs = () => {
                   duration={2000}
                   delay={0}
                 >
+                  {/* TODO: Thêm ảnh nếu có */}
                   <Image
                     w={
                       isLaptop
@@ -324,7 +341,7 @@ const AboutUs = () => {
                       ff={'GeomanistBold'}
                       cl={'primary'}
                     >
-                      <Highlight cl={'#fff'}>Viên ngọc quý</Highlight>
+                      <Highlight cl={'#fff'}>{data?.page?.content[3]?.title}</Highlight>
                     </Text>
                   </Animation>
                   <Animation
@@ -338,9 +355,7 @@ const AboutUs = () => {
                       fs={isTablet ? 'xl' : isMobile ? 'md' : '2xl'}
                       ta='center'
                     >
-                      "Paramita thể hiện tình yêu thương bao la cùng lòng từ bi
-                      bằng hương vị ngọt ngào từ các món chay giản đơn mà đầy
-                      dinh dưỡng."
+                      "{data?.page?.content[3]?.description}"
                     </Text>
                   </Animation>
                 </Flex>
@@ -348,6 +363,7 @@ const AboutUs = () => {
               <Box bd={'1px solid'} bdc={'primary'} br={'md'}>
                 <Box bd={'1px solid'} bdc={'primary'} br={'md'} m={fr(5)}>
                   <Flex direction='row' gap={fr(10)} justify='center'>
+                    {/* TODO: Thêm ảnh nếu có */}
                     <Image
                       w={
                         isLaptop

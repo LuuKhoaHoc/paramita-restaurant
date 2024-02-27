@@ -22,11 +22,28 @@ import { HomePic2, DividerLogo, Space6, BookTablePic, HomePic1 } from '~/images'
 import React, { useEffect, useState } from 'react'
 
 // component
-import { MainPic, DividerParamita } from '~/components'
+import { MainPic, DividerParamita, Loading } from '~/components'
 import { useForm } from '@prismane/core/hooks'
 import p from '~/utils/zodToPrismane'
 import { z } from 'zod'
 import { useResponsive } from '~/utils/responsive'
+import { gql, useQuery } from '@apollo/client'
+
+const GET_CONTENTS = gql`
+  query {
+    page(name: "Book Table") {
+      page_id
+      name
+      content {
+        title
+        slogan
+        description
+        image
+        position
+      }
+    }
+  }
+`
 
 const BookTable = () => {
   const { handleReset, handleSubmit, register } = useForm({
@@ -142,12 +159,14 @@ const BookTable = () => {
     }
   }, [])
   const { isMobile, isTablet, isLaptop } = useResponsive()
+  const { loading, error, data } = useQuery(GET_CONTENTS)
+  if (loading) return <Loading />
   return (
     <Box pos={'relative'} mih={'100vh'} of={'hidden'}>
       <MainPic
         image={BookTablePic}
-        title={'Đặt bàn'}
-        subtitle={'Lựa chọn tối ưu cho mọi cuộc hẹn'}
+        title={data?.page?.content[0]?.title}
+        subtitle={data?.page?.content[0]?.description}
       />
       <Box w={'100%'} h={'100%'} pos={'relative'}>
         <Grid templateColumns={12}>
@@ -170,36 +189,25 @@ const BookTable = () => {
                   mb={fr(4)}
                   cl={'primary'}
                 >
-                  "Nhà hàng chay Paramita - đồng hành cùng mọi khoảnh khắc quý
-                  giá của bạn! "
+                  "{data?.page?.content[1]?.title}"
                 </Text>
                 <Flex direction='row' gap={fr(4)}>
                   <Box w={isTablet ? '50%' : isMobile ? '50%' : '100%'}>
-                    <Text as={'h2'}>Đặt chỗ bằng điện thoại</Text>
+                    <Text as={'h2'}>{data?.page?.content[2]?.title}</Text>
                     <Text
                       as={'p'}
                       fs={isTablet ? 'lg' : isMobile ? 'md' : 'xl'}
                     >
-                      Để được tư vấn và giữ chỗ tại khu vực yêu thích trong nhà
-                      hàng, Quý khách vui lòng gọi Hotline{' '}
-                      <Link w={'fit-content'} href='tel: +84 xxx xxx xxx'>
-                        +84 xxx xxx xxx{' '}
-                      </Link>
-                      để được nhân viên phục vụ nhiệt tình hỗ trợ. Cảm ơn Quý
-                      khách đã quan tâm đến dịch vụ của nhà hàng!
+                      {data?.page?.content[2]?.description}
                     </Text>
                   </Box>
                   <Box w={isTablet ? '50%' : isMobile ? '50%' : '100%'}>
-                    <Text as={'h2'}>Đặt chỗ sự kiện & nhóm</Text>
+                    <Text as={'h2'}>{data?.page?.content[3]?.title}</Text>
                     <Text
                       as={'p'}
                       fs={isTablet ? 'lg' : isMobile ? 'md' : 'xl'}
                     >
-                      Với không gian ấm cúng và riêng tư cho mọi sự kiện và họp
-                      nhóm, hãy liên hệ Paramita để được tư vấn và giữ chỗ
-                      trước. Chúng mình có đội ngũ chuyên biệt tổ chức những sự
-                      kiện và cuộc hẹn quan trọng dành cho từng yêu cầu của thực
-                      khách.
+                      {data?.page?.content[3]?.description}
                     </Text>
                   </Box>
                 </Flex>
@@ -207,12 +215,13 @@ const BookTable = () => {
               <Box w={isTablet ? '100%' : isMobile ? '90%' : '30%'}>
                 <Box bd={'1px solid'} bdc={'primary'}>
                   <Center direction='column' gap={fr(4)} m={fr(4)} fs={'lg'}>
-                    <Text as={'h2'}>Thời gian mở cửa</Text>
-                    <Text ta={'center'}>Thứ 2 - Chủ nhật & 6:30 - 22:30</Text>
-                    <Text as={'h3'}>Địa điểm</Text>
+                    <Text as={'h2'}>{data?.page?.content[4]?.title}</Text>
                     <Text ta={'center'}>
-                      107 Nguyễn Thị Minh Khai, phường Bến Nghé, Quận 1, TP.HCM
-                      & 108 Lê Văn Sỹ, phường 13, Quận 3, TP.HCM
+                      {data?.page?.content[4]?.description}
+                    </Text>
+                    <Text as={'h3'}>{data?.page?.content[5]?.title}</Text>
+                    <Text ta={'center'}>
+                      {data?.page?.content[5]?.description}
                     </Text>
                   </Center>
                 </Box>
@@ -374,7 +383,7 @@ const BookTable = () => {
                 <Animation
                   animation={'fade'}
                   animated={scrollEvent}
-                  duration={1000}
+                  duration={3000}
                   delay={0}
                 >
                   <Text
@@ -383,14 +392,13 @@ const BookTable = () => {
                     className='GeomanistBold-font'
                     cl={'primary'}
                   >
-                    "Hương thơm tinh khiết, hài hòa giữa hương và vị. Tiếp đón
-                    bạn là nụ cười ấm áp, thân thiện."
+                    "{data?.page?.content[6]?.title}"
                   </Text>
                 </Animation>
                 <Animation
                   animation={'slide-right'}
                   animated={scrollEvent}
-                  duration={1500}
+                  duration={4000}
                   delay={0}
                 >
                   <Text
@@ -399,7 +407,7 @@ const BookTable = () => {
                     ta='center'
                     tt={'uppercase'}
                   >
-                    NGÔI NHÀ CỦA NHỮNG KHOẢNH KHẮC SUM VẦY
+                    {data?.page?.content[6]?.description}
                   </Text>
                 </Animation>
               </Flex>
