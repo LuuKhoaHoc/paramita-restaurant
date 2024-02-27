@@ -76,6 +76,7 @@ input MenuInput {
 input ContentInput {
   title: String!
   slogan: String
+  image: String
   description: String!
 }
 
@@ -283,6 +284,7 @@ type Content {
   tsid: String!
   title: String!
   slogan: String
+  image: String
   description: String!
 }
 

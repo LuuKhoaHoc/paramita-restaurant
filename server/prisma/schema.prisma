@@ -18,6 +18,7 @@ model contents {
   content_id  Int     @id @default(autoincrement())
   tsid        String  @db.VarChar(13)
   title       String  @db.VarChar(255)
+  image       String? @db.Text
   slogan      String? @db.VarChar(255)
   description String  @db.Text
 }
