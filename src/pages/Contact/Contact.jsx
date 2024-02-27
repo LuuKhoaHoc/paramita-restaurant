@@ -23,11 +23,27 @@ import {
   PaperPlaneTilt
 } from '@phosphor-icons/react'
 import { useResponsive } from '~/utils/responsive'
+import { gql, useQuery } from '@apollo/client'
+
+const GET_CONTENTS = gql`
+  query {
+    page(name: "Contact") {
+      page_id
+      name
+      content {
+        title
+        slogan
+        description
+      }
+    }
+  }
+`
 
 const Contact = () => {
   const { isMobile, isTablet, isLaptop } = useResponsive()
   const textColor = useThemeModeValue('#371b04', '#d1e9d5')
   const [scrollEvent, setScrollEvent] = useState(false)
+  // const { loading, data } = useQuery(GET_CONTENTS)
   useEffect(() => {
     const handleScroll = () => {
       setScrollEvent(true)

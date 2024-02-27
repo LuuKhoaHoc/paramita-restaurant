@@ -12,26 +12,33 @@ import {
   Lau
 } from '~/images'
 // component
-import { MainPic } from '~/components'
+import { Loading, MainPic } from '~/components'
 import MenuListCategory from '~/pages/Menu/MenuListCategory/MenuListCategory'
 import MenuListItem from '~/pages/Menu/MenuListItem/MenuListItem'
 import { useResponsive } from '~/utils/responsive'
 import { gql, useQuery } from '@apollo/client'
 
-const GET_CATEGORYLIST = gql`
-  query {
-    categoryList {
+const GET_CONTENTS = gql `
+ query {
+    page(name: "Menu") {
+      page_id
       name
+      content {
+        title
+        slogan
+        description
+        image
+        position
+      }
     }
   }
+
 `
 
 const Menu = () => {
-  const { isMobile, isTablet } = useResponsive()
-  const { loading, error, data } = useQuery(GET_CATEGORYLIST)
-  if (loading) return <p>Loading...</p>
-  if (error) return <p>Error :{error.message}</p>
-  const listCategory = data.categoryList.map((item) => item.name)
+    const { isMobile, isTablet } = useResponsive()
+  const { loading, error, data } = useQuery(GET_CONTENTS)
+  if (loading) return <Loading />
   const imagesFood = [
     { image: BanhXeo, title: 'Bánh xèo', price: 5, category: 'Món chính' },
     {
@@ -75,7 +82,7 @@ const Menu = () => {
 
   return (
     <Box pos={'relative'} mih={'100vh'}>
-      <MainPic image={Menus} title={'Menu'} subtitle='Nơi hương vị thăng hoa' />
+      <MainPic image={Menus} title={data?.page?.content[0].title} subtitle={data?.page?.content[0].description} />
       <Box w={'100%'} h={'100%'} pos={'relative'}>
         <Grid templateColumns={12}>
           <Grid.Item
@@ -88,7 +95,7 @@ const Menu = () => {
               my={fr(10)}
               mx={isMobile ? fr(3) : 0}
             >
-              <MenuListCategory listCategory={listCategory} />
+              <MenuListCategory />
               <Divider orientation='vertical' />
               <MenuListItem items={imagesFood} />
             </Flex>

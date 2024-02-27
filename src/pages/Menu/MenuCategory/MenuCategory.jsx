@@ -19,21 +19,28 @@ import { useLocation } from 'react-router-dom'
 import { useResponsive } from '~/utils/responsive'
 import { gql, useQuery } from '@apollo/client'
 
-const GET_CATEGORYLIST = gql`
-  query {
-    categoryList {
+const GET_CONTENTS = gql `
+ query {
+    page(name: "Menu") {
+      page_id
       name
+      content {
+        title
+        slogan
+        description
+        image
+        position
+      }
     }
   }
+
 `
 
 const MenuCategory = () => {
   const { isMobile, isTablet, isLaptop } = useResponsive()
   const { state } = useLocation()
-  const { loading, error, data } = useQuery(GET_CATEGORYLIST)
-  if (loading) return <p>Loading...</p>
-  if (error) return <p>Error :{error.message}</p>
-  const listCategory = data.categoryList.map((item) => item.name)
+  const { loading, error, data } = useQuery(GET_CONTENTS)
+  if (loading) return <Loading />
   const imagesFood = [
     { image: BanhXeo, title: 'Bánh xèo', price: 5, category: 'Món chính' },
     {
@@ -76,7 +83,7 @@ const MenuCategory = () => {
   ]
   return (
     <Box pos={'relative'} mih={'100vh'}>
-      <MainPic image={Menus} title={'Menu'} subtitle='Nơi hương vị thăng hoa' />
+      <MainPic image={Menus} title={data?.page?.content[0].title} subtitle={data?.page?.content[0].description} />
       <Box w={'100%'} h={'100%'} pos={'relative'}>
         <Grid templateColumns={12}>
           <Grid.Item
@@ -89,7 +96,7 @@ const MenuCategory = () => {
               my={fr(10)}
               mx={isMobile ? fr(3) : 0}
             >
-              <MenuListCategory listCategory={listCategory} />
+              <MenuListCategory />
               <Divider orientation='vertical' />
               <Flex direction='column' gap={fr(4)}>
                 <Text fs={'xl'} className='GeomanistMedium-font'>
