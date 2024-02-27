@@ -208,13 +208,11 @@ const BookTable = () => {
                 <Box bd={'1px solid'} bdc={'primary'}>
                   <Center direction='column' gap={fr(4)} m={fr(4)} fs={'lg'}>
                     <Text as={'h2'}>Thời gian mở cửa</Text>
-                    <Text>Thứ 2 - Chủ nhật</Text>
-                    <Text>6:30 - 22:30</Text>
-                    <Text as={'h3'}>Location</Text>
-                    <Text>
-                      107 Nguyễn Thị Minh Khai, phường Bến Nghé, quận 1, TP.HCM{' '}
-                      <br />
-                      108 Lê Văn Sỹ, phường 13, quận 3, TP.HCM
+                    <Text ta={'center'}>Thứ 2 - Chủ nhật & 6:30 - 22:30</Text>
+                    <Text as={'h3'}>Địa điểm</Text>
+                    <Text ta={'center'}>
+                      107 Nguyễn Thị Minh Khai, phường Bến Nghé, Quận 1, TP.HCM
+                      & 108 Lê Văn Sỹ, phường 13, Quận 3, TP.HCM
                     </Text>
                   </Center>
                 </Box>

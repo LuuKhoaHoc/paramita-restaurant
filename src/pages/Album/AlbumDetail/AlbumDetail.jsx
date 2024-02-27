@@ -59,7 +59,7 @@ const AlbumDetail = () => {
       title: 'Workshop dạy nấu ăn'
     }
   ]
-  const { isTablet, isMobile } = useResponsive()
+  const { isLaptop, isTablet, isMobile } = useResponsive()
   return (
     <>
       <Box h={fr(22.5)} bg='#371b04' />
@@ -104,8 +104,24 @@ const AlbumDetail = () => {
                       br={'md'}
                       bsh={'md'}
                       fit='cover'
-                      w={isTablet ? fr(78) : isMobile ? fr(46) : fr(118)}
-                      h={isTablet ? fr(45) : isMobile ? fr(30) : fr(75)}
+                      w={
+                        isLaptop
+                          ? fr(78)
+                          : isTablet
+                          ? fr(78)
+                          : isMobile
+                          ? fr(46)
+                          : fr(103)
+                      }
+                      h={
+                        isLaptop
+                          ? fr(45)
+                          : isTablet
+                          ? fr(45)
+                          : isMobile
+                          ? fr(30)
+                          : fr(75)
+                      }
                       sx={{
                         transition: 'transform 0.3s',
                         '&:hover': {

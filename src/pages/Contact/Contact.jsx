@@ -62,9 +62,9 @@ const Contact = () => {
                   <Text
                     as={'h1'}
                     fs={isTablet ? 'xl' : isMobile ? 'lg' : 'inherit'}
-                    mb={fr(14)}
+                    mb={fr(20)}
                   >
-                    Liên hệ
+                    Địa chỉ
                   </Text>
                   <Text
                     as={'p'}
@@ -116,9 +116,16 @@ const Contact = () => {
               <Flex direction='column' gap={fr(8)}>
                 <Box>
                   <Text
+                    as={'h1'}
+                    fs={isTablet ? 'xl' : isMobile ? 'lg' : 'inherit'}
+                    mb={fr(8)}
+                  >
+                    Liên hệ
+                  </Text>
+                  <Text
                     as={'h2'}
                     fs={isTablet ? 'md' : isMobile ? 'base' : 'xl'}
-                    mb={fr(8)}
+                    // mb={fr(8)}
                   >
                     Số điện thoại:{' '}
                     <Link
@@ -131,7 +138,7 @@ const Contact = () => {
                   <Text
                     as={'h2'}
                     fs={isTablet ? 'md' : isMobile ? 'base' : 'xl'}
-                    mb={fr(8)}
+                    // mb={fr(8)}
                   >
                     Email:{' '}
                     <Link
