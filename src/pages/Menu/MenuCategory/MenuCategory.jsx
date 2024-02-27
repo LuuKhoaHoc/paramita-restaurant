@@ -17,10 +17,23 @@ import MenuListCategory from '~/pages/Menu/MenuListCategory/MenuListCategory'
 import MenuListItem from '~/pages/Menu/MenuListItem/MenuListItem'
 import { useLocation } from 'react-router-dom'
 import { useResponsive } from '~/utils/responsive'
+import { gql, useQuery } from '@apollo/client'
+
+const GET_CATEGORYLIST = gql`
+  query {
+    categoryList {
+      name
+    }
+  }
+`
 
 const MenuCategory = () => {
   const { isMobile, isTablet, isLaptop } = useResponsive()
   const { state } = useLocation()
+  const { loading, error, data } = useQuery(GET_CATEGORYLIST)
+  if (loading) return <p>Loading...</p>
+  if (error) return <p>Error :{error.message}</p>
+  const listCategory = data.categoryList.map((item) => item.name)
   const imagesFood = [
     { image: BanhXeo, title: 'Bánh xèo', price: 5, category: 'Món chính' },
     {
@@ -60,20 +73,6 @@ const MenuCategory = () => {
       category: 'Món chính'
     },
     { image: Lau, title: 'Lẩu Paramita', price: 4, category: 'Lẩu' }
-  ]
-  const listCategory = [
-    'Tất cả',
-    'Bữa sáng',
-    'Tráng miệng',
-    'Rau, gỏi',
-    'Món chính',
-    'Lẩu',
-    'Các món Tây',
-    'Thức uống',
-    'Cà phê',
-    'Nước ép',
-    'Trà thảo mộc',
-    'Món thêm'
   ]
   return (
     <Box pos={'relative'} mih={'100vh'}>

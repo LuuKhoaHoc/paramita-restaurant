@@ -16,9 +16,22 @@ import { MainPic } from '~/components'
 import MenuListCategory from '~/pages/Menu/MenuListCategory/MenuListCategory'
 import MenuListItem from '~/pages/Menu/MenuListItem/MenuListItem'
 import { useResponsive } from '~/utils/responsive'
+import { gql, useQuery } from '@apollo/client'
+
+const GET_CATEGORYLIST = gql`
+  query {
+    categoryList {
+      name
+    }
+  }
+`
 
 const Menu = () => {
-  const { isMobile, isTablet, isLaptop } = useResponsive()
+  const { isMobile, isTablet } = useResponsive()
+  const { loading, error, data } = useQuery(GET_CATEGORYLIST)
+  if (loading) return <p>Loading...</p>
+  if (error) return <p>Error :{error.message}</p>
+  const listCategory = data.categoryList.map((item) => item.name)
   const imagesFood = [
     { image: BanhXeo, title: 'Bánh xèo', price: 5, category: 'Món chính' },
     {
@@ -59,20 +72,7 @@ const Menu = () => {
     },
     { image: Lau, title: 'Lẩu Paramita', price: 4, category: 'Lẩu' }
   ]
-  const listCategory = [
-    'Tất cả',
-    'Bữa sáng',
-    'Tráng miệng',
-    'Rau, gỏi',
-    'Món chính',
-    'Lẩu',
-    'Món Âu',
-    'Thức uống',
-    'Cà phê',
-    'Nước ép',
-    'Trà thảo mộc',
-    'Món thêm'
-  ]
+
   return (
     <Box pos={'relative'} mih={'100vh'}>
       <MainPic image={Menus} title={'Menu'} subtitle='Nơi hương vị thăng hoa' />
