@@ -5,6 +5,8 @@
   "private": true,
   "dependencies": {
     "@apollo/client": "^3.9.5",
+    "@cloudinary/react": "^1.13.0",
+    "@cloudinary/url-gen": "^1.18.0",
     "@phosphor-icons/react": "^2.0.15",
     "@prismane/core": "^1.4.2",
     "@vitejs/plugin-react": "^4.2.1",

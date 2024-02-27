@@ -12,6 +12,7 @@
   "license": "ISC",
   "dependencies": {
     "@prisma/client": "^5.9.1",
+    "cloudinary": "^2.0.1",
     "graphql": "^16.8.1",
     "graphql-scalars": "^1.22.4",
     "graphql-yoga": "^5.1.1",
