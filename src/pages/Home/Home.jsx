@@ -32,6 +32,23 @@ import { MainPic, StyledButton, DividerParamita } from '~/components'
 import { Star } from '@phosphor-icons/react'
 import { Link } from 'react-router-dom'
 import { useResponsive } from '~/utils/responsive'
+import { useQuery, gql } from '@apollo/client'
+
+const GET_CONTENTS = gql`
+  query {
+    page(name: "Home") {
+      page_id
+      name
+      content {
+        title
+        slogan
+        description
+        image
+        position
+      }
+    }
+  }
+`
 
 const Home = () => {
   const { isLaptop, isTablet, isMobile } = useResponsive()
@@ -46,6 +63,7 @@ const Home = () => {
     { image: Lau, title: 'Lẩu Paramita', rating: 4.5 }
   ]
   const [scrollEvent, setScrollEvent] = useState(false)
+  const { loading, error, data } = useQuery(GET_CONTENTS)
   useEffect(() => {
     const handleScroll = () => {
       setScrollEvent(true)
@@ -58,9 +76,9 @@ const Home = () => {
   return (
     <Box pos={'relative'} mih={'100vh'} of={'hidden'}>
       <MainPic
-        title={'Paramita'}
+        title={data?.page?.content[0]?.title}
         image={HomePic}
-        sloganRight={'Tịnh tâm - Sống khoẻ - Yêu đời'}
+        sloganRight={data?.page?.content[0]?.slogan}
       />
       <Box w={'100%'} h={'100%'} pos={'relative'}>
         <Grid templateColumns={12}>
@@ -75,7 +93,7 @@ const Home = () => {
               align='center'
               gap={isMobile ? fr(4) : fr(8)}
               my={fr(5)}
-              mx={isMobile ? fr(2) : fr(0 )}
+              mx={isMobile ? fr(2) : fr(0)}
             >
               <Box>
                 <Animation
@@ -85,6 +103,7 @@ const Home = () => {
                   timing='ease-in-out'
                   delay={0}
                 >
+                    {/*TODO: Thêm image nếu có */}
                   <Image
                     w={
                       isLaptop
@@ -112,82 +131,77 @@ const Home = () => {
                 </Animation>
               </Box>
               <Box>
-                <Flex
-                  w={'100%'}
-                  h={
-                    isLaptop
-                      ? fr(140)
-                      : isTablet
-                      ? fr(120)
-                      : isMobile
-                      ? fr(100)
-                      : fr(160)
-                  }
-                  direction='column'
-                  justify='evenly'
-                >
-                  <Text
-                    as={'h2'}
-                    className='GeomanistLight-font'
-                    cl={'primary'}
-                    fs={
+                {data?.page?.content[1] && (
+                  <Flex
+                    w={'100%'}
+                    h={
                       isLaptop
-                        ? 'xl'
+                        ? fr(140)
                         : isTablet
-                        ? 'lg'
+                        ? fr(120)
                         : isMobile
-                        ? 'base'
-                        : '2xl'
+                        ? fr(100)
+                        : fr(160)
                     }
-                  >
-                    <Highlight cl={'#fff'} className='GeomanistLight-font'>
-                      Paramita
-                    </Highlight>{' '}
-                    có gì đặc biệt?
-                  </Text>
-                  <Animation
-                    animation={'slide-right'}
-                    animated={scrollEvent}
-                    duration={1500}
-                    timing='ease-in-out'
-                    delay={0}
+                    direction='column'
+                    justify='evenly'
                   >
                     <Text
-                      as={'p'}
+                      as={'h2'}
+                      className='GeomanistLight-font'
+                      cl={'primary'}
                       fs={
                         isLaptop
                           ? 'xl'
                           : isTablet
-                          ? 'md'
+                          ? 'lg'
                           : isMobile
-                          ? 'sm'
+                          ? 'base'
                           : '2xl'
                       }
                     >
-                      Paramita sử dụng 100% nguyên liệu thuần thực vật, được
-                      trồng theo phương pháp hữu cơ, đảm bảo an toàn cho sức
-                      khoẻ và thân thiện với môi trường. Paramita có thực đơn đa
-                      dạng, phong phú, đáp ứng nhu cầu của mọi khách hàng, từ
-                      trẻ nhỏ đến người lớn tuổi. Paramita thường xuyên tổ chức
-                      các chương trình khuyến mãi hấp dẫn, mang đến cơ hội cho
-                      khách hàng thưởng thức ẩm thực chay với giá ưu đãi.
+                      <Highlight cl={'#fff'} className='GeomanistLight-font'>
+                        {data?.page?.content[1]?.title}
+                      </Highlight>
                     </Text>
-                  </Animation>
-                  <Image
-                    src={DividerLogo}
-                    alt='divider'
-                    fit='cover'
-                    w={
-                      isLaptop
-                        ? fr(80)
-                        : isTablet
-                        ? fr(60)
-                        : isMobile
-                        ? fr(40)
-                        : fr(80)
-                    }
-                  />
-                </Flex>
+                    <Animation
+                      animation={'slide-right'}
+                      animated={scrollEvent}
+                      duration={1500}
+                      timing='ease-in-out'
+                      delay={0}
+                    >
+                      <Text
+                        as={'p'}
+                        fs={
+                          isLaptop
+                            ? 'xl'
+                            : isTablet
+                            ? 'md'
+                            : isMobile
+                            ? 'sm'
+                            : '2xl'
+                        }
+                      >
+                        {data?.page?.content[1]?.description}
+                      </Text>
+                    </Animation>
+                    <Image
+                      src={DividerLogo}
+                      alt='divider'
+                      fit='cover'
+                      w={
+                        isLaptop
+                          ? fr(80)
+                          : isTablet
+                          ? fr(60)
+                          : isMobile
+                          ? fr(40)
+                          : fr(80)
+                      }
+                    />
+                  </Flex>
+                )}
               </Box>
             </Flex>
             <Flex
@@ -242,7 +256,7 @@ const Home = () => {
                       }
                     >
                       <Highlight cl={'#fff'}>
-                        "Ba la mật chay - Hương vị thanh tịnh"
+                        "{data?.page?.content[2]?.slogan}"
                       </Highlight>
                     </Text>
                   </Animation>
@@ -265,7 +279,7 @@ const Home = () => {
                       ff={'GeomanistBold'}
                       cl={'primary'}
                     >
-                      Ẩm thực chay thanh tịnh
+                      {data?.page?.content[2]?.title}
                     </Text>
                   </Animation>
                   <Animation
@@ -287,19 +301,8 @@ const Home = () => {
                           : 'xl'
                       }
                       px={isTablet ? fr(5) : isMobile ? fr(2) : fr(10)}
-                
                     >
-                      Paramita là một nhà hàng chay chuyên phục vụ những món ăn
-                      mang đậm hương vị thanh tịnh của Phật giáo. Các món ăn ở
-                      đây được chế biến từ những nguyên liệu tự nhiên, tươi
-                      ngon, mang đến hương vị thơm ngon, hấp dẫn, giúp thực
-                      khách cảm nhận được sự thanh tịnh, an yên trong tâm hồn.
-                      Một trong những món ăn nổi tiếng nhất của Paramita là cơm
-                      chay thập cẩm. Cơm chay ở đây được nấu từ gạo trắng, thơm
-                      dẻo, ăn kèm với nhiều loại rau củ quả tươi ngon, sườn
-                      chay, chả chay,... Tất cả hòa quyện tạo nên một món ăn
-                      thơm ngon, hấp dẫn, mang đậm hương vị thanh tịnh của Phật
-                      giáo.
+                      {data?.page?.content[2]?.description}
                     </Text>
                   </Animation>
                   <Animation>
@@ -316,6 +319,7 @@ const Home = () => {
                   duration={2000}
                   delay={0}
                 >
+                  {/* TODO: Thêm image nếu có */}
                   <Image
                     w={
                       isLaptop
@@ -349,7 +353,11 @@ const Home = () => {
           </Grid.Item>
           <Grid.Item columnStart={1} columnEnd={13}>
             <Box w={'100%'} pos={'relative'} my={fr(5)}>
-              <Text ff={'GeomanistBold'} fs={isMobile ? 'lg' : '3xl'} ml={fr(10)}>
+              <Text
+                ff={'GeomanistBold'}
+                fs={isMobile ? 'lg' : '3xl'}
+                ml={fr(10)}
+              >
                 <Highlight bg={['primary', 100]} cl={'#fff'}>
                   Best seller #1
                 </Highlight>
