@@ -1,18 +1,36 @@
 import { Box, Flex, Grid, Image, Text, fr } from '@prismane/core'
 import React from 'react'
-import { MainPic } from '~/components'
+import { Loading, MainPic } from '~/components'
 import { BangGo, CareerPic } from '~/images'
 import CareerPost from '~/pages/Career/CareerPost/CareerPost'
 import { useResponsive } from '~/utils/responsive'
+import { gql, useQuery } from '@apollo/client'
+
+const GET_CONTENTS = gql`
+  query {
+    page(name: "Career") {
+      page_id
+      name
+      content {
+        title
+        slogan
+        description
+        position
+      }
+    }
+  }
+`
 
 const Career = () => {
   const { isLaptop, isMobile, isTablet } = useResponsive()
+  const { loading, data } = useQuery(GET_CONTENTS)
+  if (loading) return <Loading />
   return (
     <Box pos={'relative'} mih={'100vh'}>
       <MainPic
         image={CareerPic}
-        title={'Tuyển dụng'}
-        subtitle='Kết nối cùng Paramita'
+        title={data?.page?.content[0].title}
+        subtitle={data?.page?.content[0].description}
       />
       <Box w={'100%'} h={'100%'} pos={'relative'}>
         <Grid templateColumns={12}>
@@ -31,21 +49,14 @@ const Career = () => {
                 fs={isTablet ? 'xl' : isMobile ? 'lg' : 'inherit'}
                 className='GeomanistMedium-font'
               >
-                Giới thiệu ngắn gọn về công ty, văn hóa doanh nghiệp.
+                {data?.page?.content[1].title}
               </Text>
               <Flex
                 justify='around'
                 direction={isTablet ? 'column' : isMobile ? 'column' : 'row'}
               >
                 <Text as={'p'} fs={isTablet ? 'lg' : isMobile ? 'md' : 'xl'}>
-                  Paramita là thương hiệu nhà hàng chay nổi tiếng với phong cách
-                  phục vụ chuyên nghiệp, thân thiện. Chúng tôi coi nhân viên là
-                  tài sản quý giá nhất, luôn tạo môi trường làm việc năng động,
-                  sáng tạo để nhân viên phát huy hết khả năng. Tại Paramita, mọi
-                  nhân viên được tôn trọng, đãi ngộ xứng đáng và có nhiều cơ hội
-                  thăng tiến. Chúng tôi cùng nhau phục vụ thực khách bằng tất cả
-                  tâm huyết và nhiệt huyết. Mong muốn cùng xây dựng một tập thể
-                  vững mạnh, gắn kết như gia đình.
+                  {data?.page?.content[1].description}
                 </Text>
                 <Image
                   src={BangGo}

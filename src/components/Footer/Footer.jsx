@@ -13,10 +13,30 @@ import {
   YoutubeLogo
 } from '@phosphor-icons/react'
 import { useResponsive } from '~/utils/responsive'
+import { gql, useQuery } from '@apollo/client'
+import { Loading } from '~/components'
+
+const GET_CONTENTS = gql`
+  query {
+    page(name: "Contact") {
+      page_id
+      name
+      content {
+        title
+        slogan
+        description
+        position
+      }
+    }
+  }
+`
+
 // utils
 
 const Footer = () => {
   const { isLaptop, isMobile, isTablet } = useResponsive()
+  const { loading, data } = useQuery(GET_CONTENTS)
+  if (loading) return <Loading />
   return (
     <Transition
       transition='all'

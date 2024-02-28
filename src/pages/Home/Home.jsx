@@ -216,9 +216,9 @@ const Home = () => {
                   w={'100%'}
                   h={
                     isLaptop
-                      ? fr(140)
+                      ? fr(150)
                       : isTablet
-                      ? fr(120)
+                      ? fr(140)
                       : isMobile
                       ? fr(80)
                       : fr(160)
@@ -285,10 +285,16 @@ const Home = () => {
                     animated={scrollEvent}
                     duration={2000}
                     delay={0}
+                    of={'hidden'}
+                    sx={{ 
+                      textOverflow: 'ellipsis',
+                      display: '-webkit-box',
+                      WebkitLineClamp: '10',
+                      WebkitBoxOrient: 'vertical',
+                    }}
                   >
                     <Text
                       as={'p'}
-                      // h={isTablet ? fr(60) : isMobile ? fr(40) : fr(80)}
                       fs={
                         isLaptop
                           ? 'lg'

@@ -16,7 +16,7 @@ import {
 import { ContactPic } from '~/images'
 import React, { useEffect, useState } from 'react'
 // component
-import { MainPic } from '~/components'
+import { Loading, MainPic } from '~/components'
 import {
   FacebookLogo,
   InstagramLogo,
@@ -34,6 +34,7 @@ const GET_CONTENTS = gql`
         title
         slogan
         description
+        position
       }
     }
   }
@@ -43,7 +44,7 @@ const Contact = () => {
   const { isMobile, isTablet, isLaptop } = useResponsive()
   const textColor = useThemeModeValue('#371b04', '#d1e9d5')
   const [scrollEvent, setScrollEvent] = useState(false)
-  // const { loading, data } = useQuery(GET_CONTENTS)
+  const { loading, data } = useQuery(GET_CONTENTS)
   useEffect(() => {
     const handleScroll = () => {
       setScrollEvent(true)
@@ -53,12 +54,13 @@ const Contact = () => {
       window.removeEventListener('scroll', handleScroll)
     }
   }, [])
+  if (loading) return <Loading />
   return (
     <Box pos={'relative'} mih={'100vh'}>
       <MainPic
         image={ContactPic}
-        title={'Liên hệ'}
-        subtitle='Kết nối cùng Paramita'
+        title={data?.page?.content[0]?.title}
+        subtitle={data?.page?.content[0]?.description}
       />
       <Box w={'100%'} h={'100%'} pos={'relative'}>
         <Grid templateColumns={12}>
@@ -87,14 +89,14 @@ const Contact = () => {
                     fs={isTablet ? 'md' : isMobile ? 'base' : 'xl'}
                     tt={'capitalize'}
                   >
-                    107 Nguyễn Thị Minh Khai, phường Bến Nghé, quận 1, TP.HCM
+                    {data?.page?.content[1]?.description}
                   </Text>
                   <Text
                     as={'p'}
                     fs={isTablet ? 'md' : isMobile ? 'base' : 'xl'}
                     tt={'capitalize'}
                   >
-                    108 Lê Văn Sỹ, phường 13, quận 3, TP.HCM
+                    {data?.page?.content[2]?.description}
                   </Text>
                 </Box>
                 <Box>
@@ -143,12 +145,12 @@ const Contact = () => {
                     fs={isTablet ? 'md' : isMobile ? 'base' : 'xl'}
                     // mb={fr(8)}
                   >
-                    Số điện thoại:{' '}
+                    {data?.page?.content[3]?.title}
                     <Link
                       href='tel:0123456789'
                       cl={[textColor, { hover: 'primary' }]}
                     >
-                      +84 (0)123-456-789
+                      {data?.page?.content[3]?.description}
                     </Link>
                   </Text>
                   <Text
@@ -156,12 +158,12 @@ const Contact = () => {
                     fs={isTablet ? 'md' : isMobile ? 'base' : 'xl'}
                     // mb={fr(8)}
                   >
-                    Email:{' '}
+                    {data?.page?.content[4]?.title}
                     <Link
                       href='mailto:hi@paramita.com'
                       cl={[textColor, { hover: 'primary' }]}
                     >
-                      hi@paramita.com
+                      {data?.page?.content[4]?.description}
                     </Link>
                   </Text>
                 </Box>
@@ -179,14 +181,16 @@ const Contact = () => {
                     fs={isTablet ? 'md' : isMobile ? 'base' : 'xl'}
                     tt={'capitalize'}
                   >
-                    Thứ 2 - Chủ nhật
+                    {data?.page?.content[5]?.title}
                   </Text>
                   <Text
                     as={'p'}
                     fs={isTablet ? 'md' : isMobile ? 'base' : 'xl'}
                     tt={'capitalize'}
                   >
-                    9:00 - 22:00
+                    {data?.page?.content[5]?.description}
+                    <br />
+                    {data?.page?.content[6]?.description}
                   </Text>
                 </Box>
               </Flex>
@@ -203,19 +207,14 @@ const Contact = () => {
                   as={'h1'}
                   fs={isTablet ? 'xl' : isMobile ? 'lg' : 'inherit'}
                 >
-                  LIÊN HỆ VỚI CHÚNG TÔI
+                  {data?.page?.content[7]?.title}
                 </Text>
                 <Text
                   as={'p'}
                   fs={isTablet ? 'md' : isMobile ? 'base' : 'xl'}
                   mt={fr(4)}
                 >
-                  Paramita luôn sẵn sàng hỗ trợ mọi thắc mắc cũng như góp ý của
-                  quý khách hàng. Có bất kỳ câu hỏi hoặc yêu cầu nào, vui lòng
-                  điền các thông tin vào form bên cạnh. Chúng tôi sẽ phản hồi
-                  lại sớm nhất có thể. Đội ngũ nhân viên của Paramita cam kết
-                  lắng nghe, tư vấn và mang đến cho quý khách dịch vụ tốt nhất.
-                  Xin cảm ơn!
+                  {data?.page?.content[7]?.description}
                 </Text>
               </Box>
               <Box

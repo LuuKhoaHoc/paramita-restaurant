@@ -3,13 +3,30 @@ import { Box, Flex, Grid, Highlight, Image, Text, fr } from '@prismane/core'
 import { AlbumPic } from '~/images'
 import React, { useState } from 'react'
 // component
-import { MainPic, DividerParamita } from '~/components'
+import { MainPic, DividerParamita, Loading } from '~/components'
 import { Link } from 'react-router-dom'
 import { itemToURL } from '~/utils/stringToURL'
 import { useResponsive } from '~/utils/responsive'
+import { gql, useQuery } from '@apollo/client'
+
+const GET_CONTENTS = gql`
+  query {
+    page(name: "Album") {
+      page_id
+      name
+      content {
+        title
+        slogan
+        description
+        position
+      }
+    }
+  }
+`
 
 const Album = () => {
   const { isLaptop, isMobile, isTablet } = useResponsive()
+  const { loading, data } = useQuery(GET_CONTENTS)
   const imagesCategory = [
     {
       image:
@@ -61,11 +78,12 @@ const Album = () => {
   window.addEventListener('scroll', () => {
     setScrollEvent(true)
   })
+  if (loading) return <Loading />
   return (
     <Box pos={'relative'} mih={'100vh'} of={'hidden'}>
       <MainPic
-        title={'Album'}
-        subtitle='Không gian trang nhã - Ẩm thực tinh tế'
+        title={data?.page?.content[0].title}
+        subtitle={data?.page?.content[0].description}
         image={AlbumPic}
       />
       <Box w={'100%'} h={'100%'} pos={'relative'}>
@@ -84,10 +102,7 @@ const Album = () => {
               mx={isMobile ? fr(5) : fr(0)}
             >
               <Text fs={isTablet ? 'xl' : isMobile ? 'lg' : '2xl'} my={fr(4)}>
-                Thưởng thức món ngon tại Nhà hàng chay Paramita không chỉ là
-                hương vị mà còn là trải nghiệm 5 giác quan đầy thư thái. Hãy
-                cùng chiêm ngưỡng vẻ đẹp của không gian và ẩm thực qua góc nhìn
-                ảnh nghệ thuật của chúng tôi.
+                {data?.page?.content[1].description}
               </Text>
               <Text
                 fs={isTablet ? '2xl' : isMobile ? 'xl' : '3xl'}

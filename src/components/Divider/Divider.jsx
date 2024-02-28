@@ -11,18 +11,18 @@ const   Divider = () => {
       pos={'relative'}
       justify='between'
       w={'100%'}
-      h={isTablet ? fr(60) : isMobile ? fr(30) : fr(100)}
+      h={isLaptop ? fr(80) : isTablet ? fr(60) : isMobile ? fr(30) : fr(100)}
       my={fr(5)}
     >
       <Box pos={'absolute'} l={0}>
-        <Image h={isTablet ? fr(60) : isMobile ? fr(30) : fr(80) } src={HomeLeaf1} alt='home-leaf' fit='contain' />
+        <Image h={isLaptop ? fr(80) : isTablet ? fr(60) : isMobile ? fr(30) : fr(80) } src={HomeLeaf1} alt='home-leaf' fit='contain' />
       </Box>
       <Box pos={'absolute'} l={'50%'} sx={{ transform: 'translateX(-50%)' }}>
-        <Image h={isTablet ? fr(60) : isMobile ? fr(30) : fr(80) } src={HomeFood1} alt='home-leaf' fit='contain' />
+        <Image h={isLaptop ? fr(80) : isTablet ? fr(60) : isMobile ? fr(30) : fr(80) } src={HomeFood1} alt='home-leaf' fit='contain' />
       </Box>
       <Box pos={'absolute'} r={0}>
         <Image
-          h={isTablet ? fr(60) : isMobile ? fr(30) : fr(80) }
+          h={isLaptop ? fr(80) : isTablet ? fr(60) : isMobile ? fr(30) : fr(80) }
           src={HomeLeaf1}
           alt='home-leaf'
           fit='contain'
