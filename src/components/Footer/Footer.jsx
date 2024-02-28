@@ -124,11 +124,17 @@ const Footer = () => {
                 <Phone />
               </Icon>
               <Flex direction='column' gap={fr(1)}>
-                <TextFooter as={'a'} href='tel:0987654321'>
-                  0987654321
+                <TextFooter
+                  as={'a'}
+                  href={'tel:' + data?.page?.content[3]?.description}
+                >
+                  {data?.page?.content[3]?.description}
                 </TextFooter>
-                <TextFooter as={'a'} href='tel:0123456789'>
-                  0123456789
+                <TextFooter
+                  as={'a'}
+                  href={'tel:' + data?.page?.content[8]?.description}
+                >
+                  {data?.page?.content[8]?.description}
                 </TextFooter>
               </Flex>
             </Flex>
@@ -136,8 +142,11 @@ const Footer = () => {
               <Icon size={isMobile ? fr(7) : fr(9)}>
                 <Envelope />
               </Icon>
-              <TextFooter as={'a'} href='mailto:hi@paramita.com'>
-                hi@paramita.com
+              <TextFooter
+                as={'a'}
+                href={'mailto:' + data?.page?.content[4]?.description}
+              >
+                {data?.page?.content[4]?.description}
               </TextFooter>
             </Flex>
             <Flex direction='row' gap={fr(3)}>
@@ -146,10 +155,10 @@ const Footer = () => {
               </Icon>
               <Flex direction='column' gap={fr(1)}>
                 <Text className='GeomanistMedium-font' tt={'capitalize'}>
-                  107 Nguyễn Thị Minh Khai, phường Bến Nghé, quận 1, TP.HCM
+                  {data?.page?.content[1]?.description}
                 </Text>
                 <Text className='GeomanistMedium-font' tt={'capitalize'}>
-                  108 Lê Văn Sỹ, phường 13, quận 3, TP.HCM
+                  {data?.page?.content[2]?.description}
                 </Text>
               </Flex>
             </Flex>

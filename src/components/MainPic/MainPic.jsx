@@ -149,13 +149,13 @@ const MainPic = ({
           b={0}
         >
           <Circle
-            as={'a'}
-            href='#'
             size={isMobile ? 40 : 60}
             bg='white'
             td={'none'}
             cl={'black'}
             direction='column'
+            cs={'pointer'}
+            onClick={() => window.scrollTo({ top: 820, behavior: 'smooth' })}
           >
             {isMobile ? (
               <>

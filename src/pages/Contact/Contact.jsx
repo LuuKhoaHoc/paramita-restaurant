@@ -147,10 +147,16 @@ const Contact = () => {
                   >
                     {data?.page?.content[3]?.title}
                     <Link
-                      href='tel:0123456789'
+                      href={'tel:' + data?.page?.content[3].description}
                       cl={[textColor, { hover: 'primary' }]}
                     >
                       {data?.page?.content[3]?.description}
+                    </Link>
+                    <Link
+                      href={'tel:' + data?.page?.content[8].description}
+                      cl={[textColor, { hover: 'primary' }]}
+                    >
+                      {data?.page?.content[8]?.description}
                     </Link>
                   </Text>
                   <Text
@@ -160,7 +166,7 @@ const Contact = () => {
                   >
                     {data?.page?.content[4]?.title}
                     <Link
-                      href='mailto:hi@paramita.com'
+                      href={'mailto:' + data?.page?.content[4]?.description}
                       cl={[textColor, { hover: 'primary' }]}
                     >
                       {data?.page?.content[4]?.description}

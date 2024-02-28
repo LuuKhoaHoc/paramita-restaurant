@@ -1,11 +1,30 @@
 import { Box, Flex, Grid, Image, Text, fr } from '@prismane/core'
-import { HomePic3 } from '../../images'
-import { StyledButton } from '../'
+import { HomePic3 } from '~/images'
+import { Loading, StyledButton } from '~/components'
 import { Link } from 'react-router-dom'
 import { useResponsive } from '~/utils/responsive'
+import { gql, useQuery } from '@apollo/client'
+
+const GET_CONTENTS = gql`
+  query {
+    page(name: "Error") {
+      page_id
+      name
+      content {
+        title
+        slogan
+        description
+        image
+        position
+      }
+    }
+  }
+`
 
 const SmallBookTable = () => {
   const { isLaptop, isMobile, isTablet } = useResponsive()
+  const { loading, data } = useQuery(GET_CONTENTS)
+  if (loading) return <Loading />
   return (
     <Grid templateColumns={12}>
       <Grid.Item columnStart={1} columnEnd={13}>
@@ -30,10 +49,10 @@ const SmallBookTable = () => {
             ff={'BalihoScript'}
           >
             <Text fs={isMobile ? 'lg' : '2xl'} cl={'#fff'}>
-              Hãy để Paramita giữ chỗ cho bạn
+              {data?.page?.content[0]?.slogan}
             </Text>
-            <Text cl={'#fff'} fs={ isMobile ? 'xl' : '4xl'} ff={'GeomanistBold'}>
-              Đặt bàn thật đơn giản
+            <Text cl={'#fff'} fs={isMobile ? 'xl' : '4xl'} ff={'GeomanistBold'}>
+              {data?.page?.content[0].title}
             </Text>
             <Text
               as={'p'}
@@ -41,12 +60,7 @@ const SmallBookTable = () => {
               fs={isLaptop ? 'lg' : isTablet ? 'md' : isMobile ? 'base' : 'xl'}
               w={'50%'}
             >
-              Chào mừng bạn đến với Paramita! Chúng tôi rất vui khi được phục vụ
-              bạn. Để tiết kiệm thời gian, bạn có thể đặt bàn trực tuyến với vài
-              thao tác đơn giản. Hãy chọn ngày giờ phù hợp với lịch của mình và
-              đảm bảo có chỗ ngồi khi đến nhà hàng nhé. Chúng tôi cam kết sẽ
-              phục vụ bạn chu đáo với không gian ấm cúng, thức ăn ngon lành. Hẹn
-              gặp lại bạn sớm!
+              {data?.page?.content[0].description}
             </Text>
             <StyledButton cl={['primary', 100]} p={fr(5)}>
               <Link to={'/book-table'}>Đặt bàn ngay</Link>
