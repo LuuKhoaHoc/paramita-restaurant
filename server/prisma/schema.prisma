@@ -58,12 +58,12 @@ model customers {
   tsid             String             @db.VarChar(13)
   name             String             @db.VarChar(255)
   phone            String             @db.Char(11)
-  email            String             @db.VarChar(255)
+  email            String             @unique @db.VarChar(255)
   birthday         DateTime?          @db.Date
   points           Int                @default(0) @db.SmallInt
   level_id         Int                @default(0)
   status           Boolean            @default(false)
-  username         String             @db.VarChar(255)
+  username         String             @unique @db.VarChar(255)
   password         String             @db.VarChar(255)
   created_at       DateTime           @default(now())
   updated_at       DateTime           @updatedAt
