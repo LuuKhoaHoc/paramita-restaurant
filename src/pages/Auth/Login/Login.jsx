@@ -18,9 +18,26 @@ import usernameAndEmail from '~/utils/usernameAndEmail'
 import React, { useEffect, useState } from 'react'
 import { LoginPic } from '~/images'
 import { Link } from 'react-router-dom'
-import { AlertCustom, MainPic } from '~/components'
+import { AlertCustom, Loading, MainPic } from '~/components'
 import { Password, User } from '@phosphor-icons/react'
 import { useResponsive } from '~/utils/responsive'
+import { gql, useQuery } from '@apollo/client'
+
+const GET_CONTENTS = gql`
+  query {
+    page(name: "Login") {
+      page_id
+      name
+      content {
+        title
+        slogan
+        description
+        image
+        position
+      }
+    }
+  }
+`
 
 const Login = () => {
   const { isLaptop, isMobile, isTablet } = useResponsive()
@@ -70,12 +87,14 @@ const Login = () => {
       }
     }
   })
+  const { loading, data } = useQuery(GET_CONTENTS)
+  if (loading) return <Loading />
   return (
     <Box pos={'relative'} mih={'100vh'}>
       <MainPic
         image={LoginPic}
-        title={'Paramita'}
-        sloganCenter={'Chào mừng bạn đến với hệ thống'}
+        title={data?.page?.content[0]?.title}
+        sloganCenter={data?.page?.content[0]?.slogan}
       />
       <Flex
         id='login'
@@ -109,7 +128,7 @@ const Login = () => {
                 '.PrismaneTextField-label, .PrismanePasswordField-label': {
                   fontSize: fr(4)
                 }
-              },
+              }
             }}
           >
             <Card.Header>

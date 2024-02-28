@@ -15,11 +15,28 @@ import p from '~/utils/zodToPrismane'
 import React, { useEffect } from 'react'
 import { LoginPic } from '~/images'
 import { useNavigate } from 'react-router-dom'
-import { MainPic } from '~/components'
+import { Loading, MainPic } from '~/components'
 import { ArrowLeft } from '@phosphor-icons/react/dist/ssr'
 import { z } from 'zod'
 import { Envelope } from '@phosphor-icons/react'
 import { useResponsive } from '~/utils/responsive'
+import { gql, useQuery } from '@apollo/client'
+
+const GET_CONTENTS = gql`
+  query {
+    page(name: "Forgot Password") {
+      page_id
+      name
+      content {
+        title
+        slogan
+        description
+        image
+        position
+      }
+    }
+  }
+`
 
 const ForgotPassword = () => {
   const { isLaptop, isMobile, isTablet } = useResponsive()
@@ -58,12 +75,14 @@ const ForgotPassword = () => {
       }
     }
   })
+  const { loading, data } = useQuery(GET_CONTENTS)
+  if (loading) return <Loading />
   return (
     <Box pos={'relative'} mih={'100vh'}>
       <MainPic
         image={LoginPic}
-        title={'Paramita'}
-        sloganCenter={'Chào mừng bạn đến với hệ thống'}
+        title={data?.page?.content[0]?.title}
+        sloganCenter={data?.page?.content[0]?.slogan}
       />
       <Flex
         id='forgot-password'

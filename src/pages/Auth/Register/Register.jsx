@@ -14,11 +14,28 @@ import { useForm, useScroll } from '@prismane/core/hooks'
 import React, { useEffect } from 'react'
 import { LoginPic } from '~/images'
 import { Link } from 'react-router-dom'
-import { Footer, MainPic } from '~/components'
+import { Footer, Loading, MainPic } from '~/components'
 import p from '~/utils/zodToPrismane'
 import { z } from 'zod'
 import { Envelope, Password, User } from '@phosphor-icons/react'
 import { useResponsive } from '~/utils/responsive'
+import { gql, useQuery } from '@apollo/client'
+
+const GET_CONTENTS = gql`
+  query {
+    page(name: "Register") {
+      page_id
+      name
+      content {
+        title
+        slogan
+        description
+        image
+        position
+      }
+    }
+  }
+`
 
 const Register = () => {
   const { isLaptop, isMobile, isTablet } = useResponsive()
@@ -92,12 +109,14 @@ const Register = () => {
       }
     }
   })
+  const { loading, data } = useQuery(GET_CONTENTS)
+  if (loading) return <Loading />
   return (
     <Box pos={'relative'} mih={'100vh'}>
       <MainPic
         image={LoginPic}
-        title={'Paramita'}
-        sloganCenter={'Chào mừng bạn đến với hệ thống'}
+        title={data?.page?.content[0]?.title}
+        sloganCenter={data?.page?.content[0]?.slogan}
       />
       <Flex
         id='register'
@@ -119,7 +138,7 @@ const Register = () => {
             },
             '.PrismaneCheckbox-error': {
               fontSize: fr(4)
-            },
+            }
           }}
         >
           <Card.Header>
