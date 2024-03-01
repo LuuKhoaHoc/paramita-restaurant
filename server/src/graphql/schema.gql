@@ -12,7 +12,8 @@ type Mutation {
   createPage(data: PageInput!): Page
   updatePage(id: Int!, data: PageInput!): Page!
   deletePage(id: Int!): Page!
-  createCustomer(data: CustomerInput!): Customer
+  login(username: String!, password: String!): AuthPayload!
+  createCustomer(data: CustomerInput!): AuthPayload!
   updateCustomer(id: Int!, data: CustomerInput!): Customer!
   deleteCustomer(id: Int!): Customer!
   createCustomerAddress(data: CustomerAddressInput!): CustomerAddress!
@@ -87,13 +88,13 @@ input PageInput {
 }
 
 input CustomerInput {
-  name: String!
-  phone: String!
+  name: String
+  phone: String
   email: String!
-  birthday: DateTime!
-  points: Int!
-  levelId: Int!
-  status: Boolean!
+  birthday: DateTime
+  points: Int
+  levelId: Int
+  status: Boolean
   username: String!
   password: String!
 }
@@ -226,6 +227,10 @@ input PositionInput {
 #Query
 
 type Query {
+  # Auth
+  checkUsernameExistence(username: String!): Customer
+  checkEmailExistence(email: String!): Customer
+
   category(id: Int!): Category
   item(id: Int!): Menu
   content(id: Int!): Content
@@ -304,14 +309,19 @@ type Page {
   content: [Content!]
 }
 
+type AuthPayload {
+  customer: Customer!
+  token: String!
+}
+
 type Customer {
   customer_id: Int!
   tsid: String!
-  name: String!
-  phone: String!
+  name: String
+  phone: String
   email: String!
-  address: [CustomerAddress]!
-  birthday: DateTime!
+  address: [CustomerAddress!]
+  birthday: DateTime
   points: Int!
   level: CustomerLevel!
   status: Boolean!
@@ -328,14 +338,14 @@ type Customer {
 }
 
 type CustomerAddress {
-  level_id: Int!
+  address_id: Int!
   tsid: String!
   customer: Customer!
   address: String!
 }
 
 type CustomerLevel {
-  address_id: Int!
+  level_id: Int!
   tsid: String!
   name: String!
   description: String!

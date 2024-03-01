@@ -1,10 +1,35 @@
 import { DateTimeResolver } from 'graphql-scalars'
+import * as bcrypt from 'bcrypt'
+import * as jwt from 'jsonwebtoken'
 import { Context } from '../context'
 import { getTsid } from 'tsid-ts'
 
 export const resolvers = {
   // Query
   Query: {
+    // Authentication
+    checkUsernameExistence: async (
+      _parent: any,
+      args: { username: string },
+      context: Context
+    ) => {
+      return context.prisma.customers.findFirst({
+        where: {
+          username: args.username
+        }
+      })
+    },
+    checkEmailExistence: async (
+      _parent: any,
+      args: { email: string },
+      context: Context
+    ) => {
+      return context.prisma.customers.findFirst({
+        where: {
+          email: args.email
+        }
+      })
+    },
     categoryList: async (_parent: any, _args: any, context: Context) => {
       return context.prisma.categories.findMany()
     },
@@ -268,7 +293,7 @@ export const resolvers = {
     ) => {
       if (!args.data) {
         throw new Error(
-          "Missing required 'data' argument in createCategory mutation."
+          "Missing required 'data' argument in createMenu mutation."
         )
       }
       const tsid = getTsid().timestamp.toString()
@@ -316,7 +341,7 @@ export const resolvers = {
     ) => {
       if (!args.data) {
         throw new Error(
-          "Missing required 'data' argument in createCategory mutation."
+          "Missing required 'data' argument in createContent mutation."
         )
       }
       const tsid = getTsid().timestamp.toString()
@@ -394,19 +419,58 @@ export const resolvers = {
         where: { page_id: args.id }
       })
     },
+    // Login
+    login: async (
+      _parent: any,
+      args: { username: string; password: string },
+      context: Context
+    ) => {
+      const existingCustomer = await context.prisma.customers.findFirst({
+        where: {
+          OR: [{ username: args.username }, { email: args.username }]
+        }
+      })
+
+      const customer = existingCustomer
+      if (!customer) {
+        throw new Error('Tài khoản không đúng')
+      }
+      if (
+        customer &&
+        !(await bcrypt.compare(args.password, customer.password))
+      ) {
+        throw new Error('Mật khẩu không đúng')
+      }
+      const token = jwt.sign(
+        { userId: customer.customer_id },
+        process.env.JWT_SECRET as string
+      )
+      return { customer, token }
+    },
+
     // Customer
     createCustomer: async (
       _parent: any,
       args: { data: CustomerInput },
       context: Context
     ) => {
+      const existingCustomer = await context.prisma.customers.findFirst({
+        where: {
+          OR: [{ username: args.data.username }, { email: args.data.email }]
+        }
+      })
+
+      if (existingCustomer) {
+        throw new Error('Tài khoản đã tồn tại')
+      }
       if (!args.data) {
         throw new Error(
           "Missing required 'data' argument in createCustomer mutation."
         )
       }
       const tsid = getTsid().timestamp.toString()
-      return context.prisma.customers.create({
+      const passwordHash = await bcrypt.hash(args.data?.password, 10)
+      const createdCustomer = await context.prisma.customers.create({
         data: {
           tsid,
           name: args.data.name,
@@ -417,9 +481,18 @@ export const resolvers = {
           level_id: args.data.levelId,
           status: args.data.status,
           username: args.data.username,
-          password: args.data.password
+          password: passwordHash
         }
       })
+      const token = jwt.sign(
+        { userId: createdCustomer.customer_id },
+        process.env.JWT_SECRET as string
+      )
+
+      return {
+        customer: createdCustomer,
+        token
+      }
     },
     updateCustomer: async (
       _parent: any,
@@ -458,7 +531,7 @@ export const resolvers = {
     ) => {
       if (!args.data) {
         throw new Error(
-          "Missing required 'data' argument in createCategory mutation."
+          "Missing required 'data' argument in createCustomerAddress mutation."
         )
       }
       const tsid = getTsid().timestamp.toString()
@@ -500,7 +573,7 @@ export const resolvers = {
     ) => {
       if (!args.data) {
         throw new Error(
-          "Missing required 'data' argument in createCategory mutation."
+          "Missing required 'data' argument in createCustomerLevel mutation."
         )
       }
       const tsid = getTsid().timestamp.toString()
@@ -548,7 +621,7 @@ export const resolvers = {
     ) => {
       if (!args.data) {
         throw new Error(
-          "Missing required 'data' argument in createCategory mutation."
+          "Missing required 'data' argument in createInvoiceDetail mutation."
         )
       }
       const tsid = getTsid().timestamp.toString()
@@ -599,7 +672,7 @@ export const resolvers = {
     ) => {
       if (!args.data) {
         throw new Error(
-          "Missing required 'data' argument in createCategory mutation."
+          "Missing required 'data' argument in createInvoice mutation."
         )
       }
       const tsid = getTsid().timestamp.toString()
@@ -655,7 +728,7 @@ export const resolvers = {
     ) => {
       if (!args.data) {
         throw new Error(
-          "Missing required 'data' argument in createCategory mutation."
+          "Missing required 'data' argument in createOrderDetail mutation."
         )
       }
       const tsid = getTsid().timestamp.toString()
@@ -703,7 +776,7 @@ export const resolvers = {
     ) => {
       if (!args.data) {
         throw new Error(
-          "Missing required 'data' argument in createCategory mutation."
+          "Missing required 'data' argument in createOrder mutation."
         )
       }
       const tsid = getTsid().timestamp.toString()
@@ -761,7 +834,7 @@ export const resolvers = {
     ) => {
       if (!args.data) {
         throw new Error(
-          "Missing required 'data' argument in createCategory mutation."
+          "Missing required 'data' argument in createPointsHistory mutation."
         )
       }
       const tsid = getTsid().timestamp.toString()
@@ -811,7 +884,7 @@ export const resolvers = {
     ) => {
       if (!args.data) {
         throw new Error(
-          "Missing required 'data' argument in createCategory mutation."
+          "Missing required 'data' argument in createPromotion mutation."
         )
       }
       const tsid = getTsid().timestamp.toString()
@@ -865,7 +938,7 @@ export const resolvers = {
     ) => {
       if (!args.data) {
         throw new Error(
-          "Missing required 'data' argument in createCategory mutation."
+          "Missing required 'data' argument in createRevenue mutation."
         )
       }
       const tsid = getTsid().timestamp.toString()
@@ -909,7 +982,7 @@ export const resolvers = {
     ) => {
       if (!args.data) {
         throw new Error(
-          "Missing required 'data' argument in createCategory mutation."
+          "Missing required 'data' argument in createTable mutation."
         )
       }
       const tsid = getTsid().timestamp.toString()
@@ -953,7 +1026,7 @@ export const resolvers = {
     ) => {
       if (!args.data) {
         throw new Error(
-          "Missing required 'data' argument in createCategory mutation."
+          "Missing required 'data' argument in createReservation mutation."
         )
       }
       const tsid = getTsid().timestamp.toString()
@@ -1001,7 +1074,7 @@ export const resolvers = {
     ) => {
       if (!args.data) {
         throw new Error(
-          "Missing required 'data' argument in createCategory mutation."
+          "Missing required 'data' argument in createReview mutation."
         )
       }
       const tsid = getTsid().timestamp.toString()
@@ -1047,7 +1120,7 @@ export const resolvers = {
     ) => {
       if (!args.data) {
         throw new Error(
-          "Missing required 'data' argument in createCategory mutation."
+          "Missing required 'data' argument in createVoucher mutation."
         )
       }
       const tsid = getTsid().timestamp.toString()
@@ -1099,7 +1172,7 @@ export const resolvers = {
     ) => {
       if (!args.data) {
         throw new Error(
-          "Missing required 'data' argument in createCategory mutation."
+          "Missing required 'data' argument in createEmployee mutation."
         )
       }
       const tsid = getTsid().timestamp.toString()
@@ -1159,7 +1232,7 @@ export const resolvers = {
     ) => {
       if (!args.data) {
         throw new Error(
-          "Missing required 'data' argument in createCategory mutation."
+          "Missing required 'data' argument in createPosition mutation."
         )
       }
       const tsid = getTsid().timestamp.toString()
@@ -1231,6 +1304,13 @@ export const resolvers = {
     content: (parent: any, _args: any, context: Context) => {
       return context.prisma.contents.findMany({
         where: { page_id: parent?.page_id }
+      })
+    }
+  },
+  AuthPayload: {
+    customer: (parent: any, _args: any, context: Context) => {
+      return context.prisma.customers.findUnique({
+        where: { username: parent?.customer.username }
       })
     }
   },
@@ -1462,14 +1542,14 @@ interface CustomerAddressInput {
   address: string
 }
 interface CustomerInput {
-  name: string
-  phone: string
+  name?: string
+  phone?: string
   email: string
-  addresses: CustomerAddressInput[]
-  birthday: Date
-  points: number
-  levelId: number
-  status: boolean
+  addresses?: CustomerAddressInput[]
+  birthday?: Date
+  points?: number
+  levelId?: number
+  status?: boolean
   username: string
   password: string
 }
@@ -1479,10 +1559,10 @@ interface PageInput {
 interface ContentInput {
   title: string
   slogan?: string
-  image? : string
+  image?: string
   description: string
   position?: number
-  pageId? : number
+  pageId?: number
 }
 interface MenuInput {
   name: string
