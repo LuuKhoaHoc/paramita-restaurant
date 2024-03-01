@@ -21,36 +21,43 @@ import { Link } from 'react-router-dom'
 import { AlertCustom, Loading, MainPic } from '~/components'
 import { Password, User } from '@phosphor-icons/react'
 import { useResponsive } from '~/utils/responsive'
-import { gql, useQuery } from '@apollo/client'
+import { gql, useMutation, useQuery } from '@apollo/client'
 
-const GET_CONTENTS = gql`
-  query {
-    page(name: "Login") {
-      page_id
-      name
-      content {
-        title
-        slogan
-        description
-        image
-        position
+const CHECK_USERNAME_EXIST = gql`
+  query checkUsername($username: String!) {
+    checkUsernameExistence(username: $username) {
+      username
+    }
+  }
+`
+const CHECK_EMAIL_EXIST = gql`
+  query checkEmail($email: String!) {
+    checkEmailExistence(email: $email) {
+      email
+    }
+  }
+`
+
+const LOGIN_MUTATION = gql`
+  mutation login($username: String!, $password: String!) {
+    login(username: $username, password: $password) {
+      customer {
+        customer_id
+        tsid
+        status
+        username
+        email
       }
+      token
     }
   }
 `
 
 const Login = () => {
   const { isLaptop, isMobile, isTablet } = useResponsive()
-  const username = 'paramita'
-  const password = 'paramita'
   const [remember, setRemember] = useState(false)
   const { scrollToId } = useScroll()
-  if (
-    sessionStorage.getItem('login') === 'true' ||
-    localStorage.getItem('login') === 'true'
-  ) {
-    window.location.href = '/'
-  }
+
   useEffect(() => scrollToId('login'), [])
   const { animate, animating, duration, timing } = useAnimation(
     true,
@@ -87,14 +94,33 @@ const Login = () => {
       }
     }
   })
-  const { loading, data } = useQuery(GET_CONTENTS)
-  if (loading) return <Loading />
+  // Mutation
+  const [
+    login,
+    { loading: mutationLoading, error: mutationError, data: mutationData }
+  ] = useMutation(LOGIN_MUTATION)
+  // Check username exist
+  const { data: queryUsername } = useQuery(CHECK_USERNAME_EXIST, {
+    variables: { username: register('username').value }
+  })
+  // check email exist
+  const { data: queryEmail } = useQuery(CHECK_EMAIL_EXIST, {
+    variables: { email: register('username').value }
+  })
+  if (
+    sessionStorage.getItem('login') === 'true' &&
+    localStorage.getItem('token') === mutationData?.login?.token
+  ) {
+    window.location.href = '/'
+  }
+  // loading
+  if (mutationLoading) return <Loading />
   return (
     <Box pos={'relative'} mih={'100vh'}>
       <MainPic
         image={LoginPic}
-        title={data?.page?.content[0]?.title}
-        sloganCenter={data?.page?.content[0]?.slogan}
+        title={'Paramita'}
+        sloganCenter={'Chào mừng bạn đến với hệ thống'}
       />
       <Flex
         id='login'
@@ -138,37 +164,59 @@ const Login = () => {
             </Card.Header>
             <Form
               onSubmit={(SubmitEvent) =>
-                handleSubmit(SubmitEvent, (value) => {
-                  // Kiểm tra nếu đúng thông tin sẽ lưu vào sessionStorage
-                  if (
-                    value.username === username &&
-                    value.password === password
-                  ) {
-                    sessionStorage.setItem('login', true)
-                    // Lấy dữ diệu từ DB lưu vào sessionStorage để sử dụng ở các trang khác
-                    sessionStorage.setItem(
-                      'checkout-information',
-                      JSON.stringify({
-                        address: '',
-                        name: username,
-                        phone: '0987654321',
-                        payment: 'tien-mat',
-                        notes: '',
-                        delivery: 15000,
-                        voucher: 0
-                      })
-                    )
-                    if (remember) {
-                      localStorage.setItem('login', true)
-                    }
-                  } else {
-                    if (value.username !== username) {
-                      setError('username', 'Tài khoản không đúng')
-                    }
-                    if (value.password !== password) {
-                      setError('password', 'Mật khẩu không đúng')
-                    }
+                handleSubmit(SubmitEvent, async (value) => {
+                  if (queryUsername?.checkUsernameExistence === null) {
+                    setError('username', 'Tên tài khoản không tồn tại')
                   }
+                  if (queryEmail?.checkEmailExistence === null) {
+                    setError('username', 'Tên tài khoản không tồn tại')
+                  }
+                  if (
+                    queryUsername?.checkUsernameExistence !== null ||
+                    queryEmail?.checkEmailExistence !== null
+                  ) {
+                    const { data } = await login({
+                      variables: {
+                        username: value.username,
+                        password: value.password
+                      }
+                    })
+                    sessionStorage.setItem('login', 'true')
+                    if (data?.login.token) {
+                      localStorage.setItem('token', data?.login.token)
+                    }
+                    window.location.href = '/'
+                  }
+                  // // Kiểm tra nếu đúng thông tin sẽ lưu vào sessionStorage
+                  // if (
+                  //   value.username === username &&
+                  //   value.password === password
+                  // ) {
+                  //   sessionStorage.setItem('login', true)
+                  //   // Lấy dữ diệu từ DB lưu vào sessionStorage để sử dụng ở các trang khác
+                  //   sessionStorage.setItem(
+                  //     'checkout-information',
+                  //     JSON.stringify({
+                  //       address: '',
+                  //       name: username,
+                  //       phone: '0987654321',
+                  //       payment: 'tien-mat',
+                  //       notes: '',
+                  //       delivery: 15000,
+                  //       voucher: 0
+                  //     })
+                  //   )
+                  //   if (remember) {
+                  //     localStorage.setItem('login', true)
+                  //   }
+                  // } else {
+                  //   if (value.username !== username) {
+                  //     setError('username', 'Tài khoản không đúng')
+                  //   }
+                  //   if (value.password !== password) {
+                  //     setError('password', 'Mật khẩu không đúng')
+                  //   }
+                  // }
                 })
               }
               onReset={handleReset}

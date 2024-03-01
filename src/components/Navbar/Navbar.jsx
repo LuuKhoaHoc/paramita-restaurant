@@ -61,14 +61,14 @@ const Navbar = () => {
   const [menuOpen, setMenuOpen] = useState(false)
   // State cho drawer
   const [right, setRight] = useState(false)
+  const loginToken = localStorage.getItem('token')
   useEffect(() => {
-    if (
-      sessionStorage.getItem('login') === 'true' ||
-      localStorage.getItem('login') === 'true'
-    ) {
+    if (sessionStorage.getItem('login') === 'true' && loginToken) {
       setLogin(true)
+    } else {
+      setLogin(false)
     }
-  }, [])
+  }, [loginToken])
   // animation line cho navLink
   const lineAnimation = {
     '&::before': {
@@ -109,6 +109,7 @@ const Navbar = () => {
     localStorage.removeItem('orders')
     localStorage.removeItem('orderSuccess')
     localStorage.removeItem('login')
+    localStorage.removeItem('token')
     setLogin(false)
   }
 
@@ -171,7 +172,9 @@ const Navbar = () => {
                       <>
                         <Flex align='center' justify='around'>
                           <Avatar size={'sm'} color={'primary'}></Avatar>
-                          <Text cl={'primary'} fs={isTablet ? 'lg' : 'md'}>Paramita</Text>
+                          <Text cl={'primary'} fs={isTablet ? 'lg' : 'md'}>
+                            Paramita
+                          </Text>
                         </Flex>
                         <Divider my={isTablet ? fr(4) : fr(6)} />
                         <List
@@ -221,6 +224,7 @@ const Navbar = () => {
                             align='center'
                             justify='between'
                             p={fr(2)}
+                            cs={'pointer'}
                             onClick={handleLogout}
                           >
                             <Icon>

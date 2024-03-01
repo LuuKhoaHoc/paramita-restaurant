@@ -19,20 +19,40 @@ import p from '~/utils/zodToPrismane'
 import { z } from 'zod'
 import { Envelope, Password, User } from '@phosphor-icons/react'
 import { useResponsive } from '~/utils/responsive'
-import { gql, useQuery } from '@apollo/client'
+import { gql, useMutation, useQuery } from '@apollo/client'
 
-const GET_CONTENTS = gql`
-  query {
-    page(name: "Register") {
-      page_id
-      name
-      content {
-        title
-        slogan
-        description
-        image
-        position
+const CHECK_USERNAME_EXIST = gql`
+  query checkUsername($username: String!) {
+    checkUsernameExistence(username: $username) {
+      username
+    }
+  }
+`
+const CHECK_EMAIL_EXIST = gql`
+  query checkEmail($email: String!) {
+    checkEmailExistence(email: $email) {
+      email
+    }
+  }
+`
+
+const CREATE_CUSTOMER = gql`
+  mutation createCustomer(
+    $username: String!
+    $email: String!
+    $password: String!
+  ) {
+    createCustomer(
+      data: { username: $username, email: $email, password: $password }
+    ) {
+      customer {
+        customer_id
+        tsid
+        status
+        username
+        email
       }
+      token
     }
   }
 `
@@ -46,8 +66,7 @@ const Register = () => {
   useEffect(() => {
     scrollToId('register')
   }, [])
-
-  const { handleSubmit, handleReset, register } = useForm({
+  const { handleSubmit, handleReset, register, setError } = useForm({
     fields: {
       username: {
         value: '',
@@ -109,14 +128,25 @@ const Register = () => {
       }
     }
   })
-  const { loading, data } = useQuery(GET_CONTENTS)
-  if (loading) return <Loading />
+  // Mutation
+  const [createCustomer, { loading: mutationLoading, error: mutationError }] =
+    useMutation(CREATE_CUSTOMER)
+  // Check username exist
+  const { data: queryUsername } = useQuery(CHECK_USERNAME_EXIST, {
+    variables: { username: register('username').value }
+  })
+  // check email exist
+  const { data: queryEmail } = useQuery(CHECK_EMAIL_EXIST, {
+    variables: { email: register('email').value }
+  })
+  // loading
+  if (mutationLoading) return <Loading />
   return (
     <Box pos={'relative'} mih={'100vh'}>
       <MainPic
         image={LoginPic}
-        title={data?.page?.content[0]?.title}
-        sloganCenter={data?.page?.content[0]?.slogan}
+        title={'Paramita'}
+        sloganCenter={'Chào mừng bạn đến với hệ thống'}
       />
       <Flex
         id='register'
@@ -148,9 +178,36 @@ const Register = () => {
           </Card.Header>
           <Form
             onSubmit={(SubmitEvent) =>
-              handleSubmit(SubmitEvent, (value) => console.log(value))
+              handleSubmit(SubmitEvent, async (value) => {
+                if (queryUsername?.checkUsernameExistence !== null) {
+                  setError('username', 'Tên tài khoản đã tồn tại')
+                }
+                if (queryEmail?.checkEmailExistence !== null) {
+                  setError('email', 'Email đã tồn tại')
+                }
+                if (
+                  queryUsername?.checkUsernameExistence === null &&
+                  queryEmail?.checkEmailExistence === null
+                ) {
+                  const { data } = await createCustomer({
+                    variables: {
+                      username: value.username,
+                      email: value.email,
+                      password: value.password
+                    }
+                  })
+                  sessionStorage.setItem('login', 'true')
+                  if (data?.createCustomer.token) {
+                    localStorage.setItem('token', data?.createCustomer.token)
+                  }
+                  window.location.href = '/'
+                }
+              })
             }
             onReset={handleReset}
+            onError={(error) => {
+              console.log(error)
+            }}
           >
             <TextField
               {...register('username')}
