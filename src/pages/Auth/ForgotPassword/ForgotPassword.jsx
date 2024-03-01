@@ -22,22 +22,6 @@ import { Envelope } from '@phosphor-icons/react'
 import { useResponsive } from '~/utils/responsive'
 import { gql, useQuery } from '@apollo/client'
 
-const GET_CONTENTS = gql`
-  query {
-    page(name: "Forgot Password") {
-      page_id
-      name
-      content {
-        title
-        slogan
-        description
-        image
-        position
-      }
-    }
-  }
-`
-
 const ForgotPassword = () => {
   const { isLaptop, isMobile, isTablet } = useResponsive()
   const navigate = useNavigate()
@@ -75,14 +59,12 @@ const ForgotPassword = () => {
       }
     }
   })
-  const { loading, data } = useQuery(GET_CONTENTS)
-  if (loading) return <Loading />
   return (
     <Box pos={'relative'} mih={'100vh'}>
       <MainPic
         image={LoginPic}
-        title={data?.page?.content[0]?.title}
-        sloganCenter={data?.page?.content[0]?.slogan}
+        title={'Paramita'}
+        sloganCenter={'Chào mừng bạn đến với hệ thống'}
       />
       <Flex
         id='forgot-password'
