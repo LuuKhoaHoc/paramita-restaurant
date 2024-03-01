@@ -47,7 +47,7 @@ model customer_level {
   tsid        String      @db.VarChar(13)
   name        String      @db.VarChar(255)
   description String      @db.Text
-  discount    Decimal     @db.Decimal(2, 2)
+  discount    Int         @db.TinyInt
   points      Int
   benefits    String      @db.VarChar(255)
   customers   customers[]
@@ -56,8 +56,8 @@ model customer_level {
 model customers {
   customer_id      Int                @id @default(autoincrement())
   tsid             String             @db.VarChar(13)
-  name             String             @db.VarChar(255)
-  phone            String             @db.Char(11)
+  name             String?            @db.VarChar(255)
+  phone            String?            @db.Char(11)
   email            String             @unique @db.VarChar(255)
   birthday         DateTime?          @db.Date
   points           Int                @default(0) @db.SmallInt
