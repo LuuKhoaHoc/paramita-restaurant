@@ -33,7 +33,7 @@ export const resolvers = {
     categoryList: async (_parent: any, _args: any, context: Context) => {
       return context.prisma.categories.findMany()
     },
-    category: async (_parent: any, args: { id: number }, context: Context) => {
+    category: async (_parent: any, args: { id: any }, context: Context) => {
       return context.prisma.categories.findUnique({
         where: { category_id: args.id || undefined }
       })
@@ -41,7 +41,7 @@ export const resolvers = {
     menuList: async (_parent: any, _args: any, context: Context) => {
       return context.prisma.menu.findMany()
     },
-    item: async (_parent: any, args: { id: number }, context: Context) => {
+    item: async (_parent: any, args: { id: any }, context: Context) => {
       return context.prisma.menu.findUnique({
         where: { item_id: args.id || undefined }
       })
@@ -49,7 +49,7 @@ export const resolvers = {
     contentList: async (_parent: any, _args: any, context: Context) => {
       return context.prisma.contents.findMany()
     },
-    content: async (_parent: any, args: { id: number }, context: Context) => {
+    content: async (_parent: any, args: { id: any }, context: Context) => {
       return context.prisma.contents.findUnique({
         where: { content_id: args.id || undefined }
       })
@@ -65,9 +65,10 @@ export const resolvers = {
     customerList: async (_parent: any, _args: any, context: Context) => {
       return context.prisma.customers.findMany()
     },
-    customer: async (_parent: any, args: { id: number }, context: Context) => {
+    customer: async (_parent: any, args: { id: any }, context: Context) => {
+      const customer_id = jwt.decode(args.id) as { userId: number }
       return context.prisma.customers.findUnique({
-        where: { customer_id: args.id || undefined }
+        where: { customer_id: customer_id.userId || undefined }
       })
     },
     customerLevelList: async (_parent: any, _args: any, context: Context) => {
@@ -75,7 +76,7 @@ export const resolvers = {
     },
     customerLevel: async (
       _parent: any,
-      args: { id: number },
+      args: { id: any },
       context: Context
     ) => {
       return context.prisma.customer_level.findUnique({
@@ -87,7 +88,7 @@ export const resolvers = {
     },
     customerAddress: async (
       _parent: any,
-      args: { id: number },
+      args: { id: any },
       context: Context
     ) => {
       return context.prisma.customer_address.findUnique({
@@ -97,7 +98,7 @@ export const resolvers = {
     invoiceList: async (_parent: any, _args: any, context: Context) => {
       return context.prisma.invoices.findMany()
     },
-    invoice: async (_parent: any, args: { id: number }, context: Context) => {
+    invoice: async (_parent: any, args: { id: any }, context: Context) => {
       return context.prisma.invoices.findUnique({
         where: { invoice_id: args.id || undefined },
         include: { invoice_details: true }
@@ -106,11 +107,7 @@ export const resolvers = {
     invoiceDetailList: async (_parent: any, _args: any, context: Context) => {
       return context.prisma.invoice_details.findMany()
     },
-    invoiceDetail: async (
-      parent: any,
-      args: { id: number },
-      context: Context
-    ) => {
+    invoiceDetail: async (parent: any, args: { id: any }, context: Context) => {
       return context.prisma.invoice_details.findUnique({
         where: { invoice_detail_id: args.id || undefined }
       })
@@ -118,7 +115,7 @@ export const resolvers = {
     orderList: async (_parent: any, _args: any, context: Context) => {
       return context.prisma.orders.findMany()
     },
-    order: async (_parent: any, args: { id: number }, context: Context) => {
+    order: async (_parent: any, args: { id: any }, context: Context) => {
       return context.prisma.orders.findUnique({
         where: { order_id: args.id || undefined },
         include: { order_details: true }
@@ -127,11 +124,7 @@ export const resolvers = {
     orderDetailList: async (_parent: any, _args: any, context: Context) => {
       return context.prisma.order_details.findMany()
     },
-    orderDetail: async (
-      parent: any,
-      args: { id: number },
-      context: Context
-    ) => {
+    orderDetail: async (parent: any, args: { id: any }, context: Context) => {
       return context.prisma.order_details.findUnique({
         where: { order_detail_id: args.id || undefined }
       })
@@ -139,11 +132,7 @@ export const resolvers = {
     pointsHistoryList: async (_parent: any, _args: any, context: Context) => {
       return context.prisma.point_histories.findMany()
     },
-    pointsHistory: async (
-      parent: any,
-      args: { id: number },
-      context: Context
-    ) => {
+    pointsHistory: async (parent: any, args: { id: any }, context: Context) => {
       return context.prisma.point_histories.findUnique({
         where: { point_history_id: args.id || undefined }
       })
@@ -151,7 +140,7 @@ export const resolvers = {
     promotionList: async (_parent: any, _args: any, context: Context) => {
       return context.prisma.promotions.findMany()
     },
-    promotion: async (parent: any, args: { id: number }, context: Context) => {
+    promotion: async (parent: any, args: { id: any }, context: Context) => {
       return context.prisma.promotions.findUnique({
         where: { promotion_id: args.id || undefined }
       })
@@ -159,7 +148,7 @@ export const resolvers = {
     revenueList: async (_parent: any, _args: any, context: Context) => {
       return context.prisma.revenue.findMany()
     },
-    revenue: async (_parent: any, args: { id: number }, context: Context) => {
+    revenue: async (_parent: any, args: { id: any }, context: Context) => {
       return context.prisma.revenue.findUnique({
         where: { revenue_id: args.id || undefined }
       })
@@ -167,7 +156,7 @@ export const resolvers = {
     tableList: async (_parent: any, _args: any, context: Context) => {
       return context.prisma.tables.findMany()
     },
-    table: async (_parent: any, args: { id: number }, context: Context) => {
+    table: async (_parent: any, args: { id: any }, context: Context) => {
       return context.prisma.tables.findUnique({
         where: { table_id: args.id || undefined }
       })
@@ -175,11 +164,7 @@ export const resolvers = {
     reservationList: async (_parent: any, _args: any, context: Context) => {
       return context.prisma.reservations.findMany()
     },
-    reservation: async (
-      parent: any,
-      args: { id: number },
-      context: Context
-    ) => {
+    reservation: async (parent: any, args: { id: any }, context: Context) => {
       return context.prisma.reservations.findUnique({
         where: { reservation_id: args.id || undefined }
       })
@@ -187,7 +172,7 @@ export const resolvers = {
     reviewList: async (_parent: any, _args: any, context: Context) => {
       return context.prisma.reviews.findMany()
     },
-    review: async (_parent: any, args: { id: number }, context: Context) => {
+    review: async (_parent: any, args: { id: any }, context: Context) => {
       return context.prisma.reviews.findUnique({
         where: { review_id: args.id || undefined }
       })
@@ -195,7 +180,7 @@ export const resolvers = {
     voucherList: async (_parent: any, _args: any, context: Context) => {
       return context.prisma.vouchers.findMany()
     },
-    voucher: async (_parent: any, args: { id: number }, context: Context) => {
+    voucher: async (_parent: any, args: { id: any }, context: Context) => {
       return context.prisma.vouchers.findUnique({
         where: { voucher_id: args.id || undefined }
       })
@@ -203,7 +188,7 @@ export const resolvers = {
     employeeList: async (_parent: any, _args: any, context: Context) => {
       return context.prisma.employees.findMany()
     },
-    employee: async (_parent: any, args: { id: number }, context: Context) => {
+    employee: async (_parent: any, args: { id: any }, context: Context) => {
       return context.prisma.employees.findUnique({
         where: { employee_id: args.id || undefined }
       })
@@ -211,7 +196,7 @@ export const resolvers = {
     positionList: async (_parent: any, _args: any, context: Context) => {
       return context.prisma.positions.findMany()
     },
-    position: async (_parent, args: { id: number }, context: Context) => {
+    position: async (_parent, args: { id: any }, context: Context) => {
       return context.prisma.positions.findUnique({
         where: { position_id: args.id || undefined }
       })
@@ -278,7 +263,7 @@ export const resolvers = {
     },
     deleteCategory: async (
       _parent: any,
-      args: { id: number },
+      args: { id: any },
       context: Context
     ) => {
       return context.prisma.categories.delete({
@@ -324,11 +309,7 @@ export const resolvers = {
         }
       })
     },
-    deleteMenu: async (
-      _parent: any,
-      args: { id: number },
-      context: Context
-    ) => {
+    deleteMenu: async (_parent: any, args: { id: any }, context: Context) => {
       return context.prisma.menu.delete({
         where: { item_id: args.id }
       })
@@ -374,7 +355,7 @@ export const resolvers = {
     },
     deleteContent: async (
       _parent: any,
-      args: { id: number },
+      args: { id: any },
       context: Context
     ) => {
       return context.prisma.contents.delete({
@@ -410,11 +391,7 @@ export const resolvers = {
         }
       })
     },
-    deletePage: async (
-      _parent: any,
-      args: { id: number },
-      context: Context
-    ) => {
+    deletePage: async (_parent: any, args: { id: any }, context: Context) => {
       return context.prisma.pages.delete({
         where: { page_id: args.id }
       })
@@ -516,7 +493,7 @@ export const resolvers = {
     },
     deleteCustomer: async (
       _parent: any,
-      args: { id: number },
+      args: { id: any },
       context: Context
     ) => {
       return context.prisma.customers.delete({
@@ -558,7 +535,7 @@ export const resolvers = {
     },
     deleteCustomerAddress: async (
       _parent: any,
-      args: { id: number },
+      args: { id: any },
       context: Context
     ) => {
       return context.prisma.customer_address.delete({
@@ -606,7 +583,7 @@ export const resolvers = {
     },
     deleteCustomerLevel: async (
       _parent: any,
-      args: { id: number },
+      args: { id: any },
       context: Context
     ) => {
       return context.prisma.customer_level.delete({
@@ -654,7 +631,7 @@ export const resolvers = {
     },
     deleteInvoiceDetail: async (
       _parent: any,
-      args: { id: number },
+      args: { id: any },
       context: Context
     ) => {
       return context.prisma.invoice_details.delete({
@@ -715,7 +692,7 @@ export const resolvers = {
     },
     deleteInvoice: async (
       _parent: any,
-      args: { id: number },
+      args: { id: any },
       context: Context
     ) => {
       return context.prisma.invoices.delete({ where: { invoice_id: args.id } })
@@ -761,7 +738,7 @@ export const resolvers = {
     },
     deleteOrderDetail: async (
       _parent: any,
-      args: { id: number },
+      args: { id: any },
       context: Context
     ) => {
       return context.prisma.order_details.delete({
@@ -819,11 +796,7 @@ export const resolvers = {
         }
       })
     },
-    deleteOrder: async (
-      _parent: any,
-      args: { id: number },
-      context: Context
-    ) => {
+    deleteOrder: async (_parent: any, args: { id: any }, context: Context) => {
       return context.prisma.orders.delete({ where: { order_id: args.id } })
     },
     // PointHistory
@@ -869,7 +842,7 @@ export const resolvers = {
     },
     deletePointsHistory: async (
       _parent: any,
-      args: { id: number },
+      args: { id: any },
       context: Context
     ) => {
       return context.prisma.point_histories.delete({
@@ -923,7 +896,7 @@ export const resolvers = {
     },
     deletePromotion: async (
       _parent: any,
-      args: { id: number },
+      args: { id: any },
       context: Context
     ) => {
       return context.prisma.promotions.delete({
@@ -967,7 +940,7 @@ export const resolvers = {
     },
     deleteRevenue: async (
       _parent: any,
-      args: { id: number },
+      args: { id: any },
       context: Context
     ) => {
       return context.prisma.revenue.delete({
@@ -1009,11 +982,7 @@ export const resolvers = {
         }
       })
     },
-    deleteTable: async (
-      _parent: any,
-      args: { id: number },
-      context: Context
-    ) => {
+    deleteTable: async (_parent: any, args: { id: any }, context: Context) => {
       return context.prisma.tables.delete({
         where: { table_id: args.id }
       })
@@ -1059,7 +1028,7 @@ export const resolvers = {
     },
     deleteReservation: async (
       _parent: any,
-      args: { id: number },
+      args: { id: any },
       context: Context
     ) => {
       return context.prisma.reservations.delete({
@@ -1103,11 +1072,7 @@ export const resolvers = {
         }
       })
     },
-    deleteReview: async (
-      _parent: any,
-      args: { id: number },
-      context: Context
-    ) => {
+    deleteReview: async (_parent: any, args: { id: any }, context: Context) => {
       return context.prisma.reviews.delete({
         where: { review_id: args.id }
       })
@@ -1157,7 +1122,7 @@ export const resolvers = {
     },
     deleteVoucher: async (
       _parent: any,
-      args: { id: number },
+      args: { id: any },
       context: Context
     ) => {
       return context.prisma.vouchers.delete({
@@ -1217,7 +1182,7 @@ export const resolvers = {
     },
     deleteEmployee: async (
       _parent: any,
-      args: { id: number },
+      args: { id: any },
       context: Context
     ) => {
       return context.prisma.employees.delete({
@@ -1267,7 +1232,7 @@ export const resolvers = {
     },
     deletePosition: async (
       _parent: any,
-      args: { id: number },
+      args: { id: any },
       context: Context
     ) => {
       return context.prisma.positions.delete({

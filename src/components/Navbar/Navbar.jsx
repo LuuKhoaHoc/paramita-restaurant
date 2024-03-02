@@ -25,6 +25,7 @@ import { LogoText } from '~/images'
 import { useResponsive } from '~/utils/responsive'
 import lazyWithPreload from 'react-lazy-with-preload'
 import { useEffect, useState, useContext } from 'react'
+import { Loading } from '~/components'
 import {
   ClockCountdown,
   List as ListIcon,
@@ -45,7 +46,22 @@ const Login = lazyWithPreload(() => import('~/pages/Auth/Login/Login'))
 
 import { CartContext } from '~/contexts/CartContext'
 
+import { gql, useQuery } from '@apollo/client'
+import { useLocalStorage } from '@prismane/core/hooks'
+
+const GET_CUSTOMER = gql`
+  query getCustomer($id: ID!) {
+    customer(id: $id) {
+      customer_id
+      name
+      username
+    }
+  }
+`
+
 const Navbar = () => {
+  // Retrieve token
+  const [loginToken, setLoginToken] = useLocalStorage('token')
   // Responsive
   const { isLaptop, isMobile, isTablet } = useResponsive()
   // Số lượng item trong cart
@@ -61,14 +77,7 @@ const Navbar = () => {
   const [menuOpen, setMenuOpen] = useState(false)
   // State cho drawer
   const [right, setRight] = useState(false)
-  const loginToken = localStorage.getItem('token')
-  useEffect(() => {
-    if (sessionStorage.getItem('login') === 'true' && loginToken) {
-      setLogin(true)
-    } else {
-      setLogin(false)
-    }
-  }, [loginToken])
+
   // animation line cho navLink
   const lineAnimation = {
     '&::before': {
@@ -112,6 +121,20 @@ const Navbar = () => {
     localStorage.removeItem('token')
     setLogin(false)
   }
+  const { loading, error, data } = useQuery(GET_CUSTOMER, {
+    variables: {
+      id: loginToken
+    }
+  })
+  useEffect(() => {
+    if (sessionStorage.getItem('login') === 'true' && loginToken) {
+      setLogin(true)
+    } else {
+      handleLogout()
+    }
+  }, [])
+
+  if (loading) return <Loading />
 
   return (
     <Grid
@@ -173,7 +196,7 @@ const Navbar = () => {
                         <Flex align='center' justify='around'>
                           <Avatar size={'sm'} color={'primary'}></Avatar>
                           <Text cl={'primary'} fs={isTablet ? 'lg' : 'md'}>
-                            Paramita
+                            {data?.customer?.name || data?.customer?.username}
                           </Text>
                         </Flex>
                         <Divider my={isTablet ? fr(4) : fr(6)} />
