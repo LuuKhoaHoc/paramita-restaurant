@@ -2,8 +2,11 @@ import express from 'express'
 import { context } from './context'
 import { createYoga } from 'graphql-yoga'
 import { schema } from './schema'
+import validateTokenMiddleware from './middleware/validateTokenMiddleware'
 
 const app = express()
+
+app.use(validateTokenMiddleware)
 
 const yoga = createYoga({
   schema,
