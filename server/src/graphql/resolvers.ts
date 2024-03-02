@@ -420,8 +420,16 @@ export const resolvers = {
       }
       const token = jwt.sign(
         { userId: customer.customer_id },
-        process.env.JWT_SECRET as string
+        process.env.JWT_SECRET as string,
+        {
+          expiresIn: '1h'
+        }
       )
+      context.res.cookie('token', token, {
+        httpOnly: true,
+        secure: true,
+        expires: new Date(Date.now() + 1000 * 60 * 60 * 24)
+      })
       return { customer, token }
     },
 

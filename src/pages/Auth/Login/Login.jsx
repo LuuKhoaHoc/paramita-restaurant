@@ -179,6 +179,11 @@ const Login = () => {
                       variables: {
                         username: value.username,
                         password: value.password
+                      },
+                      context: {
+                        headers: {
+                          Authorization: `Bearer ${mutationData?.login?.token}`
+                        }
                       }
                     })
                     sessionStorage.setItem('login', 'true')

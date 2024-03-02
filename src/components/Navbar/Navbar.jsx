@@ -60,8 +60,6 @@ const GET_CUSTOMER = gql`
 `
 
 const Navbar = () => {
-  // Retrieve token
-  const [loginToken, setLoginToken] = useLocalStorage('token')
   // Responsive
   const { isLaptop, isMobile, isTablet } = useResponsive()
   // Số lượng item trong cart
@@ -123,11 +121,11 @@ const Navbar = () => {
   }
   const { loading, error, data } = useQuery(GET_CUSTOMER, {
     variables: {
-      id: loginToken
+      // id: loginToken
     }
   })
   useEffect(() => {
-    if (sessionStorage.getItem('login') === 'true' && loginToken) {
+    if (sessionStorage.getItem('login') === 'true') {
       setLogin(true)
     } else {
       handleLogout()
@@ -196,7 +194,7 @@ const Navbar = () => {
                         <Flex align='center' justify='around'>
                           <Avatar size={'sm'} color={'primary'}></Avatar>
                           <Text cl={'primary'} fs={isTablet ? 'lg' : 'md'}>
-                            {data?.customer?.name || data?.customer?.username}
+                            {/* {data?.customer?.name || data?.customer?.username} */}
                           </Text>
                         </Flex>
                         <Divider my={isTablet ? fr(4) : fr(6)} />
