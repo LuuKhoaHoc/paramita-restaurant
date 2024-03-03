@@ -47,7 +47,6 @@ const Login = lazyWithPreload(() => import('~/pages/Auth/Login/Login'))
 import { CartContext } from '~/contexts/CartContext'
 
 import { gql, useQuery } from '@apollo/client'
-import { useLocalStorage } from '@prismane/core/hooks'
 
 const GET_CUSTOMER = gql`
   query getCustomer($id: ID!) {
@@ -119,21 +118,21 @@ const Navbar = () => {
     localStorage.removeItem('token')
     setLogin(false)
   }
-  const { loading, error, data } = useQuery(GET_CUSTOMER, {
-    variables: {
-      // id: loginToken
-    }
-  })
+
+  const loginToken = localStorage.getItem('token')
   useEffect(() => {
-    if (sessionStorage.getItem('login') === 'true') {
+    if (sessionStorage.getItem('login') === 'true' && loginToken) {
       setLogin(true)
     } else {
       handleLogout()
     }
   }, [])
-
+  const { loading, error, data } = useQuery(GET_CUSTOMER, {
+    variables: {
+      id: localStorage.getItem('token')
+    }
+  })
   if (loading) return <Loading />
-
   return (
     <Grid
       id='header'
@@ -194,7 +193,7 @@ const Navbar = () => {
                         <Flex align='center' justify='around'>
                           <Avatar size={'sm'} color={'primary'}></Avatar>
                           <Text cl={'primary'} fs={isTablet ? 'lg' : 'md'}>
-                            {/* {data?.customer?.name || data?.customer?.username} */}
+                            {data?.customer?.name || data?.customer?.username}
                           </Text>
                         </Flex>
                         <Divider my={isTablet ? fr(4) : fr(6)} />

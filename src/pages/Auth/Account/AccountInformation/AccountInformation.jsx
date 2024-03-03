@@ -13,10 +13,33 @@ import { z } from 'zod'
 import { useResponsive } from '~/utils/responsive'
 import usernameAndEmail from '~/utils/usernameAndEmail'
 import p from '~/utils/zodToPrismane'
+import { gql, useQuery } from '@apollo/client'
+
+const GET_CUSTOMER = gql`
+  query getCustomer($id: ID!) {
+    customer(id: $id) {
+      customer_id
+      username
+      name
+      email
+      points
+      level {
+        level_id
+        name
+      }
+    }
+  }
+`
 
 const AccountInformation = () => {
   const { isTablet, isMobile } = useResponsive()
-  const { handleSubmit, handleReset, register } = useForm({
+  const { data } = useQuery(GET_CUSTOMER, {
+    variables: {
+      id: localStorage.getItem('token')
+    }
+  })
+
+  const { handleSubmit, handleReset, register, setValue } = useForm({
     fields: {
       firstName: {
         value: '',

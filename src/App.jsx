@@ -42,12 +42,39 @@ import {
   CheckoutSuccess
 } from '~/routes'
 import { CartProvider } from '~/contexts/CartContext'
+import { gql, useQuery } from '@apollo/client'
+
+const CHECK_TOKEN = gql`
+  query checkToken($token: String!) {
+    checkToken(token: $token) {
+      token
+    }
+  }
+`
 
 const imagesGallery = [Space1, Space2, Space3, Food1, Food2, HomePic2]
 
 const App = () => {
   const textColor = useThemeModeValue('#371b04', '#d1e9d5')
   const bgColor = useThemeModeValue('#fff2e5', '#1d2b1f')
+  if (localStorage.getItem('token')) {
+    const token = localStorage.getItem('token')
+    const { loading, error, data } = useQuery(CHECK_TOKEN, {
+      variables: {
+        token
+      }
+    })
+    if (loading) return <Loading />
+    if (data === undefined) {
+      localStorage.removeItem('token')
+      window.location.reload()
+    }
+  }
+  window.addEventListener('storage', function (e) {
+    if (e.key === 'token') {
+      window.location.reload()
+    }
+  })
   return (
     <Suspense fallback={<Loading />}>
       <Box bg={bgColor} cl={textColor}>

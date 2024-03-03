@@ -13,6 +13,9 @@ import HistoryRewardPoint from '~/pages/Auth/Account/HistoryRewardPoint/HistoryR
 import { useResponsive } from '~/utils/responsive'
 
 const Account = () => {
+  if (!localStorage.getItem('token')) {
+    window.location.href = '/'
+  }
   const { isLaptop, isMobile, isTablet } = useResponsive()
   return (
     <Box pos={'relative'} mih={'100vh'}>
