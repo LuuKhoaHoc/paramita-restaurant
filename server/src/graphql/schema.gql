@@ -230,13 +230,14 @@ type Query {
   # Auth
   checkUsernameExistence(username: String!): Customer
   checkEmailExistence(email: String!): Customer
+  checkToken(token: String!): AuthPayload
 
   category(id: ID!): Category
   item(id: ID!): Menu
   content(id: ID!): Content
   page(name: String!): Page
   customer(id: ID!): Customer
-  customerLevel(id: ID!): CustomerLevel
+  customerLevel(id: Int!): CustomerLevel
   customerAddress(id: ID!): CustomerAddress
   invoice(id: ID!): Invoice
   invoiceDetail(id: ID!): InvoiceDetail

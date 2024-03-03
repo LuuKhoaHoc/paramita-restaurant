@@ -30,6 +30,26 @@ export const resolvers = {
         }
       })
     },
+    checkToken: async (
+      _parent: any,
+      args: { token: string },
+      context: Context
+    ) => {
+      const token = jwt.verify(
+        args.token,
+        process.env.JWT_SECRET as string
+      ) as jwt.JwtPayload
+      if (token) {
+        const customer = context.prisma.customers.findFirst({
+          where: {
+            customer_id: token.userId
+          }
+        })
+        return { customer, token: args.token }
+      } else {
+        return false
+      }
+    },
     categoryList: async (_parent: any, _args: any, context: Context) => {
       return context.prisma.categories.findMany()
     },
@@ -66,7 +86,10 @@ export const resolvers = {
       return context.prisma.customers.findMany()
     },
     customer: async (_parent: any, args: { id: any }, context: Context) => {
-      const customer_id = jwt.decode(args.id) as { userId: number }
+      const customer_id = jwt.verify(
+        args.id,
+        process.env.JWT_SECRET as string
+      ) as jwt.JwtPayload
       return context.prisma.customers.findUnique({
         where: { customer_id: customer_id.userId || undefined }
       })
@@ -425,11 +448,6 @@ export const resolvers = {
           expiresIn: '1h'
         }
       )
-      context.res.cookie('token', token, {
-        httpOnly: true,
-        secure: true,
-        expires: new Date(Date.now() + 1000 * 60 * 60 * 24)
-      })
       return { customer, token }
     },
 
