@@ -7,6 +7,10 @@ const app = express()
 
 const yoga = createYoga({
   schema,
+  cors: {
+    origin: 'http://localhost:3000',
+    credentials: true
+  },
   context
 })
 
