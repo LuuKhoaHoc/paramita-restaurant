@@ -23,7 +23,7 @@ import {
   useThemeModeValue
 } from '@prismane/core'
 import React from 'react'
-import { NavLink, useNavigate } from 'react-router-dom'
+import { NavLink } from 'react-router-dom'
 import { useResponsive } from '~/utils/responsive'
 import { gql, useQuery } from '@apollo/client'
 
@@ -52,7 +52,6 @@ const GET_NEXTLEVEL = gql`
 
 const AccountAside = () => {
   const { isLaptop, isTablet, isMobile } = useResponsive()
-  const navigate = useNavigate()
   const textColor = useThemeModeValue('#371b04', '#d1e9d5')
   const bgColor = useThemeModeValue('#fff2e5', '#1d2b1f')
   const handleLogout = () => {
@@ -60,7 +59,8 @@ const AccountAside = () => {
     localStorage.removeItem('orders')
     localStorage.removeItem('orderSuccess')
     localStorage.removeItem('login')
-    navigate('/')
+    localStorage.removeItem('token')
+    window.location.href = '/'
   }
 
   const { data } = useQuery(GET_CUSTOMER, {

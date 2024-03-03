@@ -494,7 +494,7 @@ const Navbar = () => {
                     </Box>
                   </Flex>
                 </Box>
-                {login ? (
+                {login || localStorage.getItem('login') ? (
                   <>
                     <Center id='account-side' gap={fr(10)} cl={'#fff'}>
                       <Box>
