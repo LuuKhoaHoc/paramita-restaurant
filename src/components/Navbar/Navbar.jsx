@@ -117,14 +117,13 @@ const Navbar = () => {
     localStorage.removeItem('login')
     localStorage.removeItem('token')
     setLogin(false)
+    window.location.href = '/'
   }
 
   const loginToken = localStorage.getItem('token')
   useEffect(() => {
     if (sessionStorage.getItem('login') === 'true' && loginToken) {
       setLogin(true)
-    } else {
-      handleLogout()
     }
   }, [])
   const { loading, error, data } = useQuery(GET_CUSTOMER, {

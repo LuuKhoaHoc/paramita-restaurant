@@ -430,7 +430,6 @@ export const resolvers = {
           OR: [{ username: args.username }, { email: args.username }]
         }
       })
-
       const customer = existingCustomer
       if (!customer) {
         throw new Error('Tài khoản không đúng')

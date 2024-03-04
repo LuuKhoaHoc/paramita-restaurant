@@ -64,7 +64,7 @@ const Login = () => {
     1500,
     'ease-in'
   )
-  const { handleSubmit, handleReset, register, setError } = useForm({
+  const { handleSubmit, handleReset, register, setError, getError } = useForm({
     fields: {
       username: {
         value: '',
@@ -108,7 +108,8 @@ const Login = () => {
     variables: { email: register('username').value }
   })
   if (
-    sessionStorage.getItem('login') === 'true' &&
+    (sessionStorage.getItem('login') === 'true' ||
+      localStorage.getItem('login') === 'true') &&
     localStorage.getItem('token') === mutationData?.login?.token
   ) {
     window.location.href = '/'
@@ -165,71 +166,43 @@ const Login = () => {
             <Form
               onSubmit={(SubmitEvent) =>
                 handleSubmit(SubmitEvent, async (value) => {
-                  if (queryUsername?.checkUsernameExistence === null) {
-                    setError('username', 'Tên tài khoản không tồn tại')
-                  }
-                  if (queryEmail?.checkEmailExistence === null) {
-                    setError('username', 'Tên tài khoản không tồn tại')
-                  }
-                  if (
-                    queryUsername?.checkUsernameExistence !== null ||
-                    queryEmail?.checkEmailExistence !== null
-                  ) {
-                    const { data } = await login({
-                      variables: {
-                        username: value.username,
-                        password: value.password
-                      },
-                      context: {
-                        headers: {
-                          Authorization: `Bearer ${mutationData?.login?.token}`
-                        }
-                      }
-                    })
-                    sessionStorage.setItem('login', 'true')
-                    if (data?.login.token) {
-                      localStorage.setItem('token', data?.login.token)
+                  if (value.username.includes('@')) {
+                    if (!queryEmail?.checkEmailExistence) {
+                      setError('username', 'Email không tồn tại')
                     }
-                    window.location.href = '/'
+                  } else {
+                    if (!queryUsername?.checkUsernameExistence) {
+                      setError('username', 'Tên tài khoảng không tồn tại')
+                    }
                   }
-                  // // Kiểm tra nếu đúng thông tin sẽ lưu vào sessionStorage
-                  // if (
-                  //   value.username === username &&
-                  //   value.password === password
-                  // ) {
-                  //   sessionStorage.setItem('login', true)
-                  //   // Lấy dữ diệu từ DB lưu vào sessionStorage để sử dụng ở các trang khác
-                  //   sessionStorage.setItem(
-                  //     'checkout-information',
-                  //     JSON.stringify({
-                  //       address: '',
-                  //       name: username,
-                  //       phone: '0987654321',
-                  //       payment: 'tien-mat',
-                  //       notes: '',
-                  //       delivery: 15000,
-                  //       voucher: 0
-                  //     })
-                  //   )
-                  //   if (remember) {
-                  //     localStorage.setItem('login', true)
-                  //   }
-                  // } else {
-                  //   if (value.username !== username) {
-                  //     setError('username', 'Tài khoản không đúng')
-                  //   }
-                  //   if (value.password !== password) {
-                  //     setError('password', 'Mật khẩu không đúng')
-                  //   }
-                  // }
+                  if (getError('username') === null) {
+                    try {
+                      const { data } = await login({
+                        variables: {
+                          username: value.username,
+                          password: value.password
+                        },
+                        context: {
+                          headers: {
+                            Authorization: `Bearer ${mutationData?.login?.token}`
+                          }
+                        }
+                      })
+                      sessionStorage.setItem('login', 'true')
+                      if (remember) {
+                        localStorage.setItem('login', true)
+                      }
+                      if (data?.login.token) {
+                        localStorage.setItem('token', data?.login.token)
+                      }
+                      window.location.href = '/'
+                    } catch (error) {
+                      setError('password', 'Mật khẩu không đúng')
+                    }
+                  }
                 })
               }
               onReset={handleReset}
-              onError={() => {
-                console.log('error')
-                setError('username', 'Tài khoản không đúng')
-                setError('password', 'Mật khẩu không đúng')
-              }}
               my={30}
             >
               <TextField
