@@ -44,9 +44,19 @@ const Menus = lazyWithPreload(() => import('~/pages/Menu/Menu'))
 const Order = lazyWithPreload(() => import('~/pages/Order/Order'))
 const Login = lazyWithPreload(() => import('~/pages/Auth/Login/Login'))
 
+// context
 import { CartContext } from '~/contexts/CartContext'
+import { AuthContext } from '~/contexts/AuthContext'
 
 import { gql, useQuery } from '@apollo/client'
+
+const CHECK_TOKEN = gql`
+  query checkToken($token: String!) {
+    checkToken(token: $token) {
+      token
+    }
+  }
+`
 
 const GET_CUSTOMER = gql`
   query getCustomer($id: ID!) {
@@ -59,6 +69,8 @@ const GET_CUSTOMER = gql`
 `
 
 const Navbar = () => {
+  const { isLoggedIn, setIsLoggedIn } = useContext(AuthContext)
+  const [token, setToken] = useState('')
   // Responsive
   const { isLaptop, isMobile, isTablet } = useResponsive()
   // Số lượng item trong cart
@@ -68,8 +80,6 @@ const Navbar = () => {
   const subTotal = cartItems.reduce((acc, item) => {
     return acc + item.price * item.quantity * 1000
   }, 0)
-  // Kiểm tra đăng nhập
-  const [login, setLogin] = useState(false)
   // State cho menu
   const [menuOpen, setMenuOpen] = useState(false)
   // State cho drawer
@@ -97,10 +107,10 @@ const Navbar = () => {
   // Hàm xử lý navbar khi scroll
   const handleScroll = () => {
     const header = document.getElementById('header')
-    if (document.documentElement.scrollTop > 10) {
+    if (header && document.documentElement.scrollTop > 10) {
       header.style.backgroundColor = '#371b04'
     }
-    if (document.documentElement.scrollTop < 10) {
+    if (header && document.documentElement.scrollTop < 10) {
       header.style.boxShadow = 'none'
       header.style.backdropFilter = 'none'
       header.style.backgroundColor = 'transparent'
@@ -116,26 +126,23 @@ const Navbar = () => {
     localStorage.removeItem('orderSuccess')
     localStorage.removeItem('login')
     localStorage.removeItem('token')
-    setLogin(false)
-    window.location.href = '/'
+    setIsLoggedIn(false)
   }
 
-  const loginToken = localStorage.getItem('token')
   useEffect(() => {
-    if (
-      (sessionStorage.getItem('login') || localStorage.getItem('login')) ===
-        'true' &&
-      loginToken
-    ) {
-      setLogin(true)
+    setToken(localStorage.getItem('token'))
+    if ((isLoggedIn || localStorage.getItem('login')) && token) {
+      setIsLoggedIn(true)
     }
-  }, [])
+  }, [isLoggedIn])
+
   const { loading, error, data } = useQuery(GET_CUSTOMER, {
     variables: {
-      id: localStorage.getItem('token')
+      id: token
     }
   })
   if (loading) return <Loading />
+
   return (
     <Grid
       id='header'
@@ -170,7 +177,7 @@ const Navbar = () => {
                     <Text></Text>
                   </Drawer.Header>
                   <Flex direction='column' className='GeomanistMedium-font'>
-                    {!login ? (
+                    {!isLoggedIn || localStorage.getItem('login') ? (
                       <Center>
                         <Box>
                           <Link
@@ -497,7 +504,7 @@ const Navbar = () => {
                     </Box>
                   </Flex>
                 </Box>
-                {login || localStorage.getItem('login') ? (
+                {(isLoggedIn || localStorage.getItem('login')) && token ? (
                   <>
                     <Center id='account-side' gap={fr(10)} cl={'#fff'}>
                       <Box>

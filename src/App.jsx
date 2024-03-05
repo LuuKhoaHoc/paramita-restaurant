@@ -43,6 +43,7 @@ import {
 } from '~/routes'
 import { CartProvider } from '~/contexts/CartContext'
 import { gql, useQuery } from '@apollo/client'
+import { AuthProvider } from './contexts/AuthContext'
 
 const CHECK_TOKEN = gql`
   query checkToken($token: String!) {
@@ -67,57 +68,63 @@ const App = () => {
     if (loading) return <Loading />
     if (data === undefined) {
       localStorage.removeItem('token')
-      window.location.reload()
     }
   }
   window.addEventListener('storage', function (e) {
-    if (e.key === 'token') {
+    if (e.key === 'token' || e.key === 'login') {
+      localStorage.removeItem('login')
+      localStorage.removeItem('token')
       window.location.reload()
     }
   })
   return (
     <Suspense fallback={<Loading />}>
       <Box bg={bgColor} cl={textColor}>
-        <CartProvider>
-          <ScrollToTop />
-          <Navbar />
-          <Routes>
-            <Route element={<Addition />}>
-              <Route path='/' index element={<Home />} />
-              <Route path='/about' element={<AboutUs />} />
-              <Route path='/promotion' element={<Promotion />} />
+        <AuthProvider>
+          <CartProvider>
+            <ScrollToTop />
+            <Navbar />
+            <Routes>
+              <Route element={<Addition />}>
+                <Route path='/' index element={<Home />} />
+                <Route path='/about' element={<AboutUs />} />
+                <Route path='/promotion' element={<Promotion />} />
+                <Route
+                  path='/promotion/:promotion'
+                  element={<PromotionDetail />}
+                />
+                <Route path='/order-online' element={<Order />} />
+                <Route path='/order-online/:category' element={<Order />} />
+                <Route path='/contact' element={<Contact />} />
+                <Route path='/book-table' element={<BookTable />} />
+              </Route>
+              <Route path='/menu' element={<Menu />} />
+              <Route path='/menu/:category' element={<MenuCategory />} />
               <Route
-                path='/promotion/:promotion'
-                element={<PromotionDetail />}
+                path='/menu/:category/:item'
+                element={<MenuItemDetail />}
               />
-              <Route path='/order-online' element={<Order />} />
-              <Route path='/order-online/:category' element={<Order />} />
-              <Route path='/contact' element={<Contact />} />
-              <Route path='/book-table' element={<BookTable />} />
-            </Route>
-            <Route path='/menu' element={<Menu />} />
-            <Route path='/menu/:category' element={<MenuCategory />} />
-            <Route path='/menu/:category/:item' element={<MenuItemDetail />} />
-            <Route path='/album' element={<Album />} />
-            <Route path='/album/:album' element={<AlbumDetail />} />
-            <Route path='/career' element={<Career />} />
-            <Route path='/privacy' element={<Privacy />} />
-            <Route path='/term' element={<TermOfUse />} />
-            <Route path='/faq' element={<FAQ />} />
-            <Route element={<Auth />}>
-              <Route path='/account' element={<Account />} />
-              <Route path='/account/*' element={<Account />} />
-              <Route path='/cart' element={<Cart />} />
-              <Route path='/checkout' element={<Checkout />} />
-              <Route path='/checkout-success' element={<CheckoutSuccess />} />
-            </Route>
-            <Route path='/login' element={<Login />} />
-            <Route path='/register' element={<Register />} />
-            <Route path='/forgot-password' element={<ForgotPassword />} />
-            <Route path='*' element={<Error />} />
-          </Routes>
-        </CartProvider>
-        <Footer />
+              <Route path='/album' element={<Album />} />
+              <Route path='/album/:album' element={<AlbumDetail />} />
+              <Route path='/career' element={<Career />} />
+              <Route path='/privacy' element={<Privacy />} />
+              <Route path='/term' element={<TermOfUse />} />
+              <Route path='/faq' element={<FAQ />} />
+              <Route element={<Auth />}>
+                <Route path='/account' element={<Account />} />
+                <Route path='/account/*' element={<Account />} />
+                <Route path='/cart' element={<Cart />} />
+                <Route path='/checkout' element={<Checkout />} />
+                <Route path='/checkout-success' element={<CheckoutSuccess />} />
+              </Route>
+              <Route path='/login' element={<Login />} />
+              <Route path='/register' element={<Register />} />
+              <Route path='/forgot-password' element={<ForgotPassword />} />
+              <Route path='*' element={<Error />} />
+            </Routes>
+          </CartProvider>
+          <Footer />
+        </AuthProvider>
         <ScrollToTopButton />
         <ToggleMode />
       </Box>

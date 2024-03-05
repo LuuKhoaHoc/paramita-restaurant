@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import { Route, Routes } from 'react-router-dom'
 import { Box, Center, Flex, Grid, Icon, Text, fr } from '@prismane/core'
 import { UserCircle } from '@phosphor-icons/react'
@@ -48,9 +48,6 @@ function getCustomer() {
 }
 
 const Account = () => {
-  if (!localStorage.getItem('token')) {
-    window.location.href = '/'
-  }
   const { customer } = getCustomer()
   const { isLaptop, isMobile, isTablet } = useResponsive()
   return (

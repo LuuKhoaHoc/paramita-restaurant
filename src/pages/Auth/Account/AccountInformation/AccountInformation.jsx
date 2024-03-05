@@ -93,6 +93,9 @@ const AccountInformation = ({ customer }) => {
           email: (v) =>
             p(v, z.string().email({ message: 'Email không hợp lệ' }))
         }
+      },
+      date: {
+        value: ''
       }
     }
   })
@@ -170,7 +173,7 @@ const AccountInformation = ({ customer }) => {
           label='Địa chỉ email'
           placeholder='hi@paramita.com'
         />
-        <NativeDateField label='Sinh nhật' />
+        <NativeDateField {...register('date')} label='Sinh nhật' />
         <Button size='md' br={'full'} ml={'auto'}>
           <Text fs={'md'} className='GeomanistLight-font'>
             Cập nhật

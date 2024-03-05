@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import {
-  Box,
   Button,
   Flex,
+  Form,
   Icon,
   Modal,
   Stack,
@@ -12,38 +12,94 @@ import {
 } from '@prismane/core'
 import { Pen, X } from '@phosphor-icons/react'
 import { useResponsive } from '~/utils/responsive'
-import { gql, useQuery } from '@apollo/client'
+import { gql, useMutation, useQuery } from '@apollo/client'
+import { useForm } from '@prismane/core/hooks'
+import p from '~/utils/zodToPrismane'
+import { z } from 'zod'
+import { Loading } from '~/components'
 
 const CREATE_ADDRESS = gql`
-  mutation createAddress($data: AddressInput!) {
-    createAddress(data: $data) {
+  mutation createAddress($data: CustomerAddressInput!) {
+    createCustomerAddress(data: $data) {
+      address_id
+      address
+    }
+  }
+`
+const UPDATE_ADDRESS = gql`
+  mutation updateAddress($id: Int!, $data: CustomerAddressInput!) {
+    updateCustomerAddress(id: $id, data: $data) {
       address_id
       address
     }
   }
 `
 
-function createAddress(address) {
-  const { loading, error, data } = useQuery(CREATE_ADDRESS, {
-    variables: {
-      address
-    }
-  })
-  if (loading) return <Loading />
-  if (error) return <p>Error : {error.message}</p>
-  return data
+function updateAddress(address) {
+  const { address_id, address } = address
+  return {
+    address_id,
+    address
+  }
 }
 
 const AccountAddresses = ({ customer }) => {
   const { isTablet, isMobile } = useResponsive()
   const [open, setOpen] = useState(false)
+  const [openUpdate, setOpenUpdate] = useState(false)
   const [addresses, setAddresses] = useState([])
   useEffect(() => {
     setAddresses(customer?.address)
   }, [customer])
+  // Create Address
+  const [addAddress, { loading, error, data }] = useMutation(CREATE_ADDRESS)
+  if (loading) return <Loading />
+  if (error) return <p>Error : {error.message}</p>
+  // Update Address
+  const [
+    updateAddress,
+    { loading: loadingUpdate, error: errorUpdate, data: dataUpdate }
+  ] = useMutation(UPDATE_ADDRESS)
+  if (loading) return <Loading />
+  if (error) return <p>Error : {error.message}</p>
+  const { register, handleSubmit, setValue } = useForm({
+    fields: {
+      address: {
+        value: '',
+        validators: {
+          required: (v) =>
+            p(
+              v,
+              z.string().trim().min(1, { message: 'Không được để trống ô này' })
+            )
+        }
+      },
+      district: {
+        value: '',
+        validators: {
+          required: (v) =>
+            p(
+              v,
+              z.string().trim().min(1, { message: 'Không được để trống ô này' })
+            )
+        }
+      },
+      city: {
+        value: '',
+        validators: {
+          required: (v) =>
+            p(
+              v,
+              z.string().trim().min(1, { message: 'Không được để trống ô này' })
+            )
+        }
+      }
+    }
+  })
 
   return (
     <>
+      {/* add address Modal */}
       <Modal
         w={isMobile ? '80vw' : '40vw'}
         open={open}
@@ -55,37 +111,123 @@ const AccountAddresses = ({ customer }) => {
             Thêm địa chỉ
           </Text>
         </Modal.Header>
-        <Flex
-          direction='column'
-          justify='around'
-          sx={{
-            '.PrismaneTextField-label': {
-              fontSize: fr(4)
-            }
+        <Form
+          onSubmit={(SubmitEvent) => {
+            handleSubmit(SubmitEvent, async (value) => {
+              const { address, district, city } = value
+              const addressData = `${address}, ${district}, ${city}`
+              const { data: dataAddress } = await addAddress({
+                variables: {
+                  data: {
+                    customerId: customer?.customer_id,
+                    address: addressData
+                  }
+                }
+              })
+              setAddresses([...addresses, dataAddress?.createCustomerAddress])
+              setOpen(false)
+            })
           }}
         >
-          <TextField w={'100%'} label='Địa chỉ' placeholder='Điền địa chỉ' />
-          <TextField
-            w={'100%'}
-            label='Quận huyện'
-            placeholder='Điền quận huyện'
-          />
-          <TextField
-            w={'100%'}
-            label='Tỉnh thành'
-            placeholder='Điền tỉnh thành'
-          />
-        </Flex>
-        <Modal.Footer>
-          <Button
-            size='lg'
-            br={'full'}
-            className='GeomanistMedium-font'
-            onClick={() => setOpen(false)}
+          <Flex
+            direction='column'
+            justify='around'
+            sx={{
+              '.PrismaneTextField-label': {
+                fontSize: fr(4)
+              }
+            }}
           >
-            Thêm
-          </Button>
-        </Modal.Footer>
+            <TextField
+              {...register('address')}
+              w={'100%'}
+              label='Địa chỉ'
+              placeholder='Điền địa chỉ'
+            />
+            <TextField
+              {...register('district')}
+              w={'100%'}
+              label='Quận huyện'
+              placeholder='Điền quận huyện'
+            />
+            <TextField
+              {...register('city')}
+              w={'100%'}
+              label='Tỉnh thành'
+              placeholder='Điền tỉnh thành'
+            />
+          </Flex>
+          <Modal.Footer justify='end'>
+            <Button size='lg' br={'full'} className='GeomanistMedium-font'>
+              Thêm
+            </Button>
+          </Modal.Footer>
+        </Form>
+      </Modal>
+      {/* update address Modal */}
+      <Modal
+        w={isMobile ? '80vw' : '40vw'}
+        open={openUpdate}
+        onClose={() => setOpenUpdate(false)}
+        closable
+      >
+        <Modal.Header className='GeomanistMedium-font'>
+          <Text fs={'2xl'} ta={'center'}>
+            Sửa địa chỉ
+          </Text>
+        </Modal.Header>
+        <Form
+          onSubmit={(SubmitEvent) => {
+            handleSubmit(SubmitEvent, async (value) => {
+              const { address, district, city } = value
+              const addressData = `${address}, ${district}, ${city}`
+              const { data: dataAddress } = await updateAddress({
+                variables: {
+                  data: {
+                    customerId: customer?.customer_id,
+                    address: addressData
+                  }
+                }
+              })
+              setAddresses([...addresses, dataAddress?.createCustomerAddress])
+              setOpen(false)
+            })
+          }}
+        >
+          <Flex
+            direction='column'
+            justify='around'
+            sx={{
+              '.PrismaneTextField-label': {
+                fontSize: fr(4)
+              }
+            }}
+          >
+            <TextField
+              {...register('address')}
+              w={'100%'}
+              label='Địa chỉ'
+              placeholder='Điền địa chỉ'
+            />
+            <TextField
+              {...register('district')}
+              w={'100%'}
+              label='Quận huyện'
+              placeholder='Điền quận huyện'
+            />
+            <TextField
+              {...register('city')}
+              w={'100%'}
+              label='Tỉnh thành'
+              placeholder='Điền tỉnh thành'
+            />
+          </Flex>
+          <Modal.Footer justify='end'>
+            <Button size='lg' br={'full'} className='GeomanistMedium-font'>
+              Sửa
+            </Button>
+          </Modal.Footer>
+        </Form>
       </Modal>
       <Flex direction='column' grow pos={'relative'} m={fr(10)}>
         <Text
@@ -119,7 +261,7 @@ const AccountAddresses = ({ customer }) => {
               Thêm
             </Text>
           </Flex>
-          <Flex>
+          <Flex direction='column'>
             {addresses?.map((item, index) => (
               <Flex key={index} w={'100%'}>
                 <Text tt={'capitalize'} fs={'lg'}>
