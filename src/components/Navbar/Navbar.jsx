@@ -122,7 +122,11 @@ const Navbar = () => {
 
   const loginToken = localStorage.getItem('token')
   useEffect(() => {
-    if (sessionStorage.getItem('login') === 'true' && loginToken) {
+    if (
+      (sessionStorage.getItem('login') || localStorage.getItem('login')) ===
+        'true' &&
+      loginToken
+    ) {
       setLogin(true)
     }
   }, [])

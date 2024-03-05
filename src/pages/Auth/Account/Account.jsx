@@ -2,6 +2,7 @@ import React from 'react'
 import { Route, Routes } from 'react-router-dom'
 import { Box, Center, Flex, Grid, Icon, Text, fr } from '@prismane/core'
 import { UserCircle } from '@phosphor-icons/react'
+import { Loading } from '~/components'
 
 import AccountAddresses from '~/pages/Auth/Account/AccountAddresses/AccountAddresses'
 import AccountInformation from '~/pages/Auth/Account/AccountInformation/AccountInformation'
@@ -12,10 +13,45 @@ import AccountAside from '~/pages/Auth/Account/AccountAside/AccountAside'
 import HistoryRewardPoint from '~/pages/Auth/Account/HistoryRewardPoint/HistoryRewardPoint'
 import { useResponsive } from '~/utils/responsive'
 
+import { gql, useQuery } from '@apollo/client'
+
+const GET_CUSTOMER = gql`
+  query getCustomer($id: ID!) {
+    customer(id: $id) {
+      customer_id
+      username
+      name
+      email
+      phone
+      points
+      level {
+        level_id
+        name
+      }
+      address {
+        address_id
+        address
+      }
+    }
+  }
+`
+
+function getCustomer() {
+  const { loading, error, data } = useQuery(GET_CUSTOMER, {
+    variables: {
+      id: localStorage.getItem('token')
+    }
+  })
+  if (loading) return <Loading />
+  if (error) return <p>Error : {error.message}</p>
+  return data
+}
+
 const Account = () => {
   if (!localStorage.getItem('token')) {
     window.location.href = '/'
   }
+  const { customer } = getCustomer()
   const { isLaptop, isMobile, isTablet } = useResponsive()
   return (
     <Box pos={'relative'} mih={'100vh'}>
@@ -41,8 +77,14 @@ const Account = () => {
             <Flex direction={isTablet ? 'column' : isMobile ? 'column' : 'row'}>
               <AccountAside />
               <Routes>
-                <Route path='information' element={<AccountInformation />} />
-                <Route path='addresses' element={<AccountAddresses />} />
+                <Route
+                  path='information'
+                  element={<AccountInformation customer={customer} />}
+                />
+                <Route
+                  path='addresses'
+                  element={<AccountAddresses customer={customer} />}
+                />
                 <Route path='orders' element={<AccountOrders />} />
                 <Route path='history-purchase' element={<AccountHistory />} />
                 <Route path='history-point' element={<HistoryRewardPoint />} />

@@ -7,45 +7,15 @@ import {
   TextField,
   fr
 } from '@prismane/core'
+import { useEffect } from 'react'
 import { useForm } from '@prismane/core/hooks'
 import { z } from 'zod'
 import { useResponsive } from '~/utils/responsive'
 import usernameAndEmail from '~/utils/usernameAndEmail'
 import p from '~/utils/zodToPrismane'
 import separateName from '~/utils/separateName'
-import { gql, useQuery } from '@apollo/client'
-import { Loading } from '~/components'
-import { useEffect } from 'react'
 
-const GET_CUSTOMER = gql`
-  query getCustomer($id: ID!) {
-    customer(id: $id) {
-      customer_id
-      username
-      name
-      email
-      phone
-      points
-      level {
-        level_id
-        name
-      }
-    }
-  }
-`
-
-function getCustomer() {
-  const { loading, error, data } = useQuery(GET_CUSTOMER, {
-    variables: {
-      id: localStorage.getItem('token')
-    }
-  })
-  if (loading) return <Loading />
-  if (error) return <p>Error : {error.message}</p>
-  return data
-}
-
-const AccountInformation = () => {
+const AccountInformation = ({ customer }) => {
   const { isMobile } = useResponsive()
   const { handleSubmit, handleReset, register, setValue } = useForm({
     fields: {
@@ -126,7 +96,6 @@ const AccountInformation = () => {
       }
     }
   })
-  const { customer } = getCustomer()
   useEffect(() => {
     if (customer && customer.username !== register('username').value) {
       const { lastName, firstName } = separateName(customer?.name || '')

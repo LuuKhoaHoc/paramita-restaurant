@@ -1,5 +1,6 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import {
+  Box,
   Button,
   Flex,
   Icon,
@@ -11,12 +12,44 @@ import {
 } from '@prismane/core'
 import { Pen, X } from '@phosphor-icons/react'
 import { useResponsive } from '~/utils/responsive'
-const AccountAddresses = () => {
+import { gql, useQuery } from '@apollo/client'
+
+const CREATE_ADDRESS = gql`
+  mutation createAddress($data: AddressInput!) {
+    createAddress(data: $data) {
+      address_id
+      address
+    }
+  }
+`
+
+function createAddress(address) {
+  const { loading, error, data } = useQuery(CREATE_ADDRESS, {
+    variables: {
+      address
+    }
+  })
+  if (loading) return <Loading />
+  if (error) return <p>Error : {error.message}</p>
+  return data
+}
+
+const AccountAddresses = ({ customer }) => {
   const { isTablet, isMobile } = useResponsive()
   const [open, setOpen] = useState(false)
+  const [addresses, setAddresses] = useState([])
+  useEffect(() => {
+    setAddresses(customer?.address)
+  }, [customer])
+
   return (
     <>
-      <Modal w={isMobile ? '80vw' : '20vw'} open={open} onClose={() => setOpen(false)} closable>
+      <Modal
+        w={isMobile ? '80vw' : '40vw'}
+        open={open}
+        onClose={() => setOpen(false)}
+        closable
+      >
         <Modal.Header className='GeomanistMedium-font'>
           <Text fs={'2xl'} ta={'center'}>
             Thêm địa chỉ
@@ -87,27 +120,31 @@ const AccountAddresses = () => {
             </Text>
           </Flex>
           <Flex>
-            <Text tt={'capitalize'} fs={'lg'}>
-              184 Lê Đại Hành, quận 11, TP Hồ Chí Minh
-            </Text>
-            <Flex ml={'auto'} gap={fr(5)}>
-              <Icon
-                cs={'pointer'}
-                size={fr(6)}
-                cl={['inherit', { hover: 'blue' }]}
-                onClick={() => {}}
-              >
-                <Pen weight='bold' />
-              </Icon>
-              <Icon
-                cs={'pointer'}
-                size={fr(6)}
-                cl={['inherit', { hover: 'red' }]}
-                onClick={() => {}}
-              >
-                <X weight='bold' />
-              </Icon>
-            </Flex>
+            {addresses?.map((item, index) => (
+              <Flex key={index} w={'100%'}>
+                <Text tt={'capitalize'} fs={'lg'}>
+                  {item.address}
+                </Text>
+                <Flex ml={'auto'} gap={fr(5)}>
+                  <Icon
+                    cs={'pointer'}
+                    size={fr(6)}
+                    cl={['inherit', { hover: 'blue' }]}
+                    onClick={() => {}}
+                  >
+                    <Pen weight='bold' />
+                  </Icon>
+                  <Icon
+                    cs={'pointer'}
+                    size={fr(6)}
+                    cl={['inherit', { hover: 'red' }]}
+                    onClick={() => {}}
+                  >
+                    <X weight='bold' />
+                  </Icon>
+                </Flex>
+              </Flex>
+            ))}
           </Flex>
         </Stack>
       </Flex>
