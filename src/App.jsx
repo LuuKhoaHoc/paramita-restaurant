@@ -52,10 +52,41 @@ const CHECK_TOKEN = gql`
     }
   }
 `
+const GET_CUSTOMER = gql`
+  query getCustomer($id: ID!) {
+    customer(id: $id) {
+      customer_id
+      username
+      name
+      email
+      phone
+      points
+      level {
+        level_id
+        name
+      }
+      address {
+        address_id
+        address
+      }
+    }
+  }
+`
 
 const imagesGallery = [Space1, Space2, Space3, Food1, Food2, HomePic2]
 
 const App = () => {
+  function getCustomer() {
+    const { loading, error, data } = useQuery(GET_CUSTOMER, {
+      variables: {
+        id: localStorage.getItem('token')
+      }
+    })
+    if (loading) return <Loading />
+    if (error) return <p>Error : {error.message}</p>
+    return data
+  }
+  const { customer } = getCustomer()
   const textColor = useThemeModeValue('#371b04', '#d1e9d5')
   const bgColor = useThemeModeValue('#fff2e5', '#1d2b1f')
   if (localStorage.getItem('token')) {
@@ -83,7 +114,7 @@ const App = () => {
         <AuthProvider>
           <CartProvider>
             <ScrollToTop />
-            <Navbar />
+            <Navbar customer={customer} />
             <Routes>
               <Route element={<Addition />}>
                 <Route path='/' index element={<Home />} />
@@ -111,8 +142,14 @@ const App = () => {
               <Route path='/term' element={<TermOfUse />} />
               <Route path='/faq' element={<FAQ />} />
               <Route element={<Auth />}>
-                <Route path='/account' element={<Account />} />
-                <Route path='/account/*' element={<Account />} />
+                <Route
+                  path='/account'
+                  element={<Account customer={customer} />}
+                />
+                <Route
+                  path='/account/*'
+                  element={<Account customer={customer} />}
+                />
                 <Route path='/cart' element={<Cart />} />
                 <Route path='/checkout' element={<Checkout />} />
                 <Route path='/checkout-success' element={<CheckoutSuccess />} />

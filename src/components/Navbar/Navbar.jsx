@@ -58,17 +58,7 @@ const CHECK_TOKEN = gql`
   }
 `
 
-const GET_CUSTOMER = gql`
-  query getCustomer($id: ID!) {
-    customer(id: $id) {
-      customer_id
-      name
-      username
-    }
-  }
-`
-
-const Navbar = () => {
+const Navbar = ({ customer }) => {
   const { isLoggedIn, setIsLoggedIn } = useContext(AuthContext)
   const [token, setToken] = useState('')
   // Responsive
@@ -136,13 +126,6 @@ const Navbar = () => {
     }
   }, [isLoggedIn])
 
-  const { loading, error, data } = useQuery(GET_CUSTOMER, {
-    variables: {
-      id: token
-    }
-  })
-  if (loading) return <Loading />
-
   return (
     <Grid
       id='header'
@@ -177,7 +160,7 @@ const Navbar = () => {
                     <Text></Text>
                   </Drawer.Header>
                   <Flex direction='column' className='GeomanistMedium-font'>
-                    {!isLoggedIn || localStorage.getItem('login') ? (
+                    {isLoggedIn === 'false' ? (
                       <Center>
                         <Box>
                           <Link
@@ -203,7 +186,7 @@ const Navbar = () => {
                         <Flex align='center' justify='around'>
                           <Avatar size={'sm'} color={'primary'}></Avatar>
                           <Text cl={'primary'} fs={isTablet ? 'lg' : 'md'}>
-                            {data?.customer?.name || data?.customer?.username}
+                            {customer?.name || customer?.username}
                           </Text>
                         </Flex>
                         <Divider my={isTablet ? fr(4) : fr(6)} />

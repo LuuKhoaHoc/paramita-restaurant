@@ -15,40 +15,7 @@ import { useResponsive } from '~/utils/responsive'
 
 import { gql, useQuery } from '@apollo/client'
 
-const GET_CUSTOMER = gql`
-  query getCustomer($id: ID!) {
-    customer(id: $id) {
-      customer_id
-      username
-      name
-      email
-      phone
-      points
-      level {
-        level_id
-        name
-      }
-      address {
-        address_id
-        address
-      }
-    }
-  }
-`
-
-function getCustomer() {
-  const { loading, error, data } = useQuery(GET_CUSTOMER, {
-    variables: {
-      id: localStorage.getItem('token')
-    }
-  })
-  if (loading) return <Loading />
-  if (error) return <p>Error : {error.message}</p>
-  return data
-}
-
-const Account = () => {
-  const { customer } = getCustomer()
+const Account = ({ customer }) => {
   const { isLaptop, isMobile, isTablet } = useResponsive()
   return (
     <Box pos={'relative'} mih={'100vh'}>
