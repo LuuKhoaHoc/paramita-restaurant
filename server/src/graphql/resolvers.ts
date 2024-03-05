@@ -444,7 +444,7 @@ export const resolvers = {
         { userId: customer.customer_id },
         process.env.JWT_SECRET as string,
         {
-          expiresIn: '1h'
+          expiresIn: '24h'
         }
       )
       return { customer, token }

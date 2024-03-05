@@ -15,13 +15,14 @@ import { useAnimation, useForm, useScroll } from '@prismane/core/hooks'
 import p from '~/utils/zodToPrismane'
 import { z } from 'zod'
 import usernameAndEmail from '~/utils/usernameAndEmail'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useContext } from 'react'
 import { LoginPic } from '~/images'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { AlertCustom, Loading, MainPic } from '~/components'
 import { Password, User } from '@phosphor-icons/react'
 import { useResponsive } from '~/utils/responsive'
 import { gql, useMutation, useQuery } from '@apollo/client'
+import { AuthContext } from '~/contexts/AuthContext'
 
 const CHECK_USERNAME_EXIST = gql`
   query checkUsername($username: String!) {
@@ -54,6 +55,8 @@ const LOGIN_MUTATION = gql`
 `
 
 const Login = () => {
+  const { isLoggedIn, setIsLoggedIn } = useContext(AuthContext)
+  const navigate = useNavigate()
   const { isLaptop, isMobile, isTablet } = useResponsive()
   const [remember, setRemember] = useState(false)
   const { scrollToId } = useScroll()
@@ -107,13 +110,15 @@ const Login = () => {
   const { data: queryEmail } = useQuery(CHECK_EMAIL_EXIST, {
     variables: { email: register('username').value }
   })
-  if (
-    (sessionStorage.getItem('login') === 'true' ||
-      localStorage.getItem('login') === 'true') &&
-    localStorage.getItem('token') === mutationData?.login?.token
-  ) {
-    window.location.href = '/'
-  }
+  useEffect(() => {
+    if (
+      (isLoggedIn || localStorage.getItem('login')) === 'true' &&
+      localStorage.getItem('token') === mutationData?.login?.token
+    ) {
+      navigate(-1)
+    }
+  }, [isLoggedIn])
+
   // loading
   if (mutationLoading) return <Loading />
   return (
@@ -188,14 +193,14 @@ const Login = () => {
                           }
                         }
                       })
-                      sessionStorage.setItem('login', 'true')
+                      setIsLoggedIn(true)
+                      navigate(-1)
                       if (remember) {
                         localStorage.setItem('login', true)
                       }
                       if (data?.login.token) {
                         localStorage.setItem('token', data?.login.token)
                       }
-                      window.location.href = '/'
                     } catch (error) {
                       setError('password', 'Mật khẩu không đúng')
                     }
