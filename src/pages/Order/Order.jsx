@@ -34,11 +34,25 @@ const GET_CONTENTS = gql`
     }
   }
 `
-
-
+const GET_CATEGORYLIST = gql`
+  query {
+    categoryList {
+      name
+    }
+  }
+`
 
 const Order = () => {
-  const { loading, error, data} = useQuery(GET_CONTENTS)
+  const {
+    loading: loadingCategory,
+    error: errorCategory,
+    data: dataCategory
+  } = useQuery(GET_CATEGORYLIST)
+  const {
+    loading: loadingContent,
+    error: errorContent,
+    data: dataContent
+  } = useQuery(GET_CONTENTS)
   const listFood = [
     {
       image: BanhXeo,
@@ -90,14 +104,14 @@ const Order = () => {
     }
   ]
   const { isMobile, isTablet, isLaptop } = useResponsive()
-  if (loading) return <Loading/>
+  if (loadingContent) return <Loading />
 
   return (
     <Toaster position='top-right' t={fr(23)}>
       <Box pos={'relative'} mih={'100vh'}>
         <MainPic
-          title={data?.page?.content[0]?.title}
-          subtitle={data?.page?.content[0]?.description}
+          title={dataContent?.page?.content[0]?.title}
+          subtitle={dataContent?.page?.content[0]?.description}
           image={Orders}
         />
         <Box w={'100%'} h={'100%'} pos={'relative'}>
@@ -115,7 +129,7 @@ const Order = () => {
                     Các món từ nhà Paramita
                   </Text>
                 </Flex>
-                <OrderListCategory />
+                <OrderListCategory data={dataCategory} />
                 <OrderListItem listFood={listFood} />
               </Flex>
             </Grid.Item>

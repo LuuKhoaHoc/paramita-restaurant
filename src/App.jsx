@@ -39,7 +39,8 @@ import {
   Error,
   Account,
   Checkout,
-  CheckoutSuccess
+  CheckoutSuccess,
+  OrderCategory
 } from '~/routes'
 import { CartProvider } from '~/contexts/CartContext'
 import { gql, useQuery } from '@apollo/client'
@@ -126,7 +127,10 @@ const App = () => {
                   element={<PromotionDetail />}
                 />
                 <Route path='/order-online' element={<Order />} />
-                <Route path='/order-online/:category' element={<Order />} />
+                <Route
+                  path='/order-online/:category'
+                  element={<OrderCategory />}
+                />
                 <Route path='/contact' element={<Contact />} />
                 <Route path='/book-table' element={<BookTable />} />
               </Route>
