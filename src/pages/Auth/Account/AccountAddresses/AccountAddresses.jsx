@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import {
+  Alert,
   Button,
   Flex,
   Form,
@@ -8,13 +9,15 @@ import {
   Stack,
   Text,
   TextField,
-  fr
+  fr,
+  useToast
 } from '@prismane/core'
 import { Pen, X } from '@phosphor-icons/react'
 import { useResponsive } from '~/utils/responsive'
 import { gql, useMutation, useQuery } from '@apollo/client'
 import { useForm } from '@prismane/core/hooks'
 import p from '~/utils/zodToPrismane'
+import separateAddressParts from '~/utils/separateAddressParts'
 import { z } from 'zod'
 import { Loading } from '~/components'
 
@@ -35,22 +38,7 @@ const UPDATE_ADDRESS = gql`
   }
 `
 
-function updateAddress(address) {
-  const { address_id, address } = address
-  return {
-    address_id,
-    address
-  }
-}
-
 const AccountAddresses = ({ customer }) => {
-  const { isTablet, isMobile } = useResponsive()
-  const [open, setOpen] = useState(false)
-  const [openUpdate, setOpenUpdate] = useState(false)
-  const [addresses, setAddresses] = useState([])
-  useEffect(() => {
-    setAddresses(customer?.address)
-  }, [customer])
   // Create Address
   const [addAddress, { loading, error, data }] = useMutation(CREATE_ADDRESS)
   if (loading) return <Loading />
@@ -60,8 +48,37 @@ const AccountAddresses = ({ customer }) => {
     updateAddress,
     { loading: loadingUpdate, error: errorUpdate, data: dataUpdate }
   ] = useMutation(UPDATE_ADDRESS)
-  if (loading) return <Loading />
-  if (error) return <p>Error : {error.message}</p>
+  if (loadingUpdate) return <Loading />
+  if (errorUpdate) return <p>Error : {errorUpdate.message}</p>
+  // responsive
+  const { isTablet, isMobile } = useResponsive()
+  // toast
+  const toast = useToast()
+  // modal
+  const [open, setOpen] = useState(false)
+  // check update or create
+  const [checkModal, setCheckModal] = useState('create')
+  // set address data
+  const [addresses, setAddresses] = useState([])
+  // set address update
+  const [addressUpdate, setAddressUpdate] = useState({})
+  // slipt address to 3 part
+  const { address, district, city } = separateAddressParts(
+    addressUpdate?.address
+  )
+  useEffect(() => {
+    if (addressUpdate) {
+      setValue('address', address || '')
+      setValue('district', district || '')
+      setValue('city', city || '')
+    }
+  }, [addressUpdate])
+  // set address after had customer
+  useEffect(() => {
+    setAddresses(customer?.address)
+  }, [customer])
+
+  // set validation field
   const { register, handleSubmit, setValue } = useForm({
     fields: {
       address: {
@@ -99,7 +116,7 @@ const AccountAddresses = ({ customer }) => {
 
   return (
     <>
-      {/* add address Modal */}
+      {/*  Modal */}
       <Modal
         w={isMobile ? '80vw' : '40vw'}
         open={open}
@@ -108,27 +125,10 @@ const AccountAddresses = ({ customer }) => {
       >
         <Modal.Header className='GeomanistMedium-font'>
           <Text fs={'2xl'} ta={'center'}>
-            Thêm địa chỉ
+            {checkModal === 'create' ? 'Thêm' : 'Sửa'} địa chỉ
           </Text>
         </Modal.Header>
-        <Form
-          onSubmit={(SubmitEvent) => {
-            handleSubmit(SubmitEvent, async (value) => {
-              const { address, district, city } = value
-              const addressData = `${address}, ${district}, ${city}`
-              const { data: dataAddress } = await addAddress({
-                variables: {
-                  data: {
-                    customerId: customer?.customer_id,
-                    address: addressData
-                  }
-                }
-              })
-              setAddresses([...addresses, dataAddress?.createCustomerAddress])
-              setOpen(false)
-            })
-          }}
-        >
+        <Form>
           <Flex
             direction='column'
             justify='around'
@@ -159,72 +159,7 @@ const AccountAddresses = ({ customer }) => {
           </Flex>
           <Modal.Footer justify='end'>
             <Button size='lg' br={'full'} className='GeomanistMedium-font'>
-              Thêm
-            </Button>
-          </Modal.Footer>
-        </Form>
-      </Modal>
-      {/* update address Modal */}
-      <Modal
-        w={isMobile ? '80vw' : '40vw'}
-        open={openUpdate}
-        onClose={() => setOpenUpdate(false)}
-        closable
-      >
-        <Modal.Header className='GeomanistMedium-font'>
-          <Text fs={'2xl'} ta={'center'}>
-            Sửa địa chỉ
-          </Text>
-        </Modal.Header>
-        <Form
-          onSubmit={(SubmitEvent) => {
-            handleSubmit(SubmitEvent, async (value) => {
-              const { address, district, city } = value
-              const addressData = `${address}, ${district}, ${city}`
-              const { data: dataAddress } = await updateAddress({
-                variables: {
-                  data: {
-                    customerId: customer?.customer_id,
-                    address: addressData
-                  }
-                }
-              })
-              setAddresses([...addresses, dataAddress?.createCustomerAddress])
-              setOpen(false)
-            })
-          }}
-        >
-          <Flex
-            direction='column'
-            justify='around'
-            sx={{
-              '.PrismaneTextField-label': {
-                fontSize: fr(4)
-              }
-            }}
-          >
-            <TextField
-              {...register('address')}
-              w={'100%'}
-              label='Địa chỉ'
-              placeholder='Điền địa chỉ'
-            />
-            <TextField
-              {...register('district')}
-              w={'100%'}
-              label='Quận huyện'
-              placeholder='Điền quận huyện'
-            />
-            <TextField
-              {...register('city')}
-              w={'100%'}
-              label='Tỉnh thành'
-              placeholder='Điền tỉnh thành'
-            />
-          </Flex>
-          <Modal.Footer justify='end'>
-            <Button size='lg' br={'full'} className='GeomanistMedium-font'>
-              Sửa
+              {checkModal === 'create' ? 'Thêm' : 'Sửa'}
             </Button>
           </Modal.Footer>
         </Form>
@@ -255,6 +190,8 @@ const AccountAddresses = ({ customer }) => {
               cs={'pointer'}
               cl={['inherit', { hover: 'primary' }]}
               onClick={() => {
+                setCheckModal('create')
+                setAddressUpdate('')
                 setOpen(!open)
               }}
             >
@@ -272,7 +209,11 @@ const AccountAddresses = ({ customer }) => {
                     cs={'pointer'}
                     size={fr(6)}
                     cl={['inherit', { hover: 'blue' }]}
-                    onClick={() => {}}
+                    onClick={() => {
+                      setCheckModal('update')
+                      setAddressUpdate(item)
+                      setOpen(!open)
+                    }}
                   >
                     <Pen weight='bold' />
                   </Icon>
