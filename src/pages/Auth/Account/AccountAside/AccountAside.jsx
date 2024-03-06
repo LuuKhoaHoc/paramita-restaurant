@@ -254,7 +254,8 @@ const AccountAside = () => {
         </>
       ) : (
         <Box
-          w={fr(95)}
+          miw={fr(95)}
+          maw={fr(95)}
           bg={bgColor}
           bsh={'xl'}
           br={'xl'}
@@ -396,6 +397,7 @@ const AccountAside = () => {
             </List.Item>
             <Divider size='xs' />
             <List.Item
+              className='GeomanistMedium-font'
               gap={fr(2)}
               onClick={() => handleLogout()}
               cs={'pointer'}
@@ -406,6 +408,7 @@ const AccountAside = () => {
               </List.Icon>{' '}
               Đăng xuất
             </List.Item>
+            <Divider size='xs' />
           </List>
         </Box>
       )}
