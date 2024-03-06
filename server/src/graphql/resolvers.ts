@@ -296,7 +296,7 @@ export const resolvers = {
     // Menu
     createMenu: async (
       _parent: any,
-      args: { category_id: number; data: MenuInput },
+      args: { data: MenuInput },
       context: Context
     ) => {
       if (!args.data) {
@@ -308,7 +308,7 @@ export const resolvers = {
       return context.prisma.menu.create({
         data: {
           tsid,
-          category_id: args.category_id,
+          category_id: args.data.categoryId,
           name: args.data.name,
           description: args.data.description,
           price: args.data.price,
@@ -1312,7 +1312,7 @@ export const resolvers = {
         .findUnique({
           where: { category_id: parent?.category_id }
         })
-        .menu()
+        .menus()
     }
   },
   Content: {
@@ -1587,6 +1587,7 @@ interface ContentInput {
   pageId?: number
 }
 interface MenuInput {
+  categoryId: number
   name: string
   description: string
   price: number

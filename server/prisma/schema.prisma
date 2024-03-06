@@ -11,7 +11,22 @@ model categories {
   category_id Int    @id @default(autoincrement())
   tsid        String @db.VarChar(13)
   name        String @db.VarChar(255)
-  menu        menu[]
+  menus       menu[]
+}
+
+model menu {
+  item_id                                   Int             @id @default(autoincrement())
+  tsid                                      String          @db.VarChar(13)
+  name                                      String          @db.VarChar(255)
+  description                               String          @db.Text
+  price                                     Decimal         @db.Decimal(10, 2)
+  image                                     String          @db.Text
+  category_id                               Int
+  categories                                categories[]
+  order_details_menu_item_idToorder_details order_details   @relation("menu_item_idToorder_details", fields: [item_id], references: [item_id], onUpdate: Restrict, map: "menu_ibfk_6")
+  order_details_order_details_item_idTomenu order_details[] @relation("order_details_item_idTomenu")
+
+  @@index([category_id], map: "category_id")
 }
 
 model contents {
@@ -133,21 +148,6 @@ model invoices {
   point_histories point_histories[]
 
   @@index([customer_id], map: "customer_id")
-}
-
-model menu {
-  item_id                                   Int             @id @default(autoincrement())
-  tsid                                      String          @db.VarChar(13)
-  name                                      String          @db.VarChar(255)
-  description                               String          @db.Text
-  price                                     Decimal         @db.Decimal(10, 2)
-  image                                     String          @db.Text
-  category_id                               Int
-  categories                                categories      @relation(fields: [category_id], references: [category_id], onUpdate: Restrict, map: "menu_ibfk_1")
-  order_details_menu_item_idToorder_details order_details   @relation("menu_item_idToorder_details", fields: [item_id], references: [item_id], onUpdate: Restrict, map: "menu_ibfk_6")
-  order_details_order_details_item_idTomenu order_details[] @relation("order_details_item_idTomenu")
-
-  @@index([category_id], map: "category_id")
 }
 
 model order_details {

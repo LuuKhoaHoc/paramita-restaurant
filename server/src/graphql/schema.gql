@@ -72,13 +72,14 @@ type Mutation {
 
 input CategoryInput {
   name: String!
+  menu: [MenuInput!]
 }
 input MenuInput {
-  categoryId: Int!
   name: String!
   description: String!
   price: Float!
-  image: String!
+  image: String
+  category: [CategoryInput!]
 }
 
 input ContentInput {
@@ -296,8 +297,8 @@ type Menu {
   name: String!
   description: String!
   price: Float!
-  image: String!
-  category: Category!
+  image: String
+  categories: [Category!]
 }
 
 type Content {
