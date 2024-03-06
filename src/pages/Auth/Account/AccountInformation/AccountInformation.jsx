@@ -1,11 +1,13 @@
 import {
+  Alert,
   Button,
   Flex,
   Form,
   NativeDateField,
   Text,
   TextField,
-  fr
+  fr,
+  useToast
 } from '@prismane/core'
 import { useEffect } from 'react'
 import { useForm } from '@prismane/core/hooks'
@@ -14,10 +16,30 @@ import { useResponsive } from '~/utils/responsive'
 import usernameAndEmail from '~/utils/usernameAndEmail'
 import p from '~/utils/zodToPrismane'
 import separateName from '~/utils/separateName'
+import { gql, useMutation } from '@apollo/client'
+
+const UPDATE_CUSTOMER = gql`
+  mutation updateCustomer($id: Int!, $data: CustomerInput!) {
+    updateCustomer(id: $id, data: $data) {
+      customer_id
+      username
+      name
+      email
+      phone
+      points
+      level {
+        level_id
+        name
+      }
+    }
+  }
+`
 
 const AccountInformation = ({ customer }) => {
   const { isMobile } = useResponsive()
-  const { handleSubmit, handleReset, register, setValue } = useForm({
+  const toast = useToast()
+  const [updateCustomer, { loading }] = useMutation(UPDATE_CUSTOMER)
+  const { handleSubmit, register, setValue } = useForm({
     fields: {
       firstName: {
         value: '',
@@ -139,10 +161,39 @@ const AccountInformation = ({ customer }) => {
         Thông tin tài khoản
       </Text>
       <Form
-        onSubmit={(e) => {
-          handleSubmit(e, (v) => console.log(v))
+        onSubmit={(SubmitEvent) => {
+          handleSubmit(SubmitEvent, async (value) => {
+            const fullName = `${value.lastName} ${value.firstName}`
+            try {
+              await updateCustomer({
+                variables: {
+                  id: customer?.customer_id,
+                  data: {
+                    name: fullName,
+                    username: value.username,
+                    password: customer.password,
+                    phone: value.phone,
+                    email: value.email
+                  }
+                }
+              })
+              toast({
+                element: (
+                  <Alert variant='success'>
+                    <Alert.Title
+                      fs={isMobile ? 'sm' : 'md'}
+                      className='GeomanistMedium-font'
+                    >
+                      Đã cập nhật thông tin thành công
+                    </Alert.Title>
+                  </Alert>
+                )
+              })
+            } catch (error) {
+              console.log('🚀 ~ handleSubmit ~ error:', error)
+            }
+          })
         }}
-        onReset={handleReset}
       >
         <Flex gap={fr(10)} w={'fit-content'}>
           <TextField
@@ -174,7 +225,7 @@ const AccountInformation = ({ customer }) => {
           placeholder='hi@paramita.com'
         />
         <NativeDateField {...register('date')} label='Sinh nhật' />
-        <Button size='md' br={'full'} ml={'auto'}>
+        <Button type='submit' size='md' br={'full'} ml={'auto'}>
           <Text fs={'md'} className='GeomanistLight-font'>
             Cập nhật
           </Text>

@@ -57,7 +57,10 @@ const OrderItem = ({ image, title, price, description }) => {
     toast({
       element: (
         <Alert variant='success'>
-          <Alert.Title fs={isMobile ? 'sm' : 'md'} className='Geomanist-font'>
+          <Alert.Title
+            fs={isMobile ? 'sm' : 'md'}
+            className='GeomanistMedium-font'
+          >
             Đã thêm món vào giỏ hàng thành công
           </Alert.Title>
         </Alert>
@@ -76,7 +79,7 @@ const OrderItem = ({ image, title, price, description }) => {
       toast({
         element: (
           <Alert variant='warning'>
-            <Alert.Title fs={'md'} className='Geomanist-font'>
+            <Alert.Title fs={'md'} className='GeomanistMedium-font'>
               Bạn cần đăng nhập để thêm vào giỏ hàng
             </Alert.Title>
           </Alert>

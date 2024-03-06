@@ -165,7 +165,12 @@ const MainPic = ({
               </>
             ) : (
               <>
-                <Text ta={'center'} mt={10} fs='xs' className='Geomanist-font'>
+                <Text
+                  ta={'center'}
+                  mt={10}
+                  fs='xs'
+                  className='GeomanistMedium-font'
+                >
                   SCROLL {'\n'} DOWN
                 </Text>
                 <Icon size={'xs'}>

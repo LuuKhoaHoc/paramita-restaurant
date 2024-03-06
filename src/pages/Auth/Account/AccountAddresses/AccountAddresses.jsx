@@ -150,7 +150,7 @@ const AccountAddresses = ({ customer }) => {
                     <Alert variant='success'>
                       <Alert.Title
                         fs={isMobile ? 'sm' : 'md'}
-                        className='Geomanist-font'
+                        className='GeomanistMedium-font'
                       >
                         Đã thêm địa chỉ thành công
                       </Alert.Title>
@@ -182,7 +182,7 @@ const AccountAddresses = ({ customer }) => {
                     <Alert variant='info'>
                       <Alert.Title
                         fs={isMobile ? 'sm' : 'md'}
-                        className='Geomanist-font'
+                        className='GeomanistMedium-font'
                       >
                         Đã sửa địa chỉ thành công
                       </Alert.Title>
@@ -305,7 +305,7 @@ const AccountAddresses = ({ customer }) => {
                           <Alert variant='error'>
                             <Alert.Title
                               fs={isMobile ? 'sm' : 'md'}
-                              className='Geomanist-font'
+                              className='GeomanistMedium-font'
                             >
                               Đã xoá địa chỉ thành công
                             </Alert.Title>

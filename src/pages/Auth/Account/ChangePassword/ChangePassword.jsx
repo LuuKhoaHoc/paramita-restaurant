@@ -128,7 +128,7 @@ const ChangePassword = ({ customer }) => {
                   <Alert variant='success'>
                     <Alert.Title
                       fs={isMobile ? 'sm' : 'md'}
-                      className='Geomanist-font'
+                      className='GeomanistMedium-font'
                     >
                       Đã thay đổi mật khẩu thành công
                     </Alert.Title>

@@ -74,7 +74,7 @@ const CartItem = ({ image, title, price, selected, quantity }) => {
         <Modal.Footer>
           <Button
             br={'full'}
-            className='Geomanist-font'
+            className='GeomanistMedium-font'
             size='md'
             onClick={() => setOpen(false)}
           >

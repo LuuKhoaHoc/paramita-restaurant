@@ -57,6 +57,7 @@ const GET_CUSTOMER = gql`
     customer(id: $id) {
       customer_id
       username
+      password
       name
       email
       phone
