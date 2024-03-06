@@ -38,18 +38,16 @@ const UPDATE_ADDRESS = gql`
   }
 `
 
+const DELETE_ADDRESS = gql`
+  mutation deleteAddress($id: Int!) {
+    deleteCustomerAddress(id: $id) {
+      address_id
+      address
+    }
+  }
+`
+
 const AccountAddresses = ({ customer }) => {
-  // Create Address
-  const [addAddress, { loading, error, data }] = useMutation(CREATE_ADDRESS)
-  if (loading) return <Loading />
-  if (error) return <p>Error : {error.message}</p>
-  // Update Address
-  const [
-    updateAddress,
-    { loading: loadingUpdate, error: errorUpdate, data: dataUpdate }
-  ] = useMutation(UPDATE_ADDRESS)
-  if (loadingUpdate) return <Loading />
-  if (errorUpdate) return <p>Error : {errorUpdate.message}</p>
   // responsive
   const { isTablet, isMobile } = useResponsive()
   // toast
@@ -57,26 +55,24 @@ const AccountAddresses = ({ customer }) => {
   // modal
   const [open, setOpen] = useState(false)
   // check update or create
-  const [checkModal, setCheckModal] = useState('create')
+  const [isUpdateModal, setIsUpdateModal] = useState(false)
   // set address data
-  const [addresses, setAddresses] = useState([])
+  const [addresses, setAddresses] = useState(customer?.address)
   // set address update
   const [addressUpdate, setAddressUpdate] = useState({})
   // slipt address to 3 part
   const { address, district, city } = separateAddressParts(
     addressUpdate?.address
   )
-  useEffect(() => {
-    if (addressUpdate) {
-      setValue('address', address || '')
-      setValue('district', district || '')
-      setValue('city', city || '')
-    }
-  }, [addressUpdate])
-  // set address after had customer
-  useEffect(() => {
-    setAddresses(customer?.address)
-  }, [customer])
+  // Create Address
+  const [addAddress, { loading, error }] = useMutation(CREATE_ADDRESS)
+
+  // Update Address
+  const [updateAddress, { loading: loadingUpdate, error: errorUpdate }] =
+    useMutation(UPDATE_ADDRESS)
+
+  const [deleteAddress, { loading: loadingDelete, error: errorDelete }] =
+    useMutation(DELETE_ADDRESS)
 
   // set validation field
   const { register, handleSubmit, setValue } = useForm({
@@ -113,6 +109,11 @@ const AccountAddresses = ({ customer }) => {
       }
     }
   })
+  useEffect(() => {
+    setValue('address', address || '')
+    setValue('district', district || '')
+    setValue('city', city || '')
+  }, [addressUpdate])
 
   return (
     <>
@@ -125,10 +126,74 @@ const AccountAddresses = ({ customer }) => {
       >
         <Modal.Header className='GeomanistMedium-font'>
           <Text fs={'2xl'} ta={'center'}>
-            {checkModal === 'create' ? 'Thêm' : 'Sửa'} địa chỉ
+            {isUpdateModal === 'create' ? 'Thêm' : 'Sửa'} địa chỉ
           </Text>
         </Modal.Header>
-        <Form>
+        <Form
+          onSubmit={(SubmitEvent) => {
+            handleSubmit(SubmitEvent, async (value) => {
+              const fullAddress = `${value.address}, ${value.district}, ${value.city}`
+              if (!isUpdateModal) {
+                // create address
+                const { data } = await addAddress({
+                  variables: {
+                    data: {
+                      customerId: customer?.customer_id,
+                      address: fullAddress
+                    }
+                  }
+                })
+                setAddresses([...addresses, data.createCustomerAddress])
+                setAddressUpdate({})
+                toast({
+                  element: (
+                    <Alert variant='success'>
+                      <Alert.Title
+                        fs={isMobile ? 'sm' : 'md'}
+                        className='Geomanist-font'
+                      >
+                        Đã thêm địa chỉ thành công
+                      </Alert.Title>
+                    </Alert>
+                  )
+                })
+                setOpen(false)
+              } else {
+                // update address
+                const { data } = await updateAddress({
+                  variables: {
+                    id: addressUpdate?.address_id,
+                    data: {
+                      customerId: customer?.customer_id,
+                      address: fullAddress
+                    }
+                  }
+                })
+                const newAddresses = addresses.map((address) => {
+                  if (address.address_id === addressUpdate?.address_id) {
+                    address = data.updateCustomerAddress
+                  }
+                  return { ...address }
+                })
+                setAddresses(newAddresses)
+                setAddressUpdate({})
+                toast({
+                  element: (
+                    <Alert variant='info'>
+                      <Alert.Title
+                        fs={isMobile ? 'sm' : 'md'}
+                        className='Geomanist-font'
+                      >
+                        Đã sửa địa chỉ thành công
+                      </Alert.Title>
+                    </Alert>
+                  )
+                })
+                setOpen(false)
+              }
+            })
+          }}
+        >
           <Flex
             direction='column'
             justify='around'
@@ -158,8 +223,13 @@ const AccountAddresses = ({ customer }) => {
             />
           </Flex>
           <Modal.Footer justify='end'>
-            <Button size='lg' br={'full'} className='GeomanistMedium-font'>
-              {checkModal === 'create' ? 'Thêm' : 'Sửa'}
+            <Button
+              type='submit'
+              size='lg'
+              br={'full'}
+              className='GeomanistMedium-font'
+            >
+              {isUpdateModal === 'create' ? 'Thêm' : 'Sửa'}
             </Button>
           </Modal.Footer>
         </Form>
@@ -190,9 +260,9 @@ const AccountAddresses = ({ customer }) => {
               cs={'pointer'}
               cl={['inherit', { hover: 'primary' }]}
               onClick={() => {
-                setCheckModal('create')
-                setAddressUpdate('')
-                setOpen(!open)
+                setIsUpdateModal(false)
+                setAddressUpdate({})
+                setOpen(true)
               }}
             >
               Thêm
@@ -202,7 +272,7 @@ const AccountAddresses = ({ customer }) => {
             {addresses?.map((item, index) => (
               <Flex key={index} w={'100%'}>
                 <Text tt={'capitalize'} fs={'lg'}>
-                  {item.address}
+                  {item?.address}
                 </Text>
                 <Flex ml={'auto'} gap={fr(5)}>
                   <Icon
@@ -210,9 +280,9 @@ const AccountAddresses = ({ customer }) => {
                     size={fr(6)}
                     cl={['inherit', { hover: 'blue' }]}
                     onClick={() => {
-                      setCheckModal('update')
+                      setIsUpdateModal(true)
                       setAddressUpdate(item)
-                      setOpen(!open)
+                      setOpen(true)
                     }}
                   >
                     <Pen weight='bold' />
@@ -221,7 +291,28 @@ const AccountAddresses = ({ customer }) => {
                     cs={'pointer'}
                     size={fr(6)}
                     cl={['inherit', { hover: 'red' }]}
-                    onClick={() => {}}
+                    onClick={() => {
+                      deleteAddress({
+                        variables: { id: item.address_id }
+                      })
+                      setAddresses(
+                        addresses.filter(
+                          (address) => address.address_id !== item.address_id
+                        )
+                      )
+                      toast({
+                        element: (
+                          <Alert variant='error'>
+                            <Alert.Title
+                              fs={isMobile ? 'sm' : 'md'}
+                              className='Geomanist-font'
+                            >
+                              Đã xoá địa chỉ thành công
+                            </Alert.Title>
+                          </Alert>
+                        )
+                      })
+                    }}
                   >
                     <X weight='bold' />
                   </Icon>

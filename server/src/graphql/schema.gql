@@ -18,7 +18,7 @@ type Mutation {
   deleteCustomer(id: ID!): Customer!
   createCustomerAddress(data: CustomerAddressInput!): CustomerAddress!
   updateCustomerAddress(id: Int!, data: CustomerAddressInput!): CustomerAddress!
-  deleteCustomerAddress(id: ID!): CustomerAddress!
+  deleteCustomerAddress(id: Int!): CustomerAddress!
   createCustomerLevel(data: CustomerLevelInput): CustomerLevel!
   updateCustomerLevel(id: Int!, data: CustomerLevelInput): CustomerLevel!
   deleteCustomerLevel(id: ID!): CustomerLevel!
