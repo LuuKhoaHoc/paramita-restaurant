@@ -449,7 +449,39 @@ export const resolvers = {
       )
       return { customer, token }
     },
-
+    // Change Password
+    changePassword: async (
+      _parent,
+      {
+        id,
+        oldPassword,
+        newPassword
+      }: { id: number; oldPassword: string; newPassword: string },
+      { prisma }: Context
+    ) => {
+      const passwordHash = await bcrypt.hash(newPassword, 10)
+      const oldCustomer = await prisma.customers.findFirst({
+        where: { customer_id: id },
+        select: {
+          customer_id: true,
+          password: true
+        }
+      })
+      if (
+        !oldCustomer ||
+        !(await bcrypt.compare(oldPassword, oldCustomer.password))
+      ) {
+        throw new Error('Mật khẩu cũ không đúng')
+      }
+      const customer = await prisma.customers.update({
+        where: { customer_id: id },
+        data: { password: passwordHash }
+      })
+      if (!customer) {
+        throw new Error('Cập nhập không thành công')
+      }
+      return customer
+    },
     // Customer
     createCustomer: async (
       _parent: any,

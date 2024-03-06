@@ -12,7 +12,14 @@ type Mutation {
   createPage(data: PageInput!): Page
   updatePage(id: Int!, data: PageInput!): Page!
   deletePage(id: ID!): Page!
+  # Account Mutation
   login(username: String!, password: String!): AuthPayload!
+  changePassword(
+    id: Int!
+    oldPassword: String!
+    newPassword: String!
+  ): Customer!
+
   createCustomer(data: CustomerInput!): AuthPayload!
   updateCustomer(id: Int!, data: CustomerInput!): Customer!
   deleteCustomer(id: ID!): Customer!

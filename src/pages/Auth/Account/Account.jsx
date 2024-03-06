@@ -65,7 +65,10 @@ const Account = ({ customer }) => {
                     path='history-point'
                     element={<HistoryRewardPoint />}
                   />
-                  <Route path='change-password' element={<ChangePassword />} />
+                  <Route
+                    path='change-password'
+                    element={<ChangePassword customer={customer} />}
+                  />
                   <Route path='*' element={<AccountInformation />} />
                 </Routes>
               </Flex>

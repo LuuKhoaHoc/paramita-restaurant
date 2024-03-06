@@ -74,18 +74,17 @@ const GET_CUSTOMER = gql`
 `
 
 const imagesGallery = [Space1, Space2, Space3, Food1, Food2, HomePic2]
-
+function getCustomer() {
+  const { loading, error, data } = useQuery(GET_CUSTOMER, {
+    variables: {
+      id: localStorage.getItem('token')
+    }
+  })
+  if (loading) return <Loading />
+  if (error) return <p>Error : {error.message}</p>
+  return data
+}
 const App = () => {
-  function getCustomer() {
-    const { loading, error, data } = useQuery(GET_CUSTOMER, {
-      variables: {
-        id: localStorage.getItem('token')
-      }
-    })
-    if (loading) return <Loading />
-    if (error) return <p>Error : {error.message}</p>
-    return data
-  }
   const { customer } = getCustomer()
   const textColor = useThemeModeValue('#371b04', '#d1e9d5')
   const bgColor = useThemeModeValue('#fff2e5', '#1d2b1f')
