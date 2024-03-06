@@ -24,9 +24,14 @@ const Privacy = lazyWithPreload(() => import('~/pages/Privacy/Privacy'))
 const TermOfUse = lazyWithPreload(() => import('~/pages/TermOfUse/TermOfUse'))
 const FAQ = lazyWithPreload(() => import('~/pages/FAQ/FAQ'))
 const Order = lazyWithPreload(() => import('~/pages/Order/Order'))
+const OrderCategory = lazyWithPreload(() =>
+  import('~/pages/Order/OrderCategory')
+)
 const Cart = lazyWithPreload(() => import('~/pages/Cart/Cart'))
 const Checkout = lazyWithPreload(() => import('~/pages/Checkout/Checkout'))
-const CheckoutSuccess = lazyWithPreload(() => import('~/pages/Checkout/CheckoutSuccess/CheckoutSuccess'))
+const CheckoutSuccess = lazyWithPreload(() =>
+  import('~/pages/Checkout/CheckoutSuccess/CheckoutSuccess')
+)
 const Auth = lazyWithPreload(() => import('~/pages/Auth/Auth'))
 const Login = lazyWithPreload(() => import('~/pages/Auth/Login/Login'))
 const Register = lazyWithPreload(() => import('~/pages/Auth/Register/Register'))
@@ -65,6 +70,7 @@ export {
   TermOfUse,
   FAQ,
   Order,
+  OrderCategory,
   Cart,
   Checkout,
   CheckoutSuccess,

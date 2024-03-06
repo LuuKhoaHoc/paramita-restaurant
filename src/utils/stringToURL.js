@@ -5,5 +5,5 @@ export function itemToURL(item) {
     .replace(/[\u0300-\u036f]/g, '')
     .replace(/[^a-z0-9]/g, ' ')
     .trim()
-    .replace(/ /g, '%20')
+    .replace(/ /g, '-')
 }
