@@ -129,6 +129,7 @@ const AccountInformation = ({ customer }) => {
       setValue('username', customer.username || '')
       setValue('email', customer.email || '')
       setValue('phone', customer.phone || '')
+      setValue('date', customer?.birthday.split('T')[0] || '')
     }
   }, [customer, setValue, register('username').value])
   return (
@@ -164,6 +165,8 @@ const AccountInformation = ({ customer }) => {
         onSubmit={(SubmitEvent) => {
           handleSubmit(SubmitEvent, async (value) => {
             const fullName = `${value.lastName} ${value.firstName}`
+            const birthday = new Date(value.date)
+            // .toISOString().split('T')[0]
             try {
               await updateCustomer({
                 variables: {
@@ -173,7 +176,8 @@ const AccountInformation = ({ customer }) => {
                     username: value.username,
                     password: customer.password,
                     phone: value.phone,
-                    email: value.email
+                    email: value.email,
+                    birthday: birthday
                   }
                 }
               })
@@ -191,6 +195,19 @@ const AccountInformation = ({ customer }) => {
               })
             } catch (error) {
               console.log('🚀 ~ handleSubmit ~ error:', error)
+              toast({
+                element: (
+                  <Alert variant='error'>
+                    <Alert.Title
+                      fs={isMobile ? 'sm' : 'md'}
+                      className='GeomanistMedium-font'
+                    >
+                      Cập nhật thông tin không thành công! Vui lòng kiểm tra lại
+                      thông tin.
+                    </Alert.Title>
+                  </Alert>
+                )
+              })
             }
           })
         }}

@@ -61,6 +61,7 @@ const GET_CUSTOMER = gql`
       name
       email
       phone
+      birthday
       points
       level {
         level_id

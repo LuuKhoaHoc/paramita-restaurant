@@ -158,15 +158,11 @@ const ChangePassword = ({ customer }) => {
             {...register('confirmPassword')}
             label='Xác nhận mật khẩu mới'
           />
-          <Button
-            size='md'
-            br={'full'}
-            className='GeomanistLight-font'
-            ml={'auto'}
-            mt={fr(4)}
-            type='submit'
-          >
-            <Text fs={'md'}>Cập nhật</Text>
+
+          <Button type='submit' size='md' br={'full'} ml={'auto'} mt={fr(4)}>
+            <Text fs={'md'} className='GeomanistLight-font'>
+              Cập nhật
+            </Text>
           </Button>
         </Flex>
       </Form>
