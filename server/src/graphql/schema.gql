@@ -75,6 +75,7 @@ input CategoryInput {
   menu: [MenuInput!]
 }
 input MenuInput {
+  categoryId: Int
   name: String!
   description: String!
   price: Float!
@@ -298,7 +299,8 @@ type Menu {
   description: String!
   price: Float!
   image: String
-  categories: [Category!]
+  # category_id: Int!
+  category: [Category!]
 }
 
 type Content {

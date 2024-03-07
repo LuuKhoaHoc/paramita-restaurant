@@ -11,22 +11,7 @@ model categories {
   category_id Int    @id @default(autoincrement())
   tsid        String @db.VarChar(13)
   name        String @db.VarChar(255)
-  menus       menu[]
-}
-
-model menu {
-  item_id                                   Int             @id @default(autoincrement())
-  tsid                                      String          @db.VarChar(13)
-  name                                      String          @db.VarChar(255)
-  description                               String          @db.Text
-  price                                     Decimal         @db.Decimal(10, 2)
-  image                                     String          @db.Text
-  category_id                               Int
-  categories                                categories[]
-  order_details_menu_item_idToorder_details order_details   @relation("menu_item_idToorder_details", fields: [item_id], references: [item_id], onUpdate: Restrict, map: "menu_ibfk_6")
-  order_details_order_details_item_idTomenu order_details[] @relation("order_details_item_idTomenu")
-
-  @@index([category_id], map: "category_id")
+  menu        menu[]
 }
 
 model contents {
@@ -150,17 +135,31 @@ model invoices {
   @@index([customer_id], map: "customer_id")
 }
 
+model menu {
+  item_id       Int            @id @default(autoincrement())
+  tsid          String         @db.VarChar(13)
+  name          String         @db.VarChar(255)
+  description   String         @db.Text
+  price         Decimal        @db.Decimal(10, 2)
+  image         String         @db.Text
+  category_id   Int
+  categories    categories     @relation(fields: [category_id], references: [category_id])
+  order_details order_details?
+
+  @@index([category_id], map: "category_id")
+}
+
 model order_details {
-  order_detail_id                  Int     @id @default(autoincrement())
-  tsid                             String  @db.VarChar(13)
-  order_id                         Int
-  item_id                          Int     @unique
-  quantity                         Int
-  unit_price                       Decimal @db.Decimal(10, 2)
-  total_price                      Decimal @db.Decimal(10, 2)
-  menu_menu_item_idToorder_details menu?   @relation("menu_item_idToorder_details")
-  orders                           orders  @relation(fields: [order_id], references: [order_id], onUpdate: Restrict, map: "order_details_ibfk_1")
-  menu_order_details_item_idTomenu menu    @relation("order_details_item_idTomenu", fields: [item_id], references: [item_id], onUpdate: Restrict, map: "order_details_ibfk_4")
+  order_detail_id Int     @id @default(autoincrement())
+  tsid            String  @db.VarChar(13)
+  order_id        Int
+  item_id         Int     @unique
+  quantity        Int
+  unit_price      Decimal @db.Decimal(10, 2)
+  total_price     Decimal @db.Decimal(10, 2)
+
+  menu   menu?  @relation(fields: [item_id], references: [item_id])
+  orders orders @relation(fields: [order_id], references: [order_id], onUpdate: Restrict, map: "order_details_ibfk_1")
 
   @@index([item_id], map: "item_id")
   @@index([order_id], map: "order_id")

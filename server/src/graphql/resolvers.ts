@@ -1312,7 +1312,7 @@ export const resolvers = {
         .findUnique({
           where: { category_id: parent?.category_id }
         })
-        .menus()
+        .menu()
     }
   },
   Content: {
