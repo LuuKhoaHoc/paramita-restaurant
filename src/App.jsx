@@ -58,7 +58,6 @@ const GET_CUSTOMER = gql`
     customer(id: $id) {
       customer_id
       username
-      password
       name
       email
       phone
@@ -156,7 +155,10 @@ const App = () => {
                   element={<Account customer={customer} />}
                 />
                 <Route path='/cart' element={<Cart />} />
-                <Route path='/checkout' element={<Checkout />} />
+                <Route
+                  path='/checkout'
+                  element={<Checkout customer={customer} />}
+                />
                 <Route path='/checkout-success' element={<CheckoutSuccess />} />
               </Route>
               <Route path='/login' element={<Login />} />

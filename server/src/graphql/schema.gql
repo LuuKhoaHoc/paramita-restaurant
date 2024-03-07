@@ -105,7 +105,7 @@ input CustomerInput {
   levelId: Int
   status: Boolean
   username: String!
-  password: String!
+  password: String
 }
 
 input CustomerAddressInput {

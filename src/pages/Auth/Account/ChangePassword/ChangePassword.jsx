@@ -110,10 +110,12 @@ const ChangePassword = ({ customer }) => {
           handleSubmit(SubmitEvent, async (value) => {
             if (value.oldPassword === value.password) {
               setError('password', 'Mật khẩu mới phải khác mật khẩu cũ')
+              return
             }
             if (value.password !== value.confirmPassword) {
               setError('password', 'Mật khẩu mới không khớp nhau')
               setError('confirmPassword', 'Mật khẩu mới không khớp nhau')
+              return
             }
             try {
               await changePassword({

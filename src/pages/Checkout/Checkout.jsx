@@ -22,7 +22,8 @@ import CheckoutReview from '~/pages/Checkout/CheckoutReview/CheckoutReview'
 import React, { useEffect } from 'react'
 import { useResponsive } from '~/utils/responsive'
 
-const Checkout = () => {
+const Checkout = ({ customer }) => {
+  console.log('🚀 ~ Checkout ~ customer:', customer)
   const { isMobile, isTablet } = useResponsive()
   return (
     <Box pos={'relative'} mih={'100vh'}>
@@ -39,7 +40,12 @@ const Checkout = () => {
             columnStart={isTablet ? 2 : isMobile ? 1 : 3}
             columnEnd={isTablet ? 12 : isMobile ? 13 : 11}
           >
-            <Stack direction={isMobile ? 'column' : 'row'} gap={fr(4)} mih={'70vh'} mb={fr(4)}>
+            <Stack
+              direction={isMobile ? 'column' : 'row'}
+              gap={fr(4)}
+              mih={'70vh'}
+              mb={fr(4)}
+            >
               <Flex
                 w={isMobile ? '80vw' : '60%'}
                 bg={(theme) => (theme.mode === 'dark' ? '#1f2937' : '#fff')}
@@ -77,7 +83,7 @@ const Checkout = () => {
                     </Tabs.Tab>
                   </Tabs.List>
                   <Tabs.Panel value='first' direction='column'>
-                    <CheckoutShipping />
+                    <CheckoutShipping customer={customer} />
                   </Tabs.Panel>
                   <Tabs.Panel value='second'>
                     <CheckoutPayment />

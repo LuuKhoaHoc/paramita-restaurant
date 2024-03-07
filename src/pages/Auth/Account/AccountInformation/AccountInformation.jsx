@@ -34,7 +34,6 @@ const UPDATE_CUSTOMER = gql`
     }
   }
 `
-
 const AccountInformation = ({ customer }) => {
   const { isMobile } = useResponsive()
   const toast = useToast()
@@ -129,7 +128,7 @@ const AccountInformation = ({ customer }) => {
       setValue('username', customer.username || '')
       setValue('email', customer.email || '')
       setValue('phone', customer.phone || '')
-      setValue('date', customer?.birthday.split('T')[0] || '')
+      setValue('date', customer?.birthday?.split('T')[0] || '')
     }
   }, [customer, setValue, register('username').value])
   return (
@@ -174,7 +173,6 @@ const AccountInformation = ({ customer }) => {
                   data: {
                     name: fullName,
                     username: value.username,
-                    password: customer.password,
                     phone: value.phone,
                     email: value.email,
                     birthday: birthday
