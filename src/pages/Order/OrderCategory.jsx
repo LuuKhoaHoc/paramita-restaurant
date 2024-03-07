@@ -19,6 +19,7 @@ import {
 import { useResponsive } from '~/utils/responsive'
 import { gql, useQuery } from '@apollo/client'
 import { useParams } from 'react-router-dom'
+import { itemToURL } from '~/utils/stringToURL'
 
 const GET_CONTENTS = gql`
   query {
@@ -43,6 +44,19 @@ const GET_CATEGORYLIST = gql`
     }
   }
 `
+const GET_MENU = gql`
+  query {
+    menuList {
+      image
+      name
+      price
+      description
+      category {
+        name
+      }
+    }
+  }
+`
 
 const OrderCategory = () => {
   const { category } = useParams()
@@ -56,56 +70,22 @@ const OrderCategory = () => {
     error: errorContent,
     data: dataContent
   } = useQuery(GET_CONTENTS)
-  const listFood = [
-    {
-      image: BanhXeo,
-      title: 'Bánh xèo',
-      price: '100.000',
-      description: 'Món Bánh xèo ngon miệng'
-    },
-    {
-      image: BunHue,
-      title: 'Bún Huế Paramita',
-      price: '80.000',
-      description: 'Món Bún Huế thơm ngon'
-    },
-    {
-      image: BunNam,
-      title: 'Bún nấm nướng chả giò',
-      price: '100.000',
-      description: 'Món Bún nấm nướng chả giò hấp dẫn'
-    },
-    {
-      image: CaTimNuong,
-      title: 'Cà tím nướng hành ớt',
-      price: '100.000',
-      description: 'Món Cà tím nướng hành ớt đậm đà'
-    },
-    {
-      image: ChaoNamMoi,
-      title: 'Cháo nấm mối',
-      price: '100.000',
-      description: 'Món Cháo nấm mối thơm ngon'
-    },
-    {
-      image: ComTam,
-      title: 'Cơm tấm Paramita',
-      price: '100.000',
-      description: 'Món Cơm tấm ngon lành'
-    },
-    {
-      image: DauHuNonChungTuong,
-      title: 'Đậu hũ non chưng tương',
-      price: '100.000',
-      description: 'Món Đậu hũ non chưng tương thơm ngon'
-    },
-    {
-      image: Lau,
-      title: 'Lẩu Paramita',
-      price: '80.000',
-      description: 'Món Lẩu thơm ngon'
-    }
-  ]
+  const {
+    loading: loadingMenu,
+    error: errorMenu,
+    data: dataMenu
+  } = useQuery(GET_MENU)
+
+  const listFood = dataMenu?.menuList || []
+  let listFoodFilter = []
+  if (category === 'tat-ca') {
+    listFoodFilter = listFood
+  } else {
+    listFoodFilter = listFood.filter(
+      (item) => itemToURL(item.category[0].name) === category
+    )
+  }
+
   const { isMobile, isTablet, isLaptop } = useResponsive()
   if (loadingContent) return <Loading />
 
@@ -133,7 +113,7 @@ const OrderCategory = () => {
                   </Text>
                 </Flex>
                 <OrderListCategory data={dataCategory} />
-                <OrderListItem listFood={listFood} />
+                <OrderListItem listFood={listFoodFilter} />
               </Flex>
             </Grid.Item>
           </Grid>

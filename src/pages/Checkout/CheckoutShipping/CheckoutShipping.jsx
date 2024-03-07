@@ -14,7 +14,7 @@ import { useForm, useSearch } from '@prismane/core/hooks'
 import React, { useEffect } from 'react'
 import { useResponsive } from '~/utils/responsive'
 
-const CheckoutShipping = () => {
+const CheckoutShipping = ({ customer }) => {
   const { isTablet, isMobile } = useResponsive()
   const checkoutInformation = JSON.parse(
     sessionStorage.getItem('checkout-information')
@@ -110,7 +110,7 @@ const CheckoutShipping = () => {
         </Flex>
       </Center>
       <Box mx={fr(4)}>
-        <Text className='GeomanistMedium-font' fs={isTablet ? 'md' :'xl'}>
+        <Text className='GeomanistMedium-font' fs={isTablet ? 'md' : 'xl'}>
           Địa chỉ khác
         </Text>
         <Form
@@ -147,12 +147,18 @@ const CheckoutShipping = () => {
           />
           <Flex gap={fr(2)}>
             <Button br={'full'} variant='tertiary' type='submit'>
-              <Text className='GeomanistMedium-font' fs={isTablet ? 'sm' : 'base'}>
+              <Text
+                className='GeomanistMedium-font'
+                fs={isTablet ? 'sm' : 'base'}
+              >
                 Thêm địa chỉ
               </Text>
             </Button>
             <Button br={'full'} variant='tertiary' type='reset'>
-              <Text className='GeomanistMedium-font' fs={isTablet ? 'sm' : 'base'}>
+              <Text
+                className='GeomanistMedium-font'
+                fs={isTablet ? 'sm' : 'base'}
+              >
                 Xoá
               </Text>
             </Button>

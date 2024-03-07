@@ -41,6 +41,19 @@ const GET_CATEGORYLIST = gql`
     }
   }
 `
+const GET_MENU = gql`
+  query {
+    menuList {
+      image
+      name
+      price
+      description
+      category {
+        name
+      }
+    }
+  }
+`
 
 const Order = () => {
   const {
@@ -53,56 +66,63 @@ const Order = () => {
     error: errorContent,
     data: dataContent
   } = useQuery(GET_CONTENTS)
-  const listFood = [
-    {
-      image: BanhXeo,
-      title: 'Bánh xèo',
-      price: '100.000',
-      description: 'Món Bánh xèo ngon miệng'
-    },
-    {
-      image: BunHue,
-      title: 'Bún Huế Paramita',
-      price: '80.000',
-      description: 'Món Bún Huế thơm ngon'
-    },
-    {
-      image: BunNam,
-      title: 'Bún nấm nướng chả giò',
-      price: '100.000',
-      description: 'Món Bún nấm nướng chả giò hấp dẫn'
-    },
-    {
-      image: CaTimNuong,
-      title: 'Cà tím nướng hành ớt',
-      price: '100.000',
-      description: 'Món Cà tím nướng hành ớt đậm đà'
-    },
-    {
-      image: ChaoNamMoi,
-      title: 'Cháo nấm mối',
-      price: '100.000',
-      description: 'Món Cháo nấm mối thơm ngon'
-    },
-    {
-      image: ComTam,
-      title: 'Cơm tấm Paramita',
-      price: '100.000',
-      description: 'Món Cơm tấm ngon lành'
-    },
-    {
-      image: DauHuNonChungTuong,
-      title: 'Đậu hũ non chưng tương',
-      price: '100.000',
-      description: 'Món Đậu hũ non chưng tương thơm ngon'
-    },
-    {
-      image: Lau,
-      title: 'Lẩu Paramita',
-      price: '80.000',
-      description: 'Món Lẩu thơm ngon'
-    }
-  ]
+  const {
+    loading: loadingMenu,
+    error: errorMenu,
+    data: dataMenu
+  } = useQuery(GET_MENU)
+
+  const listFood = dataMenu?.menuList || []
+  // const listFood = [
+  //   {
+  //     image: BanhXeo,
+  //     title: 'Bánh xèo',
+  //     price: '100.000',
+  //     description: 'Món Bánh xèo ngon miệng'
+  //   },
+  //   {
+  //     image: BunHue,
+  //     title: 'Bún Huế Paramita',
+  //     price: '80.000',
+  //     description: 'Món Bún Huế thơm ngon'
+  //   },
+  //   {
+  //     image: BunNam,
+  //     title: 'Bún nấm nướng chả giò',
+  //     price: '100.000',
+  //     description: 'Món Bún nấm nướng chả giò hấp dẫn'
+  //   },
+  //   {
+  //     image: CaTimNuong,
+  //     title: 'Cà tím nướng hành ớt',
+  //     price: '100.000',
+  //     description: 'Món Cà tím nướng hành ớt đậm đà'
+  //   },
+  //   {
+  //     image: ChaoNamMoi,
+  //     title: 'Cháo nấm mối',
+  //     price: '100.000',
+  //     description: 'Món Cháo nấm mối thơm ngon'
+  //   },
+  //   {
+  //     image: ComTam,
+  //     title: 'Cơm tấm Paramita',
+  //     price: '100.000',
+  //     description: 'Món Cơm tấm ngon lành'
+  //   },
+  //   {
+  //     image: DauHuNonChungTuong,
+  //     title: 'Đậu hũ non chưng tương',
+  //     price: '100.000',
+  //     description: 'Món Đậu hũ non chưng tương thơm ngon'
+  //   },
+  //   {
+  //     image: Lau,
+  //     title: 'Lẩu Paramita',
+  //     price: '80.000',
+  //     description: 'Món Lẩu thơm ngon'
+  //   }
+  // ]
   const { isMobile, isTablet, isLaptop } = useResponsive()
   if (loadingContent) return <Loading />
 

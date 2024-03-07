@@ -23,7 +23,7 @@ const Cart = () => {
   const { cartItems } = useContext(CartContext)
   const data = cartItems
   const subTotal = data.reduce((acc, item) => {
-    return acc + item.price * item.quantity * 1000
+    return acc + item.price * item.quantity
   }, 0)
   return (
     <Box pos={'relative'} mih={'100vh'}>
@@ -95,12 +95,7 @@ const Cart = () => {
               <Divider />
               <Flex fs={isTablet ? 'lg' : isMobile ? 'md' : 'xl'}>
                 <Text>Tổng cộng</Text>
-                <Text ml={'auto'}>
-                  {subTotal.toLocaleString('vi-VN', {
-                    style: 'currency',
-                    currency: 'VND'
-                  })}
-                </Text>
+                <Text ml={'auto'}>{subTotal.toLocaleString('vi-VN')}đ</Text>
               </Flex>
               <Flex ml={'auto'} align='center' gap={fr(4)} my={fr(5)}>
                 <Center

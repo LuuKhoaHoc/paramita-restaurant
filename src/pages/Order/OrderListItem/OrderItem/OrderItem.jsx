@@ -18,8 +18,10 @@ import React, { useContext, useState } from 'react'
 import { QuantityItem } from '~/components'
 import { CartContext } from '~/contexts/CartContext'
 import { useResponsive } from '~/utils/responsive'
+import { AuthContext } from '~/contexts/AuthContext'
 
 const OrderItem = ({ image, title, price, description }) => {
+  const { isLoggedIn } = useContext(AuthContext)
   const { isMobile, isTablet } = useResponsive()
   const { addCartItem } = useContext(CartContext)
   const toast = useToast()
@@ -70,8 +72,8 @@ const OrderItem = ({ image, title, price, description }) => {
   }
   const handleOrder = () => {
     if (
-      sessionStorage.getItem('login') === 'true' ||
-      localStorage.getItem('login') === 'true'
+      localStorage.getItem('token') &&
+      (isLoggedIn || localStorage.getItem('login') === 'true')
     ) {
       handleSendItem()
     } else {
@@ -114,14 +116,11 @@ const OrderItem = ({ image, title, price, description }) => {
         />
         <Text fs={isTablet ? 'xl' : isMobile ? 'lg' : '2xl'}>{title}</Text>
         <Text fs={isTablet ? 'md' : isMobile ? 'base' : 'lg'}>
-          Lorem ipsum dolor sit amet consectetur, adipisicing elit. Quisquam
-          voluptatibus vero quibusdam delectus neque deserunt nesciunt
-          voluptatem praesentium debitis molestias suscipit magnam non maiores
-          sint eum, reiciendis cum! Id, quibusdam?
+          {description}
           {/* {description} */}
         </Text>
         <Flex justify='between' align='center' fs={'lg'} mb={fr(2)}>
-          <Text>{price}</Text>
+          <Text>{price.toLocaleString('vi-VN')}đ</Text>
           <QuantityItem onQuantityChange={handleQuantityChange} />
         </Flex>
         <TextField
@@ -176,7 +175,7 @@ const OrderItem = ({ image, title, price, description }) => {
           className='GeomanistMedium-font'
           onClick={handleOrder}
         >
-          {price} đ - Thêm vào giỏ hàng
+          {price.toLocaleString('vi-VN')}đ - Thêm vào giỏ hàng
         </Button>
       </Modal>
       <Flex
@@ -202,7 +201,7 @@ const OrderItem = ({ image, title, price, description }) => {
           {title}
         </Text>
         <Flex align='center' justify='between' w={'100%'}>
-          <Text>{price} đ</Text>
+          <Text>{price.toLocaleString('vi-VN')}đ</Text>
           <Button
             icon={<Plus weight='bold' />}
             br={'full'}

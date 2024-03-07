@@ -20,7 +20,7 @@ const CartItem = ({ image, title, price, selected, quantity }) => {
   const { isTablet, isMobile } = useResponsive()
   const { removeCartItem, updateCartItemQuantity, updateCartItemSelected } =
     useContext(CartContext)
-  const subtotal = price * quantity * 1000
+  const subtotal = price * quantity
   const handleRemoveItem = (title) => {
     removeCartItem(title)
   }
@@ -71,7 +71,7 @@ const CartItem = ({ image, title, price, selected, quantity }) => {
             </Flex>
           ))}
         </Flex>
-        <Modal.Footer>
+        <Modal.Footer justify='end'>
           <Button
             br={'full'}
             className='GeomanistMedium-font'
@@ -112,13 +112,7 @@ const CartItem = ({ image, title, price, selected, quantity }) => {
         </Table.Cell>
         {!isMobile && (
           <Table.Cell ta={'center'}>
-            <Text fs={'lg'}>
-              {price.toLocaleString('vi-VN', {
-                style: 'currency',
-                currency: 'VND'
-              })}
-              đ
-            </Text>
+            <Text fs={'lg'}>{price.toLocaleString('vi-VN')}đ</Text>
           </Table.Cell>
         )}
         {!isMobile && (
@@ -135,12 +129,7 @@ const CartItem = ({ image, title, price, selected, quantity }) => {
           </Table.Cell>
         )}
         <Table.Cell ta={'center'}>
-          <Text fs={'lg'}>
-            {subtotal.toLocaleString('vi-VN', {
-              style: 'currency',
-              currency: 'VND'
-            })}
-          </Text>
+          <Text fs={'lg'}>{subtotal.toLocaleString('vi-VN')}đ</Text>
         </Table.Cell>
       </Table.Row>
     </>

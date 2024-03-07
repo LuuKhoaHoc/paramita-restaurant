@@ -318,14 +318,14 @@ export const resolvers = {
     },
     updateMenu: async (
       _parent: any,
-      args: { id: number; cat_id: number; data: MenuInput },
+      args: { id: number; data: MenuInput },
       context: Context
     ) => {
       return context.prisma.menu.update({
         where: { item_id: args.id },
         data: {
           name: args.data.name,
-          category_id: args.cat_id,
+          category_id: args.data.categoryId,
           description: args.data.description,
           price: args.data.price,
           image: args.data.image
@@ -1300,21 +1300,20 @@ export const resolvers = {
   DateTime: DateTimeResolver,
   // Relationship
   Category: {
-    menu: (parent: any, _args: any, context: Context) => {
+    menu: (_parent: any, _args: any, context: Context) => {
       return context.prisma.menu.findMany({
-        where: { category_id: parent?.category_id }
+        where: { categories: { category_id: _parent.category_id } }
       })
     }
   },
   Menu: {
-    category: (parent: any, _args: any, context: Context) => {
-      return context.prisma.categories
-        .findUnique({
-          where: { category_id: parent?.category_id }
-        })
-        .menu()
+    category: (_parent: any, _args: any, context: Context) => {
+      return context.prisma.categories.findMany({
+        where: { menu: { some: { item_id: _parent.item_id } } }
+      })
     }
   },
+
   Content: {
     page: (parent: any, _args: any, context: Context) => {
       return context.prisma.pages.findUnique({
