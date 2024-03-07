@@ -116,6 +116,7 @@ const Navbar = ({ customer }) => {
     localStorage.removeItem('orderSuccess')
     localStorage.removeItem('login')
     localStorage.removeItem('token')
+    setMenuOpen(false)
     setIsLoggedIn(false)
   }
 

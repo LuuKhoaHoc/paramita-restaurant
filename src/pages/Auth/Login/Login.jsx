@@ -193,6 +193,15 @@ const Login = () => {
                           }
                         }
                       })
+                      sessionStorage.setItem(
+                        'checkout-information',
+                        JSON.stringify({
+                          payment: 'tien-mat',
+                          notes: '',
+                          delivery: 15000,
+                          voucher: 0
+                        })
+                      )
                       setIsLoggedIn(true)
                       navigate(-1)
                       if (remember) {
