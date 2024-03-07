@@ -196,6 +196,7 @@ const Login = () => {
                       sessionStorage.setItem(
                         'checkout-information',
                         JSON.stringify({
+                          address: '',
                           payment: 'tien-mat',
                           notes: '',
                           delivery: 15000,
