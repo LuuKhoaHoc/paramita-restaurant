@@ -10,7 +10,8 @@ import {
   ToggleMode,
   SmallBookTable,
   SmallGallery,
-  ScrollToTop as ScrollToTopButton
+  ScrollToTop as ScrollToTopButton,
+  ErrorLogin
 } from '~/components'
 import { Food1, Food2, HomePic2, Space1, Space2, Space3 } from '~/images'
 // routes
@@ -99,11 +100,14 @@ const App = () => {
     })
     if (loading) return <Loading />
     if (data === undefined) {
+      ErrorLogin()
       localStorage.removeItem('token')
     }
   }
+
   window.addEventListener('storage', function (e) {
     if (e.key === 'token' || e.key === 'login') {
+      ErrorLogin()
       localStorage.removeItem('login')
       localStorage.removeItem('token')
       window.location.reload()
