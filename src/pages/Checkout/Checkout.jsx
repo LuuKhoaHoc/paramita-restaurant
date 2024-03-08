@@ -16,9 +16,19 @@ import CheckoutPayment from '~/pages/Checkout/CheckoutPayment/CheckoutPayment'
 import CheckoutReview from '~/pages/Checkout/CheckoutReview/CheckoutReview'
 import React, { useEffect } from 'react'
 import { useResponsive } from '~/utils/responsive'
+import { ErrorLogin } from '~/components'
 
 const Checkout = ({ customer }) => {
   const { isMobile, isTablet } = useResponsive()
+  window.addEventListener('storage', function (e) {
+    if (e.key === 'token' || e.key === 'login') {
+      ErrorLogin()
+      localStorage.removeItem('login')
+      localStorage.removeItem('token')
+      window.location.reload()
+    }
+  })
+
   return (
     <Box pos={'relative'} mih={'100vh'}>
       <Box h={fr(22.5)} bg='#371b04' />
@@ -80,10 +90,10 @@ const Checkout = ({ customer }) => {
                     <CheckoutShipping customer={customer} />
                   </Tabs.Panel>
                   <Tabs.Panel value='second'>
-                    <CheckoutPayment />
+                    <CheckoutPayment customer={customer} />
                   </Tabs.Panel>
                   <Tabs.Panel value='third'>
-                    <CheckoutReview />
+                    <CheckoutReview customer={customer} />
                   </Tabs.Panel>
                 </Tabs>
               </Flex>

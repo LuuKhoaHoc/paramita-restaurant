@@ -36,16 +36,24 @@ const CheckoutShipping = ({ customer }) => {
       }
     }
   })
-  const accountAddress = customer?.address.map((item) => {
-    return item.address
-  })
+  // address history
   const addressHistory =
     JSON.parse(localStorage.getItem('address-history')) || []
+  // useSearch hook
+  const { query, setQuery, filtered } = useSearch(addressHistory)
+  // Check information from the previous session
+  useEffect(() => {
+    if (checkoutInformation.address) {
+      setQuery(checkoutInformation.address)
+    }
+  }, [])
   const addAddress = (newAddress) => {
     addressHistory.push(newAddress)
     localStorage.setItem('address-history', JSON.stringify(addressHistory))
   }
-  const { query, setQuery, filtered } = useSearch(addressHistory)
+  const accountAddress = customer?.address.map((item) => {
+    return item.address
+  })
   const handleSetAddress = (v) => {
     checkoutInformation.address = v
     sessionStorage.setItem(
@@ -84,7 +92,7 @@ const CheckoutShipping = ({ customer }) => {
             icon={<CheckCircle color={hasTwoCommas(query) ? '#39b54a' : ''} />}
           />
           <List mah={fr(35)} of={'auto'}>
-            {accountAddress.map((item, index) => (
+            {accountAddress?.map((item, index) => (
               <List.Item
                 key={index}
                 cl={(theme) => (theme.mode === 'dark' ? 'white' : 'black')}

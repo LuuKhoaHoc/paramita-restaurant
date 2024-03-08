@@ -14,7 +14,7 @@ import { CartContext } from '~/contexts/CartContext'
 import { LogoIcon } from '~/images'
 import { useResponsive } from '~/utils/responsive'
 
-const CheckoutReview = () => {
+const CheckoutReview = ({ customer }) => {
   const { isTablet, isMobile } = useResponsive()
   // Lấy cartItems và clearCart từ CartContext
   const { cartItems, clearCart } = useContext(CartContext)
@@ -25,7 +25,7 @@ const CheckoutReview = () => {
   // Tính tổng tiền
   const totalPrice =
     cartItems.reduce((acc, item) => {
-      return acc + item.price * item.quantity * 1000
+      return acc + item.price * item.quantity
     }, 0) + checkoutInformation?.delivery
   // Tạo state open để mở dialog
   const [open, setOpen] = useState(false)
@@ -54,8 +54,6 @@ const CheckoutReview = () => {
         'checkout-information',
         JSON.stringify({
           address: '',
-          name: 'paramita',
-          phone: '0987654321',
           payment: 'tien-mat',
           notes: '',
           delivery: 15000,
@@ -90,8 +88,8 @@ const CheckoutReview = () => {
         <Image
           src={LogoIcon}
           alt='logo'
-          w={isTablet ? fr(32): fr(40)}
-          h={isTablet ? fr(32): fr(40)}
+          w={isTablet ? fr(32) : fr(40)}
+          h={isTablet ? fr(32) : fr(40)}
           fit='cover'
           bsh={'md'}
           br={'full'}

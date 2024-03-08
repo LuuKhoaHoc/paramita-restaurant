@@ -10,17 +10,18 @@ import {
   Text,
   fr
 } from '@prismane/core'
-import React, { useContext } from 'react'
-import { Link } from 'react-router-dom'
+import React, { useContext, useEffect } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
 import { CountDown } from '~/components'
 import { CartContext } from '~/contexts/CartContext'
 import { useResponsive } from '~/utils/responsive'
 const CheckoutCart = () => {
+  const navigate = useNavigate()
   const { isTablet, isMobile } = useResponsive()
   const { cartItems, removeCartItem } = useContext(CartContext)
-  if (sessionStorage.getItem('cartItems').length === 0) {
+  if (cartItems?.length === 0) {
     setTimeout(() => {
-      window.location.href = '/order-online'
+      navigate('/order-online')
     }, 5000)
   }
   const checkoutInformation = JSON.parse(

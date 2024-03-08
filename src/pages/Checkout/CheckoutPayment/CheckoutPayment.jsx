@@ -13,14 +13,17 @@ import {
 import React, { useEffect, useState } from 'react'
 import { useResponsive } from '~/utils/responsive'
 
-const CheckoutPayment = () => {
+const CheckoutPayment = ({ customer }) => {
+  console.log('🚀 ~ CheckoutPayment ~ customer:', customer)
   const { isTablet, isMobile } = useResponsive()
   const checkoutInformation = JSON.parse(
     sessionStorage.getItem('checkout-information')
   )
 
-  const [name, setName] = useState(checkoutInformation.name)
-  const [phone, setPhone] = useState(checkoutInformation.phone)
+  const [name, setName] = useState(checkoutInformation.name || customer?.name)
+  const [phone, setPhone] = useState(
+    checkoutInformation.phone || customer?.phone
+  )
   const [notes, setNotes] = useState(checkoutInformation.notes)
   const [paymentMethod, setPaymentMethod] = useState(
     checkoutInformation.payment
@@ -106,21 +109,21 @@ const CheckoutPayment = () => {
         value={paymentMethod}
         onChange={(e) => setPaymentMethod(e.target.value)}
       >
-        <Center w={'100%' } fs={isTablet ? 'base' : 'lg'} justify='between'>
+        <Center w={'100%'} fs={isTablet ? 'base' : 'lg'} justify='between'>
           <Radio value='tien-mat' />
           <Icon size={fr(8)}>
             <Money />
           </Icon>
           <Text w={fr(20)}>Tiền mặt</Text>
         </Center>
-        <Center w={'100%' } fs={isTablet ? 'base' : 'lg'} justify='between'>
+        <Center w={'100%'} fs={isTablet ? 'base' : 'lg'} justify='between'>
           <Radio value='mo-mo' />
           <Icon size={fr(8)}>
             <PiggyBank />
           </Icon>
           <Text w={fr(20)}>Momo</Text>
         </Center>
-        <Center w={'100%' } fs={isTablet ? 'base' : 'lg'} justify='between'>
+        <Center w={'100%'} fs={isTablet ? 'base' : 'lg'} justify='between'>
           <Radio value='ngan-hang' />
           <Icon size={fr(8)}>
             <Bank />
