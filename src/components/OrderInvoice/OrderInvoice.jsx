@@ -12,7 +12,7 @@ const OrderInvoice = () => {
   const information = orders[lastIndex].information
   const total = orders[lastIndex].totalPrice
   const subTotal = cart.reduce((acc, item) => {
-    return acc + item.price * item.quantity * 1000
+    return acc + item.price * item.quantity
   }, 0)
   return (
     <Flex
@@ -74,7 +74,10 @@ const OrderInvoice = () => {
                 fs={isTablet ? 'md' : isMobile ? 'sm' : 'lg'}
               >
                 <Text>{index + 1}</Text>
-                <Flex align='center' w={isTablet ? fr(60) : isMobile ? 'fit-content' : fr(86)}>
+                <Flex
+                  align='center'
+                  w={isTablet ? fr(60) : isMobile ? 'fit-content' : fr(86)}
+                >
                   <Image
                     src={item.image}
                     w={isTablet ? fr(16) : isMobile ? fr(10) : fr(20)}
@@ -92,49 +95,32 @@ const OrderInvoice = () => {
                     </Box>
                   </Box>
                 </Flex>
-                <Text>{item.price}đ</Text>
+                <Text>{item.price.toLocaleString('vi-VN')}đ</Text>
                 <Text>{item.quantity}</Text>
                 <Text>
-                  {(item.price * item.quantity * 1000).toLocaleString('vi-VN', {
-                    style: 'currency',
-                    currency: 'VND'
-                  })}
+                  {(item.price * item.quantity).toLocaleString('vi-VN')}đ
                 </Text>
               </List.Item>
               <Divider />
             </Box>
           ))}
         </List>
-        <Flex direction='column' align='end' fs={isMobile ? 'base' : 'lg'} gap={fr(2)} my={fr(2)}>
+        <Flex
+          direction='column'
+          align='end'
+          fs={isMobile ? 'base' : 'lg'}
+          gap={fr(2)}
+          my={fr(2)}
+        >
+          <Text>Tổng cộng: {subTotal.toLocaleString('vi-VN')}đ</Text>
           <Text>
-            Tổng cộng:{' '}
-            {subTotal.toLocaleString('vi-VN', {
-              style: 'currency',
-              currency: 'VND'
-            })}
+            Phí vận chuyển: {information.delivery.toLocaleString('vi-VN')}đ
           </Text>
           <Text>
-            Phí vận chuyển:{' '}
-            {information.delivery.toLocaleString('vi-VN', {
-              style: 'currency',
-              currency: 'VND'
-            })}
-          </Text>
-          <Text>
-            Mã giảm giá:{' '}
-            {
-              -String(information.voucher).toLocaleString('vi-VN', {
-                style: 'currency',
-                currency: 'VND'
-              })
-            }
+            Mã giảm giá: {-String(information.voucher).toLocaleString('vi-VN')}đ
           </Text>
           <Text fs={isMobile ? 'md' : 'xl'} cl={'primary'}>
-            Tổng thanh toán:{' '}
-            {total.toLocaleString('vi-VN', {
-              style: 'currency',
-              currency: 'VND'
-            })}
+            Tổng thanh toán: {total.toLocaleString('vi-VN')}đ
           </Text>
         </Flex>
       </Box>

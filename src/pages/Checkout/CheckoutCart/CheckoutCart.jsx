@@ -117,7 +117,7 @@ const CheckoutCart = () => {
         <Divider />
         <Flex justify='between'>
           <Text>Phí giao hàng</Text>
-          <Text>{checkoutInformation?.delivery.toLocaleString('vi-VN')} đ</Text>
+          <Text>{checkoutInformation?.delivery.toLocaleString('vi-VN')}đ</Text>
         </Flex>
         <Divider />
         <Flex>
