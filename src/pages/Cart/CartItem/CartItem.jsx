@@ -1,4 +1,4 @@
-import { Gear, X } from '@phosphor-icons/react'
+import { Gear, Note, NotePencil, X } from '@phosphor-icons/react'
 import {
   Button,
   Center,
@@ -10,6 +10,7 @@ import {
   Radio,
   Table,
   Text,
+  TextField,
   fr
 } from '@prismane/core'
 import React, { useContext, useState } from 'react'
@@ -27,7 +28,7 @@ const CartItem = ({ image, title, price, selected, quantity }) => {
   const [open, setOpen] = useState(false)
   return (
     <>
-      <Modal w={'70vw'} open={open} onClose={() => setOpen(false)} closable>
+      <Modal w={'50vw'} open={open} onClose={() => setOpen(false)} closable>
         <Modal.Header>
           <Text
             fw='bold'
@@ -106,7 +107,7 @@ const CartItem = ({ image, title, price, selected, quantity }) => {
         <Table.Cell>
           <Center>
             <Icon cs={'pointer'} size={fr(5)} onClick={() => setOpen(!open)}>
-              <Gear />
+              <NotePencil />
             </Icon>
           </Center>
         </Table.Cell>

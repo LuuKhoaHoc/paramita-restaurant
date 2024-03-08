@@ -40,7 +40,6 @@ const OrderItem = ({ image, title, price, description }) => {
       selected: 'no'
     }
   ])
-  const [notes, setNotes] = useState('')
   const [quantity, setQuantity] = useState(1)
   const handleQuantityChange = (newQuantity) => {
     setQuantity(newQuantity)
@@ -52,7 +51,6 @@ const OrderItem = ({ image, title, price, description }) => {
       price,
       description,
       quantity,
-      notes,
       optionList
     }
     addCartItem(item)
@@ -123,12 +121,6 @@ const OrderItem = ({ image, title, price, description }) => {
           <Text>{price.toLocaleString('vi-VN')}đ</Text>
           <QuantityItem onQuantityChange={handleQuantityChange} />
         </Flex>
-        <TextField
-          placeholder='Ghi chú thêm cho món này'
-          value={notes}
-          onChange={(e) => setNotes(e.target.value)}
-          icon={<Note />}
-        />
         <Box
           w={'100%'}
           bg={['base', 100]}

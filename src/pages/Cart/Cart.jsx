@@ -87,6 +87,7 @@ const Cart = () => {
                       title={item.title}
                       price={item.price}
                       selected={item.optionList}
+                      notes={item.notes}
                       quantity={item.quantity}
                     />
                   ))}
