@@ -1,4 +1,8 @@
-import { ClockCounterClockwise, PushPin } from '@phosphor-icons/react'
+import {
+  CheckCircle,
+  ClockCounterClockwise,
+  PushPin
+} from '@phosphor-icons/react'
 import {
   Box,
   Button,
@@ -32,11 +36,9 @@ const CheckoutShipping = ({ customer }) => {
       }
     }
   })
-  const accountAddress = [
-    'Số 1, Đường 1, Phường 1, Quận 1, TP.HCM',
-    'Số 2, Đường 2, Phường 2, Quận 2, TP.HCM',
-    'Số 3, Đường 3, Phường 3, Quận 3, TP.HCM'
-  ]
+  const accountAddress = customer?.address.map((item) => {
+    return item.address
+  })
   const addressHistory =
     JSON.parse(localStorage.getItem('address-history')) || []
   const addAddress = (newAddress) => {
@@ -64,9 +66,11 @@ const CheckoutShipping = ({ customer }) => {
     handleSetAddress(valueString)
     handleReset()
   }
-  useEffect(() => {
-    setQuery(checkoutInformation?.address)
-  }, [])
+  function hasTwoCommas(text) {
+    var count = (text.match(/,/g) || []).length
+    return count >= 2
+  }
+
   return (
     <>
       <Center w={'100%'} h={'fit-content'} my={fr(4)}>
@@ -77,8 +81,9 @@ const CheckoutShipping = ({ customer }) => {
             placeholder='Search...'
             value={query}
             onChange={(e) => setQuery(e.target.value)}
+            icon={<CheckCircle color={hasTwoCommas(query) ? '#39b54a' : ''} />}
           />
-          <List mah={fr(38)} of={'auto'}>
+          <List mah={fr(35)} of={'auto'}>
             {accountAddress.map((item, index) => (
               <List.Item
                 key={index}
@@ -89,7 +94,7 @@ const CheckoutShipping = ({ customer }) => {
                 cs={'pointer'}
               >
                 <Button variant='text' cl={'secondary'} icon={<PushPin />}>
-                  {item}{' '}
+                  <Text>{item}</Text>
                 </Button>
               </List.Item>
             ))}
@@ -102,7 +107,7 @@ const CheckoutShipping = ({ customer }) => {
                 cs={'pointer'}
               >
                 <Button variant='text' icon={<ClockCounterClockwise />}>
-                  {item}{' '}
+                  <Text>{item}</Text>
                 </Button>
               </List.Item>
             ))}
@@ -154,7 +159,7 @@ const CheckoutShipping = ({ customer }) => {
                 Thêm địa chỉ
               </Text>
             </Button>
-            <Button br={'full'} variant='tertiary' type='reset'>
+            <Button br={'full'} color='red' variant='tertiary' type='reset'>
               <Text
                 className='GeomanistMedium-font'
                 fs={isTablet ? 'sm' : 'base'}

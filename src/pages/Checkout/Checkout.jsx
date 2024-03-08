@@ -1,18 +1,13 @@
 import { Cardholder } from '@phosphor-icons/react'
 import {
   Box,
-  Button,
   Center,
-  Divider,
   Flex,
-  Form,
   Grid,
   Icon,
-  List,
   Stack,
   Tabs,
   Text,
-  TextField,
   fr
 } from '@prismane/core'
 import CheckoutCart from '~/pages/Checkout/CheckoutCart/CheckoutCart'
@@ -23,7 +18,6 @@ import React, { useEffect } from 'react'
 import { useResponsive } from '~/utils/responsive'
 
 const Checkout = ({ customer }) => {
-  console.log('🚀 ~ Checkout ~ customer:', customer)
   const { isMobile, isTablet } = useResponsive()
   return (
     <Box pos={'relative'} mih={'100vh'}>

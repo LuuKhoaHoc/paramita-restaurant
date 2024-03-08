@@ -16,7 +16,7 @@ import { CountDown } from '~/components'
 import { CartContext } from '~/contexts/CartContext'
 import { useResponsive } from '~/utils/responsive'
 const CheckoutCart = () => {
-  const {isTablet, isMobile} = useResponsive()
+  const { isTablet, isMobile } = useResponsive()
   const { cartItems, removeCartItem } = useContext(CartContext)
   if (sessionStorage.getItem('cartItems').length === 0) {
     setTimeout(() => {
@@ -76,10 +76,7 @@ const CheckoutCart = () => {
               </Button>
             </Text>
             <Text ml={'auto'} fs={isTablet ? 'md' : 'lg'}>
-              {item.price.toLocaleString('vi-VN', {
-                style: 'currency',
-                currency: 'VND'
-              })}đ
+              {item.price.toLocaleString('vi-VN')}đ
             </Text>
             <Center></Center>
           </List.Item>
@@ -111,7 +108,7 @@ const CheckoutCart = () => {
           <Text>Tạm tính</Text>
           <Text>
             {cartItems
-              .reduce((acc, item) => acc + item.price * item.quantity * 1000, 0)
+              .reduce((acc, item) => acc + item.price * item.quantity, 0)
               .toLocaleString('vi-VN')}
             đ
           </Text>
@@ -119,12 +116,7 @@ const CheckoutCart = () => {
         <Divider />
         <Flex justify='between'>
           <Text>Phí giao hàng</Text>
-          <Text>
-            {checkoutInformation?.delivery.toLocaleString('vi-VN', {
-              style: 'currency',
-              currency: 'VND'
-            })}
-          </Text>
+          <Text>{checkoutInformation?.delivery.toLocaleString('vi-VN')} đ</Text>
         </Flex>
         <Divider />
         <Flex>
@@ -143,13 +135,21 @@ const CheckoutCart = () => {
             borderBottomRightRadius: '10px'
           }}
         >
-          <Text as={'h3'} fs={isTablet ? 'base' : 'inherit'} className='GeomanistLight-font'>
+          <Text
+            as={'h3'}
+            fs={isTablet ? 'base' : 'inherit'}
+            className='GeomanistLight-font'
+          >
             Thành tiền
           </Text>
-          <Text as={'h3'} fs={isTablet ? 'base' : 'inherit'} className='GeomanistLight-font'>
+          <Text
+            as={'h3'}
+            fs={isTablet ? 'base' : 'inherit'}
+            className='GeomanistLight-font'
+          >
             {(
               cartItems.reduce(
-                (acc, item) => acc + item.price * item.quantity * 1000,
+                (acc, item) => acc + item.price * item.quantity,
                 0
               ) + checkoutInformation?.delivery
             ).toLocaleString('vi-VN')}
