@@ -13,8 +13,10 @@ import {
 } from '@prismane/core'
 import React from 'react'
 import { OrderInvoice } from '~/components'
+import { useResponsive } from '~/utils/responsive'
 
 const CheckoutSuccess = () => {
+  const { isTablet, isMobile } = useResponsive()
   if (localStorage.getItem('orderSuccess') !== 'true') {
     window.location.href = '/'
   }
