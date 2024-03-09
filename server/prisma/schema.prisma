@@ -170,9 +170,8 @@ model orders {
   tsid             String            @db.VarChar(13)
   customer_id      Int
   status           String            @db.VarChar(255)
-  shipping_address String            @db.VarChar(255)
-  shipping_method  String            @db.VarChar(255)
-  shipping_cost    Decimal           @db.Decimal(10, 2)
+  delivery_address String            @db.VarChar(255)
+  transport_fee    Decimal           @db.Decimal(10, 2)
   payment_method   String            @db.VarChar(255)
   payment_status   String            @db.VarChar(255)
   created_at       DateTime          @default(now())
