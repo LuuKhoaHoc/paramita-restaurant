@@ -5,19 +5,27 @@ import {
   Divider,
   Flex,
   Icon,
+  Image,
   List,
+  Modal,
+  Radio,
   Stack,
   Text,
+  TextField,
   fr
 } from '@prismane/core'
-import React, { useContext, useEffect } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { CountDown } from '~/components'
 import { CartContext } from '~/contexts/CartContext'
+import { LogoIcon } from '~/images'
 import { useResponsive } from '~/utils/responsive'
 const CheckoutCart = () => {
   const navigate = useNavigate()
-  const { isTablet, isMobile } = useResponsive()
+  const { isTablet, isMobile, isLaptop } = useResponsive()
+  const [openModal, setOpenModal] = useState(false)
+  const [voucherInput, setVoucherInput] = useState('')
+  const [voucherSelected, setVoucherSelected] = useState('no')
   const { cartItems, removeCartItem } = useContext(CartContext)
   if (cartItems?.length === 0) {
     setTimeout(() => {
@@ -29,6 +37,65 @@ const CheckoutCart = () => {
   )
   return (
     <>
+      <Modal
+        open={openModal}
+        onClose={() => setOpenModal(false)}
+        closable
+        w={isMobile ? '90%' : isTablet ? '80%' : '35vw'}
+      >
+        <Modal.Header>
+          <Text className='GeomanistMedium-font'>Chọn Paramita Voucher</Text>
+        </Modal.Header>
+        <Center gap={fr(2)}>
+          <TextField
+            grow
+            placeholder='Nhập mã paramita voucher'
+            value={voucherInput}
+            onChange={(e) => setVoucherInput(e.target.value)}
+          />
+          <Button variant='primary' size='md'>
+            Áp dụng
+          </Button>
+        </Center>
+        <Stack>
+          <Flex align='center' br={fr(3)} bsh={'lg'} mt={fr(4)}>
+            <Center
+              direction='column'
+              p={fr(4)}
+              bg={'primary'}
+              gap={fr(1)}
+              sx={{
+                borderTopLeftRadius: fr(3),
+                borderBottomLeftRadius: fr(3)
+              }}
+            >
+              <Image src={LogoIcon} alt='paramita-icon' w={fr(12)} h={fr(12)} />
+              <Text cl={'white'}>Paramita</Text>
+            </Center>
+            <Flex direction='column' ml={fr(2)} fs={isLaptop ? 'base' : 'sm'}>
+              <Text fs={'md'} className='GeomanistMedium-font'>
+                Giảm ngay 5% tối đa đ100k
+              </Text>
+              <Text cl={'gray'}>Đơn tối thiểu: đ0</Text>
+              <Flex>
+                <Text cl={['gray', 400]}>Hết hạn: 13.03.2024</Text>
+                <Button variant='text' cl={['blue', 500]}>
+                  Điều kiện
+                </Button>
+              </Flex>
+            </Flex>
+            <Radio.Group
+              name='answer'
+              value={voucherSelected}
+              onChange={(e) => setVoucherSelected(e.target.value)}
+              ml={'auto'}
+              mr={fr(4)}
+            >
+              <Radio value='yes' />
+            </Radio.Group>
+          </Flex>
+        </Stack>
+      </Modal>
       <Flex w={'100%'} justify='between' align='center'>
         <Center my={fr(4)}>
           <Icon size={fr(8)} cl={'primary'}>
@@ -121,7 +188,9 @@ const CheckoutCart = () => {
         </Flex>
         <Divider />
         <Flex>
-          <Button variant='text'>Khuyến mãi</Button>
+          <Button variant='text' onClick={() => setOpenModal(true)}>
+            Khuyến mãi
+          </Button>
         </Flex>
         <Flex
           bg={'primary'}
