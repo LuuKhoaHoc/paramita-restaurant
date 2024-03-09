@@ -48,23 +48,13 @@ const Login = lazyWithPreload(() => import('~/pages/Auth/Login/Login'))
 import { CartContext } from '~/contexts/CartContext'
 import { AuthContext } from '~/contexts/AuthContext'
 
-import { gql, useQuery } from '@apollo/client'
-
-const CHECK_TOKEN = gql`
-  query checkToken($token: String!) {
-    checkToken(token: $token) {
-      token
-    }
-  }
-`
-
 const Navbar = ({ customer }) => {
   const { isLoggedIn, setIsLoggedIn } = useContext(AuthContext)
   const [token, setToken] = useState('')
   // Responsive
   const { isLaptop, isMobile, isTablet } = useResponsive()
   // Số lượng item trong cart
-  const { cartItems } = useContext(CartContext)
+  const { cartItems, clearCart } = useContext(CartContext)
   const itemCount = cartItems.reduce((total, item) => total + item.quantity, 0)
   // Tổng tiền trong cart
   const subTotal = cartItems.reduce((acc, item) => {
@@ -111,7 +101,7 @@ const Navbar = ({ customer }) => {
   window.addEventListener('scroll', handleScroll)
   // Hàm xử lí đăng xuất
   const handleLogout = () => {
-    sessionStorage.clear()
+    sessionStorage.removeItem('checkout-information')
     localStorage.removeItem('orders')
     localStorage.removeItem('orderSuccess')
     localStorage.removeItem('login')

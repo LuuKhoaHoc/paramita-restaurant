@@ -103,6 +103,10 @@ const App = () => {
       ErrorLogin()
       localStorage.removeItem('token')
     }
+  } else {
+    ErrorLogin()
+    localStorage.removeItem('login')
+    sessionStorage.removeItem('checkout-information')
   }
 
   window.addEventListener('storage', function (e) {
@@ -110,6 +114,7 @@ const App = () => {
       ErrorLogin()
       localStorage.removeItem('login')
       localStorage.removeItem('token')
+      sessionStorage.clear()
       window.location.reload()
     }
   })
