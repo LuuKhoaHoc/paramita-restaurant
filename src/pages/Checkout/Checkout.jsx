@@ -28,6 +28,21 @@ const Checkout = ({ customer }) => {
       window.location.reload()
     }
   })
+  if (
+    localStorage.getItem('token') &&
+    sessionStorage.getItem('checkout-information') === null
+  ) {
+    sessionStorage.setItem(
+      'checkout-information',
+      JSON.stringify({
+        address: '',
+        payment: 'tien-mat',
+        notes: '',
+        delivery: 15000,
+        voucher: 0
+      })
+    )
+  }
 
   return (
     <Box pos={'relative'} mih={'100vh'}>

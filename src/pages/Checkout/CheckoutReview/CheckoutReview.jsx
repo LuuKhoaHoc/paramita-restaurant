@@ -14,8 +14,38 @@ import { CartContext } from '~/contexts/CartContext'
 import { LogoIcon } from '~/images'
 import { useResponsive } from '~/utils/responsive'
 
+import { gql, useMutation } from '@apollo/client'
+
+const CREATE_ORDER = gql`
+  mutation createOrder($data: OrderInput!) {
+    createOrder(data: $data) {
+      order_id
+      customer {
+        customer_id
+        name
+      }
+      status
+      address
+      shippingMethod
+      shippingFee
+      paymentStatus
+      orderDetails {
+        item {
+          item_id
+        }
+        quantity
+        price
+        total
+      }
+    }
+  }
+`
+
 const CheckoutReview = ({ customer }) => {
+  // responsive
   const { isTablet, isMobile } = useResponsive()
+  // Tạo order lưu vào Db
+  const [createOrder, { loading, error }] = useMutation(CREATE_ORDER)
   // Lấy cartItems và clearCart từ CartContext
   const { cartItems, clearCart } = useContext(CartContext)
   // Lấy thông tin người dùng từ sessionStorage
@@ -39,29 +69,35 @@ const CheckoutReview = ({ customer }) => {
     ) {
       setOpen(true)
     } else {
-      localStorage.setItem(
-        'orders',
-        JSON.stringify([
-          {
-            cart: cartItems,
-            information: checkoutInformation,
-            totalPrice: totalPrice
-          }
-        ])
+      // localStorage.setItem(
+      //   'orders',
+      //   JSON.stringify([
+      //     {
+      //       cart: cartItems,
+      //       information: checkoutInformation,
+      //       totalPrice: totalPrice
+      //     }
+      console.log('🚀 ~ handleInformation ~ totalPrice:', totalPrice)
+      console.log(
+        '🚀 ~ handleInformation ~ checkoutInformation:',
+        checkoutInformation
       )
-      localStorage.setItem('orderSuccess', 'true')
-      sessionStorage.setItem(
-        'checkout-information',
-        JSON.stringify({
-          address: '',
-          payment: 'tien-mat',
-          notes: '',
-          delivery: 15000,
-          voucher: 0
-        })
-      )
-      clearCart()
-      window.location.href = '/checkout-success'
+      console.log('🚀 ~ handleInformation ~ cartItems:', cartItems)
+      //   ])
+      // )
+      // localStorage.setItem('orderSuccess', 'true')
+      // sessionStorage.setItem(
+      //   'checkout-information',
+      //   JSON.stringify({
+      //     address: '',
+      //     payment: 'tien-mat',
+      //     notes: '',
+      //     delivery: 15000,
+      //     voucher: 0
+      //   })
+      // )
+      // clearCart()
+      // window.location.href = '/checkout-success'
     }
   }
   return (

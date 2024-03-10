@@ -14,7 +14,6 @@ import React, { useEffect, useState } from 'react'
 import { useResponsive } from '~/utils/responsive'
 
 const CheckoutPayment = ({ customer }) => {
-  console.log('🚀 ~ CheckoutPayment ~ customer:', customer)
   const { isTablet, isMobile } = useResponsive()
   const checkoutInformation = JSON.parse(
     sessionStorage.getItem('checkout-information')
