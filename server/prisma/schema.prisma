@@ -124,10 +124,11 @@ model invoices {
   tsid            String            @db.VarChar(13)
   invoice_time    DateTime          @db.Date
   customer_id     Int
-  voucher_code    String?           @db.VarChar(255)
   payment_method  String            @db.VarChar(255)
   payment_status  String            @db.VarChar(255)
   note            String?           @db.VarChar(255)
+  voucher_id      Int?              @unique
+  voucher         vouchers?         @relation(fields: [voucher_id], references: [voucher_id])
   invoice_details invoice_details[]
   customers       customers         @relation(fields: [customer_id], references: [customer_id], onUpdate: Restrict, map: "invoices_ibfk_1")
   point_histories point_histories[]
@@ -174,9 +175,10 @@ model orders {
   transport_fee    Decimal           @db.Decimal(10, 2)
   payment_method   String            @db.VarChar(255)
   payment_status   String            @db.VarChar(255)
-  voucher_code     String?           @db.VarChar(255)
   created_at       DateTime          @default(now())
   updated_at       DateTime          @updatedAt
+  voucher_id       Int?              @unique
+  voucher          vouchers?         @relation(fields: [voucher_id], references: [voucher_id])
   order_details    order_details[]
   customers        customers         @relation(fields: [customer_id], references: [customer_id], onUpdate: Restrict, map: "orders_ibfk_1")
   point_history    point_histories[]
@@ -271,10 +273,13 @@ model vouchers {
   code          String            @db.VarChar(255)
   description   String            @db.Text
   discount      Decimal           @db.Decimal(10, 2)
-  expire_date   DateTime          @db.Date
+  // Test nên đổi DB type từ datetime thành string
+  expired_date  String            @db.VarChar(255)
   status        String            @db.VarChar(255)
   point_history point_histories[]
   customers     customers         @relation(fields: [customer_id], references: [customer_id], onUpdate: Restrict, map: "vouchers_ibfk_1")
+  invoices      invoices?
+  orders        orders?
 
   @@index([customer_id], map: "customer_id")
 }

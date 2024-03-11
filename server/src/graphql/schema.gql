@@ -210,8 +210,9 @@ input VoucherInput {
   code: String!
   description: String!
   discount: Float!
-  expireDate: DateTime!
-  status: Boolean!
+  expiredDate: String!
+  # expireDate: DateTime!
+  status: String!
 }
 
 input EmployeeInput {
@@ -345,7 +346,7 @@ type Customer {
   pointsHistory: [PointsHistory!]
   reservations: [Reservation!]
   reviews: [Review!]
-  vouchers: [Voucher!]
+  voucher: [Voucher!]
 }
 
 type CustomerAddress {
@@ -480,7 +481,7 @@ type Voucher {
   code: String!
   description: String!
   discount: Float!
-  expireDate: DateTime!
+  expiredDate: String!
   status: String!
 }
 

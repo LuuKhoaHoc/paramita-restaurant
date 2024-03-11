@@ -715,7 +715,7 @@ export const resolvers = {
           tsid,
           customer_id: args.data.customerId,
           invoice_time: args.data.date,
-          voucher_code: args.data.voucherCode,
+          voucher_id: args.data.voucherId,
           payment_method: args.data.paymentMethod,
           payment_status: args.data.paymentStatus,
           invoice_details: {
@@ -740,7 +740,7 @@ export const resolvers = {
           invoice_details: {
             connect: { invoice_detail_id: args.invoiceDetailId }
           },
-          voucher_code: args.data.voucherCode,
+          voucher_id: args.data.voucherId,
           payment_method: args.data.paymentMethod,
           payment_status: args.data.paymentStatus,
           note: args.data?.note
@@ -819,11 +819,10 @@ export const resolvers = {
           tsid,
           customer_id: args.data.customerId,
           status: args.data.status,
-          shipping_address: args.data.address,
-          shipping_method: args.data.shippingMethod,
+          delivery_address: args.data.address,
           payment_method: args.data.paymentMethod,
           payment_status: args.data.paymentStatus,
-          shipping_cost: args.data.shippingFee,
+          transport_fee: args.data.transportFee,
           order_details: {
             connect: {
               order_detail_id: args.orderDetailId
@@ -842,11 +841,10 @@ export const resolvers = {
         data: {
           customer_id: args.data.customerId,
           status: args.data.status,
-          shipping_address: args.data.address,
-          shipping_method: args.data.shippingMethod,
+          delivery_address: args.data.address,
           payment_method: args.data.paymentMethod,
           payment_status: args.data.paymentStatus,
-          shipping_cost: args.data.shippingFee,
+          transport_fee: args.data.transportFee,
           order_details: {
             connect: { order_detail_id: args.orderDetailId }
           }
@@ -1154,7 +1152,7 @@ export const resolvers = {
           code: args.data.code,
           description: args.data.description,
           discount: args.data.discount,
-          expire_date: args.data.expiredDate,
+          expired_date: args.data.expiredDate,
           status: args.data.status
         }
       })
@@ -1172,7 +1170,7 @@ export const resolvers = {
           code: args.data.code,
           description: args.data.description,
           discount: args.data.discount,
-          expire_date: args.data.expiredDate,
+          expired_date: args.data.expiredDate,
           status: args.data.status
         }
       })
@@ -1345,6 +1343,11 @@ export const resolvers = {
       return context.prisma.customer_address.findMany({
         where: { customer_id: parent?.customer_id }
       })
+    },
+    voucher: (parent: any, _args: any, context: Context) => {
+      return context.prisma.vouchers.findMany({
+        where: { customer_id: parent?.customer_id }
+      })
     }
   },
   CustomerLevel: {
@@ -1424,11 +1427,9 @@ export const resolvers = {
   },
   Voucher: {
     customer: (parent: any, _args: any, context: Context) => {
-      return context.prisma.customers
-        .findUnique({
-          where: { customer_id: parent?.customer_id }
-        })
-        .vouchers()
+      return context.prisma.customers.findFirst({
+        where: { customer_id: parent?.customer_id }
+      })
     }
   },
   Employee: {
@@ -1472,7 +1473,7 @@ interface VoucherInput {
   code: string
   description: string
   discount: number
-  expiredDate: Date
+  expiredDate: string
   status: string
 }
 interface ReviewInput {
@@ -1528,8 +1529,8 @@ interface OrderInput {
   customerId: number
   status: string
   address: string
-  shippingFee: number
-  shippingMethod: string
+  voucher_id: number
+  transportFee: number
   paymentMethod: string
   paymentStatus: string
   note?: string
@@ -1545,7 +1546,7 @@ interface InvoiceDetailInput {
 interface InvoiceInput {
   date: Date
   customerId: number
-  voucherCode?: string
+  voucherId?: number
   paymentMethod: string
   paymentStatus: string
   note?: string
