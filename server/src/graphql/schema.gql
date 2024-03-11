@@ -212,6 +212,7 @@ input VoucherInput {
   discount: Float!
   expiredDate: String!
   minSpend: Float!
+  maxDiscount: Int!
   # expireDate: DateTime!
   status: String!
 }
@@ -484,6 +485,7 @@ type Voucher {
   discount: Float!
   expired_date: String
   min_spend: Int
+  max_discount: Int
   status: String!
 }
 

@@ -279,6 +279,7 @@ model vouchers {
   tsid          String            @db.VarChar(13)
   expired_date  String            @db.VarChar(255)
   min_spend     Int
+  max_discount  Int
   invoices      invoices?
   orders        orders?
   point_history point_histories[]

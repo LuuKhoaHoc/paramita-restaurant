@@ -1154,6 +1154,7 @@ export const resolvers = {
           discount: args.data.discount,
           expired_date: args.data.expiredDate,
           min_spend: args.data.minSpend,
+          max_discount: args.data.maxDiscount,
           status: args.data.status
         }
       })
@@ -1477,6 +1478,7 @@ interface VoucherInput {
   discount: number
   expiredDate: string
   minSpend: number
+  maxDiscount: number
   status: string
 }
 interface ReviewInput {
