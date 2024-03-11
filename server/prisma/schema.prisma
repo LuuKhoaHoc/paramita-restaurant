@@ -9,21 +9,23 @@ datasource db {
 
 model categories {
   category_id Int    @id @default(autoincrement())
-  tsid        String @db.VarChar(13)
   name        String @db.VarChar(255)
+  tsid        String @db.VarChar(13)
   menu        menu[]
 }
 
 model contents {
   content_id  Int     @id @default(autoincrement())
-  tsid        String  @db.VarChar(13)
   title       String  @db.VarChar(255)
-  image       String? @db.Text
   slogan      String? @db.VarChar(255)
   description String  @db.Text
-  position    Int?    @db.TinyInt
+  tsid        String  @db.VarChar(13)
+  image       String? @db.Text
   page_id     Int?
+  position    Int?    @db.TinyInt
   pages       pages?  @relation(fields: [page_id], references: [page_id])
+
+  @@index([page_id], map: "contents_page_id_fkey")
 }
 
 model pages {
@@ -34,9 +36,9 @@ model pages {
 
 model customer_address {
   address_id  Int       @id @default(autoincrement())
-  tsid        String    @db.VarChar(13)
   customer_id Int
   address     String    @db.VarChar(255)
+  tsid        String    @db.VarChar(13)
   customers   customers @relation(fields: [customer_id], references: [customer_id], onUpdate: Restrict, map: "customer_address_ibfk_1")
 
   @@index([customer_id], map: "customer_id")
@@ -44,18 +46,17 @@ model customer_address {
 
 model customer_level {
   level_id    Int         @id @default(autoincrement())
-  tsid        String      @db.VarChar(13)
   name        String      @db.VarChar(255)
   description String      @db.Text
   discount    Int         @db.TinyInt
   points      Int
   benefits    String      @db.VarChar(255)
+  tsid        String      @db.VarChar(13)
   customers   customers[]
 }
 
 model customers {
   customer_id      Int                @id @default(autoincrement())
-  tsid             String             @db.VarChar(13)
   name             String?            @db.VarChar(255)
   phone            String?            @db.Char(11)
   email            String             @unique @db.VarChar(255)
@@ -67,6 +68,7 @@ model customers {
   password         String             @db.VarChar(255)
   created_at       DateTime           @default(now())
   updated_at       DateTime           @updatedAt
+  tsid             String             @db.VarChar(13)
   customer_address customer_address[]
   customer_level   customer_level     @relation(fields: [level_id], references: [level_id], onUpdate: Restrict, map: "customers_ibfk_1")
   invoices         invoices[]
@@ -81,7 +83,6 @@ model customers {
 
 model employees {
   employee_id Int       @id @default(autoincrement())
-  tsid        String    @db.VarChar(13)
   name        String    @db.VarChar(255)
   gender      String    @db.VarChar(50)
   email       String    @db.VarChar(255)
@@ -93,44 +94,47 @@ model employees {
   is_admin    Boolean   @default(false)
   username    String    @db.VarChar(255)
   password    String    @db.VarChar(255)
-  positions   positions @relation(fields: [position_id], references: [position_id], onUpdate: Restrict, map: "employees_ibfk_1")
   created_at  DateTime  @default(now())
   updated_at  DateTime  @updatedAt
+  tsid        String    @db.VarChar(13)
+  positions   positions @relation(fields: [position_id], references: [position_id], onUpdate: Restrict, map: "employees_ibfk_1")
 
   @@index([position_id], map: "position_id")
 }
 
 model positions {
   position_id Int         @id @default(autoincrement())
-  tsid        String      @db.VarChar(13)
   name        String      @db.VarChar(255)
   salary      Decimal     @db.Decimal(10, 2)
+  tsid        String      @db.VarChar(13)
   employees   employees[]
 }
 
 model invoice_details {
-  invoice_detail_id Int       @id @default(autoincrement())
-  tsid              String    @db.VarChar(13)
+  invoice_detail_id Int      @id @default(autoincrement())
   invoice_id        Int
   item_id           Int
-  quantity          Int       @db.TinyInt
-  unit_price        Decimal   @db.Decimal(10, 2)
-  total_price       Decimal   @db.Decimal(10, 2)
-  invoices          invoices? @relation(fields: [invoice_id], references: [invoice_id])
+  quantity          Int      @db.TinyInt
+  unit_price        Decimal  @db.Decimal(10, 2)
+  total_price       Decimal  @db.Decimal(10, 2)
+  tsid              String   @db.VarChar(13)
+  invoices          invoices @relation(fields: [invoice_id], references: [invoice_id])
+
+  @@index([invoice_id], map: "invoice_details_invoice_id_fkey")
 }
 
 model invoices {
   invoice_id      Int               @id @default(autoincrement())
-  tsid            String            @db.VarChar(13)
   invoice_time    DateTime          @db.Date
   customer_id     Int
   payment_method  String            @db.VarChar(255)
   payment_status  String            @db.VarChar(255)
   note            String?           @db.VarChar(255)
+  tsid            String            @db.VarChar(13)
   voucher_id      Int?              @unique
-  voucher         vouchers?         @relation(fields: [voucher_id], references: [voucher_id])
   invoice_details invoice_details[]
   customers       customers         @relation(fields: [customer_id], references: [customer_id], onUpdate: Restrict, map: "invoices_ibfk_1")
+  voucher         vouchers?         @relation(fields: [voucher_id], references: [voucher_id])
   point_histories point_histories[]
 
   @@index([customer_id], map: "customer_id")
@@ -138,11 +142,11 @@ model invoices {
 
 model menu {
   item_id       Int            @id @default(autoincrement())
-  tsid          String         @db.VarChar(13)
   name          String         @db.VarChar(255)
   description   String         @db.Text
   price         Decimal        @db.Decimal(10, 2)
   image         String         @db.Text
+  tsid          String         @db.VarChar(13)
   category_id   Int
   categories    categories     @relation(fields: [category_id], references: [category_id])
   order_details order_details?
@@ -152,15 +156,14 @@ model menu {
 
 model order_details {
   order_detail_id Int     @id @default(autoincrement())
-  tsid            String  @db.VarChar(13)
   order_id        Int
   item_id         Int     @unique
   quantity        Int
   unit_price      Decimal @db.Decimal(10, 2)
   total_price     Decimal @db.Decimal(10, 2)
-
-  menu   menu?  @relation(fields: [item_id], references: [item_id])
-  orders orders @relation(fields: [order_id], references: [order_id], onUpdate: Restrict, map: "order_details_ibfk_1")
+  tsid            String  @db.VarChar(13)
+  orders          orders  @relation(fields: [order_id], references: [order_id], onUpdate: Restrict, map: "order_details_ibfk_1")
+  menu            menu    @relation(fields: [item_id], references: [item_id])
 
   @@index([item_id], map: "item_id")
   @@index([order_id], map: "order_id")
@@ -168,19 +171,19 @@ model order_details {
 
 model orders {
   order_id         Int               @id @default(autoincrement())
-  tsid             String            @db.VarChar(13)
   customer_id      Int
   status           String            @db.VarChar(255)
-  delivery_address String            @db.VarChar(255)
-  transport_fee    Decimal           @db.Decimal(10, 2)
   payment_method   String            @db.VarChar(255)
   payment_status   String            @db.VarChar(255)
   created_at       DateTime          @default(now())
   updated_at       DateTime          @updatedAt
+  tsid             String            @db.VarChar(13)
+  delivery_address String            @db.VarChar(255)
+  transport_fee    Decimal           @db.Decimal(10, 2)
   voucher_id       Int?              @unique
-  voucher          vouchers?         @relation(fields: [voucher_id], references: [voucher_id])
   order_details    order_details[]
   customers        customers         @relation(fields: [customer_id], references: [customer_id], onUpdate: Restrict, map: "orders_ibfk_1")
+  voucher          vouchers?         @relation(fields: [voucher_id], references: [voucher_id])
   point_history    point_histories[]
 
   @@index([customer_id], map: "customer_id")
@@ -188,14 +191,14 @@ model orders {
 
 model point_histories {
   point_history_id Int       @id @default(autoincrement())
-  tsid             String    @db.VarChar(13)
   customer_id      Int
   order_id         Int?
-  invoice_id       Int?
   voucher_id       Int?
   points_earned    Int?      @db.TinyInt
   points_deducted  Int?      @db.TinyInt
   transaction_date DateTime  @db.Date
+  tsid             String    @db.VarChar(13)
+  invoice_id       Int?
   customers        customers @relation(fields: [customer_id], references: [customer_id], onUpdate: Restrict, map: "point_history_ibfk_1")
   orders           orders?   @relation(fields: [order_id], references: [order_id], onDelete: Restrict, onUpdate: Restrict, map: "point_history_ibfk_11")
   vouchers         vouchers? @relation(fields: [voucher_id], references: [voucher_id], onDelete: Restrict, onUpdate: Restrict, map: "point_history_ibfk_12")
@@ -210,7 +213,6 @@ model point_histories {
 
 model promotions {
   promotion_id Int      @id @default(autoincrement())
-  tsid         String   @db.VarChar(13)
   name         String   @db.VarChar(255)
   description  String   @db.Text
   start_date   DateTime @db.Date
@@ -219,16 +221,17 @@ model promotions {
   conditions   String   @db.Text
   discount     Decimal  @db.Decimal(10, 2)
   status       String   @db.VarChar(255)
+  tsid         String   @db.VarChar(13)
 }
 
 model reservations {
   reservation_id   Int       @id @default(autoincrement())
-  tsid             String    @db.VarChar(13)
   customer_id      Int
   table_id         Int       @unique
   description      String    @db.Text
   reservation_date DateTime  @db.Date
   status           String    @db.VarChar(255)
+  tsid             String    @db.VarChar(13)
   customers        customers @relation(fields: [customer_id], references: [customer_id], onUpdate: Restrict, map: "reservations_ibfk_1")
   table            tables    @relation(fields: [table_id], references: [table_id])
 
@@ -237,20 +240,20 @@ model reservations {
 
 model revenue {
   revenue_id Int      @id @default(autoincrement())
-  tsid       String   @db.VarChar(13)
   date       DateTime @db.Date
   revenue    Decimal  @db.Decimal(10, 2)
   cost       Decimal  @db.Decimal(10, 2)
+  tsid       String   @db.VarChar(13)
 }
 
 model reviews {
   review_id   Int       @id @default(autoincrement())
-  tsid        String    @db.VarChar(13)
   customer_id Int
   content     String    @db.Text
   rating      Int       @db.TinyInt
   status      String    @db.VarChar(255)
   created_at  DateTime  @default(now())
+  tsid        String    @db.VarChar(13)
   customers   customers @relation(fields: [customer_id], references: [customer_id], onUpdate: Restrict, map: "reviews_ibfk_1")
 
   @@index([customer_id], map: "customer_id")
@@ -258,28 +261,28 @@ model reviews {
 
 model tables {
   table_id     Int           @id @default(autoincrement())
-  tsid         String        @db.VarChar(13)
   name         String        @db.VarChar(255)
   capacity     Int
   status       String        @db.VarChar(255)
+  tsid         String        @db.VarChar(13)
   reservations reservations?
 }
 
 model vouchers {
   voucher_id    Int               @id @default(autoincrement())
-  tsid          String            @db.VarChar(13)
   customer_id   Int
   name          String            @db.VarChar(255)
   code          String            @db.VarChar(255)
   description   String            @db.Text
   discount      Decimal           @db.Decimal(10, 2)
-  // Test nên đổi DB type từ datetime thành string
-  expired_date  String            @db.VarChar(255)
   status        String            @db.VarChar(255)
-  point_history point_histories[]
-  customers     customers         @relation(fields: [customer_id], references: [customer_id], onUpdate: Restrict, map: "vouchers_ibfk_1")
+  tsid          String            @db.VarChar(13)
+  expired_date  String            @db.VarChar(255)
+  min_spend     Int
   invoices      invoices?
   orders        orders?
+  point_history point_histories[]
+  customers     customers         @relation(fields: [customer_id], references: [customer_id], onUpdate: Restrict, map: "vouchers_ibfk_1")
 
   @@index([customer_id], map: "customer_id")
 }

@@ -211,6 +211,7 @@ input VoucherInput {
   description: String!
   discount: Float!
   expiredDate: String!
+  minSpend: Float!
   # expireDate: DateTime!
   status: String!
 }
@@ -259,7 +260,7 @@ type Query {
   table(id: ID!): Table
   reservation(id: ID!): Reservation
   review(id: ID!): Review
-  voucher(id: ID!): Voucher
+  voucher(id: Int!): Voucher
   employee(id: ID!): Employee
   position(id: ID!): Position
 
@@ -481,7 +482,8 @@ type Voucher {
   code: String!
   description: String!
   discount: Float!
-  expiredDate: String!
+  expired_date: String
+  min_spend: Int
   status: String!
 }
 
