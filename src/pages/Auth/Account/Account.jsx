@@ -25,7 +25,7 @@ import { useResponsive } from '~/utils/responsive'
 const Account = ({ customer }) => {
   const { isLaptop, isMobile, isTablet } = useResponsive()
   return (
-    <Toaster position='bottom-right'>
+    <Toaster position='top-right' mt={fr(22.5)}>
       <Box pos={'relative'} mih={'100vh'}>
         <Box h={fr(22.5)} bg='#371b04' />
         <Box w={'100%'} h={'100%'} pos={'relative'}>

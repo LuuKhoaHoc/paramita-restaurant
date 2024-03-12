@@ -65,6 +65,11 @@ const Navbar = ({ customer }) => {
   // State cho drawer
   const [right, setRight] = useState(false)
 
+  // count order
+  let orderCount = customer?.orders.map((item) => {
+    return item.status === 'Chờ xác nhận' || item.status === 'Đang đến'
+  }).length
+
   // animation line cho navLink
   const lineAnimation = {
     '&::before': {
@@ -209,8 +214,21 @@ const Navbar = ({ customer }) => {
                             <Icon>
                               <ListChecks />
                             </Icon>
-                            Đơn hàng
+                            {orderCount ? (
+                              <Badge
+                                className='GeomanistMedium-font'
+                                label={orderCount}
+                                cl={'white'}
+                              >
+                                <Text className='GeomanistMedium-font'>
+                                  Đơn hàng
+                                </Text>
+                              </Badge>
+                            ) : (
+                              'Đơn hàng'
+                            )}
                           </List.Item>
+
                           <List.Item
                             align='center'
                             justify='between'
@@ -484,7 +502,12 @@ const Navbar = ({ customer }) => {
                     <Center id='account-side' gap={fr(10)} cl={'#fff'}>
                       <Box>
                         <Link to={'/cart'}>
-                          <Badge label={itemCount} size='sm' cl={'#fff'}>
+                          <Badge
+                            className='GeomanistMedium-font'
+                            label={itemCount}
+                            size='sm'
+                            cl={'#fff'}
+                          >
                             <Icon>
                               <ShoppingCartSimple weight='fill' />
                             </Icon>
@@ -493,12 +516,28 @@ const Navbar = ({ customer }) => {
                       </Box>
                       <Flex direction='column' gap={fr(2)}>
                         <Box>
-                          <Icon
-                            onClick={() => setMenuOpen(!menuOpen)}
-                            cs={'pointer'}
-                          >
-                            <User weight='fill' />
-                          </Icon>
+                          {orderCount ? (
+                            <Badge
+                              className='GeomanistMedium-font'
+                              label={orderCount}
+                              size='sm'
+                              cl={'#fff'}
+                            >
+                              <Icon
+                                onClick={() => setMenuOpen(!menuOpen)}
+                                cs={'pointer'}
+                              >
+                                <User weight='fill' />
+                              </Icon>
+                            </Badge>
+                          ) : (
+                            <Icon
+                              onClick={() => setMenuOpen(!menuOpen)}
+                              cs={'pointer'}
+                            >
+                              <User weight='fill' />
+                            </Icon>
+                          )}
                         </Box>
                         <Menu
                           w={fr(46)}
@@ -529,7 +568,9 @@ const Navbar = ({ customer }) => {
                           <Menu.Item
                             align='center'
                             as={Link}
-                            onClick={() => setMenuOpen(!menuOpen)}
+                            onClick={() => {
+                              setMenuOpen(!menuOpen)
+                            }}
                             to={'/account/orders'}
                           >
                             <Center
@@ -540,7 +581,20 @@ const Navbar = ({ customer }) => {
                               <Menu.Icon>
                                 <ListChecks />
                               </Menu.Icon>
-                              Đơn hàng
+                              {orderCount ? (
+                                <Badge
+                                  label={orderCount}
+                                  className='GeomanistMedium-font'
+                                  size='sm'
+                                  cl={'#fff'}
+                                >
+                                  <Text className='GeomanistMedium-font'>
+                                    Đơn hàng
+                                  </Text>
+                                </Badge>
+                              ) : (
+                                'Đơn hàng'
+                              )}
                             </Center>
                           </Menu.Item>
                           <Menu.Item
