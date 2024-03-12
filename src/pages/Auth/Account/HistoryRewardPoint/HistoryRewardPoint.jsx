@@ -3,7 +3,7 @@ import { Center, Flex, Icon, Image, Stack, Text, fr } from '@prismane/core'
 import { useId } from '@prismane/core/hooks'
 import React from 'react'
 import { useResponsive } from '~/utils/responsive'
-const HistoryRewardPoint = () => {
+const HistoryRewardPoint = ({ customer }) => {
   const { isTablet, isMobile } = useResponsive()
   const id = useId()
   return (
@@ -39,7 +39,7 @@ const HistoryRewardPoint = () => {
             <Text as={'h2'} fs={isMobile ? 'md' : 'inherit'}>
               Đổi điểm thành công
             </Text>
-            <Text fs={isMobile ? 'base' : 'inherit'}>13/2/2024</Text>
+            <Text fs={isMobile ? 'base' : 'lg'}>13/2/2024</Text>
             <Text fs={isMobile ? 'base' : 'xl'} cl={'primary'}>
               Mã giao địch: #{id}
             </Text>
@@ -65,7 +65,7 @@ const HistoryRewardPoint = () => {
             <Text as={'h2'} fs={isMobile ? 'md' : 'inherit'}>
               Giao địch thành công
             </Text>
-            <Text fs={isMobile ? 'base' : 'inherit'}>14/2/2024</Text>
+            <Text fs={isMobile ? 'base' : 'lg'}>14/2/2024</Text>
             <Text fs={isMobile ? 'base' : 'xl'} cl={'primary'}>
               Mã giao địch: #{id}
             </Text>

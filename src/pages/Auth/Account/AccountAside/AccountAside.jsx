@@ -37,7 +37,6 @@ const GET_NEXTLEVEL = gql`
 `
 
 const AccountAside = ({ customer }) => {
-  console.log('🚀 ~ AccountAside ~ customer:', customer)
   const { isLaptop, isTablet, isMobile } = useResponsive()
   const textColor = useThemeModeValue('#371b04', '#d1e9d5')
   const bgColor = useThemeModeValue('#fff2e5', '#1d2b1f')

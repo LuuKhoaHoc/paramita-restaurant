@@ -66,9 +66,14 @@ const Navbar = ({ customer }) => {
   const [right, setRight] = useState(false)
 
   // count order
-  let orderCount = customer?.orders.map((item) => {
-    return item.status === 'Chờ xác nhận' || item.status === 'Đang đến'
-  }).length
+  let orderCount = 0
+  if (customer) {
+    for (const item of customer.orders) {
+      if (item.status === 'Chờ xác nhận' || item.status === 'Đang đến') {
+        orderCount++
+      }
+    }
+  }
 
   // animation line cho navLink
   const lineAnimation = {
@@ -517,12 +522,7 @@ const Navbar = ({ customer }) => {
                       <Flex direction='column' gap={fr(2)}>
                         <Box>
                           {orderCount ? (
-                            <Badge
-                              className='GeomanistMedium-font'
-                              label={orderCount}
-                              size='sm'
-                              cl={'#fff'}
-                            >
+                            <Badge label={null} size='xs' cl={'#fff'}>
                               <Icon
                                 onClick={() => setMenuOpen(!menuOpen)}
                                 cs={'pointer'}
