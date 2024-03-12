@@ -1,5 +1,6 @@
 import { ArrowLeft, Pen, ShoppingCart } from '@phosphor-icons/react'
 import {
+  Alert,
   Button,
   Center,
   Divider,
@@ -12,7 +13,8 @@ import {
   Stack,
   Text,
   TextField,
-  fr
+  fr,
+  useToast
 } from '@prismane/core'
 import React, { useContext, useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
@@ -62,9 +64,11 @@ const GET_VOUCHER = gql`
   }
 `
 
-const CheckoutCart = () => {
+const CheckoutCart = ({ customer }) => {
   // use route to navigate
   const navigate = useNavigate()
+  // use toast
+  const toast = useToast()
   // responsive
   const { isTablet, isMobile, isLaptop } = useResponsive()
   // state
@@ -93,7 +97,9 @@ const CheckoutCart = () => {
   )
 
   // call data from DB
-  const voucherList = data?.voucherList
+  const voucherList = data?.voucherList.map(
+    (item) => item.customer.customer_id === customer?.customer_id && item
+  )
   const voucher = dataVoucher?.voucher
   // store total price to variable
   let totalPrice =
@@ -120,23 +126,51 @@ const CheckoutCart = () => {
   }
   function handleApplyVoucher() {
     const foundVoucher = voucherList.find((item) => item.code === voucherInput)
-    if (foundVoucher) {
+    if (foundVoucher && foundVoucher.status === 'Chưa sử dụng') {
       setSelectedVoucherId(foundVoucher.voucher_id)
       checkoutInformation.voucherId = foundVoucher.voucher_id
       sessionStorage.setItem(
         'checkout-information',
         JSON.stringify(checkoutInformation)
       )
+      toast({
+        element: (
+          <Alert variant='success'>
+            <Text fs={'lg'}>Áp dụng thành công!</Text>
+          </Alert>
+        )
+      })
+      setOpenModal(false)
+    } else {
+      toast({
+        element: (
+          <Alert variant='error'>
+            <Text fs={'lg'}>Mã đã hết hạn hoặc đã áp dụng rồi!!</Text>
+          </Alert>
+        )
+      })
       setOpenModal(false)
     }
+    setVoucherInput('')
   }
   function handleSelectVoucher(id) {
-    setSelectedVoucherId(id)
-    checkoutInformation.voucherId = id
-    sessionStorage.setItem(
-      'checkout-information',
-      JSON.stringify(checkoutInformation)
-    )
+    if (id === selectedVoucherId) {
+      setSelectedVoucherId(null)
+    } else {
+      setSelectedVoucherId(id)
+      checkoutInformation.voucherId = id
+      sessionStorage.setItem(
+        'checkout-information',
+        JSON.stringify(checkoutInformation)
+      )
+      toast({
+        element: (
+          <Alert variant='success'>
+            <Text fs={'lg'}>Áp dụng thành công!</Text>
+          </Alert>
+        )
+      })
+    }
   }
   return (
     <>
@@ -164,67 +198,71 @@ const CheckoutCart = () => {
         </Center>
         <Stack>
           <Flex wrap='wrap' direction='column' mt={fr(2)} gap={fr(4)}>
-            {voucherList?.map((item) => {
-              const expiredDate = new Date(
-                item.expired_date
-              ).toLocaleDateString()
-              const isSelected = item.voucher_id === selectedVoucherId
+            {voucherList?.map((item, index) => {
+              if (item.status == 'Đã sử dụng') {
+                return <Flex key={index}></Flex>
+              } else {
+                const expiredDate = new Date(
+                  item.expired_date
+                ).toLocaleDateString()
+                const isSelected = item.voucher_id === selectedVoucherId
 
-              return (
-                <Flex
-                  key={item.voucher_id}
-                  align='center'
-                  br={fr(2)}
-                  bsh={'lg'}
-                  sx={{
-                    borderRadius: fr(2),
-                    border: isSelected ? '2px solid #1089ff' : 'none',
-                    cursor: 'pointer'
-                  }}
-                  onClick={() => handleSelectVoucher(item.voucher_id)}
-                >
-                  <Center
-                    direction='column'
-                    p={fr(4)}
-                    bg={isSelected ? 'primary' : 'white'}
-                    gap={fr(1)}
-                  >
-                    <Image
-                      src={LogoIcon}
-                      alt='paramita-icon'
-                      w={fr(12)}
-                      h={fr(12)}
-                    />
-                    <Text cl={isSelected ? 'white' : 'gray'}>
-                      {isSelected ? 'Paramita' : 'Paramita'}
-                    </Text>
-                  </Center>
+                return (
                   <Flex
-                    direction='column'
-                    ml={fr(2)}
-                    fs={isLaptop ? 'base' : 'sm'}
+                    key={item.voucher_id}
+                    align='center'
+                    br={fr(2)}
+                    bsh={'lg'}
+                    sx={{
+                      borderRadius: fr(2),
+                      border: isSelected ? '2px solid #1089ff' : 'none',
+                      cursor: 'pointer'
+                    }}
+                    onClick={() => handleSelectVoucher(item.voucher_id)}
                   >
-                    <Text fs={'md'} className='GeomanistMedium-font'>
-                      {item.name}
-                    </Text>
-                    <Text cl={'gray'}>Đơn tối thiểu: đ{item.min_spend}</Text>
-                    <Flex>
-                      <Text cl={'gray'}>Hết hạn: {expiredDate}</Text>
-                      <Text
-                        cl={isSelected ? ['blue', 500] : 'gray'}
-                        px={fr(4)}
-                        fs={'base'}
-                        onClick={() => {
-                          setVoucherDetail(item)
-                          setOpenModalDetail(true)
-                        }}
-                      >
-                        Chi tiết
+                    <Center
+                      direction='column'
+                      p={fr(4)}
+                      bg={isSelected ? 'primary' : 'white'}
+                      gap={fr(1)}
+                    >
+                      <Image
+                        src={LogoIcon}
+                        alt='paramita-icon'
+                        w={fr(12)}
+                        h={fr(12)}
+                      />
+                      <Text cl={isSelected ? 'white' : 'gray'}>
+                        {isSelected ? 'Paramita' : 'Paramita'}
                       </Text>
+                    </Center>
+                    <Flex
+                      direction='column'
+                      ml={fr(2)}
+                      fs={isLaptop ? 'base' : 'sm'}
+                    >
+                      <Text fs={'md'} className='GeomanistMedium-font'>
+                        {item.name}
+                      </Text>
+                      <Text cl={'gray'}>Đơn tối thiểu: đ{item.min_spend}</Text>
+                      <Flex>
+                        <Text cl={'gray'}>Hết hạn: {expiredDate}</Text>
+                        <Text
+                          cl={isSelected ? ['blue', 500] : 'gray'}
+                          px={fr(4)}
+                          fs={'base'}
+                          onClick={() => {
+                            setVoucherDetail(item)
+                            setOpenModalDetail(true)
+                          }}
+                        >
+                          Chi tiết
+                        </Text>
+                      </Flex>
                     </Flex>
                   </Flex>
-                </Flex>
-              )
+                )
+              }
             })}
           </Flex>
         </Stack>
