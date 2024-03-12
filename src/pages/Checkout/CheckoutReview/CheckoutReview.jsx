@@ -20,24 +20,6 @@ const CREATE_ORDER = gql`
   mutation createOrder($data: OrderInput!) {
     createOrder(data: $data) {
       order_id
-      customer {
-        customer_id
-        name
-      }
-      status
-      delivery_address
-      transport_fee
-      payment_status
-      payment_method
-      order_details {
-        item {
-          item_id
-          name
-        }
-        quantity
-        unit_price
-        total_price
-      }
     }
   }
 `
@@ -45,16 +27,6 @@ const CREATE_ORDER_DETAIL = gql`
   mutation createOrderDetail($data: OrderDetailInput!) {
     createOrderDetail(data: $data) {
       order_detail_id
-      order {
-        order_id
-      }
-      item {
-        item_id
-        name
-      }
-      quantity
-      unit_price
-      total_price
     }
   }
 `
