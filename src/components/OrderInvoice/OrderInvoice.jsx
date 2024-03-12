@@ -3,11 +3,11 @@ import { Flex, Text, Box, Divider, List, Image, fr } from '@prismane/core'
 import { useId } from '@prismane/core/hooks'
 import { useResponsive } from '~/utils/responsive'
 
-const OrderInvoice = () => {
+const OrderInvoice = ({ customer }) => {
   const { isTablet, isMobile } = useResponsive()
   const id = useId()
   const orders = JSON.parse(localStorage.getItem('orders'))
-  const lastIndex = orders.length - 1
+  const lastIndex = orders?.length - 1
   const cart = orders[lastIndex].cart
   const information = orders[lastIndex].information
   const total = orders[lastIndex].totalPrice

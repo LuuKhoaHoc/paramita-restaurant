@@ -14,15 +14,20 @@ import React, { useState } from 'react'
 import { OrderInvoice } from '~/components'
 import { useResponsive } from '~/utils/responsive'
 
-const AccountOrder = () => {
+const AccountOrder = ({ customer }) => {
   const { isTablet, isMobile } = useResponsive()
   const id = useId()
   const [open, setOpen] = useState(false)
   const orders = JSON.parse(localStorage.getItem('orders'))
   return (
     <>
-      <Modal w={isMobile ? '100vw' : '80vw'} open={open} onClose={() => setOpen(false)} closable>
-        <OrderInvoice />
+      <Modal
+        w={isMobile ? '100vw' : '80vw'}
+        open={open}
+        onClose={() => setOpen(false)}
+        closable
+      >
+        <OrderInvoice customer={customer} />
       </Modal>
       <Flex direction='column' grow pos={'relative'} m={fr(10)}>
         <Text
@@ -78,11 +83,11 @@ const AccountOrder = () => {
                   </Text>
                   {isMobile && (
                     <Text fs={isMobile ? 'md' : 'xl'} cl={'primary'}>
-                    {item.totalPrice.toLocaleString('vi-VN', {
-                      style: 'currency',
-                      currency: 'VND'
-                    })}
-                  </Text>
+                      {item.totalPrice.toLocaleString('vi-VN', {
+                        style: 'currency',
+                        currency: 'VND'
+                      })}
+                    </Text>
                   )}
                 </Flex>
               </Flex>

@@ -49,7 +49,7 @@ const Account = ({ customer }) => {
               <Flex
                 direction={isTablet ? 'column' : isMobile ? 'column' : 'row'}
               >
-                <AccountAside />
+                <AccountAside customer={customer} />
                 <Routes>
                   <Route
                     path='information'
@@ -59,17 +59,26 @@ const Account = ({ customer }) => {
                     path='addresses'
                     element={<AccountAddresses customer={customer} />}
                   />
-                  <Route path='orders' element={<AccountOrders />} />
-                  <Route path='history-purchase' element={<AccountHistory />} />
+                  <Route
+                    path='orders'
+                    element={<AccountOrders customer={customer} />}
+                  />
+                  <Route
+                    path='history-purchase'
+                    element={<AccountHistory customer={customer} />}
+                  />
                   <Route
                     path='history-point'
-                    element={<HistoryRewardPoint />}
+                    element={<HistoryRewardPoint customer={customer} />}
                   />
                   <Route
                     path='change-password'
                     element={<ChangePassword customer={customer} />}
                   />
-                  <Route path='*' element={<AccountInformation />} />
+                  <Route
+                    path='*'
+                    element={<AccountInformation customer={customer} />}
+                  />
                 </Routes>
               </Flex>
             </Grid.Item>

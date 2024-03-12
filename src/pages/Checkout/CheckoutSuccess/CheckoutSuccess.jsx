@@ -15,7 +15,7 @@ import React from 'react'
 import { OrderInvoice } from '~/components'
 import { useResponsive } from '~/utils/responsive'
 
-const CheckoutSuccess = () => {
+const CheckoutSuccess = ({ customer }) => {
   const { isTablet, isMobile } = useResponsive()
   if (localStorage.getItem('orderSuccess') !== 'true') {
     window.location.href = '/'
@@ -41,7 +41,7 @@ const CheckoutSuccess = () => {
             columnStart={isTablet ? 2 : isMobile ? 1 : 3}
             columnEnd={isTablet ? 12 : isMobile ? 13 : 11}
           >
-            <OrderInvoice />
+            <OrderInvoice customer={customer} />
           </Grid.Item>
         </Grid>
       </Box>

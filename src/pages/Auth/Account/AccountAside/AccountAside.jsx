@@ -27,20 +27,6 @@ import { NavLink } from 'react-router-dom'
 import { useResponsive } from '~/utils/responsive'
 import { gql, useQuery } from '@apollo/client'
 
-const GET_CUSTOMER = gql`
-  query getCustomer($id: ID!) {
-    customer(id: $id) {
-      customer_id
-      username
-      email
-      points
-      level {
-        level_id
-        name
-      }
-    }
-  }
-`
 const GET_NEXTLEVEL = gql`
   query getLevel($id: Int!) {
     customerLevel(id: $id) {
@@ -50,7 +36,8 @@ const GET_NEXTLEVEL = gql`
   }
 `
 
-const AccountAside = () => {
+const AccountAside = ({ customer }) => {
+  console.log('🚀 ~ AccountAside ~ customer:', customer)
   const { isLaptop, isTablet, isMobile } = useResponsive()
   const textColor = useThemeModeValue('#371b04', '#d1e9d5')
   const bgColor = useThemeModeValue('#fff2e5', '#1d2b1f')
@@ -63,14 +50,9 @@ const AccountAside = () => {
     window.location.href = '/'
   }
 
-  const { data } = useQuery(GET_CUSTOMER, {
-    variables: {
-      id: localStorage.getItem('token')
-    }
-  })
   const { data: levelData } = useQuery(GET_NEXTLEVEL, {
     variables: {
-      id: data?.customer?.level.level_id + 1
+      id: customer?.level.level_id + 1
     }
   })
   return (
@@ -118,14 +100,14 @@ const AccountAside = () => {
               </Center>
               <Flex direction='column' gap={fr(2)} pt={fr(8)} px={fr(4)}>
                 <Text as={'p'} fs={'xl'} className='GeomanistMedium-font'>
-                  {data?.customer?.username}
+                  {customer?.username}
                 </Text>
                 <Text as={'p'} fs={'lg'} className='GeomanistMedium-font'>
-                  {data?.customer?.points} điểm - {data?.customer?.level?.name}
+                  {customer?.points} điểm - {customer?.level?.name}
                 </Text>
                 <Flex fs={'sm'} cl={['base', 50]} w={'100%'} justify='between'>
                   <Text className='GeomanistLight-font'>
-                    {data?.customer?.level?.name}
+                    {customer?.level?.name}
                   </Text>
                   <Text className='GeomanistLight-font'>
                     {levelData?.customerLevel.name}
@@ -134,13 +116,11 @@ const AccountAside = () => {
                 <Progress
                   w={'100%'}
                   value={
-                    (data?.customer?.points / levelData?.customerLevel.points) *
-                    100
+                    (customer?.points / levelData?.customerLevel.points) * 100
                   }
                   label={
                     (
-                      (data?.customer?.points /
-                        levelData?.customerLevel.points) *
+                      (customer?.points / levelData?.customerLevel.points) *
                       100
                     ).toString() + '%'
                   }
@@ -156,9 +136,7 @@ const AccountAside = () => {
                 className='GeomanistLight-font'
               >
                 Còn{' '}
-                {Math.abs(
-                  data?.customer?.points - levelData?.customerLevel.points
-                )}{' '}
+                {Math.abs(customer?.points - levelData?.customerLevel.points)}{' '}
                 điểm nữa bạn sẽ thăng hạng. Đổi quà không ảnh hưởng tới việc
                 thăng hạng của bạn Hãy dùng điểm này để đổi ưu đãi nhé.
               </Text>
@@ -303,14 +281,14 @@ const AccountAside = () => {
               </Center>
               <Flex direction='column' gap={fr(2)} pt={fr(8)} px={fr(4)}>
                 <Text as={'p'} fs={'xl'} className='GeomanistMedium-font'>
-                  {data?.customer?.username}
+                  {customer?.username}
                 </Text>
                 <Text as={'p'} fs={'lg'} className='GeomanistMedium-font'>
-                  {data?.customer?.points} điểm - {data?.customer?.level?.name}
+                  {customer?.points} điểm - {customer?.level?.name}
                 </Text>
                 <Flex fs={'sm'} cl={['base', 50]} w={'100%'} justify='between'>
                   <Text className='GeomanistLight-font'>
-                    {data?.customer?.level?.name}
+                    {customer?.level?.name}
                   </Text>
                   <Text className='GeomanistLight-font'>
                     {levelData?.customerLevel.name}
@@ -319,13 +297,11 @@ const AccountAside = () => {
                 <Progress
                   w={'100%'}
                   value={
-                    (data?.customer?.points / levelData?.customerLevel.points) *
-                    100
+                    (customer?.points / levelData?.customerLevel.points) * 100
                   }
                   label={
                     (
-                      (data?.customer?.points /
-                        levelData?.customerLevel.points) *
+                      (customer?.points / levelData?.customerLevel.points) *
                       100
                     ).toString() + '%'
                   }
@@ -341,9 +317,7 @@ const AccountAside = () => {
                 className='GeomanistLight-font'
               >
                 Còn{' '}
-                {Math.abs(
-                  data?.customer?.points - levelData?.customerLevel.points
-                )}{' '}
+                {Math.abs(customer?.points - levelData?.customerLevel.points)}{' '}
                 điểm nữa bạn sẽ thăng hạng. Đổi quà không ảnh hưởng tới việc
                 thăng hạng của bạn Hãy dùng điểm này để đổi ưu đãi nhé.
               </Text>
