@@ -18,6 +18,7 @@ const CheckoutPayment = ({ customer }) => {
   const checkoutInformation = JSON.parse(
     sessionStorage.getItem('checkout-information')
   )
+  const cart = JSON.parse(sessionStorage.getItem('cartItems'))
 
   const [name, setName] = useState(checkoutInformation.name || customer?.name)
   const [phone, setPhone] = useState(
@@ -27,6 +28,27 @@ const CheckoutPayment = ({ customer }) => {
   const [paymentMethod, setPaymentMethod] = useState(
     checkoutInformation.payment
   )
+  useEffect(() => {
+    if (cart.length !== 0) {
+      const note = cart.reduce(
+        (acc, item) =>
+          acc +
+          '\n' +
+          item.title +
+          '\n' +
+          item.optionList
+            .map((op) => `${op.title}: ${op.selected == 'no' ? 'Không' : 'Có'}`)
+            .join(', '),
+        ''
+      )
+      setNotes(note)
+    }
+
+    return () => {
+      setNotes('')
+    }
+  }, [])
+
   useEffect(() => {
     sessionStorage.setItem(
       'checkout-information',
@@ -76,6 +98,7 @@ const CheckoutPayment = ({ customer }) => {
         />
         <TextareaField
           maxLength={120}
+          size='md'
           variant='underlined'
           placeholder='Ghi chú thêm'
           value={notes}

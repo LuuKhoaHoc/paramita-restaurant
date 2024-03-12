@@ -1,19 +1,16 @@
 import React from 'react'
 import { Flex, Text, Box, Divider, List, Image, fr } from '@prismane/core'
-import { useId } from '@prismane/core/hooks'
 import { useResponsive } from '~/utils/responsive'
 
-const OrderInvoice = ({ customer }) => {
+const OrderInvoice = ({ customer, order }) => {
+  console.log('🚀 ~ OrderInvoice ~ order:', order)
+  const cart_price = order.order_details.reduce(
+    (acc, item) => acc + item.total_price,
+    0
+  )
+  const discount_price = cart_price + order.transport_fee - order.total_price
+  console.log('🚀 ~ OrderInvoice ~ discount_price:', discount_price)
   const { isTablet, isMobile } = useResponsive()
-  const id = useId()
-  const orders = JSON.parse(localStorage.getItem('orders'))
-  const lastIndex = orders?.length - 1
-  const cart = orders[lastIndex].cart
-  const information = orders[lastIndex].information
-  const total = orders[lastIndex].totalPrice
-  const subTotal = cart.reduce((acc, item) => {
-    return acc + item.price * item.quantity
-  }, 0)
   return (
     <Flex
       bg={(theme) => (theme.mode === 'dark' ? '#1a1a1a' : '#fff')}
@@ -31,10 +28,10 @@ const OrderInvoice = ({ customer }) => {
       </Text>
       <Box w={'90%'}>
         <Flex direction='column' mb={fr(2)} fs={isMobile ? 'base' : 'lg'}>
-          <Text>Mã đơn hàng: #{id}</Text>
-          <Text>Tên khách hàng: {information?.name}</Text>
-          <Text>Số điện thoại: {information?.phone}</Text>
-          <Text>Địa chỉ giao hàng: {information?.address}</Text>
+          <Text>Mã đơn hàng: #{order.tsid}</Text>
+          <Text>Tên khách hàng: {order?.customer.name}</Text>
+          <Text>Số điện thoại: {order?.customer.phone}</Text>
+          <Text>Địa chỉ giao hàng: {order?.delivery_address}</Text>
           <Flex gap={fr(2)}>
             <Text>Phương thức thanh toán: </Text>
             <Text>
@@ -43,7 +40,7 @@ const OrderInvoice = ({ customer }) => {
                   'mo-mo': 'MoMo',
                   'tien-mat': 'Tiền mặt',
                   'ngan-hang': 'ngân hàng'
-                }[information?.payment]
+                }[order?.payment_method]
               }
             </Text>
           </Flex>
@@ -65,46 +62,41 @@ const OrderInvoice = ({ customer }) => {
             <Text>Tạm tính</Text>
           </List.Item>
           <Divider />
-          {cart?.map((item, index) => (
-            <Box key={index}>
-              <List.Item
-                justify='around'
-                py={fr(2)}
-                align='center'
-                fs={isTablet ? 'md' : isMobile ? 'sm' : 'lg'}
-              >
-                <Text>{index + 1}</Text>
-                <Flex
+          {order?.order_details.map((item, index) => {
+            return (
+              <Box key={index}>
+                <List.Item
+                  justify='around'
+                  py={fr(2)}
                   align='center'
-                  w={isTablet ? fr(60) : isMobile ? 'fit-content' : fr(86)}
+                  fs={isTablet ? 'md' : isMobile ? 'sm' : 'lg'}
                 >
-                  <Image
-                    src={item.image}
-                    w={isTablet ? fr(16) : isMobile ? fr(10) : fr(20)}
-                    h={isTablet ? fr(16) : isMobile ? fr(10) : fr(20)}
-                    alt={item.title}
-                    br={'lg'}
-                  />
-                  <Box>
-                    <Text>{item.title}</Text>
+                  <Text>{index + 1}</Text>
+                  <Flex
+                    align='center'
+                    w={isTablet ? fr(60) : isMobile ? 'fit-content' : fr(86)}
+                  >
+                    <Image
+                      src={item?.item?.image}
+                      w={isTablet ? fr(16) : isMobile ? fr(10) : fr(20)}
+                      h={isTablet ? fr(16) : isMobile ? fr(10) : fr(20)}
+                      alt={item?.item?.name}
+                      br={'lg'}
+                    />
                     <Box>
-                      <Text>
-                        {item.optionList[0].title} -{' '}
-                        {item.optionList[0].selected}
-                      </Text>
+                      <Text>{item?.item?.name}</Text>
                     </Box>
-                  </Box>
-                </Flex>
-                <Text>{item.price.toLocaleString('vi-VN')}đ</Text>
-                <Text>{item.quantity}</Text>
-                <Text>
-                  {(item.price * item.quantity).toLocaleString('vi-VN')}đ
-                </Text>
-              </List.Item>
-              <Divider />
-            </Box>
-          ))}
+                  </Flex>
+                  <Text>{item?.unit_price.toLocaleString('vi-VN')}đ</Text>
+                  <Text>{item?.quantity}</Text>
+                  <Text>{item?.total_price.toLocaleString('vi-VN')}đ</Text>
+                </List.Item>
+                <Divider />
+              </Box>
+            )
+          })}
         </List>
+        <Text>Ghi chú: {order?.note}</Text>
         <Flex
           direction='column'
           align='end'
@@ -112,15 +104,13 @@ const OrderInvoice = ({ customer }) => {
           gap={fr(2)}
           my={fr(2)}
         >
-          <Text>Tổng cộng: {subTotal.toLocaleString('vi-VN')}đ</Text>
+          <Text>Tổng cộng: {cart_price.toLocaleString('vi-VN')}đ</Text>
           <Text>
-            Phí vận chuyển: {information.delivery.toLocaleString('vi-VN')}đ
+            Phí vận chuyển: {order?.transport_fee?.toLocaleString('vi-VN')}đ
           </Text>
-          <Text>
-            Mã giảm giá: {-String(information.voucher).toLocaleString('vi-VN')}đ
-          </Text>
+          <Text>Mã giảm giá: -{discount_price.toLocaleString('vi-VN')}đ</Text>
           <Text fs={isMobile ? 'md' : 'xl'} cl={'primary'}>
-            Tổng thanh toán: {total.toLocaleString('vi-VN')}đ
+            Tổng thanh toán: {order?.total_price.toLocaleString('vi-VN')}đ
           </Text>
         </Flex>
       </Box>

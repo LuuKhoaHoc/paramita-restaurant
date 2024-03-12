@@ -72,6 +72,33 @@ const GET_CUSTOMER = gql`
         address_id
         address
       }
+      orders {
+        order_id
+        tsid
+        customer {
+          name
+          phone
+        }
+        status
+        delivery_address
+        voucher_id
+        transport_fee
+        payment_method
+        payment_status
+        total_price
+        note
+        order_details {
+          order_detail_id
+          tsid
+          item {
+            name
+            image
+          }
+          quantity
+          unit_price
+          total_price
+        }
+      }
     }
   }
 `
@@ -87,6 +114,7 @@ function getCustomer() {
   if (error) return <p>Error : {error.message}</p>
   return data
 }
+
 const App = () => {
   const { customer } = getCustomer()
   const textColor = useThemeModeValue('#371b04', '#d1e9d5')
@@ -168,7 +196,10 @@ const App = () => {
                   path='/checkout'
                   element={<Checkout customer={customer} />}
                 />
-                <Route path='/checkout-success' element={<CheckoutSuccess />} />
+                <Route
+                  path='/checkout-success'
+                  element={<CheckoutSuccess customer={customer} />}
+                />
               </Route>
               <Route path='/login' element={<Login />} />
               <Route path='/register' element={<Register />} />

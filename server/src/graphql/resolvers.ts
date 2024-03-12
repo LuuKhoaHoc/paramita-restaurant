@@ -1190,6 +1190,18 @@ export const resolvers = {
         where: { voucher_id: args.id }
       })
     },
+    updateVoucherStatus: async (
+      _parent: any,
+      args: { id: any; status: string },
+      context: Context
+    ) => {
+      return context.prisma.vouchers.update({
+        where: { voucher_id: args.id },
+        data: {
+          status: args.status
+        }
+      })
+    },
     // Employee
     createEmployee: async (
       _parent: any,
@@ -1397,6 +1409,11 @@ export const resolvers = {
     customer: (parent: any, _args: any, context: Context) => {
       return context.prisma.customers.findFirst({
         where: { customer_id: parent?.customer_id }
+      })
+    },
+    order_details: (parent: any, _args: any, context: Context) => {
+      return context.prisma.order_details.findMany({
+        where: { order_id: parent?.order_id }
       })
     }
   },

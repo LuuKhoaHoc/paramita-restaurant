@@ -16,8 +16,14 @@ import { OrderInvoice } from '~/components'
 import { useResponsive } from '~/utils/responsive'
 
 const CheckoutSuccess = ({ customer }) => {
+  const orders = customer?.orders
+  const lastIndex = orders?.length - 1
   const { isTablet, isMobile } = useResponsive()
-  if (localStorage.getItem('orderSuccess') !== 'true') {
+  if (
+    sessionStorage.getItem('orderSuccess') !== 'true' ||
+    !sessionStorage.getItem('orderSuccess')
+  ) {
+    alert('Bạn hãy thử kiểm tra lại trong đơn hàng trong tài khoản nhé!')
     window.location.href = '/'
   }
 
@@ -41,7 +47,7 @@ const CheckoutSuccess = ({ customer }) => {
             columnStart={isTablet ? 2 : isMobile ? 1 : 3}
             columnEnd={isTablet ? 12 : isMobile ? 13 : 11}
           >
-            <OrderInvoice customer={customer} />
+            <OrderInvoice customer={customer} order={orders[lastIndex]} />
           </Grid.Item>
         </Grid>
       </Box>

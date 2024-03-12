@@ -62,6 +62,7 @@ type Mutation {
   createVoucher(data: VoucherInput): Voucher!
   updateVoucher(id: Int!, data: VoucherInput): Voucher!
   deleteVoucher(id: Int!): Voucher!
+  updateVoucherStatus(id: Int!, status: String!): Voucher!
   createEmployee(data: EmployeeInput): Employee!
   updateEmployee(id: Int!, data: EmployeeInput): Employee!
   deleteEmployee(id: ID!): Employee!

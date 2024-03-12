@@ -30,9 +30,9 @@ const CREATE_ORDER_DETAIL = gql`
     }
   }
 `
-const DELETE_VOUCHER = gql`
-  mutation deleteVoucher($voucherId: Int!) {
-    deleteVoucher(id: $voucherId) {
+const UPDATE_VOUCHER = gql`
+  mutation updateVoucherStatus($id: Int!, $status: String!) {
+    updateVoucherStatus(id: $id, status: $status) {
       voucher_id
     }
   }
@@ -49,8 +49,9 @@ const CheckoutReview = ({ customer }) => {
     createOrderDetail,
     { loading: loadingOrderDetail, error: errorOrderDetail }
   ] = useMutation(CREATE_ORDER_DETAIL)
-  // Sau khi order thành công xoá voucher
-  const [deleteVoucher] = useMutation(DELETE_VOUCHER)
+  // Sau khi order thành công update voucher sang `đã sử dụng`
+  const [updateVoucherStatus, { loading: loadingUpdate, error: errorUpdate }] =
+    useMutation(UPDATE_VOUCHER)
   // Lấy cartItems và clearCart từ CartContext
   const { cartItems, clearCart } = useContext(CartContext)
   // Lấy thông tin người dùng từ sessionStorage
@@ -107,23 +108,22 @@ const CheckoutReview = ({ customer }) => {
             })
           })
         })
-        .then(() => {
-          deleteVoucher({
+        .then(async () => {
+          await updateVoucherStatus({
             variables: {
-              voucherId: checkoutInformation?.voucherId
+              id: checkoutInformation?.voucherId,
+              status: 'Đã sử dụng'
             }
           })
-        })
-        .finally(() => {
-          localStorage.setItem('orderSuccess', 'true')
+          sessionStorage.setItem('orderSuccess', 'true')
           sessionStorage.setItem(
             'checkout-information',
             JSON.stringify({
               address: '',
               payment: 'tien-mat',
               notes: '',
-              delivery: 15000,
-              voucherId: null
+              delivery: 15000
+              // voucherId: null
             })
           )
           clearCart()
