@@ -138,14 +138,14 @@ input InvoiceDetailInput {
 }
 
 input OrderInput {
-  date: DateTime!
   customerId: Int!
   status: Boolean!
   address: String!
   shippingFee: Float!
-  shippingMethod: String!
   paymentMethod: String!
   paymentStatus: Boolean!
+  voucherId: Int
+  total: Float
   note: String
 }
 
@@ -396,14 +396,16 @@ type Order {
   tsid: String!
   customer: Customer!
   status: String!
-  address: String!
-  shippingMethod: String!
-  shippingFee: Float!
-  paymentMethod: String!
-  paymentStatus: Boolean!
-  createdDate: DateTime!
-  updatedDate: DateTime!
-  orderDetails: [OrderDetail!]!
+  delivery_address: String!
+  voucher_id: Int
+  transport_fee: Float!
+  payment_method: String!
+  payment_status: Boolean!
+  total_price: Float!
+  note: String
+  created_at: DateTime!
+  updated_at: DateTime!
+  order_details: [OrderDetail!]
 }
 
 type OrderDetail {
@@ -412,8 +414,8 @@ type OrderDetail {
   order: Order!
   item: Menu!
   quantity: Int!
-  price: Float!
-  total: Float!
+  unit_price: Float!
+  total_price: Float!
 }
 
 type PointsHistory {

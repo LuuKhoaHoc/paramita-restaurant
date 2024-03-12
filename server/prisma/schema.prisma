@@ -181,6 +181,8 @@ model orders {
   delivery_address String            @db.VarChar(255)
   transport_fee    Decimal           @db.Decimal(10, 2)
   voucher_id       Int?              @unique
+  total_price      Float             @db.Float
+  note             String?           @db.Text
   order_details    order_details[]
   customers        customers         @relation(fields: [customer_id], references: [customer_id], onUpdate: Restrict, map: "orders_ibfk_1")
   voucher          vouchers?         @relation(fields: [voucher_id], references: [voucher_id])

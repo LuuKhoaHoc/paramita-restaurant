@@ -820,14 +820,17 @@ export const resolvers = {
           customer_id: args.data.customerId,
           status: args.data.status,
           delivery_address: args.data.address,
+          transport_fee: args.data.transportFee,
           payment_method: args.data.paymentMethod,
           payment_status: args.data.paymentStatus,
-          transport_fee: args.data.transportFee,
-          order_details: {
-            connect: {
-              order_detail_id: args.orderDetailId
-            }
-          }
+          voucher_id: args.data?.voucher_id,
+          total_price: args.data.total,
+          note: args.data?.note
+          // order_details: {
+          //   connect: {
+          //     order_detail_id: args.orderDetailId
+          //   }
+          // }
         }
       })
     },
@@ -1538,6 +1541,7 @@ interface OrderInput {
   transportFee: number
   paymentMethod: string
   paymentStatus: string
+  total: number
   note?: string
   orderDetails: OrderDetailInput[]
 }
