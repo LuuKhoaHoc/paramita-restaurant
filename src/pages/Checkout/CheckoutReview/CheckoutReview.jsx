@@ -58,6 +58,13 @@ const CREATE_ORDER_DETAIL = gql`
     }
   }
 `
+const DELETE_VOUCHER = gql`
+  mutation deleteVoucher($voucherId: Int!) {
+    deleteVoucher(id: $voucherId) {
+      voucher_id
+    }
+  }
+`
 
 const CheckoutReview = ({ customer }) => {
   // responsive
@@ -65,13 +72,13 @@ const CheckoutReview = ({ customer }) => {
   const [open, setOpen] = useState(false)
   // Tạo order lưu vào Db
   const [createOrder, { loading, error, data }] = useMutation(CREATE_ORDER)
-  console.log('🚀 ~ CheckoutReview ~ error:', error)
   // Tạo order detail lưu vào Db
   const [
     createOrderDetail,
     { loading: loadingOrderDetail, error: errorOrderDetail }
   ] = useMutation(CREATE_ORDER_DETAIL)
-  console.log('🚀 ~ CheckoutReview ~ errorOrderDetail:', errorOrderDetail)
+  // Sau khi order thành công xoá voucher
+  const [deleteVoucher] = useMutation(DELETE_VOUCHER)
   // Lấy cartItems và clearCart từ CartContext
   const { cartItems, clearCart } = useContext(CartContext)
   // Lấy thông tin người dùng từ sessionStorage
@@ -126,6 +133,13 @@ const CheckoutReview = ({ customer }) => {
                 }
               }
             })
+          })
+        })
+        .then(() => {
+          deleteVoucher({
+            variables: {
+              voucherId: checkoutInformation?.voucherId
+            }
           })
         })
         .finally(() => {
