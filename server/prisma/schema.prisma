@@ -141,15 +141,15 @@ model invoices {
 }
 
 model menu {
-  item_id       Int            @id @default(autoincrement())
-  name          String         @db.VarChar(255)
-  description   String         @db.Text
-  price         Decimal        @db.Decimal(10, 2)
-  image         String         @db.Text
-  tsid          String         @db.VarChar(13)
+  item_id       Int             @id @default(autoincrement())
+  name          String          @db.VarChar(255)
+  description   String          @db.Text
+  price         Decimal         @db.Decimal(10, 2)
+  image         String          @db.Text
+  tsid          String          @db.VarChar(13)
   category_id   Int
-  categories    categories     @relation(fields: [category_id], references: [category_id])
-  order_details order_details?
+  categories    categories      @relation(fields: [category_id], references: [category_id])
+  order_details order_details[]
 
   @@index([category_id], map: "category_id")
 }
@@ -157,16 +157,16 @@ model menu {
 model order_details {
   order_detail_id Int     @id @default(autoincrement())
   order_id        Int
-  item_id         Int     @unique
+  item_id         Int
   quantity        Int
   unit_price      Decimal @db.Decimal(10, 2)
   total_price     Decimal @db.Decimal(10, 2)
   tsid            String  @db.VarChar(13)
-  orders          orders  @relation(fields: [order_id], references: [order_id], onUpdate: Restrict, map: "order_details_ibfk_1")
   menu            menu    @relation(fields: [item_id], references: [item_id])
+  orders          orders  @relation(fields: [order_id], references: [order_id])
 
-  @@index([item_id], map: "item_id")
   @@index([order_id], map: "order_id")
+  @@index([item_id], map: "item_id")
 }
 
 model orders {

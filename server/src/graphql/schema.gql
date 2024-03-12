@@ -139,11 +139,11 @@ input InvoiceDetailInput {
 
 input OrderInput {
   customerId: Int!
-  status: Boolean!
+  status: String!
   address: String!
-  shippingFee: Float!
+  transportFee: Int!
   paymentMethod: String!
-  paymentStatus: Boolean!
+  paymentStatus: String!
   voucherId: Int
   total: Float
   note: String
@@ -348,7 +348,7 @@ type Customer {
   pointsHistory: [PointsHistory!]
   reservations: [Reservation!]
   reviews: [Review!]
-  voucher: [Voucher!]
+  vouchers: [Voucher!]
 }
 
 type CustomerAddress {
@@ -400,7 +400,7 @@ type Order {
   voucher_id: Int
   transport_fee: Float!
   payment_method: String!
-  payment_status: Boolean!
+  payment_status: String!
   total_price: Float!
   note: String
   created_at: DateTime!

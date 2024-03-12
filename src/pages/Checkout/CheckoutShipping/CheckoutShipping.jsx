@@ -55,10 +55,12 @@ const CheckoutShipping = ({ customer }) => {
     return item.address
   })
   const handleSetAddress = (v) => {
-    checkoutInformation.address = v
     sessionStorage.setItem(
       'checkout-information',
-      JSON.stringify(checkoutInformation)
+      JSON.stringify({
+        ...checkoutInformation,
+        address: v
+      })
     )
   }
   const handleSetInput = (e) => {

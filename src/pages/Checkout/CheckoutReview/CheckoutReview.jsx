@@ -25,18 +25,36 @@ const CREATE_ORDER = gql`
         name
       }
       status
-      address
-      shippingMethod
-      shippingFee
-      paymentStatus
-      orderDetails {
+      delivery_address
+      transport_fee
+      payment_status
+      payment_method
+      order_details {
         item {
           item_id
+          name
         }
         quantity
-        price
-        total
+        unit_price
+        total_price
       }
+    }
+  }
+`
+const CREATE_ORDER_DETAIL = gql`
+  mutation createOrderDetail($data: OrderDetailInput!) {
+    createOrderDetail(data: $data) {
+      order_detail_id
+      order {
+        order_id
+      }
+      item {
+        item_id
+        name
+      }
+      quantity
+      unit_price
+      total_price
     }
   }
 `
@@ -44,23 +62,34 @@ const CREATE_ORDER = gql`
 const CheckoutReview = ({ customer }) => {
   // responsive
   const { isTablet, isMobile } = useResponsive()
+  const [open, setOpen] = useState(false)
   // Tạo order lưu vào Db
-  const [createOrder, { loading, error }] = useMutation(CREATE_ORDER)
+  const [createOrder, { loading, error, data }] = useMutation(CREATE_ORDER)
+  console.log('🚀 ~ CheckoutReview ~ error:', error)
+  // Tạo order detail lưu vào Db
+  const [
+    createOrderDetail,
+    { loading: loadingOrderDetail, error: errorOrderDetail }
+  ] = useMutation(CREATE_ORDER_DETAIL)
+  console.log('🚀 ~ CheckoutReview ~ errorOrderDetail:', errorOrderDetail)
   // Lấy cartItems và clearCart từ CartContext
   const { cartItems, clearCart } = useContext(CartContext)
   // Lấy thông tin người dùng từ sessionStorage
   const checkoutInformation = JSON.parse(
     sessionStorage.getItem('checkout-information')
   )
+  const cart = JSON.parse(sessionStorage.getItem('cartItems'))
+  const discountPrice = JSON.parse(sessionStorage.getItem('discount-price'))
   // Tính tổng tiền
   const totalPrice =
     cartItems.reduce((acc, item) => {
       return acc + item.price * item.quantity
-    }, 0) + checkoutInformation?.delivery
+    }, 0) +
+    checkoutInformation?.delivery -
+    (discountPrice || 0)
   // Tạo state open để mở dialog
-  const [open, setOpen] = useState(false)
   // Hàm xử lý khi người dùng nhấn đặt hàng
-  const handleInformation = () => {
+  const handleInformation = async () => {
     if (
       !checkoutInformation?.name ||
       !checkoutInformation?.phone ||
@@ -69,35 +98,53 @@ const CheckoutReview = ({ customer }) => {
     ) {
       setOpen(true)
     } else {
-      // localStorage.setItem(
-      //   'orders',
-      //   JSON.stringify([
-      //     {
-      //       cart: cartItems,
-      //       information: checkoutInformation,
-      //       totalPrice: totalPrice
-      //     }
-      console.log('🚀 ~ handleInformation ~ totalPrice:', totalPrice)
-      console.log(
-        '🚀 ~ handleInformation ~ checkoutInformation:',
-        checkoutInformation
-      )
-      console.log('🚀 ~ handleInformation ~ cartItems:', cartItems)
-      //   ])
-      // )
-      // localStorage.setItem('orderSuccess', 'true')
-      // sessionStorage.setItem(
-      //   'checkout-information',
-      //   JSON.stringify({
-      //     address: '',
-      //     payment: 'tien-mat',
-      //     notes: '',
-      //     delivery: 15000,
-      //     voucher: 0
-      //   })
-      // )
-      // clearCart()
-      // window.location.href = '/checkout-success'
+      await createOrder({
+        variables: {
+          data: {
+            customerId: customer?.customer_id,
+            status: 'Chờ xác nhận',
+            address: checkoutInformation?.address,
+            transportFee: checkoutInformation?.delivery,
+            paymentMethod: checkoutInformation?.payment,
+            paymentStatus: 'Chưa thanh toán',
+            voucherId: checkoutInformation?.voucherId,
+            total: totalPrice,
+            note: checkoutInformation?.notes
+          }
+        }
+      })
+        .then(async (dataOrder) => {
+          await cart.forEach(async (item) => {
+            await createOrderDetail({
+              variables: {
+                data: {
+                  orderId: dataOrder?.data?.createOrder?.order_id,
+                  itemId: item.id,
+                  quantity: item.quantity,
+                  price: item.price,
+                  total: item.price * item.quantity
+                }
+              }
+            })
+          })
+        })
+        .finally(() => {
+          localStorage.setItem('orderSuccess', 'true')
+          sessionStorage.setItem(
+            'checkout-information',
+            JSON.stringify({
+              address: '',
+              payment: 'tien-mat',
+              notes: '',
+              delivery: 15000,
+              voucherId: null
+            })
+          )
+          clearCart()
+          sessionStorage.removeItem('discount-price')
+          sessionStorage.removeItem('cartItems')
+          window.location.href = '/checkout-success'
+        })
     }
   }
   return (

@@ -823,7 +823,7 @@ export const resolvers = {
           transport_fee: args.data.transportFee,
           payment_method: args.data.paymentMethod,
           payment_status: args.data.paymentStatus,
-          voucher_id: args.data?.voucher_id,
+          voucher_id: args.data?.voucherId,
           total_price: args.data.total,
           note: args.data?.note
           // order_details: {
@@ -1350,8 +1350,13 @@ export const resolvers = {
         where: { customer_id: parent?.customer_id }
       })
     },
-    voucher: (parent: any, _args: any, context: Context) => {
+    vouchers: (parent: any, _args: any, context: Context) => {
       return context.prisma.vouchers.findMany({
+        where: { customer_id: parent?.customer_id }
+      })
+    },
+    orders: (parent: any, _args: any, context: Context) => {
+      return context.prisma.orders.findMany({
         where: { customer_id: parent?.customer_id }
       })
     }
@@ -1390,20 +1395,21 @@ export const resolvers = {
   },
   Order: {
     customer: (parent: any, _args: any, context: Context) => {
-      return context.prisma.customers
-        .findUnique({
-          where: { customer_id: parent?.customer_id }
-        })
-        .orders()
+      return context.prisma.customers.findFirst({
+        where: { customer_id: parent?.customer_id }
+      })
     }
   },
   OrderDetail: {
     order: (parent: any, _args: any, context: Context) => {
-      return context.prisma.orders
-        .findUnique({
-          where: { order_id: parent?.order_id }
-        })
-        .order_details()
+      return context.prisma.orders.findUnique({
+        where: { order_id: parent?.order_id }
+      })
+    },
+    item: (parent: any, _args: any, context: Context) => {
+      return context.prisma.menu.findUnique({
+        where: { item_id: parent?.item_id }
+      })
     }
   },
   PointsHistory: {
@@ -1537,7 +1543,7 @@ interface OrderInput {
   customerId: number
   status: string
   address: string
-  voucher_id: number
+  voucherId: number
   transportFee: number
   paymentMethod: string
   paymentStatus: string

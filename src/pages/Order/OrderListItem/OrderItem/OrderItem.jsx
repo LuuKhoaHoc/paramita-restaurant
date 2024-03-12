@@ -20,7 +20,7 @@ import { CartContext } from '~/contexts/CartContext'
 import { useResponsive } from '~/utils/responsive'
 import { AuthContext } from '~/contexts/AuthContext'
 
-const OrderItem = ({ image, title, price, description }) => {
+const OrderItem = ({ id, image, title, price, description }) => {
   const { isLoggedIn } = useContext(AuthContext)
   const { isMobile, isTablet } = useResponsive()
   const { addCartItem } = useContext(CartContext)
@@ -46,6 +46,7 @@ const OrderItem = ({ image, title, price, description }) => {
   }
   const handleSendItem = () => {
     const item = {
+      id,
       image,
       title,
       price,

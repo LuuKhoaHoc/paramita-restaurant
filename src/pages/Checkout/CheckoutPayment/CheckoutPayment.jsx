@@ -28,13 +28,15 @@ const CheckoutPayment = ({ customer }) => {
     checkoutInformation.payment
   )
   useEffect(() => {
-    checkoutInformation.name = name
-    checkoutInformation.phone = phone
-    checkoutInformation.notes = notes
-    checkoutInformation.payment = paymentMethod
     sessionStorage.setItem(
       'checkout-information',
-      JSON.stringify(checkoutInformation)
+      JSON.stringify({
+        ...checkoutInformation,
+        name,
+        phone,
+        notes,
+        payment: paymentMethod
+      })
     )
   }, [name, phone, notes, paymentMethod])
   return (

@@ -44,6 +44,7 @@ const GET_CATEGORYLIST = gql`
 const GET_MENU = gql`
   query {
     menuList {
+      item_id
       image
       name
       price

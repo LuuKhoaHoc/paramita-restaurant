@@ -14,6 +14,7 @@ const OrderListItem = ({ listFood }) => {
       {listFood?.map((item, index) => (
         <OrderItem
           key={index}
+          id={item.item_id}
           image={item.image}
           title={item.name}
           price={item.price * 1000}
