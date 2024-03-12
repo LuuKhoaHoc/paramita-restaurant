@@ -101,11 +101,12 @@ const Navbar = ({ customer }) => {
   window.addEventListener('scroll', handleScroll)
   // Hàm xử lí đăng xuất
   const handleLogout = () => {
-    sessionStorage.removeItem('checkout-information')
+    sessionStorage.clear()
     localStorage.removeItem('orders')
     localStorage.removeItem('orderSuccess')
     localStorage.removeItem('login')
     localStorage.removeItem('token')
+    clearCart()
     setMenuOpen(false)
     setIsLoggedIn(false)
   }

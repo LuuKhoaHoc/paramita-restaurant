@@ -199,8 +199,7 @@ const Login = () => {
                           address: '',
                           payment: 'tien-mat',
                           notes: '',
-                          delivery: 15000,
-                          voucher: 0
+                          delivery: 15000
                         })
                       )
                       setIsLoggedIn(true)
