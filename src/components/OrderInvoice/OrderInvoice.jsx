@@ -3,13 +3,11 @@ import { Flex, Text, Box, Divider, List, Image, fr } from '@prismane/core'
 import { useResponsive } from '~/utils/responsive'
 
 const OrderInvoice = ({ customer, order }) => {
-  console.log('🚀 ~ OrderInvoice ~ order:', order)
-  const cart_price = order.order_details.reduce(
+  const cart_price = order?.order_details.reduce(
     (acc, item) => acc + item.total_price,
     0
   )
-  const discount_price = cart_price + order.transport_fee - order.total_price
-  console.log('🚀 ~ OrderInvoice ~ discount_price:', discount_price)
+  const discount_price = cart_price + order?.transport_fee - order?.total_price
   const { isTablet, isMobile } = useResponsive()
   return (
     <Flex
@@ -28,7 +26,20 @@ const OrderInvoice = ({ customer, order }) => {
       </Text>
       <Box w={'90%'}>
         <Flex direction='column' mb={fr(2)} fs={isMobile ? 'base' : 'lg'}>
-          <Text>Mã đơn hàng: #{order.tsid}</Text>
+          <Text>Mã đơn hàng: #{order?.tsid}</Text>
+          <Text>
+            Thời gian:{' '}
+            {new Date(order?.created_at)
+              .toLocaleString('de-DE', {
+                day: '2-digit',
+                month: '2-digit',
+                year: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit'
+              })
+              .replace(/[\/\.]/g, '.')}
+          </Text>
           <Text>Tên khách hàng: {order?.customer.name}</Text>
           <Text>Số điện thoại: {order?.customer.phone}</Text>
           <Text>Địa chỉ giao hàng: {order?.delivery_address}</Text>
@@ -104,7 +115,7 @@ const OrderInvoice = ({ customer, order }) => {
           gap={fr(2)}
           my={fr(2)}
         >
-          <Text>Tổng cộng: {cart_price.toLocaleString('vi-VN')}đ</Text>
+          <Text>Tổng cộng: {cart_price?.toLocaleString('vi-VN')}đ</Text>
           <Text>
             Phí vận chuyển: {order?.transport_fee?.toLocaleString('vi-VN')}đ
           </Text>

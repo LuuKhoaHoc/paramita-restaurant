@@ -9,16 +9,18 @@ import {
   Text,
   fr
 } from '@prismane/core'
-import { useId } from '@prismane/core/hooks'
 import React, { useState } from 'react'
 import { OrderInvoice } from '~/components'
 import { useResponsive } from '~/utils/responsive'
+import timestampToDateTime from '~/utils/timeStampToDateTime'
 
 const AccountOrder = ({ customer }) => {
+  const orders = customer?.orders.filter(
+    (item) => item.status === 'Chờ xác nhận'
+  )
   const { isTablet, isMobile } = useResponsive()
-  const id = useId()
+  const [order, setOrder] = useState()
   const [open, setOpen] = useState(false)
-  const orders = JSON.parse(localStorage.getItem('orders'))
   return (
     <>
       <Modal
@@ -27,7 +29,7 @@ const AccountOrder = ({ customer }) => {
         onClose={() => setOpen(false)}
         closable
       >
-        <OrderInvoice customer={customer} />
+        <OrderInvoice customer={customer} order={order} />
       </Modal>
       <Flex direction='column' grow pos={'relative'} m={fr(10)}>
         <Text
@@ -48,62 +50,61 @@ const AccountOrder = ({ customer }) => {
           Đơn hàng
         </Text>
         <Stack align='center'>
-          {orders?.map((item, index) => (
-            <Flex
-              key={index}
-              bg={(theme) => (theme.mode === 'dark' ? '#1a1a1a' : '#fff')}
-              br={'lg'}
-              bsh={'md'}
-              p={fr(2)}
-              my={fr(2)}
-              cs={'pointer'}
-              align='center'
-              onClick={() => {
-                setOpen(!open)
-              }}
-            >
-              <Flex align='center'>
-                <Image
-                  src={item.cart[0].image}
-                  alt='order'
-                  w={isMobile ? fr(20) : fr(32)}
-                  h={isMobile ? fr(20) : fr(32)}
-                  br={'lg'}
-                />
-                <Flex direction='column' ml={isMobile ? fr(1) : fr(2)}>
-                  <Text as={'h2'} fs={isMobile ? 'md' : 'inherit'}>
-                    #{id}
-                  </Text>
-                  <Text fs={isMobile ? 'sm' : 'md'}>14/2/2024</Text>
-                  <Text fs={isMobile ? 'md' : 'xl'} cl={'primary'}>
-                    Đang thực hiện
-                  </Text>
-                  <Text tt={'capitalize'} fs={isMobile ? 'sm' : 'md'}>
-                    {item.information.address}
-                  </Text>
-                  {isMobile && (
-                    <Text fs={isMobile ? 'md' : 'xl'} cl={'primary'}>
-                      {item.totalPrice.toLocaleString('vi-VN', {
-                        style: 'currency',
-                        currency: 'VND'
-                      })}
+          {orders?.map((item) => {
+            return (
+              <Flex
+                key={item.tsid}
+                bg={(theme) => (theme.mode === 'dark' ? '#1a1a1a' : '#fff')}
+                br={'lg'}
+                bsh={'md'}
+                p={fr(2)}
+                my={fr(2)}
+                cs={'pointer'}
+                align='center'
+                onClick={() => {
+                  setOrder(item)
+                  setOpen(!open)
+                }}
+              >
+                <Flex align='center'>
+                  <Image
+                    src={item.order_details[0].item.image}
+                    alt='order'
+                    w={isMobile ? fr(20) : fr(32)}
+                    h={isMobile ? fr(20) : fr(32)}
+                    br={'lg'}
+                  />
+                  <Flex direction='column' ml={isMobile ? fr(1) : fr(2)}>
+                    <Text as={'h2'} fs={isMobile ? 'md' : 'inherit'}>
+                      #{item?.tsid}
                     </Text>
-                  )}
+                    <Text fs={isMobile ? 'sm' : 'md'}>
+                      {timestampToDateTime(+item?.tsid)}
+                    </Text>
+                    <Text fs={isMobile ? 'md' : 'xl'} cl={'primary'}>
+                      {item.status}
+                    </Text>
+                    <Text tt={'capitalize'} fs={isMobile ? 'sm' : 'md'}>
+                      {item.delivery_address}
+                    </Text>
+                    {isMobile && (
+                      <Text fs={isMobile ? 'md' : 'xl'} cl={'primary'}>
+                        {item.total_price.toLocaleString('vi-VN')}đ
+                      </Text>
+                    )}
+                  </Flex>
                 </Flex>
+                {!isMobile && (
+                  <Text fs={isMobile ? 'md' : 'xl'} cl={'primary'}>
+                    {item.total_price.toLocaleString('vi-VN')}đ
+                  </Text>
+                )}
+                <Icon size={isMobile ? fr(4) : fr(6)}>
+                  <CaretRight />
+                </Icon>
               </Flex>
-              {!isMobile && (
-                <Text fs={isMobile ? 'md' : 'xl'} cl={'primary'}>
-                  {item.totalPrice.toLocaleString('vi-VN', {
-                    style: 'currency',
-                    currency: 'VND'
-                  })}
-                </Text>
-              )}
-              <Icon size={isMobile ? fr(4) : fr(6)}>
-                <CaretRight />
-              </Icon>
-            </Flex>
-          ))}
+            )
+          })}
         </Stack>
       </Flex>
     </>

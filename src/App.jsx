@@ -98,6 +98,7 @@ const GET_CUSTOMER = gql`
           unit_price
           total_price
         }
+        created_at
       }
     }
   }
