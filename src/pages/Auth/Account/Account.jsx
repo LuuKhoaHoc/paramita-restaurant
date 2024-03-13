@@ -1,4 +1,4 @@
-import React, { useContext } from 'react'
+import React, { useContext, useEffect } from 'react'
 import { Route, Routes } from 'react-router-dom'
 import {
   Box,
@@ -21,13 +21,11 @@ import ChangePassword from '~/pages/Auth/Account/ChangePassword/ChangePassword'
 import AccountAside from '~/pages/Auth/Account/AccountAside/AccountAside'
 import HistoryRewardPoint from '~/pages/Auth/Account/HistoryRewardPoint/HistoryRewardPoint'
 import { useResponsive } from '~/utils/responsive'
-import { gql, useMutation } from '@apollo/client'
 
 const Account = ({ customer }) => {
-  const orderComplete = customer?.orders.filter(
-    (item) => item.status === 'Hoàn thành'
-  )
   const { isLaptop, isMobile, isTablet } = useResponsive()
+  if (!customer) return <Loading />
+
   return (
     <Toaster position='top-right' mt={fr(22.5)}>
       <Box pos={'relative'} mih={'100vh'}>
