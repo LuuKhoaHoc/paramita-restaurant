@@ -160,8 +160,9 @@ input OrderDetailInput {
 
 input PointsHistoryInput {
   customerId: Int!
-  orderId: Int!
-  voucherId: Int!
+  orderId: Int
+  invoiceId: Int
+  voucherId: Int
   earnedPoints: Int
   deductedPoints: Int
   transactionDate: DateTime!
@@ -346,7 +347,7 @@ type Customer {
   updatedDate: DateTime!
   invoice: [Invoice!]
   orders: [Order!]
-  pointsHistory: [PointsHistory!]
+  point_histories: [PointsHistory!]
   reservations: [Reservation!]
   reviews: [Review!]
   vouchers: [Voucher!]
@@ -420,14 +421,15 @@ type OrderDetail {
 }
 
 type PointsHistory {
-  points_history_id: Int!
+  point_history_id: Int!
   tsid: String!
   customer: Customer!
   order: Order
+  invoice: Invoice
   voucher: Voucher
-  earnedPoints: Int
-  deductedPoints: Int
-  transactionDate: DateTime!
+  points_earned: Int
+  points_deducted: Int
+  transaction_date: DateTime!
 }
 
 type Reservation {

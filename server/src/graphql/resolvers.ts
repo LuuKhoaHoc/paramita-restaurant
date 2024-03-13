@@ -875,6 +875,7 @@ export const resolvers = {
           transaction_date: args.data.transactionDate,
           customer_id: args.data.customerId,
           order_id: args.data?.orderId,
+          invoice_id: args.data?.invoiceId,
           voucher_id: args.data?.voucherId,
           points_earned: args.data?.earnedPoints,
           points_deducted: args.data?.deductedPoints
@@ -892,6 +893,7 @@ export const resolvers = {
           transaction_date: args.data.transactionDate,
           customer_id: args.data.customerId,
           order_id: args.data?.orderId,
+          invoice_id: args.data?.invoiceId,
           voucher_id: args.data?.voucherId,
           points_earned: args.data?.earnedPoints,
           points_deducted: args.data?.deductedPoints
@@ -1371,6 +1373,13 @@ export const resolvers = {
       return context.prisma.orders.findMany({
         where: { customer_id: parent?.customer_id }
       })
+    },
+    point_histories: (parent: any, _args: any, context: Context) => {
+      return context.prisma.point_histories.findMany({
+        where: {
+          customer_id: parent?.customer_id
+        }
+      })
     }
   },
   CustomerLevel: {
@@ -1431,11 +1440,24 @@ export const resolvers = {
   },
   PointsHistory: {
     customer: (parent: any, _args: any, context: Context) => {
-      return context.prisma.customers
-        .findUnique({
-          where: { customer_id: parent?.customer_id }
-        })
-        .point_histories()
+      return context.prisma.customers.findUnique({
+        where: { customer_id: parent?.customer_id }
+      })
+    },
+    voucher: (parent: any, _args: any, context: Context) => {
+      return context.prisma.vouchers.findFirst({
+        where: { voucher_id: parent?.voucher_id }
+      })
+    },
+    order: (parent: any, _args: any, context: Context) => {
+      return context.prisma.orders.findFirst({
+        where: { order_id: parent?.order_id }
+      })
+    },
+    invoice: (parent: any, _args: any, context: Context) => {
+      return context.prisma.invoices.findFirst({
+        where: { invoice_id: parent?.invoice_id }
+      })
     }
   },
   Reservation: {
@@ -1542,10 +1564,11 @@ interface PromotionInput {
 }
 interface PointsHistoryInput {
   customerId: number
-  orderId: number
+  orderId?: number
+  invoiceId?: number
   voucherId?: number
-  earnedPoints: number
-  deductedPoints: number
+  earnedPoints?: number
+  deductedPoints?: number
   transactionDate: Date
 }
 interface OrderDetailInput {
