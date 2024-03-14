@@ -1,5 +1,6 @@
 import { Bank, Money, PiggyBank } from '@phosphor-icons/react'
 import {
+  Backdrop,
   Button,
   Center,
   Dialog,
@@ -42,6 +43,7 @@ const CheckoutReview = ({ customer }) => {
   // responsive
   const { isTablet, isMobile } = useResponsive()
   const [open, setOpen] = useState(false)
+  const [showQR, setShowQR] = useState(false)
 
   // Tạo order lưu vào Db
   const [createOrder, { loading, error, data }] = useMutation(CREATE_ORDER)
@@ -76,6 +78,8 @@ const CheckoutReview = ({ customer }) => {
       !checkoutInformation?.address
     ) {
       setOpen(true)
+    } else if (checkoutInformation?.payment === 'ngan-hang') {
+      setShowQR(true)
     } else {
       const { data: dataOrder } = await createOrder({
         variables: {
@@ -139,6 +143,14 @@ const CheckoutReview = ({ customer }) => {
   }
   return (
     <>
+      {showQR && (
+        <Backdrop onClick={() => setShowQR(false)}>
+          <Image
+            src={`https://img.vietqr.io/image/TIMO-9037041007871-print.png?amount=${totalPrice}&addInfo=Thanh%20toan%20QR&accountName=LUU%20KHOA%20HOC`}
+            alt='thanh toán QR code'
+          />
+        </Backdrop>
+      )}
       <Dialog
         w={!isTablet && !isMobile ? fr(96) : '60vw'}
         open={open}

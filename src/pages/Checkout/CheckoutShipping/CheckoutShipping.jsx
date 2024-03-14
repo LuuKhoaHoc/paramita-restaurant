@@ -104,7 +104,9 @@ const CheckoutShipping = ({ customer }) => {
                 cs={'pointer'}
               >
                 <Button variant='text' cl={'secondary'} icon={<PushPin />}>
-                  <Text>{item}</Text>
+                  <Text fs={isMobile ? 'sm' : isTablet ? 'base' : 'md'}>
+                    {item}
+                  </Text>
                 </Button>
               </List.Item>
             ))}
@@ -117,7 +119,9 @@ const CheckoutShipping = ({ customer }) => {
                 cs={'pointer'}
               >
                 <Button variant='text' icon={<ClockCounterClockwise />}>
-                  <Text>{item}</Text>
+                  <Text fs={isMobile ? 'sm' : isTablet ? 'base' : 'md'}>
+                    {item}
+                  </Text>
                 </Button>
               </List.Item>
             ))}

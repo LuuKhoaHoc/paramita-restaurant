@@ -90,8 +90,7 @@ const CheckoutCart = ({ customer }) => {
       voucherId: selectedVoucherId
     }
   })
-  if (loading) return <Loading />
-  if (error) return console.log(error.message)
+
   const checkoutInformation = JSON.parse(
     sessionStorage.getItem('checkout-information')
   )
@@ -133,6 +132,8 @@ const CheckoutCart = ({ customer }) => {
     }
   }, [cartItems, navigate])
 
+  if (loading) return <Loading />
+  if (error) return console.log(error.message)
   function handleApplyVoucher() {
     const foundVoucher = voucherList.find((item) => item.code === voucherInput)
     if (foundVoucher && foundVoucher.status === 'Chưa sử dụng') {
