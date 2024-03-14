@@ -22,7 +22,7 @@ import {
   fr,
   useThemeModeValue
 } from '@prismane/core'
-import React from 'react'
+import React, { useState } from 'react'
 import { NavLink } from 'react-router-dom'
 import { useResponsive } from '~/utils/responsive'
 import { gql, useQuery } from '@apollo/client'
@@ -40,6 +40,7 @@ const AccountAside = ({ customer }) => {
   const { isLaptop, isTablet, isMobile } = useResponsive()
   const textColor = useThemeModeValue('#371b04', '#d1e9d5')
   const bgColor = useThemeModeValue('#fff2e5', '#1d2b1f')
+  const [point, setPoint] = useState(customer?.points)
   const handleLogout = () => {
     sessionStorage.clear()
     localStorage.removeItem('orders')
@@ -102,7 +103,7 @@ const AccountAside = ({ customer }) => {
                   {customer?.username}
                 </Text>
                 <Text as={'p'} fs={'lg'} className='GeomanistMedium-font'>
-                  {customer?.points} điểm - {customer?.level?.name}
+                  {point} điểm - {customer?.level?.name}
                 </Text>
                 <Flex fs={'sm'} cl={['base', 50]} w={'100%'} justify='between'>
                   <Text className='GeomanistLight-font'>
@@ -114,12 +115,10 @@ const AccountAside = ({ customer }) => {
                 </Flex>
                 <Progress
                   w={'100%'}
-                  value={
-                    (customer?.points / levelData?.customerLevel.points) * 100
-                  }
+                  value={(point / levelData?.customerLevel.points) * 100}
                   label={
                     (
-                      (customer?.points / levelData?.customerLevel.points) *
+                      (point / levelData?.customerLevel.points) *
                       100
                     ).toString() + '%'
                   }
@@ -134,10 +133,9 @@ const AccountAside = ({ customer }) => {
                 lh={fr(5)}
                 className='GeomanistLight-font'
               >
-                Còn{' '}
-                {Math.abs(customer?.points - levelData?.customerLevel.points)}{' '}
-                điểm nữa bạn sẽ thăng hạng. Đổi quà không ảnh hưởng tới việc
-                thăng hạng của bạn Hãy dùng điểm này để đổi ưu đãi nhé.
+                Còn {Math.abs(point - levelData?.customerLevel.points)} điểm nữa
+                bạn sẽ thăng hạng. Đổi quà không ảnh hưởng tới việc thăng hạng
+                của bạn Hãy dùng điểm này để đổi ưu đãi nhé.
               </Text>
             </Center>
           </Box>
@@ -283,7 +281,7 @@ const AccountAside = ({ customer }) => {
                   {customer?.username}
                 </Text>
                 <Text as={'p'} fs={'lg'} className='GeomanistMedium-font'>
-                  {customer?.points} điểm - {customer?.level?.name}
+                  {point} điểm - {customer?.level?.name}
                 </Text>
                 <Flex fs={'sm'} cl={['base', 50]} w={'100%'} justify='between'>
                   <Text className='GeomanistLight-font'>
@@ -295,12 +293,10 @@ const AccountAside = ({ customer }) => {
                 </Flex>
                 <Progress
                   w={'100%'}
-                  value={
-                    (customer?.points / levelData?.customerLevel.points) * 100
-                  }
+                  value={(point / levelData?.customerLevel.points) * 100}
                   label={
                     (
-                      (customer?.points / levelData?.customerLevel.points) *
+                      (point / levelData?.customerLevel.points) *
                       100
                     ).toString() + '%'
                   }
@@ -315,10 +311,9 @@ const AccountAside = ({ customer }) => {
                 lh={fr(5)}
                 className='GeomanistLight-font'
               >
-                Còn{' '}
-                {Math.abs(customer?.points - levelData?.customerLevel.points)}{' '}
-                điểm nữa bạn sẽ thăng hạng. Đổi quà không ảnh hưởng tới việc
-                thăng hạng của bạn Hãy dùng điểm này để đổi ưu đãi nhé.
+                Còn {Math.abs(point - levelData?.customerLevel.points)} điểm nữa
+                bạn sẽ thăng hạng. Đổi quà không ảnh hưởng tới việc thăng hạng
+                của bạn Hãy dùng điểm này để đổi ưu đãi nhé.
               </Text>
             </Center>
           </Box>
