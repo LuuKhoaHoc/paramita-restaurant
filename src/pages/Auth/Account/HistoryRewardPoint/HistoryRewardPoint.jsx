@@ -43,18 +43,18 @@ const HistoryRewardPoint = ({ customer }) => {
                 <Text as={'h2'} fs={isMobile ? 'md' : 'inherit'}>
                   Giao địch thành công
                 </Text>
-                <Text fs={isMobile ? 'base' : 'lg'}>
+                <Text fs={isMobile ? 'base' : 'base'}>
                   {item?.transaction_date}
                 </Text>
-                <Text fs={isMobile ? 'base' : 'xl'} cl={'primary'}>
+                <Text fs={isMobile ? 'base' : 'lg'} cl={'primary'}>
                   Mã giao địch: #{item?.tsid}
                 </Text>
-                <Text fs={isMobile ? 'base' : 'lg'}>
+                <Text fs={isMobile ? 'base' : 'md'}>
                   Mã đơn hàng: #{item?.order.tsid}
                 </Text>
               </Flex>
 
-              <Text fs={isMobile ? 'base' : 'xl'} cl={'primary'}>
+              <Text fs={isMobile ? 'base' : 'lg'} cl={'primary'}>
                 {item?.points_earned} điểm
               </Text>
               <Icon size={isMobile ? fr(4) : fr(6)}>
