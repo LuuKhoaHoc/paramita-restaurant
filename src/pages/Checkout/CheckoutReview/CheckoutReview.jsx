@@ -42,6 +42,7 @@ const CheckoutReview = ({ customer }) => {
   // responsive
   const { isTablet, isMobile } = useResponsive()
   const [open, setOpen] = useState(false)
+
   // Tạo order lưu vào Db
   const [createOrder, { loading, error, data }] = useMutation(CREATE_ORDER)
   // Tạo order detail lưu vào Db
@@ -52,6 +53,7 @@ const CheckoutReview = ({ customer }) => {
   // Sau khi order thành công update voucher sang `đã sử dụng`
   const [updateVoucherStatus, { loading: loadingUpdate, error: errorUpdate }] =
     useMutation(UPDATE_VOUCHER)
+
   // Lấy cartItems và clearCart từ CartContext
   const { cartItems, clearCart } = useContext(CartContext)
   // Lấy thông tin người dùng từ sessionStorage
@@ -62,12 +64,9 @@ const CheckoutReview = ({ customer }) => {
   const discountPrice = JSON.parse(sessionStorage.getItem('discount-price'))
   // Tính tổng tiền
   const totalPrice =
-    cartItems.reduce((acc, item) => {
-      return acc + item.price * item.quantity
-    }, 0) +
+    cartItems.reduce((acc, item) => acc + item.price * item.quantity, 0) +
     checkoutInformation?.delivery -
-    (discountPrice || 0)
-  // Tạo state open để mở dialog
+    discountPrice
   // Hàm xử lý khi người dùng nhấn đặt hàng
   const handleInformation = async () => {
     if (
@@ -78,7 +77,7 @@ const CheckoutReview = ({ customer }) => {
     ) {
       setOpen(true)
     } else {
-      await createOrder({
+      const { data: dataOrder } = await createOrder({
         variables: {
           data: {
             customerId: customer?.customer_id,
@@ -93,44 +92,49 @@ const CheckoutReview = ({ customer }) => {
           }
         }
       })
-        .then(async (dataOrder) => {
-          await cart.forEach(async (item) => {
-            await createOrderDetail({
-              variables: {
-                data: {
-                  orderId: dataOrder?.data?.createOrder?.order_id,
-                  itemId: item.id,
-                  quantity: item.quantity,
-                  price: item.price,
-                  total: item.price * item.quantity
-                }
-              }
-            })
-          })
-        })
-        .then(async () => {
-          await updateVoucherStatus({
-            variables: {
-              id: checkoutInformation?.voucherId,
-              status: 'Đã sử dụng'
+
+      const orderId = dataOrder?.createOrder?.order_id
+
+      const promises = cart.map((item) =>
+        createOrderDetail({
+          variables: {
+            data: {
+              orderId,
+              itemId: item.id,
+              quantity: item.quantity,
+              price: item.price,
+              total: item.price * item.quantity
             }
-          })
-          sessionStorage.setItem('orderSuccess', 'true')
-          sessionStorage.setItem(
-            'checkout-information',
-            JSON.stringify({
-              address: '',
-              payment: 'tien-mat',
-              notes: '',
-              delivery: 15000
-              // voucherId: null
-            })
-          )
-          clearCart()
-          sessionStorage.removeItem('discount-price')
-          sessionStorage.removeItem('cartItems')
-          window.location.href = '/checkout-success'
+          }
         })
+      )
+
+      await Promise.all(promises)
+
+      if (checkoutInformation?.voucherId) {
+        await updateVoucherStatus({
+          variables: {
+            id: checkoutInformation?.voucherId,
+            status: 'Đã sử dụng'
+          }
+        })
+      }
+
+      sessionStorage.setItem('orderSuccess', 'true')
+      sessionStorage.setItem(
+        'checkout-information',
+        JSON.stringify({
+          address: '',
+          payment: 'tien-mat',
+          notes: '',
+          delivery: 15000
+          // voucherId: null
+        })
+      )
+      clearCart()
+      sessionStorage.removeItem('discount-price')
+      sessionStorage.removeItem('cartItems')
+      window.location.href = '/checkout-success'
     }
   }
   return (

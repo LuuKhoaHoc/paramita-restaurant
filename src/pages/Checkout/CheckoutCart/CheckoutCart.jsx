@@ -102,28 +102,37 @@ const CheckoutCart = ({ customer }) => {
   )
   const voucher = dataVoucher?.voucher
   // store total price to variable
+
   let totalPrice =
     cartItems.reduce((acc, item) => acc + item.price * item.quantity, 0) +
     checkoutInformation?.delivery
+
   // store discount price to variable
   let discountPrice = (totalPrice * voucher?.discount) / 100
   discountPrice = Math.min(discountPrice, voucher?.max_discount * 1000)
   sessionStorage.setItem('discount-price', discountPrice || 0)
+
   // func to convert timestamp to datetime
   const startTime =
     voucherDetail?.tsid && timestampToDateTime(+voucherDetail.tsid)
   const endTime =
     voucherDetail?.expired_date &&
     voucherDetail.expired_date.split('-').reverse().join('.')
+
   // check if cartItems is empty
-  if (
-    cartItems?.length === 0 ||
-    sessionStorage.getItem('cartItems').length === 0
-  ) {
-    setTimeout(() => {
-      navigate('/order-online')
-    }, 5000)
-  }
+  useEffect(() => {
+    if (
+      cartItems?.length === 0 ||
+      sessionStorage.getItem('cartItems').length === 0
+    ) {
+      const timeout = setTimeout(() => {
+        navigate('/order-online')
+      }, 5000)
+
+      return () => clearTimeout(timeout)
+    }
+  }, [cartItems, navigate])
+
   function handleApplyVoucher() {
     const foundVoucher = voucherList.find((item) => item.code === voucherInput)
     if (foundVoucher && foundVoucher.status === 'Chưa sử dụng') {
