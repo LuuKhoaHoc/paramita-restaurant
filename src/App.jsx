@@ -100,6 +100,19 @@ const GET_CUSTOMER = gql`
         }
         created_at
       }
+      point_histories {
+        tsid
+        order {
+          order_id
+          tsid
+        }
+        voucher {
+          voucher_id
+        }
+        points_earned
+        points_deducted
+        transaction_date
+      }
     }
   }
 `

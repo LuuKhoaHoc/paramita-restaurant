@@ -97,6 +97,7 @@ const CheckoutPayment = ({ customer }) => {
           onChange={(e) => setPhone(e.target.value)}
         />
         <TextareaField
+          h={fr(20)}
           maxLength={120}
           size='md'
           variant='underlined'
