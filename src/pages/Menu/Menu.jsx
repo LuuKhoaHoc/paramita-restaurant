@@ -18,8 +18,8 @@ import MenuListItem from '~/pages/Menu/MenuListItem/MenuListItem'
 import { useResponsive } from '~/utils/responsive'
 import { gql, useQuery } from '@apollo/client'
 
-const GET_CONTENTS = gql `
- query {
+const GET_CONTENTS = gql`
+  query {
     page(name: "Menu") {
       page_id
       name
@@ -32,57 +32,57 @@ const GET_CONTENTS = gql `
       }
     }
   }
-
+`
+const GET_CATEGORYLIST = gql`
+  query {
+    categoryList {
+      name
+    }
+  }
+`
+const GET_MENU = gql`
+  query {
+    menuList {
+      item_id
+      image
+      name
+      price
+      description
+      category {
+        name
+      }
+    }
+  }
 `
 
 const Menu = () => {
-    const { isMobile, isTablet } = useResponsive()
-  const { loading, error, data } = useQuery(GET_CONTENTS)
-  if (loading) return <Loading />
-  const imagesFood = [
-    { image: BanhXeo, title: 'Bánh xèo', price: 5, category: 'Món chính' },
-    {
-      image: BunHue,
-      title: 'Bún Huế Paramita',
-      price: 4,
-      category: 'Bữa sáng'
-    },
-    {
-      image: BunNam,
-      title: 'Bún nấm nướng chả giò',
-      price: 5,
-      category: 'Bữa sáng'
-    },
-    {
-      image: CaTimNuong,
-      title: 'Cà tím nướng hành ớt',
-      price: 5,
-      category: 'Món chính'
-    },
-    {
-      image: ChaoNamMoi,
-      title: 'Cháo nấm mối',
-      price: 5,
-      category: 'Tráng miệng'
-    },
-    {
-      image: ComTam,
-      title: 'Cơm tấm Paramita',
-      price: 5,
-      category: 'Món chính'
-    },
-    {
-      image: DauHuNonChungTuong,
-      title: 'Đậu hũ non chưng tương',
-      price: 5,
-      category: 'Món chính'
-    },
-    { image: Lau, title: 'Lẩu Paramita', price: 4, category: 'Lẩu' }
-  ]
-
+  const { isMobile, isTablet } = useResponsive()
+  const {
+    loading: loadingCategory,
+    error: errorCategory,
+    data: dataCategory
+  } = useQuery(GET_CATEGORYLIST)
+  const {
+    loading: loadingContent,
+    error: errorContent,
+    data: dataContent
+  } = useQuery(GET_CONTENTS)
+  const {
+    loading: loadingMenu,
+    error: errorMenu,
+    data: dataMenu
+  } = useQuery(GET_MENU)
+  if (loadingContent) return <Loading />
+  const listFood = dataMenu?.menuList || []
+  const categoryName = dataCategory?.categoryList.map((item) => item.name)
+  console.log('🚀 ~ Menu ~ listFood:', listFood)
   return (
     <Box pos={'relative'} mih={'100vh'}>
-      <MainPic image={Menus} title={data?.page?.content[0].title} subtitle={data?.page?.content[0].description} />
+      <MainPic
+        image={Menus}
+        title={dataContent?.page?.content[0].title}
+        subtitle={dataContent?.page?.content[0].description}
+      />
       <Box w={'100%'} h={'100%'} pos={'relative'}>
         <Grid templateColumns={12}>
           <Grid.Item
@@ -95,9 +95,9 @@ const Menu = () => {
               my={fr(10)}
               mx={isMobile ? fr(3) : 0}
             >
-              <MenuListCategory />
+              <MenuListCategory categories={categoryName} />
               <Divider orientation='vertical' />
-              <MenuListItem items={imagesFood} />
+              <MenuListItem items={listFood} />
             </Flex>
           </Grid.Item>
         </Grid>

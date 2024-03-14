@@ -11,179 +11,156 @@ import {
   fr
 } from '@prismane/core'
 import React, { useEffect } from 'react'
-import { Link, useLocation } from 'react-router-dom'
-import {
-  BanhXeo,
-  BunHue,
-  BunNam,
-  CaTimNuong,
-  ChaoNamMoi,
-  ComTam,
-  DauHuNonChungTuong,
-  Lau
-} from '~/images'
+import { Link, useNavigate, useParams } from 'react-router-dom'
 import { itemToURL } from '~/utils/stringToURL'
+import { gql, useQuery } from '@apollo/client'
+import { useResponsive } from '~/utils/responsive'
+import { Loading } from '~/components'
+
+const GET_MENU = gql`
+  query {
+    menuList {
+      item_id
+      image
+      name
+      price
+      description
+      category {
+        name
+      }
+    }
+  }
+`
 
 const MenuItemDetail = () => {
-  const imagesFood = [
-    { image: BanhXeo, title: 'Bánh xèo', price: 5, category: 'Món chính' },
-    {
-      image: BunHue,
-      title: 'Bún Huế Paramita',
-      price: 4,
-      category: 'Bữa sáng'
-    },
-    {
-      image: BunNam,
-      title: 'Bún nấm nướng chả giò',
-      price: 5,
-      category: 'Bữa sáng'
-    },
-    {
-      image: CaTimNuong,
-      title: 'Cà tím nướng hành ớt',
-      price: 5,
-      category: 'Món chính'
-    },
-    {
-      image: ChaoNamMoi,
-      title: 'Cháo nấm mối',
-      price: 5,
-      category: 'Tráng miệng'
-    },
-    {
-      image: ComTam,
-      title: 'Cơm tấm Paramita',
-      price: 5,
-      category: 'Món chính'
-    },
-    {
-      image: DauHuNonChungTuong,
-      title: 'Đậu hũ non chưng tương',
-      price: 5,
-      category: 'Món chính'
-    },
-    { image: Lau, title: 'Lẩu Paramita', price: 4, category: 'Lẩu' }
-  ]
-  const { state } = useLocation()
-  const { image, item, price, category } = state
+  // navigate
+  const navigate = useNavigate()
+  // responsive
+  const { isMobile, isTablet, isLaptop } = useResponsive()
+  const { category, item } = useParams()
+  const { data, loading, error } = useQuery(GET_MENU)
+  const menuList = data?.menuList
+  const itemDetail = menuList?.find(
+    (menu) => itemToURL(menu.category[0].name) === category && menu
+  )
   useEffect(() => {
     window.scrollTo(0, 0)
-  }, [state])
+  }, [itemDetail])
+
+  if (loading) return <Loading />
   return (
     <Box pos={'relative'} mih={'100vh'}>
       <Box h={fr(22.5)} bg='#371b04' />
       <Box w={'100%'} h={'100%'} pos={'relative'}>
         <Grid templateColumns={12}>
-          <Grid.Item columnStart={3} columnEnd={11}>
-            <Breadcrumb m={fr(6)} fs={'md'}>
+          <Grid.Item
+            columnStart={isTablet ? 2 : isMobile ? 1 : 3}
+            columnEnd={isTablet ? 12 : isMobile ? 13 : 11}
+          >
+            <Breadcrumb
+              m={isMobile ? fr(4) : isTablet ? fr(5) : fr(6)}
+              fs={isMobile || isTablet ? 'base' : 'md'}
+            >
               <Breadcrumb.Item as={Link} to={'/menu'}>
                 Menu
               </Breadcrumb.Item>
               <Breadcrumb.Separator />
-              <Breadcrumb.Item
-                as={Link}
-                to={'/menu/' + itemToURL(category)}
-                state={{ category }}
-              >
-                {category}
+              <Breadcrumb.Item as={Link} to={'/menu/' + category}>
+                {itemDetail.category[0].name}
               </Breadcrumb.Item>
               <Breadcrumb.Separator />
-              <Breadcrumb.Item as={Link}>{item}</Breadcrumb.Item>
+              <Breadcrumb.Item as={Link}>{itemDetail.name}</Breadcrumb.Item>
             </Breadcrumb>
-            <Flex gap={fr(8)} mb={fr(10)}>
+            <Flex
+              w={'100%'}
+              direction={isMobile ? 'column' : 'row'}
+              gap={fr(8)}
+              mb={fr(10)}
+              align={isMobile ? 'center' : 'start'}
+            >
               <Image
-                src={image}
+                src={itemDetail.image}
                 alt={item}
                 bsh={'md'}
                 br={'lg'}
-                w={fr(140)}
-                h={fr(140)}
+                w={isMobile ? '80%' : isTablet ? '90%' : '100%'}
+                h={isMobile ? fr(70) : isTablet ? fr(80) : fr(100)}
               />
-              <Flex direction='column' gap={fr(4)} w={'100%'}>
-                <Text fs={'2xl'}>{item}</Text>
+              <Flex
+                direction='column'
+                gap={fr(4)}
+                w={'100%'}
+                align={isMobile ? 'center' : 'start'}
+              >
+                <Text fs={'2xl'}>{itemDetail.name}</Text>
                 <Text fs={'2xl'} cl={'primary'}>
-                  {price} đ
+                  {(itemDetail.price * 1000).toLocaleString('vi-VN')} đ
                 </Text>
                 <Button
-                  w={'100%'}
+                  w={isMobile ? '80%' : isTablet ? '90%' : '100%'}
                   bg={'primary'}
                   cl={'#fff'}
                   size='lg'
                   icon={<Package weight='duotone' />}
                   className='GeomanistMedium-font'
+                  onClick={() => navigate('/order-online')}
                 >
                   Đặt giao tận nơi
                 </Button>
               </Flex>
             </Flex>
             <Divider />
-            <Box my={fr(6)}>
+            <Box my={fr(6)} ml={isMobile ? fr(4) : fr(0)}>
               <Text as={'h3'} className='GeomanistMedium-font' mb={fr(2)}>
                 Mô tả món ăn
               </Text>
-              <Text fs={'md'}>
-                Lorem ipsum dolor, sit amet consectetur adipisicing elit.
-                Molestiae consequatur minima ipsum laboriosam architecto
-                molestias, labore, nisi soluta et modi sint enim dolor! Nemo
-                tenetur ipsa veniam aut accusamus obcaecati!
+              <Text fs={'md'} ml={fr(2)}>
+                {itemDetail.description}
               </Text>
             </Box>
             <Divider />
-            <Box my={fr(6)}>
+            <Box my={fr(6)} ml={isMobile ? fr(4) : fr(0)}>
               <Text as={'h3'} className='GeomanistMedium-font' mb={fr(2)}>
                 Món ăn liên quan
               </Text>
-              <Flex justify='between'>
-                {imagesFood.slice(0, 6).map((item, index) => (
+              <Flex justify='around'>
+                {menuList.slice(0, 4).map((item, index) => (
                   <Flex direction='column' key={index}>
                     <Link
                       to={
                         '/menu/' +
-                        itemToURL(category) +
+                        itemToURL(item.category[0].name) +
                         '/' +
-                        itemToURL(item.title)
+                        itemToURL(item.name)
                       }
-                      state={{
-                        image: item.image,
-                        item: item.title,
-                        price: item.price,
-                        category: category
-                      }}
                     >
                       <Image
                         src={item.image}
                         alt='bun-hue'
                         br={'xl'}
                         bsh={'md'}
-                        w={fr(43)}
-                        h={fr(43)}
+                        w={isMobile ? fr(30) : isTablet ? '90%' : fr(43)}
+                        h={isMobile ? fr(30) : isTablet ? '90%' : fr(43)}
                       />
                     </Link>
                     <Link
                       to={
                         '/menu/' +
-                        itemToURL(category) +
+                        itemToURL(item.category[0].name) +
                         '/' +
-                        itemToURL(item.title)
+                        itemToURL(item.name)
                       }
-                      state={{
-                        image: item.image,
-                        item: item.title,
-                        price: item.price,
-                        category: category
-                      }}
                     >
                       <Text
                         fs={'lg'}
                         cl={['inherit', { hover: 'primary' }]}
                         cs={'pointer'}
                       >
-                        {item.title}
+                        {item.name}
                       </Text>
                     </Link>
                     <Text fs={'md'} cl={'base'}>
-                      {item.price} đ
+                      {(item.price * 1000).toLocaleString('vi-VN')} đ
                     </Text>
                   </Flex>
                 ))}

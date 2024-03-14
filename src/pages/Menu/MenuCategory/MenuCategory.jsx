@@ -12,15 +12,16 @@ import {
   Lau
 } from '~/images'
 // component
-import { MainPic } from '~/components'
+import { Loading, MainPic } from '~/components'
 import MenuListCategory from '~/pages/Menu/MenuListCategory/MenuListCategory'
 import MenuListItem from '~/pages/Menu/MenuListItem/MenuListItem'
-import { useLocation } from 'react-router-dom'
+import { useParams } from 'react-router-dom'
 import { useResponsive } from '~/utils/responsive'
 import { gql, useQuery } from '@apollo/client'
+import { itemToURL } from '~/utils/stringToURL'
 
-const GET_CONTENTS = gql `
- query {
+const GET_CONTENTS = gql`
+  query {
     page(name: "Menu") {
       page_id
       name
@@ -33,57 +34,71 @@ const GET_CONTENTS = gql `
       }
     }
   }
-
+`
+const GET_CATEGORYLIST = gql`
+  query {
+    categoryList {
+      name
+    }
+  }
+`
+const GET_MENU = gql`
+  query {
+    menuList {
+      item_id
+      image
+      name
+      price
+      description
+      category {
+        name
+      }
+    }
+  }
 `
 
 const MenuCategory = () => {
   const { isMobile, isTablet, isLaptop } = useResponsive()
-  const { state } = useLocation()
-  const { loading, error, data } = useQuery(GET_CONTENTS)
-  if (loading) return <Loading />
-  const imagesFood = [
-    { image: BanhXeo, title: 'Bánh xèo', price: 5, category: 'Món chính' },
-    {
-      image: BunHue,
-      title: 'Bún Huế Paramita',
-      price: 4,
-      category: 'Bữa sáng'
-    },
-    {
-      image: BunNam,
-      title: 'Bún nấm nướng chả giò',
-      price: 5,
-      category: 'Bữa sáng'
-    },
-    {
-      image: CaTimNuong,
-      title: 'Cà tím nướng hành ớt',
-      price: 5,
-      category: 'Món chính'
-    },
-    {
-      image: ChaoNamMoi,
-      title: 'Cháo nấm mối',
-      price: 5,
-      category: 'Tráng miệng'
-    },
-    {
-      image: ComTam,
-      title: 'Cơm tấm Paramita',
-      price: 5,
-      category: 'Món chính'
-    },
-    {
-      image: DauHuNonChungTuong,
-      title: 'Đậu hũ non chưng tương',
-      price: 5,
-      category: 'Món chính'
-    },
-    { image: Lau, title: 'Lẩu Paramita', price: 4, category: 'Lẩu' }
-  ]
+  const { category } = useParams()
+  const {
+    loading: loadingCategory,
+    error: errorCategory,
+    data: dataCategory
+  } = useQuery(GET_CATEGORYLIST)
+  const {
+    loading: loadingContent,
+    error: errorContent,
+    data: dataContent
+  } = useQuery(GET_CONTENTS)
+  const {
+    loading: loadingMenu,
+    error: errorMenu,
+    data: dataMenu
+  } = useQuery(GET_MENU)
+  if (loadingContent) return <Loading />
+
+  const categoryName = dataCategory?.categoryList.map((item) => item.name)
+
+  const specifyCategory = categoryName.find(
+    (item) => itemToURL(item) === category
+  )
+
+  const listFood = dataMenu?.menuList || []
+  let listFoodFilter = []
+  if (category === 'tat-ca') {
+    listFoodFilter = listFood
+  } else {
+    listFoodFilter = listFood.filter(
+      (item) => itemToURL(item.category[0].name) === category
+    )
+  }
   return (
     <Box pos={'relative'} mih={'100vh'}>
-      <MainPic image={Menus} title={data?.page?.content[0].title} subtitle={data?.page?.content[0].description} />
+      <MainPic
+        image={Menus}
+        title={dataContent?.page?.content[0].title}
+        subtitle={dataContent?.page?.content[0].description}
+      />
       <Box w={'100%'} h={'100%'} pos={'relative'}>
         <Grid templateColumns={12}>
           <Grid.Item
@@ -96,13 +111,13 @@ const MenuCategory = () => {
               my={fr(10)}
               mx={isMobile ? fr(3) : 0}
             >
-              <MenuListCategory />
+              <MenuListCategory categories={categoryName} />
               <Divider orientation='vertical' />
               <Flex direction='column' gap={fr(4)}>
                 <Text fs={'xl'} className='GeomanistMedium-font'>
-                  {state?.category}
+                  {specifyCategory}
                 </Text>
-                <MenuListItem items={imagesFood} />
+                <MenuListItem items={listFoodFilter} />
               </Flex>
             </Flex>
           </Grid.Item>

@@ -9,15 +9,7 @@ const MenuItem = ({ image, title, price, category }) => {
   return (
     <Flex direction='column' mb={isTablet ? fr(7) : isMobile ? fr(4) : fr(10)}>
       <Box w={isTablet ? fr(48) : isMobile ? fr(25) : fr(56)}>
-        <Link
-          to={'/menu/' + itemToURL(category) + '/' + itemToURL(title)}
-          state={{
-            image: image,
-            item: title,
-            price: price,
-            category: category
-          }}
-        >
+        <Link to={'/menu/' + itemToURL(category) + '/' + itemToURL(title)}>
           <Image
             src={image}
             alt='image'
@@ -29,15 +21,7 @@ const MenuItem = ({ image, title, price, category }) => {
         </Link>
       </Box>
       <Box w={isTablet ? fr(48) : isMobile ? fr(25) : fr(56)}>
-        <Link
-          to={'/menu/' + itemToURL(category) + '/' + itemToURL(title)}
-          state={{
-            image: image,
-            item: title,
-            price: price,
-            category: category
-          }}
-        >
+        <Link to={'/menu/' + itemToURL(category) + '/' + itemToURL(title)}>
           <Text
             as={'h3'}
             cl={[textColor, { hover: 'primary' }]}
@@ -47,7 +31,7 @@ const MenuItem = ({ image, title, price, category }) => {
             {title}
           </Text>
         </Link>
-        <Text cl={'base'}>{price}.000 đ</Text>
+        <Text cl={'base'}>{(price * 1000).toLocaleString('vi-VN')} đ</Text>
       </Box>
     </Flex>
   )
