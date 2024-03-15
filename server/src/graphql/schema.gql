@@ -243,8 +243,8 @@ input PositionInput {
 
 type Query {
   # Auth
-  checkUsernameExistence(username: String!): Customer
-  checkEmailExistence(email: String!): Customer
+  checkUsernameExistence(username: String!): usernameExist
+  checkEmailExistence(email: String!): emailExist
   checkToken(token: String!): AuthPayload
 
   category(id: ID!): Category
@@ -291,6 +291,12 @@ type Query {
 }
 
 # TypeDefs
+type usernameExist {
+  username: String!
+}
+type emailExist {
+  email: String!
+}
 type Category {
   category_id: Int!
   tsid: String!

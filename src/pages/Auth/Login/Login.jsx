@@ -53,6 +53,18 @@ const LOGIN_MUTATION = gql`
     }
   }
 `
+const LOGIN_EMP_MUTATION = gql`
+  mutation loginEmp($username: String!, $password: String!) {
+    loginEmployee(username: $username, password: $password) {
+      employee {
+        employee_id
+        name
+        username
+      }
+      token
+    }
+  }
+`
 
 const Login = () => {
   const { isLoggedIn, setIsLoggedIn } = useContext(AuthContext)
@@ -111,7 +123,9 @@ const Login = () => {
   const { data: queryEmail } = useQuery(CHECK_EMAIL_EXIST, {
     variables: { email: register('username').value }
   })
-
+  // employee login
+  const [loginEmp, { loading: empLoading, error: empError }] =
+    useMutation(LOGIN_EMP_MUTATION)
   useEffect(() => {
     if (
       (isLoggedIn ||
@@ -180,48 +194,86 @@ const Login = () => {
             <Form
               onSubmit={(SubmitEvent) =>
                 handleSubmit(SubmitEvent, async (value) => {
-                  if (value.username.includes('@')) {
-                    if (!queryEmail?.checkEmailExistence) {
-                      setError('username', 'Email không tồn tại')
-                    }
-                  } else {
-                    if (!queryUsername?.checkUsernameExistence) {
-                      setError('username', 'Tên tài khoảng không tồn tại')
-                    }
+                  const queryResult = value.username.includes('@')
+                    ? queryEmail?.checkEmailExistence
+                    : queryUsername?.checkUsernameExistence
+                  if (!queryResult) {
+                    setError(
+                      'username',
+                      value.username.includes('@')
+                        ? 'Email không tồn tại'
+                        : 'Tên tài khoảng không tồn tại'
+                    )
                   }
-                  if (getError('username') === null) {
-                    try {
-                      const { data } = await login({
+                  let switches = null
+                  if (
+                    !!queryEmail?.checkEmailExistence ||
+                    !!queryUsername?.checkUsernameExistence
+                  ) {
+                    const { data } = await login({
+                      variables: {
+                        username: value.username,
+                        password: value.password
+                      },
+                      context: {
+                        headers: {
+                          Authorization: `Bearer ${mutationData?.login?.token}`
+                        }
+                      },
+                      onCompleted: (data) => {
+                        sessionStorage.setItem(
+                          'checkout-information',
+                          JSON.stringify({
+                            address: '',
+                            payment: 'tien-mat',
+                            notes: '',
+                            delivery: 15000
+                          })
+                        )
+                        sessionStorage.setItem('login', true)
+                        if (remember) {
+                          localStorage.setItem('login', true)
+                        }
+                        if (data?.login.token) {
+                          localStorage.setItem('token', data?.login.token)
+                        }
+                        setIsLoggedIn(true)
+                        navigate(-1)
+                      },
+                      onError: (error) => {
+                        switches = error
+                        setError('password', 'Mật khẩu không đúng')
+                      }
+                    })
+                    if (switches) {
+                      const { data: dataLoginEmp } = await loginEmp({
                         variables: {
                           username: value.username,
                           password: value.password
                         },
                         context: {
                           headers: {
-                            Authorization: `Bearer ${mutationData?.login?.token}`
+                            Authorization: `Bearer ${data?.login?.token}`
                           }
+                        },
+                        onCompleted: (data) => {
+                          setIsLoggedIn(true)
+                          sessionStorage.setItem('loginEmp', true)
+                          if (remember) {
+                            localStorage.setItem('loginEmp', true)
+                          }
+                          navigate(-1)
+                          if (data?.loginEmployee.token) {
+                            localStorage.setItem(
+                              'tokenEmp',
+                              data?.loginEmployee.token
+                            )
+                          }
+                        },
+                        onError: (error) => {
+                          setError('password', 'Mật khẩu không đúng')
                         }
                       })
-                      sessionStorage.setItem(
-                        'checkout-information',
-                        JSON.stringify({
-                          address: '',
-                          payment: 'tien-mat',
-                          notes: '',
-                          delivery: 15000
-                        })
-                      )
-                      setIsLoggedIn(true)
-                      sessionStorage.setItem('login', true)
-                      navigate(-1)
-                      if (remember) {
-                        localStorage.setItem('login', true)
-                      }
-                      if (data?.login.token) {
-                        localStorage.setItem('token', data?.login.token)
-                      }
-                    } catch (error) {
-                      setError('password', 'Mật khẩu không đúng')
                     }
                   }
                 })

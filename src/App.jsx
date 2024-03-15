@@ -41,7 +41,8 @@ import {
   Account,
   Checkout,
   CheckoutSuccess,
-  OrderCategory
+  OrderCategory,
+  AuthEmp
 } from '~/routes'
 import { CartProvider } from '~/contexts/CartContext'
 import { gql, useQuery } from '@apollo/client'
@@ -215,6 +216,7 @@ const App = () => {
                   element={<CheckoutSuccess customer={customer} />}
                 />
               </Route>
+              <Route element={<AuthEmp />}></Route>
               <Route path='/login' element={<Login />} />
               <Route path='/register' element={<Register />} />
               <Route path='/forgot-password' element={<ForgotPassword />} />

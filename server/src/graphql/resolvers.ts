@@ -13,22 +13,34 @@ export const resolvers = {
       args: { username: string },
       context: Context
     ) => {
-      return context.prisma.customers.findFirst({
+      const customerUsername = await context.prisma.customers.findFirst({
         where: {
           username: args.username
         }
       })
+      const employeeUsername = await context.prisma.employees.findFirst({
+        where: {
+          username: args.username
+        }
+      })
+      return customerUsername || employeeUsername
     },
     checkEmailExistence: async (
       _parent: any,
       args: { email: string },
       context: Context
     ) => {
-      return context.prisma.customers.findFirst({
+      const customerEmail = await context.prisma.customers.findFirst({
         where: {
           email: args.email
         }
       })
+      const employeeEmail = await context.prisma.employees.findFirst({
+        where: {
+          email: args.email
+        }
+      })
+      return customerEmail || employeeEmail
     },
     checkToken: async (
       _parent: any,
@@ -1210,12 +1222,23 @@ export const resolvers = {
       args: { username: string; password: string },
       context: Context
     ) => {
-      const employee = await context.prisma.employees.findFirst({
+      console.log('🚀 ~ username:', args.username)
+      console.log('🚀 ~ username:', args.password)
+      const existingEmployee = await context.prisma.employees.findFirst({
         where: {
-          username: args.username,
-          password: args.password
+          OR: [{ username: args.username }, { email: args.username }]
         }
       })
+      const employee = existingEmployee
+      if (!employee) {
+        throw new Error('Tài khoản không đúng')
+      }
+      if (
+        employee &&
+        !(await bcrypt.compare(args.password, employee.password))
+      ) {
+        throw new Error('Mật khẩu không đúng')
+      }
       const token = jwt.sign(
         { userId: employee?.employee_id },
         process.env.JWT_SECRET as string,
@@ -1502,8 +1525,8 @@ export const resolvers = {
   },
   AuthEmployee: {
     employee: (parent: any, _args: any, context: Context) => {
-      return context.prisma.employees.findFirst({
-        where: { username: parent?.employee.username }
+      return context.prisma.employees.findUnique({
+        where: { employee_id: parent?.employee.employee_id }
       })
     }
   },

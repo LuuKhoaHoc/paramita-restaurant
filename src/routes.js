@@ -52,6 +52,7 @@ const ChangePassword = lazyWithPreload(() =>
   import('~/pages/Auth/Account/ChangePassword/ChangePassword')
 )
 const Error = lazyWithPreload(() => import('~/pages/Error/Error'))
+const AuthEmp = lazyWithPreload(() => import('~/pages/Employee/Auth/AuthEmp'))
 
 export {
   Home,
@@ -83,5 +84,6 @@ export {
   AccountHistory,
   AccountOrders,
   ChangePassword,
-  Error
+  Error,
+  AuthEmp
 }
