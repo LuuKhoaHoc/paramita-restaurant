@@ -42,7 +42,8 @@ import {
   Checkout,
   CheckoutSuccess,
   OrderCategory,
-  AuthEmp
+  AuthEmp,
+  HomeEmp
 } from '~/routes'
 import { CartProvider } from '~/contexts/CartContext'
 import { gql, useQuery } from '@apollo/client'
@@ -118,7 +119,30 @@ const GET_CUSTOMER = gql`
   }
 `
 
+const GET_EMPLOYEE = gql`
+  query getEmployee($id: ID!) {
+    employee(id: $id) {
+      employee_id
+      name
+      gender
+      email
+      phone
+      address
+      birthday
+      position {
+        position_id
+        name
+        salary
+      }
+      status
+      is_admin
+      username
+    }
+  }
+`
+
 const imagesGallery = [Space1, Space2, Space3, Food1, Food2, HomePic2]
+
 function getCustomer() {
   const { loading, error, data } = useQuery(GET_CUSTOMER, {
     variables: {
@@ -129,11 +153,24 @@ function getCustomer() {
   if (error) return <p>Error : {error.message}</p>
   return data
 }
+function getEmployee() {
+  const { loading, error, data } = useQuery(GET_EMPLOYEE, {
+    variables: {
+      id: localStorage.getItem('tokenEmp')
+    }
+  })
+  if (loading) return <Loading />
+  if (error) return <p>Error : {error.message}</p>
+  return data
+}
 
 const App = () => {
   const { customer } = getCustomer()
+  const { employee } = getEmployee()
+  console.log('🚀 ~ App ~ employee:', employee)
   const textColor = useThemeModeValue('#371b04', '#d1e9d5')
   const bgColor = useThemeModeValue('#fff2e5', '#1d2b1f')
+  const bgColorStaff = useThemeModeValue('#fff', '#0a0118')
   if (localStorage.getItem('token')) {
     const token = localStorage.getItem('token')
     const { loading, error, data } = useQuery(CHECK_TOKEN, {
@@ -163,11 +200,11 @@ const App = () => {
   })
   return (
     <Suspense fallback={<Loading />}>
-      <Box bg={bgColor} cl={textColor}>
+      <Box bg={!employee ? bgColor : bgColorStaff} cl={textColor}>
         <AuthProvider>
           <CartProvider>
             <ScrollToTop />
-            <Navbar customer={customer} />
+            {!employee && <Navbar customer={customer} />}
             <Routes>
               <Route element={<Addition />}>
                 <Route path='/' index element={<Home />} />
@@ -216,14 +253,23 @@ const App = () => {
                   element={<CheckoutSuccess customer={customer} />}
                 />
               </Route>
-              <Route element={<AuthEmp />}></Route>
+              <Route element={<AuthEmp />}>
+                <Route
+                  path='/employee/home'
+                  element={<HomeEmp customer={customer} />}
+                />
+                <Route
+                  path='/employee/*'
+                  element={<HomeEmp customer={customer} />}
+                />
+              </Route>
               <Route path='/login' element={<Login />} />
               <Route path='/register' element={<Register />} />
               <Route path='/forgot-password' element={<ForgotPassword />} />
               <Route path='*' element={<Error />} />
             </Routes>
           </CartProvider>
-          <Footer />
+          {!employee && <Footer />}
         </AuthProvider>
         <ScrollToTopButton />
         <ToggleMode />

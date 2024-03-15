@@ -1226,8 +1226,6 @@ export const resolvers = {
       args: { username: string; password: string },
       context: Context
     ) => {
-      console.log('🚀 ~ username:', args.username)
-      console.log('🚀 ~ username:', args.password)
       const existingEmployee = await context.prisma.employees.findFirst({
         where: {
           OR: [{ username: args.username }, { email: args.username }]
