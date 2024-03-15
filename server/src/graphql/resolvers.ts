@@ -1281,9 +1281,7 @@ export const resolvers = {
           tsid,
           name: args.data.name,
           salary: args.data.salary,
-          employees: {
-            connect: { employee_id: args.employeeId }
-          }
+          description: args.data.description
         }
       })
     },
@@ -1299,9 +1297,7 @@ export const resolvers = {
         data: {
           name: args.data.name,
           salary: args.data.salary,
-          employees: {
-            connect: { employee_id: args.employeeId }
-          }
+          description: args.data.description
         }
       })
     },
@@ -1503,7 +1499,7 @@ export const resolvers = {
 interface PositionInput {
   name: string
   description: string
-  salary: number
+  salary: string
 }
 interface EmployeeInput {
   name: string

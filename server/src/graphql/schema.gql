@@ -225,7 +225,7 @@ input EmployeeInput {
   email: String!
   phone: String!
   address: String!
-  birthday: DateTime!
+  birthday: DateTime
   positionId: Int!
   status: Boolean!
   username: String!
@@ -235,7 +235,7 @@ input EmployeeInput {
 input PositionInput {
   name: String!
   description: String!
-  salary: Float!
+  salary: String!
 }
 
 #Query
@@ -495,17 +495,17 @@ type Voucher {
 }
 
 type Employee {
-  id: Int!
+  employee_id: Int!
   tsid: String!
   name: String!
   gender: String!
   email: String!
   phone: String!
   address: String!
-  birthday: DateTime!
+  birthday: DateTime
   position: Position!
   status: Boolean!
-  isAdmin: Boolean!
+  is_admin: Boolean!
   username: String!
   password: String!
   createdDate: DateTime!
@@ -513,11 +513,11 @@ type Employee {
 }
 
 type Position {
-  id: Int!
+  position_id: Int!
   tsid: String!
   name: String!
   description: String!
-  salary: Float!
+  salary: String!
   employees: [Employee!]
 }
 

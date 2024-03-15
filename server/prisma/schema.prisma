@@ -88,7 +88,7 @@ model employees {
   email       String    @db.VarChar(255)
   phone       String    @db.Char(11)
   address     String    @db.VarChar(255)
-  birthday    DateTime  @db.Date
+  birthday    DateTime? @db.Date
   position_id Int
   status      Boolean   @default(false)
   is_admin    Boolean   @default(false)
@@ -105,7 +105,8 @@ model employees {
 model positions {
   position_id Int         @id @default(autoincrement())
   name        String      @db.VarChar(255)
-  salary      Decimal     @db.Decimal(10, 2)
+  salary      String      @db.VarChar(255)
+  description String      @db.Text
   tsid        String      @db.VarChar(13)
   employees   employees[]
 }
