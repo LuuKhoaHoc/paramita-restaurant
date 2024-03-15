@@ -224,8 +224,12 @@ export const resolvers = {
       return context.prisma.employees.findMany()
     },
     employee: async (_parent: any, args: { id: any }, context: Context) => {
+      const employee_id = jwt.verify(
+        args.id,
+        process.env.JWT_SECRET as string
+      ) as jwt.JwtPayload
       return context.prisma.employees.findUnique({
-        where: { employee_id: args.id || undefined }
+        where: { employee_id: employee_id.userId || undefined }
       })
     },
     positionList: async (_parent: any, _args: any, context: Context) => {
