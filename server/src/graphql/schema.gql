@@ -63,6 +63,7 @@ type Mutation {
   updateVoucher(id: Int!, data: VoucherInput): Voucher!
   deleteVoucher(id: Int!): Voucher!
   updateVoucherStatus(id: Int!, status: String!): Voucher!
+  loginEmployee(username: String!, password: String!): AuthEmployee!
   createEmployee(data: EmployeeInput): Employee!
   updateEmployee(id: Int!, data: EmployeeInput): Employee!
   deleteEmployee(id: ID!): Employee!
@@ -492,6 +493,11 @@ type Voucher {
   min_spend: Int
   max_discount: Int
   status: String!
+}
+
+type AuthEmployee {
+  employee: Employee!
+  token: String!
 }
 
 type Employee {

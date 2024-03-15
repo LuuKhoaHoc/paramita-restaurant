@@ -1204,6 +1204,27 @@ export const resolvers = {
         }
       })
     },
+    // Login Employee
+    loginEmployee: async (
+      _parent: any,
+      args: { username: string; password: string },
+      context: Context
+    ) => {
+      const employee = await context.prisma.employees.findFirst({
+        where: {
+          username: args.username,
+          password: args.password
+        }
+      })
+      const token = jwt.sign(
+        { userId: employee?.employee_id },
+        process.env.JWT_SECRET as string,
+        {
+          expiresIn: '24h'
+        }
+      )
+      return { employee, token }
+    },
     // Employee
     createEmployee: async (
       _parent: any,
@@ -1476,6 +1497,13 @@ export const resolvers = {
     customer: (parent: any, _args: any, context: Context) => {
       return context.prisma.customers.findFirst({
         where: { customer_id: parent?.customer_id }
+      })
+    }
+  },
+  AuthEmployee: {
+    employee: (parent: any, _args: any, context: Context) => {
+      return context.prisma.employees.findFirst({
+        where: { username: parent?.employee.username }
       })
     }
   },
