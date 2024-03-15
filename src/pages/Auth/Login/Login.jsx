@@ -17,7 +17,7 @@ import { z } from 'zod'
 import usernameAndEmail from '~/utils/usernameAndEmail'
 import React, { useEffect, useState, useContext } from 'react'
 import { LoginPic } from '~/images'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { AlertCustom, Loading, MainPic } from '~/components'
 import { Password, User } from '@phosphor-icons/react'
 import { useResponsive } from '~/utils/responsive'
@@ -57,6 +57,7 @@ const LOGIN_MUTATION = gql`
 const Login = () => {
   const { isLoggedIn, setIsLoggedIn } = useContext(AuthContext)
   const navigate = useNavigate()
+  const { pathname } = useLocation()
   const { isLaptop, isMobile, isTablet } = useResponsive()
   const [remember, setRemember] = useState(false)
   const { scrollToId } = useScroll()
@@ -110,15 +111,23 @@ const Login = () => {
   const { data: queryEmail } = useQuery(CHECK_EMAIL_EXIST, {
     variables: { email: register('username').value }
   })
+
   useEffect(() => {
     if (
-      (isLoggedIn || localStorage.getItem('login')) === 'true' &&
+      (isLoggedIn ||
+        localStorage.getItem('login') ||
+        sessionStorage.getItem('login')) &&
       localStorage.getItem('token') === mutationData?.login?.token
     ) {
       navigate(-1)
     }
-  }, [isLoggedIn])
-
+  }, [
+    isLoggedIn,
+    pathname,
+    localStorage.getItem('login'),
+    sessionStorage.getItem('login'),
+    mutationData?.login?.token
+  ])
   // loading
   if (mutationLoading) return <Loading />
   return (
@@ -203,6 +212,7 @@ const Login = () => {
                         })
                       )
                       setIsLoggedIn(true)
+                      sessionStorage.setItem('login', true)
                       navigate(-1)
                       if (remember) {
                         localStorage.setItem('login', true)

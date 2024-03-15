@@ -123,10 +123,15 @@ const Navbar = ({ customer }) => {
 
   useEffect(() => {
     setToken(localStorage.getItem('token'))
-    if ((isLoggedIn || localStorage.getItem('login')) && token) {
+    if (
+      (isLoggedIn ||
+        localStorage.getItem('login') ||
+        sessionStorage.getItem('login')) &&
+      token
+    ) {
       setIsLoggedIn(true)
     }
-  }, [isLoggedIn])
+  }, [isLoggedIn, localStorage.getItem('login'), token])
 
   return (
     <Grid

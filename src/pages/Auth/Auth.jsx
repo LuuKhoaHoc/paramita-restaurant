@@ -4,7 +4,10 @@ import { AuthContext } from '~/contexts/AuthContext'
 
 const Auth = () => {
   const { isLoggedIn } = useContext(AuthContext)
-  const isAuth = isLoggedIn || localStorage.getItem('login') === 'true'
+  const isAuth =
+    isLoggedIn ||
+    localStorage.getItem('login') ||
+    sessionStorage.getItem('login')
 
   return isAuth ? <Outlet /> : <Navigate to={'/login'} />
 }
