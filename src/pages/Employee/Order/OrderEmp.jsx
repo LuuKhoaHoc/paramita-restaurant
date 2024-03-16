@@ -17,7 +17,7 @@ const OrderEmp = ({ employee }) => {
         bsh={'md'}
       >
         {open ? (
-          <Animation animation={'slide-left'} animated={open}>
+          <Animation animation={'scale-x'} animated={open}>
             <NavbarEmployee />
           </Animation>
         ) : (

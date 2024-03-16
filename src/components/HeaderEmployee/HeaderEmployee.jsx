@@ -39,7 +39,7 @@ const HeaderEmployee = ({ open, setOpen, employee }) => {
     }
   }, [pathname])
   return (
-    <Flex direction='row' align='center' pos={'relative'}>
+    <Flex direction='row' align='center'>
       <Button
         variant='text'
         icon={<List />}

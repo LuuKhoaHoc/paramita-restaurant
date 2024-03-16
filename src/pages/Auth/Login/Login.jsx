@@ -262,7 +262,7 @@ const Login = () => {
                           if (remember) {
                             localStorage.setItem('loginEmp', true)
                           }
-                          navigate('/employee/home', { replace: true })
+                          navigate('/employee/invoice', { replace: true })
                           if (data?.loginEmployee.token) {
                             localStorage.setItem(
                               'tokenEmp',
