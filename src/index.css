@@ -52,7 +52,7 @@
   font-family: 'GeomanistBold' !important;
 }
 .active {
-  color: #39b54a;
+  color: #39b54a !important;
 }
 a {
   color: inherit;
