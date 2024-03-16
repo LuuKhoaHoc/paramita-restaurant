@@ -43,7 +43,9 @@ import {
   CheckoutSuccess,
   OrderCategory,
   AuthEmp,
-  HomeEmp
+  InvoiceEmp,
+  OrderEmp,
+  ReservationEmp
 } from '~/routes'
 import { CartProvider } from '~/contexts/CartContext'
 import { gql, useQuery } from '@apollo/client'
@@ -165,9 +167,13 @@ function getEmployee() {
 }
 
 const App = () => {
-  const { customer } = getCustomer()
-  const { employee } = getEmployee()
-  console.log('🚀 ~ App ~ employee:', employee)
+  const { customer, loading: customerLoading } = getCustomer()
+  const { employee, loading: employeeLoading } = getEmployee()
+
+  if (customerLoading || employeeLoading) {
+    return <Loading />
+  }
+
   const textColor = useThemeModeValue('#371b04', '#d1e9d5')
   const bgColor = useThemeModeValue('#fff2e5', '#1d2b1f')
   const bgColorStaff = useThemeModeValue('#fff', '#0a0118')
@@ -190,7 +196,7 @@ const App = () => {
   }
 
   window.addEventListener('storage', function (e) {
-    if (e.key === 'token' || e.key === 'login') {
+    if (e.key === 'token' || e.key === 'login' || e.key === 'tokenEmp') {
       ErrorLogin()
       localStorage.removeItem('login')
       localStorage.removeItem('token')
@@ -255,12 +261,20 @@ const App = () => {
               </Route>
               <Route element={<AuthEmp />}>
                 <Route
-                  path='/employee/home'
-                  element={<HomeEmp customer={customer} />}
+                  path='/employee/invoice'
+                  element={<InvoiceEmp employee={employee} />}
+                />
+                <Route
+                  path='/employee/order'
+                  element={<OrderEmp employee={employee} />}
+                />
+                <Route
+                  path='/employee/reservation'
+                  element={<ReservationEmp employee={employee} />}
                 />
                 <Route
                   path='/employee/*'
-                  element={<HomeEmp customer={customer} />}
+                  element={<InvoiceEmp employee={employee} />}
                 />
               </Route>
               <Route path='/login' element={<Login />} />

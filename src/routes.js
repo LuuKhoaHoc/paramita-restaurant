@@ -53,7 +53,15 @@ const ChangePassword = lazyWithPreload(() =>
 )
 const Error = lazyWithPreload(() => import('~/pages/Error/Error'))
 const AuthEmp = lazyWithPreload(() => import('~/pages/Employee/Auth/AuthEmp'))
-const HomeEmp = lazyWithPreload(() => import('~/pages/Employee/Home/HomeEmp'))
+const InvoiceEmp = lazyWithPreload(() =>
+  import('~/pages/Employee/Invoice/InvoiceEmp')
+)
+const OrderEmp = lazyWithPreload(() =>
+  import('~/pages/Employee/Order/OrderEmp')
+)
+const ReservationEmp = lazyWithPreload(() =>
+  import('~/pages/Employee/Reservation/ReservationEmp')
+)
 
 export {
   Home,
@@ -87,5 +95,7 @@ export {
   ChangePassword,
   Error,
   AuthEmp,
-  HomeEmp
+  InvoiceEmp,
+  OrderEmp,
+  ReservationEmp
 }
