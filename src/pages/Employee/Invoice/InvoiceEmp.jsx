@@ -1,4 +1,4 @@
-import { Grid, Animation, fr, Divider } from '@prismane/core'
+import { Grid, Animation, fr, Divider, Text } from '@prismane/core'
 import React, { useState } from 'react'
 import HeaderEmployee from '~/components/HeaderEmployee/HeaderEmployee'
 import NavbarEmployee from '~/components/NavbarEmployee/NavbarEmployee'
@@ -11,7 +11,7 @@ const InvoiceEmp = ({ employee }) => {
     sessionStorage.getItem('openNavbar') === 'true' ? true : false
   )
   return (
-    <Grid templateColumns={12}>
+    <Grid templateColumns={12} templateRows={13} h={'100vh'}>
       <Grid.Item
         columnStart={1}
         columnEnd={!open ? 2 : 3}
@@ -19,7 +19,7 @@ const InvoiceEmp = ({ employee }) => {
         bsh={'md'}
       >
         {open ? (
-          <Animation animation={'slide-left'} animated={open}>
+          <Animation animation={'scale-x'} animated={open}>
             <NavbarEmployee />
           </Animation>
         ) : (
@@ -29,10 +29,20 @@ const InvoiceEmp = ({ employee }) => {
       <Grid.Item
         columnStart={!open ? 2 : 3}
         columnEnd={13}
-        h={fr(15)}
+        rowStart={1}
+        rowEnd={2}
+        // h={fr(15)}
         bsh={'base'}
       >
         <HeaderEmployee open={open} setOpen={setOpen} employee={employee} />
+      </Grid.Item>
+      <Grid.Item
+        columnStart={!open ? 2 : 3}
+        columnEnd={13}
+        rowStart={2}
+        rowEnd={'auto'}
+      >
+        <Text>Hii</Text>
       </Grid.Item>
     </Grid>
   )
