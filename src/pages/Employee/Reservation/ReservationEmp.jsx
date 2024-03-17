@@ -9,7 +9,8 @@ const ReservationEmp = ({ employee }) => {
     sessionStorage.getItem('openNavbar') === 'true' ? true : false
   )
   return (
-    <Grid templateColumns={12}>
+    <Grid templateColumns={12} templateRows={13} h={'100vh'}>
+      {/* Navbar */}
       <Grid.Item
         columnStart={1}
         columnEnd={!open ? 2 : 3}
@@ -24,14 +25,23 @@ const ReservationEmp = ({ employee }) => {
           <NavbarEmployeeIcon />
         )}
       </Grid.Item>
+      {/* Header */}
       <Grid.Item
         columnStart={!open ? 2 : 3}
         columnEnd={13}
-        h={fr(15)}
+        rowStart={1}
+        rowEnd={2}
         bsh={'base'}
       >
         <HeaderEmployee open={open} setOpen={setOpen} employee={employee} />
       </Grid.Item>
+      {/* Body */}
+      <Grid.Item
+        columnStart={!open ? 2 : 3}
+        columnEnd={13}
+        rowStart={2}
+        rowEnd={'auto'}
+      ></Grid.Item>
     </Grid>
   )
 }

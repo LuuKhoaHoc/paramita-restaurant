@@ -38,11 +38,13 @@ const OrderEmp = ({ employee }) => {
   ])
   return (
     <>
+      {/* Order detail */}
       <OrderDetailEmp
         openModalDetail={openModalDetail}
         setOpenModalDetail={setOpenModalDetail}
       />
       <Grid templateColumns={12} templateRows={13} h={'100vh'}>
+        {/* Navbar */}
         <Grid.Item
           columnStart={1}
           columnEnd={!open ? 2 : 3}
@@ -57,6 +59,7 @@ const OrderEmp = ({ employee }) => {
             <NavbarEmployeeIcon />
           )}
         </Grid.Item>
+        {/* Header */}
         <Grid.Item
           columnStart={!open ? 2 : 3}
           columnEnd={13}
@@ -66,6 +69,7 @@ const OrderEmp = ({ employee }) => {
         >
           <HeaderEmployee open={open} setOpen={setOpen} employee={employee} />
         </Grid.Item>
+        {/* Body */}
         <Grid.Item
           columnStart={!open ? 2 : 3}
           columnEnd={13}
