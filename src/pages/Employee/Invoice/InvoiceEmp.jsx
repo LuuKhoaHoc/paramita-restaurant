@@ -1,13 +1,4 @@
-import {
-  Dot,
-  DotsThree,
-  Eye,
-  MagnifyingGlass,
-  PaintBrush,
-  PencilLine,
-  Plus,
-  Trash
-} from '@phosphor-icons/react'
+import { DotsThree, Eye, PencilLine, Plus, Trash } from '@phosphor-icons/react'
 import {
   Grid,
   Animation,
@@ -20,10 +11,7 @@ import {
   Icon,
   NativeSelectField,
   Modal,
-  Stack,
-  TextField,
-  Center,
-  useThemeModeValue
+  TextField
 } from '@prismane/core'
 import { useSearch } from '@prismane/core/hooks'
 import React, { useState } from 'react'
@@ -31,11 +19,9 @@ import HeaderEmployee from '~/components/HeaderEmployee/HeaderEmployee'
 import NavbarEmployee from '~/components/NavbarEmployee/NavbarEmployee'
 import NavbarEmployeeIcon from '~/components/NavbarEmployee/NavbarEmployeeIcon'
 import AddEditInvoice from '~/pages/Employee/Invoice/AddEditInvoice/AddEditInvoice'
-import { useResponsive } from '~/utils/responsive'
 
 const InvoiceEmp = ({ employee }) => {
   // responsive
-  const { isMobile, isTablet, isLaptop } = useResponsive()
   // dark mode
   const [open, setOpen] = useState(
     sessionStorage.getItem('openNavbar') === 'true' ? true : false
@@ -62,19 +48,19 @@ const InvoiceEmp = ({ employee }) => {
         open={openModalDetail}
         onClose={() => setOpenModalDetail(false)}
         closable
-        w={isMobile ? '100vw' : isTablet ? '60vw' : '40vw'}
+        w={'40vw'}
       >
         <Modal.Header>
-          <Text className='GeomanistMedium-font' fs={isMobile ? 'lg' : 'xl'}>
+          <Text className='GeomanistMedium-font' fs={'xl'}>
             Chi tiết hoá đơn
           </Text>
         </Modal.Header>
-        <Flex direction='column' gap={fr(4)} fs={isMobile ? 'md' : 'lg'}>
+        <Flex direction='column' gap={fr(4)} fs={'lg'}>
           <Text>Tên khách hàng: Lê Thị Thanh Vy</Text>
           <Text>Số điện thoại: 034 999 999</Text>
           <Text>Voucher: GIAONHANH5</Text>
         </Flex>
-        <Table fs={isMobile ? 'sm' : 'base'}>
+        <Table>
           <Table.Head ta={'center'}>
             <Table.Row>
               <Table.Cell>
@@ -115,17 +101,12 @@ const InvoiceEmp = ({ employee }) => {
           </Table.Body>
         </Table>
         <Divider />
-        <Flex
-          direction='column'
-          align='end'
-          mx={fr(4)}
-          fs={isMobile ? 'md' : 'lg'}
-        >
+        <Flex direction='column' align='end' mx={fr(4)} fs={'lg'}>
           <Text mr={'auto'}>Ghi chú: </Text>
           <Text>Tổng tiền: 100.000đ</Text>
           <Text>Thuế: 5.000đ</Text>
           <Text>Mã giảm giá: -5.000đ</Text>
-          <Text cl={'primary'} fs={isMobile ? 'lg' : 'xl'}>
+          <Text cl={'primary'} fs={'xl'}>
             Thành tiền: 100.000đ
           </Text>
         </Flex>
@@ -138,6 +119,7 @@ const InvoiceEmp = ({ employee }) => {
       />
 
       <Grid templateColumns={12} templateRows={13} h={'100vh'}>
+        {/* Navbar */}
         <Grid.Item
           columnStart={1}
           columnEnd={!open ? 2 : 3}
@@ -152,6 +134,7 @@ const InvoiceEmp = ({ employee }) => {
             <NavbarEmployeeIcon />
           )}
         </Grid.Item>
+        {/* Header */}
         <Grid.Item
           columnStart={!open ? 2 : 3}
           columnEnd={13}
@@ -161,6 +144,7 @@ const InvoiceEmp = ({ employee }) => {
         >
           <HeaderEmployee open={open} setOpen={setOpen} employee={employee} />
         </Grid.Item>
+        {/* Body */}
         <Grid.Item
           columnStart={!open ? 2 : 3}
           columnEnd={13}

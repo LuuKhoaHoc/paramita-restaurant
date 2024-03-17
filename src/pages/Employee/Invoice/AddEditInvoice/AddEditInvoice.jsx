@@ -1,4 +1,4 @@
-import { MagnifyingGlass, X } from '@phosphor-icons/react'
+import { MagnifyingGlass, Plus, PlusCircle, X } from '@phosphor-icons/react'
 import {
   Button,
   Card,
@@ -65,9 +65,12 @@ const AddEditInvoice = ({ title, openModalAddEdit, setOpenModalAddEdit }) => {
                   80.000đ
                 </Text>
               </Flex>
-              <Button variant='secondary' ml={'auto'} br={'xl'}>
-                Thêm
-              </Button>
+              <Button
+                variant='secondary'
+                ml={'auto'}
+                br={'full'}
+                icon={<Plus />}
+              ></Button>
             </Card>
           </Flex>
         </Flex>
@@ -106,7 +109,7 @@ const AddEditInvoice = ({ title, openModalAddEdit, setOpenModalAddEdit }) => {
                 min={1}
                 max={99}
                 variant='underlined'
-                w={'20%'}
+                w={'30%'}
                 ml={'auto'}
                 value={quantity}
                 onChange={(e) => setQuantity(e.target.value)}
