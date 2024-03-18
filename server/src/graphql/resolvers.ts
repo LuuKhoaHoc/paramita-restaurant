@@ -62,6 +62,16 @@ export const resolvers = {
         return false
       }
     },
+    // get customer by phone
+    getCustomerByPhone: async (
+      _parent: any,
+      args: { phone: string },
+      context: Context
+    ) => {
+      return context.prisma.customers.findFirst({
+        where: { phone: args.phone }
+      })
+    },
     categoryList: async (_parent: any, _args: any, context: Context) => {
       return context.prisma.categories.findMany()
     },
