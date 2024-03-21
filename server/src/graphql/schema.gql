@@ -124,10 +124,11 @@ input CustomerLevelInput {
 }
 
 input InvoiceInput {
-  date: DateTime!
-  customerId: Int!
+  customerId: Int
+  voucherId: Int
   paymentMethod: String!
-  paymentStatus: Boolean!
+  paymentStatus: String!
+  totalPrice: Float!
   note: String
 }
 
@@ -256,10 +257,10 @@ type Query {
   customer(id: ID!): Customer
   customerLevel(id: Int!): CustomerLevel
   customerAddress(id: ID!): CustomerAddress
-  invoice(id: ID!): Invoice
-  invoiceDetail(id: ID!): InvoiceDetail
-  order(id: ID!): Order
-  orderDetail(id: ID!): OrderDetail
+  invoice(id: Int!): Invoice
+  invoiceDetail(id: Int!): InvoiceDetail
+  order(id: Int!): Order
+  orderDetail(id: Int!): OrderDetail
   pointsHistory(id: ID!): PointsHistory
   promotion(id: ID!): Promotion
   revenue(id: ID!): Revenue
@@ -383,13 +384,14 @@ type CustomerLevel {
 type Invoice {
   invoice_id: Int!
   tsid: String!
-  date: DateTime!
-  customer: Customer!
+  invoice_time: DateTime!
+  customer: Customer
   voucher: Voucher
-  paymentMethod: String!
-  paymentStatus: Boolean!
+  payment_method: String!
+  payment_status: String!
+  total_price: Float!
   note: String
-  invoiceDetails: [InvoiceDetail!]!
+  invoice_details: [InvoiceDetail!]
 }
 
 type InvoiceDetail {
@@ -398,8 +400,8 @@ type InvoiceDetail {
   invoice: Invoice!
   item: Menu!
   quantity: Int!
-  price: Float!
-  total: Float!
+  unit_price: Float!
+  total_price: Float!
 }
 
 type Order {

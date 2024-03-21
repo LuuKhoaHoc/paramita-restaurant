@@ -126,15 +126,16 @@ model invoice_details {
 
 model invoices {
   invoice_id      Int               @id @default(autoincrement())
-  invoice_time    DateTime          @db.Date
-  customer_id     Int
+  invoice_time    DateTime          @default(now())
+  customer_id     Int?
   payment_method  String            @db.VarChar(255)
   payment_status  String            @db.VarChar(255)
   note            String?           @db.VarChar(255)
   tsid            String            @db.VarChar(13)
   voucher_id      Int?              @unique
+  total_price     Float             @db.Float
   invoice_details invoice_details[]
-  customers       customers         @relation(fields: [customer_id], references: [customer_id], onUpdate: Restrict, map: "invoices_ibfk_1")
+  customers       customers?        @relation(fields: [customer_id], references: [customer_id], onUpdate: Restrict, map: "invoices_ibfk_1")
   voucher         vouchers?         @relation(fields: [voucher_id], references: [voucher_id])
   point_histories point_histories[]
 

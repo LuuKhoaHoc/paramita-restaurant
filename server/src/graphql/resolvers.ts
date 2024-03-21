@@ -726,7 +726,6 @@ export const resolvers = {
       _parent: any,
       args: {
         data: InvoiceInput
-        invoiceDetailId?: number
       },
       context: Context
     ) => {
@@ -739,36 +738,28 @@ export const resolvers = {
       return context.prisma.invoices.create({
         data: {
           tsid,
-          customer_id: args.data.customerId,
-          invoice_time: args.data.date,
-          voucher_id: args.data.voucherId,
+          customer_id: args.data?.customerId,
+          voucher_id: args.data?.voucherId,
           payment_method: args.data.paymentMethod,
           payment_status: args.data.paymentStatus,
-          invoice_details: {
-            connect: {
-              invoice_detail_id: args.invoiceDetailId
-            }
-          },
+          total_price: args.data.totalPrice,
           note: args.data?.note
         }
       })
     },
     updateInvoice: async (
       _parent: any,
-      args: { id: number; data: InvoiceInput; invoiceDetailId?: number },
+      args: { id: number; data: InvoiceInput },
       context: Context
     ) => {
       return context.prisma.invoices.update({
         where: { invoice_id: args.id },
         data: {
           customer_id: args.data.customerId,
-          invoice_time: args.data.date,
-          invoice_details: {
-            connect: { invoice_detail_id: args.invoiceDetailId }
-          },
           voucher_id: args.data.voucherId,
           payment_method: args.data.paymentMethod,
           payment_status: args.data.paymentStatus,
+          total_price: args.data.totalPrice,
           note: args.data?.note
         }
       })
@@ -1450,20 +1441,28 @@ export const resolvers = {
   },
   Invoice: {
     customer: (parent: any, _args: any, context: Context) => {
-      return context.prisma.customers
-        .findUnique({
+      if (parent?.customer_id) {
+        return context.prisma.customers.findFirst({
           where: { customer_id: parent?.customer_id }
         })
-        .invoices()
+      }
+    },
+    invoice_details: (parent: any, _args: any, context: Context) => {
+      return context.prisma.invoice_details.findMany({
+        where: { invoice_id: parent?.invoice_id }
+      })
     }
   },
   InvoiceDetail: {
     invoice: (parent: any, _args: any, context: Context) => {
-      return context.prisma.invoices
-        .findUnique({
-          where: { invoice_id: parent?.invoice_id }
-        })
-        .invoice_details()
+      return context.prisma.invoices.findUnique({
+        where: { invoice_id: parent?.invoice_id }
+      })
+    },
+    item: (parent: any, _args: any, context: Context) => {
+      return context.prisma.menu.findUnique({
+        where: { item_id: parent?.item_id }
+      })
     }
   },
   Order: {
@@ -1658,11 +1657,11 @@ interface InvoiceDetailInput {
   total: number
 }
 interface InvoiceInput {
-  date: Date
-  customerId: number
+  customerId?: number
   voucherId?: number
   paymentMethod: string
   paymentStatus: string
+  totalPrice: number
   note?: string
   invoiceDetails: InvoiceDetailInput[]
 }
