@@ -1236,10 +1236,7 @@ export const resolvers = {
       if (!employee) {
         throw new Error('Tài khoản không đúng')
       }
-      if (
-        employee &&
-        !(await bcrypt.compare(args.password, employee.password))
-      ) {
+      if (employee && !(args.password === employee.password)) {
         throw new Error('Mật khẩu không đúng')
       }
       const token = jwt.sign(
