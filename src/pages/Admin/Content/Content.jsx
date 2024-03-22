@@ -16,7 +16,6 @@ import { useSearch } from '@prismane/core/hooks'
 import { useState } from 'react'
 
 const Content = () => {
-  const [openAddContent, setOpenAddContent] = useState(false)
   const { loading, error, data } = useQuery(GET_CONTENTS)
   const { query, setQuery, filtered } = useSearch(data?.contentList || [])
   if (loading) return <Skeleton w={'100%'} h={'100vh'} mih={200} />

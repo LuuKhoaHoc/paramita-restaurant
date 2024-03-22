@@ -116,9 +116,10 @@ const ContentRow = ({ content }) => {
             gap={fr(2)}
             direction='column'
             sx={{
-              '.PrismaneTextField-label, .PrismaneTextarea-label': {
-                fontSize: fr(4.5)
-              }
+              '.PrismaneTextField-label, .PrismaneTextarea-label, .PrismaneSelectField-label':
+                {
+                  fontSize: fr(4.5)
+                }
             }}
           >
             <TextField
