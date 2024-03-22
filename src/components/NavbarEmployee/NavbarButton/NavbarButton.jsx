@@ -8,8 +8,7 @@ const NavbarButton = ({ icon, text, ...props }) => {
       bg={[bgColor, { hover: bgColorHover }]}
       cl={['gray', 500]}
       icon={icon}
-      w={'100%'}
-      p={fr(4)}
+      full
       py={fr(4)}
       size='md'
       {...props}
