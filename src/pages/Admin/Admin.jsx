@@ -10,6 +10,7 @@ import Content from '~/pages/Admin/Content/Content'
 import Home from '~/pages/Admin/Home/Home'
 import Menu from '~/pages/Admin/Menu/Menu'
 import Table from '~/pages/Admin/Table/Table'
+import EmployeeManager from '~/pages/Admin/EmployeeManager/EmployeeManager'
 
 const Admin = ({ employee }) => {
   const [open, setOpen] = useState(
@@ -56,6 +57,7 @@ const Admin = ({ employee }) => {
               <Route path='content' element={<Content />} />
               <Route path='menu' element={<Menu />} />
               <Route path='table' element={<Table />} />
+              <Route path='employees' element={<EmployeeManager />} />
               <Route path='*' element={<Home />} />
             </Routes>
           </Grid.Item>
