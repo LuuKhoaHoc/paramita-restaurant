@@ -92,6 +92,7 @@ model employees {
   position_id Int
   status      Boolean   @default(false)
   is_admin    Boolean   @default(false)
+  image       String?   @db.Text
   username    String    @db.VarChar(255)
   password    String    @db.VarChar(255)
   created_at  DateTime  @default(now())
@@ -106,8 +107,8 @@ model positions {
   position_id Int         @id @default(autoincrement())
   name        String      @db.VarChar(255)
   salary      String      @db.VarChar(255)
-  description String      @db.Text
   tsid        String      @db.VarChar(13)
+  description String      @db.Text
   employees   employees[]
 }
 
