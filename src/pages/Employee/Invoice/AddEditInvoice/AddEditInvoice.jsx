@@ -16,45 +16,32 @@ import {
   fr
 } from '@prismane/core'
 import { useEffect, useState } from 'react'
-import { gql, useQuery } from '@apollo/client'
 import { useForm, useSearch } from '@prismane/core/hooks'
+import { useMutation, useQuery } from '@apollo/client'
+import {
+  ADD_INVOICE,
+  ADD_INVOICE_DETAIL,
+  UPDATE_INVOICE,
+  UPDATE_INVOICE_DETAIL,
+  GET_CUSTOMER_BY_PHONE,
+  GET_MENU
+} from '~/pages/Employee/Invoice/AddEditInvoice/schema'
 
-const GET_MENU = gql`
-  query {
-    menuList {
-      item_id
-      image
-      name
-      price
-      description
-      category {
-        name
-      }
-    }
-  }
-`
-const GET_CUSTOMER_BY_PHONE = gql`
-  query getCustomerByPhone($phone: String!) {
-    getCustomerByPhone(phone: $phone) {
-      name
-      phone
-      points
-      level {
-        name
-      }
-    }
-  }
-`
-
-const AddEditInvoice = ({ title, openModalAddEdit, setOpenModalAddEdit }) => {
+const AddEditInvoice = ({
+  title,
+  openModalAddEdit,
+  setOpenModalAddEdit,
+  invoice_data
+}) => {
   //switch title
   const titleButton = title === 'Thêm hoá đơn' ? 'Thêm' : 'Chỉnh sửa'
   // state update quantity
   const [addedItems, setAddedItems] = useState([])
+  const [dataItem, setDataItem] = useState(invoice_data?.invoice_details || [])
   const [phoneNumber, setPhoneNumber] = useState('')
   // useQuery data
   const { data, loading, error } = useQuery(GET_MENU)
-  //
+  // useQuery customer by phone
   const {
     data: customer,
     loading: loadingCustomer,
@@ -64,24 +51,141 @@ const AddEditInvoice = ({ title, openModalAddEdit, setOpenModalAddEdit }) => {
       phone: phoneNumber
     }
   })
+  // useMutation to create Invoice
+  const [addInvoice, { loading: loadingAddInvoice }] = useMutation(ADD_INVOICE)
+  // useMutation to create InvoiceDetail
+  const [addInvoiceDetail, { loading: loadingAddInvoiceDetail }] =
+    useMutation(ADD_INVOICE_DETAIL)
+  // useMutation to create Invoice
+  const [updateInvoice, { loading: loadingUpdateInvoice }] =
+    useMutation(UPDATE_INVOICE)
+  // useMutation to create InvoiceDetail
+  const [updateInvoiceDetail, { loading: loadingUpdateInvoiceDetail }] =
+    useMutation(UPDATE_INVOICE_DETAIL)
   // useSearch hook
   const { query, setQuery, filtered } = useSearch(data?.menuList || [])
   // useEffect to get cart from sessionStorage
   useEffect(() => {
-    let cartItem = JSON.parse(sessionStorage.getItem('invoice-cart') || '[]')
-    setAddedItems(cartItem)
+    if (title === 'Sửa hoá đơn') {
+    } else {
+      let cartItem = JSON.parse(sessionStorage.getItem('invoice-cart') || '[]')
+      setAddedItems(cartItem)
+    }
   }, [])
+
   // total price
   let totalPrice = addedItems.reduce((acc, item) => {
-    return acc + item.price * item.quantity
+    return acc + item.price * item.quantity * 1000
   }, 0)
 
+  // func handle add invoice
+  const handleAddInvoice = async () => {
+    await addInvoice({
+      variables: {
+        data: {
+          customerId: customer?.getCustomerByPhone?.customer_id,
+          voucherId: null,
+          paymentMethod: 'tiền mặt',
+          paymentStatus: 'Chưa thanh toán',
+          totalPrice: totalPrice + 5000,
+          note: null
+        }
+      }
+    }).then((res) => {
+      let cart = JSON.parse(sessionStorage.getItem('invoice-cart') || '[]')
+      cart.map(async (item) => {
+        await addInvoiceDetail({
+          variables: {
+            data: {
+              invoiceId: res.data.createInvoice.invoice_id,
+              itemId: item.item_id,
+              quantity: item.quantity,
+              price: item.price * 1000,
+              total: item.price * item.quantity * 1000
+            }
+          },
+          onCompleted: () => {
+            sessionStorage.removeItem('invoice-cart')
+            setOpenModalAddEdit(false)
+          }
+        })
+      })
+    })
+  }
+  // func handle update invoice
+  const handleUpdateInvoice = async () => {
+    await updateInvoice({
+      variables: {
+        id: invoice_data.invoice_id,
+        data: {
+          customerId: customer?.getCustomerByPhone?.customer_id,
+          voucherId: null,
+          paymentMethod: 'tiền mặt',
+          paymentStatus: 'Chưa thanh toán',
+          totalPrice: totalPrice + 5000,
+          note: null
+        }
+      }
+    }).then((res) => {
+      let cart = dataItem
+      cart.map(async (item) => {
+        await updateInvoiceDetail({
+          variables: {
+            id: item.invoice_detail_id,
+            data: {
+              invoiceId: res.data.updateInvoice.invoice_id,
+              itemId: item.item_id,
+              quantity: item.quantity,
+              price: item.unit_price,
+              total: item.unit_price * item.quantity
+            }
+          },
+          onCompleted: () => {
+            sessionStorage.removeItem('invoice-cart')
+            setOpenModalAddEdit(false)
+          }
+        })
+      })
+    })
+  }
+
+  // func handle delete item of existed invoice
+  const handleDeleteExistedItem = (item) => {
+    setDataItem(
+      dataItem.filter((c) => c.invoice_detail_id !== item.invoice_detail_id)
+    )
+  }
+  // func handle update quantity of existed invoice
+  const handleUpdateQuantityExistedItem = (item, value) => {
+    let cart = dataItem
+    cart = cart.map((c) => {
+      if (c.invoice_detail_id === item.invoice_detail_id) {
+        return {
+          ...c,
+          quantity: +value
+        }
+      }
+      return c
+    })
+    setDataItem(cart)
+  }
+  // func handle add item of existed invoice
+  const handleAddItem = (item) => {
+    let cart = dataItem
+    cart?.map((c) => {
+      if (c.item.item_id === item.item_id) {
+        handleUpdateQuantityExistedItem(c, c.quantity + 1)
+      }
+    })
+  }
   // func handle delete item
   const handleDeleteItem = (item) => {
-    let cart = JSON.parse(sessionStorage.getItem('invoice-cart') || '[]')
-    cart = cart.filter((c) => c.item_id !== item.item_id)
-    setAddedItems(cart)
-    sessionStorage.setItem('invoice-cart', JSON.stringify(cart))
+    if (dataItem) {
+      let cart = JSON.parse(sessionStorage.getItem('invoice-cart') || '[]')
+      cart = cart.filter((c) => c.item_id !== item.item_id)
+      setAddedItems(cart)
+      sessionStorage.setItem('invoice-cart', JSON.stringify(cart))
+    }
   }
   // func handle update quantity
   const handleUpdateQuantity = (item, value) => {
@@ -101,6 +205,9 @@ const AddEditInvoice = ({ title, openModalAddEdit, setOpenModalAddEdit }) => {
     const existItem = cart.find((c) => c.item_id === item.item_id)
     if (existItem) {
       existItem.quantity++
+    } else if (dataItem) {
+      handleAddItem(item)
+      return
     } else {
       cart.push({
         item_id: item.item_id,
@@ -142,7 +249,7 @@ const AddEditInvoice = ({ title, openModalAddEdit, setOpenModalAddEdit }) => {
               Danh sách món ăn
             </Text>
             <TextField
-              size='sm'
+              size='md'
               placeholder='Tìm kiếm...'
               value={query || ''}
               onChange={(e) => setQuery(e.target.value)}
@@ -157,7 +264,7 @@ const AddEditInvoice = ({ title, openModalAddEdit, setOpenModalAddEdit }) => {
             bsh={'inner'}
             of={'auto'}
           >
-            <Flex direction='row' wrap='wrap' gap={fr(2)}>
+            <Flex direction='row' wrap='wrap' gap={fr(3)}>
               {loading && <Skeleton w={fr(50)} h={fr(16)} />}
               {filtered?.map((item) => {
                 return (
@@ -210,6 +317,47 @@ const AddEditInvoice = ({ title, openModalAddEdit, setOpenModalAddEdit }) => {
             gap={fr(2)}
             direction='column'
           >
+            {dataItem?.map((item) => {
+              return (
+                <Card
+                  key={item.invoice_detail_id}
+                  direction='row'
+                  h={fr(8)}
+                  gap={fr(4)}
+                  align='center'
+                >
+                  <Circle
+                    size={22}
+                    bg={[['slate', 300], { hover: 'primary' }]}
+                    cl={[
+                      (theme) => (theme.mode === 'dark' ? '#fff' : '#000'),
+                      { hover: 'white' }
+                    ]}
+                    cs={'pointer'}
+                    onClick={() => handleDeleteExistedItem(item)}
+                  >
+                    <X />
+                  </Circle>
+                  <Flex direction='column'>
+                    <Text fs={'md'}>{item?.item?.name}</Text>
+                    <Text fs={'sm'} cl={['gray', 400]}>
+                      {item?.unit_price?.toLocaleString('vi-VN')}đ
+                    </Text>
+                  </Flex>
+                  <NumberField
+                    min={1}
+                    max={99}
+                    variant='underlined'
+                    w={'30%'}
+                    ml={'auto'}
+                    value={item?.quantity}
+                    onChange={(e) =>
+                      handleUpdateQuantityExistedItem(item, e.target.value)
+                    }
+                  />
+                </Card>
+              )
+            })}
             {addedItems.map((item) => {
               return (
                 <Card
@@ -281,15 +429,30 @@ const AddEditInvoice = ({ title, openModalAddEdit, setOpenModalAddEdit }) => {
               <Skeleton w={'100%'} h={fr(27)} br={'md'} />
             ) : (
               <Flex direction='column' ml={fr(4)} fs={'md'}>
-                <Text>Khách hàng: {customer?.getCustomerByPhone?.name}</Text>
                 <Text>
-                  Số điện thoại: {customer?.getCustomerByPhone?.phone}
+                  Khách hàng:{' '}
+                  {invoice_data?.customer
+                    ? invoice_data?.customer?.name
+                    : customer?.getCustomerByPhone?.name}
                 </Text>
                 <Text>
-                  Thành viên: {customer?.getCustomerByPhone?.level.name}
+                  Số điện thoại:{' '}
+                  {invoice_data?.customer
+                    ? invoice_data?.customer?.phone
+                    : customer?.getCustomerByPhone?.phone}
                 </Text>
                 <Text>
-                  Số điểm: {customer?.getCustomerByPhone?.points} điểm
+                  Thành viên:{' '}
+                  {invoice_data?.customer
+                    ? invoice_data?.customer?.level.name
+                    : customer?.getCustomerByPhone?.level.name}
+                </Text>
+                <Text>
+                  Số điểm:{' '}
+                  {invoice_data?.customer
+                    ? invoice_data?.customer?.points
+                    : customer?.getCustomerByPhone?.points}{' '}
+                  điểm
                 </Text>
               </Flex>
             )}
@@ -306,11 +469,18 @@ const AddEditInvoice = ({ title, openModalAddEdit, setOpenModalAddEdit }) => {
               fs={'lg'}
             >
               <Text>
-                Tổng cộng: {(totalPrice * 1000).toLocaleString('vi-VN')}đ
+                Tổng cộng:{' '}
+                {invoice_data
+                  ? (invoice_data?.total_price - 5000).toLocaleString('vi-VN')
+                  : totalPrice.toLocaleString('vi-VN')}
+                đ
               </Text>
               <Text>Phí phục vụ: 5.000đ</Text>
               <Text cl={'primary'} fs={'xl'}>
-                Thành tiền: {(totalPrice * 1000 + 5000).toLocaleString('vi-VN')}
+                Thành tiền:{' '}
+                {invoice_data
+                  ? (invoice_data?.total_price).toLocaleString('vi-VN')
+                  : (totalPrice + 5000).toLocaleString('vi-VN')}
                 đ
               </Text>
             </Flex>
@@ -323,10 +493,18 @@ const AddEditInvoice = ({ title, openModalAddEdit, setOpenModalAddEdit }) => {
         mt={fr(4)}
         bg={['primary', 200]}
         br={'full'}
+        onClick={() => {
+          if (title === 'Thêm hoá đơn') {
+            handleAddInvoice()
+          } else {
+            handleUpdateInvoice()
+          }
+        }}
       >
         {titleButton} hoá đơn
       </Button>
     </Modal>
   )
 }
+
 export default AddEditInvoice

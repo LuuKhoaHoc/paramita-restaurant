@@ -1,6 +1,9 @@
 import { Divider, Flex, Modal, Table, Text, fr } from '@prismane/core'
 
-const InvoiceEmpDetail = ({ openModalDetail, setOpenModalDetail }) => {
+const InvoiceEmpDetail = ({ openModalDetail, setOpenModalDetail, data }) => {
+  let total_price = data?.invoice_details?.reduce((acc, item) => {
+    return acc + item.total_price
+  }, 0)
   return (
     <Modal
       open={openModalDetail}
@@ -14,9 +17,9 @@ const InvoiceEmpDetail = ({ openModalDetail, setOpenModalDetail }) => {
         </Text>
       </Modal.Header>
       <Flex direction='column' gap={fr(4)} fs={'lg'}>
-        <Text>Tên khách hàng: Lê Thị Thanh Vy</Text>
-        <Text>Số điện thoại: 034 999 999</Text>
-        <Text>Voucher: GIAONHANH5</Text>
+        <Text>Tên khách hàng: {data?.customer?.name}</Text>
+        <Text>Số điện thoại: {data?.customer?.phone}</Text>
+        <Text>Voucher: {data?.voucher?.name}</Text>
       </Flex>
       <Table>
         <Table.Head ta={'center'}>
@@ -39,33 +42,42 @@ const InvoiceEmpDetail = ({ openModalDetail, setOpenModalDetail }) => {
           </Table.Row>
         </Table.Head>
         <Table.Body ta={'center'}>
-          <Table.Row>
-            <Table.Cell>
-              <Text fs={'md'}>1</Text>
-            </Table.Cell>
-            <Table.Cell>
-              <Text fs={'md'}>Bún Huế Paramita</Text>
-            </Table.Cell>
-            <Table.Cell>
-              <Text fs={'md'}>100.000đ</Text>
-            </Table.Cell>
-            <Table.Cell>
-              <Text fs={'md'}>1</Text>
-            </Table.Cell>
-            <Table.Cell>
-              <Text fs={'md'}>100.000đ</Text>
-            </Table.Cell>
-          </Table.Row>
+          {data?.invoice_details?.map((item) => {
+            return (
+              <Table.Row key={item.invoice_detail_id}>
+                <Table.Cell>
+                  <Text fs={'md'}>
+                    {data?.invoice_details?.indexOf(item) + 1}
+                  </Text>
+                </Table.Cell>
+                <Table.Cell>
+                  <Text fs={'md'}>{item.item.name}</Text>
+                </Table.Cell>
+                <Table.Cell>
+                  <Text fs={'md'}>
+                    {item.unit_price.toLocaleString('vi-VN')}đ
+                  </Text>
+                </Table.Cell>
+                <Table.Cell>
+                  <Text fs={'md'}>{item.quantity}</Text>
+                </Table.Cell>
+                <Table.Cell>
+                  <Text fs={'md'}>
+                    {item.total_price.toLocaleString('vi-VN')}đ
+                  </Text>
+                </Table.Cell>
+              </Table.Row>
+            )
+          })}
         </Table.Body>
       </Table>
       <Divider />
       <Flex direction='column' align='end' mx={fr(4)} fs={'lg'}>
-        <Text mr={'auto'}>Ghi chú: </Text>
-        <Text>Tổng tiền: 100.000đ</Text>
+        <Text mr={'auto'}>Ghi chú: {data?.note}</Text>
+        <Text>Tổng tiền: {total_price.toLocaleString('vi-VN')}đ</Text>
         <Text>Thuế: 5.000đ</Text>
-        <Text>Mã giảm giá: -5.000đ</Text>
         <Text cl={'primary'} fs={'xl'}>
-          Thành tiền: 100.000đ
+          Thành tiền: {(total_price + 5000).toLocaleString('vi-VN')}đ
         </Text>
       </Flex>
     </Modal>
