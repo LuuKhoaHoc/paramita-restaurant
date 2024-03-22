@@ -62,6 +62,7 @@ const OrderEmp = lazyWithPreload(() =>
 const ReservationEmp = lazyWithPreload(() =>
   import('~/pages/Employee/Reservation/ReservationEmp')
 )
+const Admin = lazyWithPreload(() => import('~/pages/Admin/Admin'))
 
 export {
   Home,
@@ -97,5 +98,6 @@ export {
   AuthEmp,
   InvoiceEmp,
   OrderEmp,
-  ReservationEmp
+  ReservationEmp,
+  Admin
 }

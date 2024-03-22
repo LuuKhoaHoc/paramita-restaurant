@@ -45,7 +45,8 @@ import {
   AuthEmp,
   InvoiceEmp,
   OrderEmp,
-  ReservationEmp
+  ReservationEmp,
+  Admin
 } from '~/routes'
 import { CartProvider } from '~/contexts/CartContext'
 import { gql, useQuery } from '@apollo/client'
@@ -259,7 +260,12 @@ const App = () => {
                   element={<CheckoutSuccess customer={customer} />}
                 />
               </Route>
-              <Route element={<AuthEmp />}>
+              <Route element={<AuthEmp employee={employee} />}>
+                <Route path='/admin' element={<Admin employee={employee} />} />
+                <Route
+                  path='/admin/*'
+                  element={<Admin employee={employee} />}
+                />
                 <Route
                   path='/employee/invoice'
                   element={<InvoiceEmp employee={employee} />}
