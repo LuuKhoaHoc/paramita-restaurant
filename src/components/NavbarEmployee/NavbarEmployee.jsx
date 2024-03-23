@@ -87,6 +87,15 @@ const NavbarEmployee = ({ employee }) => {
                 size='md'
               />
             </Flex>
+            <Flex>
+              <NavbarButton
+                as={NavLink}
+                icon={<ShoppingCart />}
+                to={'/admin/order'}
+                text={'Đơn hàng'}
+                size='md'
+              />
+            </Flex>
           </>
         ) : (
           <>

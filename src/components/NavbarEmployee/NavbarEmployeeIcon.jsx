@@ -80,6 +80,14 @@ const NavbarEmployeeIcon = ({ employee }) => {
                 size='lg'
               />
             </Flex>
+            <Flex>
+              <NavbarButton
+                as={NavLink}
+                icon={<ShoppingCart />}
+                to={'/admin/order'}
+                size='lg'
+              />
+            </Flex>
           </>
         ) : (
           <>
