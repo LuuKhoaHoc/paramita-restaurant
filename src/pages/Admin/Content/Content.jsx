@@ -11,7 +11,7 @@ import ContentRow from '~/pages/Admin/Content/ContentRow/ContentRow'
 import { useQuery } from '@apollo/client'
 
 import { GET_CONTENTS } from '~/pages/Admin/Content/schema'
-import { DotsThree, Plus } from '@phosphor-icons/react'
+import { DotsThree } from '@phosphor-icons/react'
 import { useSearch } from '@prismane/core/hooks'
 import { useState } from 'react'
 

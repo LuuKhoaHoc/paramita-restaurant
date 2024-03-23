@@ -3,7 +3,6 @@ import { ActionButton, Card, Flex, Image, Text, fr } from '@prismane/core'
 import { useState } from 'react'
 
 const CustomerCard = ({ customer }) => {
-  console.log('🚀 ~ CustomerCard ~ customer:', customer)
   const [openModal, setOpenModal] = useState(false)
   const [openEditModal, setOpenEditModal] = useState(false)
   return (
