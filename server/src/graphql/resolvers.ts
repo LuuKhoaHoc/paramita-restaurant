@@ -1503,9 +1503,13 @@ export const resolvers = {
       })
     },
     invoice: (parent: any, _args: any, context: Context) => {
-      return context.prisma.invoices.findFirst({
-        where: { invoice_id: parent?.invoice_id }
-      })
+      if (parent?.invoice_id) {
+        return context.prisma.invoices.findFirst({
+          where: { invoice_id: parent.invoice_id }
+        })
+      } else {
+        return null
+      }
     }
   },
   Reservation: {
