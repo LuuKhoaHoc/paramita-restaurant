@@ -1,16 +1,5 @@
 import { Eye, PencilSimpleLine, Trash } from '@phosphor-icons/react'
-import {
-  ActionButton,
-  Button,
-  Card,
-  Divider,
-  Flex,
-  Image,
-  Modal,
-  Stack,
-  Text,
-  fr
-} from '@prismane/core'
+import { ActionButton, Card, Flex, Image, Text, fr } from '@prismane/core'
 import { useState } from 'react'
 import EmployeeDetailModal from '~/pages/Admin/EmployeeManager/EmployeeCard/EmployeeDetailModal/EmployeeDetailModal'
 import EmployeeEditModal from '~/pages/Admin/EmployeeManager/EmployeeCard/EmployeeEditModal/EmployeeEditModal'
@@ -30,7 +19,7 @@ const EmployeeCard = ({ employee }) => {
         openModal={openModal}
         setOpenModal={setOpenModal}
       />
-      <Card w={'calc(33.33% - 48px)'}>
+      <Card w={'calc(25% - 50px)'}>
         <Card.Header justify='center'>
           <Image
             src='https://cdn-icons-png.flaticon.com/512/3135/3135715.png'
@@ -45,7 +34,7 @@ const EmployeeCard = ({ employee }) => {
             <Text className='GeomanistMedium-font'>Họ tên:</Text>
             <Text className='GeomanistMedium-font'>Email</Text>
             <Text className='GeomanistMedium-font'>Số điện thoại:</Text>
-            <Text className='GeomanistMedium-font'>Vị trí công việc c:</Text>
+            <Text className='GeomanistMedium-font'>Vị trí công việc:</Text>
             <Text className='GeomanistMedium-font'>Trạng thái:</Text>
           </Flex>
           <Flex direction='column' gap={fr(2)} align='end'>

@@ -1,17 +1,8 @@
 import { useQuery } from '@apollo/client'
+import { DotsThree, UserCirclePlus } from '@phosphor-icons/react'
 import {
-  DotsThree,
-  PencilSimpleLine,
-  Plus,
-  Trash,
-  UserCirclePlus
-} from '@phosphor-icons/react'
-import {
-  ActionButton,
   Button,
-  Card,
   Flex,
-  Image,
   Skeleton,
   Stack,
   Text,
