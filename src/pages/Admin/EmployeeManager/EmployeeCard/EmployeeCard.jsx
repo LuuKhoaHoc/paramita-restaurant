@@ -33,8 +33,8 @@ const EmployeeCard = ({ employee }) => {
           <Flex direction='column' gap={fr(2)}>
             <Text className='GeomanistMedium-font'>Họ tên:</Text>
             <Text className='GeomanistMedium-font'>Email</Text>
-            <Text className='GeomanistMedium-font'>Số điện thoại:</Text>
-            <Text className='GeomanistMedium-font'>Vị trí công việc:</Text>
+            <Text className='GeomanistMedium-font'>SĐT:</Text>
+            <Text className='GeomanistMedium-font'>Công việc:</Text>
             <Text className='GeomanistMedium-font'>Trạng thái:</Text>
           </Flex>
           <Flex direction='column' gap={fr(2)} align='end'>
