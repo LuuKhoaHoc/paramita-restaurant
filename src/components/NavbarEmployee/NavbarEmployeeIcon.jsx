@@ -6,7 +6,8 @@ import {
   Note,
   ShoppingCart,
   Table,
-  UserCircleGear
+  UserGear,
+  Users
 } from '@phosphor-icons/react'
 import { Animation, Divider, Flex, Image, Stack, fr } from '@prismane/core'
 import { LogoIcon } from '~/images'
@@ -21,7 +22,7 @@ const NavbarEmployeeIcon = ({ employee }) => {
           <Image src={LogoIcon} w={fr(16)} mx={'auto'} />
         </Flex>
         <Divider />
-        {employee?.is_admin && (
+        {employee?.is_admin ? (
           <>
             <Flex>
               <NavbarButton
@@ -58,37 +59,56 @@ const NavbarEmployeeIcon = ({ employee }) => {
             <Flex>
               <NavbarButton
                 as={NavLink}
-                icon={<UserCircleGear />}
+                icon={<UserGear />}
                 to={'/admin/employees'}
+                size='lg'
+              />
+            </Flex>
+            <Flex>
+              <NavbarButton
+                as={NavLink}
+                icon={<Users />}
+                to={'/admin/customers'}
+                size='lg'
+              />
+            </Flex>
+            <Flex>
+              <NavbarButton
+                as={NavLink}
+                icon={<CalendarBlank />}
+                to={'/admin/reservation'}
+                size='lg'
+              />
+            </Flex>
+          </>
+        ) : (
+          <>
+            <Flex>
+              <NavbarButton
+                as={NavLink}
+                icon={<Note />}
+                to={'/employee/invoice'}
+                size='lg'
+              />
+            </Flex>
+            <Flex>
+              <NavbarButton
+                as={NavLink}
+                icon={<ShoppingCart />}
+                to={'/employee/order'}
+                size='lg'
+              />
+            </Flex>
+            <Flex>
+              <NavbarButton
+                as={NavLink}
+                icon={<CalendarBlank />}
+                to={'/employee/reservation'}
                 size='lg'
               />
             </Flex>
           </>
         )}
-        <Flex>
-          <NavbarButton
-            as={NavLink}
-            icon={<Note />}
-            to={'/employee/invoice'}
-            size='lg'
-          />
-        </Flex>
-        <Flex>
-          <NavbarButton
-            as={NavLink}
-            icon={<ShoppingCart />}
-            to={'/employee/order'}
-            size='lg'
-          />
-        </Flex>
-        <Flex>
-          <NavbarButton
-            as={NavLink}
-            icon={<CalendarBlank />}
-            to={'/employee/reservation'}
-            size='lg'
-          />
-        </Flex>
       </Stack>
     </Animation>
   )

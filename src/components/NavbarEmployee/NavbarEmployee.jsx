@@ -6,7 +6,8 @@ import {
   Note,
   ShoppingCart,
   Table,
-  UserCircleGear
+  UserGear,
+  Users
 } from '@phosphor-icons/react'
 import { Divider, Flex, Image, Stack, fr } from '@prismane/core'
 import { LogoText } from '~/images'
@@ -21,7 +22,7 @@ const NavbarEmployee = ({ employee }) => {
       </Flex>
       <Divider />
       <Stack gap={fr(6)}>
-        {employee?.is_admin && (
+        {employee?.is_admin ? (
           <>
             <Flex>
               <NavbarButton
@@ -62,41 +63,62 @@ const NavbarEmployee = ({ employee }) => {
             <Flex>
               <NavbarButton
                 as={NavLink}
-                icon={<UserCircleGear />}
+                icon={<UserGear />}
                 to={'/admin/employees'}
                 text={'Nhân viên'}
                 size='md'
               />
             </Flex>
+            <Flex>
+              <NavbarButton
+                as={NavLink}
+                icon={<Users />}
+                to={'/admin/customers'}
+                text={'Khách hàng'}
+                size='md'
+              />
+            </Flex>
+            <Flex>
+              <NavbarButton
+                as={NavLink}
+                icon={<CalendarBlank />}
+                to={'/admin/reservation'}
+                text={'Đặt bàn'}
+                size='md'
+              />
+            </Flex>
+          </>
+        ) : (
+          <>
+            <Flex>
+              <NavbarButton
+                as={NavLink}
+                icon={<Note />}
+                to={'/employee/invoice'}
+                text={'Hoá đơn'}
+                size='md'
+              />
+            </Flex>
+            <Flex>
+              <NavbarButton
+                as={NavLink}
+                icon={<ShoppingCart />}
+                to={'/employee/order'}
+                text={'Đơn hàng'}
+                size='md'
+              />
+            </Flex>
+            <Flex>
+              <NavbarButton
+                as={NavLink}
+                icon={<CalendarBlank />}
+                to={'/employee/reservation'}
+                text={'Đặt bàn'}
+                size='md'
+              />
+            </Flex>
           </>
         )}
-        <Flex>
-          <NavbarButton
-            as={NavLink}
-            icon={<Note />}
-            to={'/employee/invoice'}
-            text={'Hoá đơn'}
-            size='md'
-          />
-        </Flex>
-        <Flex>
-          <NavbarButton
-            as={NavLink}
-            icon={<ShoppingCart />}
-            to={'/employee/order'}
-            text={'Đơn hàng'}
-            size='md'
-          />
-        </Flex>
-        <Flex>
-          <NavbarButton
-            as={NavLink}
-            icon={<CalendarBlank />}
-            to={'/employee/reservation'}
-            text={'Đặt bàn'}
-            size='md'
-          />
-        </Flex>
       </Stack>
     </Stack>
   )
