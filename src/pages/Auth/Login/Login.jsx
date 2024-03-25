@@ -60,6 +60,7 @@ const LOGIN_EMP_MUTATION = gql`
         employee_id
         name
         username
+        is_admin
       }
       token
     }
@@ -77,7 +78,7 @@ const Login = () => {
   useEffect(() => scrollToId('login'), [])
   const { animate, animating, duration, timing } = useAnimation(
     true,
-    1500,
+    1000,
     'ease-in'
   )
   const { handleSubmit, handleReset, register, setError, getError } = useForm({
@@ -124,7 +125,7 @@ const Login = () => {
     variables: { email: register('username').value }
   })
   // employee login
-  const [loginEmp, { loading: empLoading, error: empError }] =
+  const [loginEmp, { loading: empLoading, error: empError, data: empData }] =
     useMutation(LOGIN_EMP_MUTATION)
   useEffect(() => {
     if (
@@ -134,6 +135,7 @@ const Login = () => {
       localStorage.getItem('token') === mutationData?.login?.token
     ) {
       navigate(-1)
+      window.location.reload()
     }
   }, [
     isLoggedIn,
@@ -142,8 +144,78 @@ const Login = () => {
     sessionStorage.getItem('login'),
     mutationData?.login?.token
   ])
+  // func handle login customer
+  const handleLoginCustomer = async (value) => {
+    const { data } = await login({
+      variables: {
+        username: value.username,
+        password: value.password
+      },
+      context: {
+        headers: {
+          Authorization: `Bearer ${mutationData?.login?.token}`
+        }
+      }
+    })
+    sessionStorage.setItem(
+      'checkout-information',
+      JSON.stringify({
+        address: '',
+        payment: 'tien-mat',
+        notes: '',
+        delivery: 15000
+      })
+    )
+    sessionStorage.setItem('login', true)
+    if (remember) {
+      localStorage.setItem('login', true)
+    }
+    if (data?.login.token) {
+      localStorage.setItem('token', data?.login.token)
+    }
+    setIsLoggedIn(true)
+    navigate(-1)
+
+    if (!data) {
+      throw new Error()
+    }
+  }
+  // func handle login employee and admin
+  const handleLoginEmployee = async (value) => {
+    try {
+      const { data } = await loginEmp({
+        variables: {
+          username: value.username,
+          password: value.password
+        },
+        context: {
+          headers: {
+            Authorization: `Bearer ${empData?.login?.token}`
+          }
+        },
+        onCompleted: (res) => {
+          setIsLoggedIn(true)
+          sessionStorage.setItem('loginEmp', true)
+          if (remember) {
+            localStorage.setItem('loginEmp', true)
+          }
+          if (res?.loginEmployee.employee.is_admin) {
+            navigate('/admin/home', { replace: true })
+          } else {
+            navigate('/employee/invoice', { replace: true })
+          }
+          if (res?.loginEmployee.token) {
+            localStorage.setItem('tokenEmp', res?.loginEmployee.token)
+          }
+        }
+      })
+    } catch (error) {
+      console.log('🚀 ~ handleLoginEmployee ~ error:', error)
+      setError('password', 'Mật khẩu không đúng')
+    }
+  }
   // loading
-  if (mutationLoading) return <Loading />
+  if (mutationLoading || empLoading) return <Loading />
   return (
     <Box pos={'relative'} mih={'100vh'}>
       <MainPic
@@ -205,75 +277,14 @@ const Login = () => {
                         : 'Tên tài khoảng không tồn tại'
                     )
                   }
-                  let switches = null
                   if (
                     !!queryEmail?.checkEmailExistence ||
                     !!queryUsername?.checkUsernameExistence
                   ) {
-                    const { data } = await login({
-                      variables: {
-                        username: value.username,
-                        password: value.password
-                      },
-                      context: {
-                        headers: {
-                          Authorization: `Bearer ${mutationData?.login?.token}`
-                        }
-                      },
-                      onCompleted: (data) => {
-                        sessionStorage.setItem(
-                          'checkout-information',
-                          JSON.stringify({
-                            address: '',
-                            payment: 'tien-mat',
-                            notes: '',
-                            delivery: 15000
-                          })
-                        )
-                        sessionStorage.setItem('login', true)
-                        if (remember) {
-                          localStorage.setItem('login', true)
-                        }
-                        if (data?.login.token) {
-                          localStorage.setItem('token', data?.login.token)
-                        }
-                        setIsLoggedIn(true)
-                        navigate(-1)
-                      },
-                      onError: (error) => {
-                        switches = error
-                        setError('password', 'Mật khẩu không đúng')
-                      }
-                    })
-                    if (switches) {
-                      const { data: dataLoginEmp } = await loginEmp({
-                        variables: {
-                          username: value.username,
-                          password: value.password
-                        },
-                        context: {
-                          headers: {
-                            Authorization: `Bearer ${data?.login?.token}`
-                          }
-                        },
-                        onCompleted: (data) => {
-                          setIsLoggedIn(true)
-                          sessionStorage.setItem('loginEmp', true)
-                          if (remember) {
-                            localStorage.setItem('loginEmp', true)
-                          }
-                          navigate('/employee/invoice', { replace: true })
-                          if (data?.loginEmployee.token) {
-                            localStorage.setItem(
-                              'tokenEmp',
-                              data?.loginEmployee.token
-                            )
-                          }
-                        },
-                        onError: (error) => {
-                          setError('password', 'Mật khẩu không đúng')
-                        }
-                      })
+                    try {
+                      await handleLoginCustomer(value)
+                    } catch (error) {
+                      await handleLoginEmployee(value)
                     }
                   }
                 })

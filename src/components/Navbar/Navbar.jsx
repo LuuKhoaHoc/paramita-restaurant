@@ -67,12 +67,12 @@ const Navbar = ({ customer }) => {
 
   // count order
   let orderCount = 0
-  if (customer) {
-    for (const item of customer.orders) {
+  if (customer?.orders) {
+    customer.orders.forEach((item) => {
       if (item.status === 'Chờ xác nhận' || item.status === 'Đang đến') {
         orderCount++
       }
-    }
+    })
   }
 
   // animation line cho navLink
