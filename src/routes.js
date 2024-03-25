@@ -35,11 +35,11 @@ const CheckoutSuccess = lazyWithPreload(() =>
 const Auth = lazyWithPreload(() => import('~/pages/Auth/Auth'))
 const Login = lazyWithPreload(() => import('~/pages/Auth/Login/Login'))
 const Register = lazyWithPreload(() => import('~/pages/Auth/Register/Register'))
+const VerifyEmail = lazyWithPreload(() =>
+  import('~/pages/Auth/VerifyEmail/VerifyEmail')
+)
 const ForgotPassword = lazyWithPreload(() =>
   import('~/pages/Auth/ForgotPassword/ForgotPassword')
-)
-const VerifyPin = lazyWithPreload(() =>
-  import('~/pages/Auth/ForgotPassword/VerifyPin/VerifyPin')
 )
 const Account = lazyWithPreload(() => import('~/pages/Auth/Account/Account'))
 const AccountAddresses = lazyWithPreload(() =>
@@ -91,8 +91,8 @@ export {
   Auth,
   Login,
   Register,
+  VerifyEmail,
   ForgotPassword,
-  VerifyPin,
   Account,
   AccountAddresses,
   AccountHistory,

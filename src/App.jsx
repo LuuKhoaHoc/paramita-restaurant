@@ -1,6 +1,6 @@
 import { Routes, Route, Outlet } from 'react-router-dom'
 import { Box, useThemeModeValue } from '@prismane/core'
-import React, { Suspense } from 'react'
+import React, { Suspense, useEffect } from 'react'
 // utils
 import ScrollToTop from '~/utils/ScrollToTop'
 import {
@@ -11,7 +11,8 @@ import {
   SmallBookTable,
   SmallGallery,
   ScrollToTop as ScrollToTopButton,
-  ErrorLogin
+  ErrorLogin,
+  LoginRoute
 } from '~/components'
 import { Food1, Food2, HomePic2, Space1, Space2, Space3 } from '~/images'
 // routes
@@ -46,11 +47,12 @@ import {
   InvoiceEmp,
   OrderEmp,
   ReservationEmp,
-  Admin
+  Admin,
+  VerifyEmail
 } from '~/routes'
 import { CartProvider } from '~/contexts/CartContext'
 import { gql, useQuery } from '@apollo/client'
-import { AuthProvider } from './contexts/AuthContext'
+import { AuthProvider } from '~/contexts/AuthContext'
 
 const CHECK_TOKEN = gql`
   query checkToken($token: String!) {
@@ -146,55 +148,47 @@ const GET_EMPLOYEE = gql`
 
 const imagesGallery = [Space1, Space2, Space3, Food1, Food2, HomePic2]
 
-function getCustomer() {
-  const { loading, error, data } = useQuery(GET_CUSTOMER, {
+const App = () => {
+  const textColor = useThemeModeValue('#371b04', '#d1e9d5')
+  const bgColor = useThemeModeValue('#fff2e5', '#1d2b1f')
+  const bgColorStaff = useThemeModeValue('#fff', '#0a0118')
+  const token = localStorage.getItem('token')
+
+  const { loading, error, data } = useQuery(CHECK_TOKEN, {
+    skip: !token, // Skip this query if no token.
+    variables: {
+      token
+    }
+  })
+
+  useEffect(() => {
+    if (!loading && !data) {
+      ErrorLogin()
+      localStorage.removeItem('token')
+      localStorage.removeItem('login')
+      sessionStorage.removeItem('checkout-information')
+    }
+  }, [loading, data])
+
+  const {
+    loading: customerLoading,
+    error: customerError,
+    data: customerData
+  } = useQuery(GET_CUSTOMER, {
     variables: {
       id: localStorage.getItem('token')
     }
   })
-  if (loading) return <Loading />
-  if (error) return <p>Error : {error.message}</p>
-  return data
-}
-function getEmployee() {
-  const { loading, error, data } = useQuery(GET_EMPLOYEE, {
+
+  const {
+    loading: employeeLoading,
+    error: employeeError,
+    data: employeeData
+  } = useQuery(GET_EMPLOYEE, {
     variables: {
       id: localStorage.getItem('tokenEmp')
     }
   })
-  if (loading) return <Loading />
-  if (error) return <p>Error : {error.message}</p>
-  return data
-}
-
-const App = () => {
-  const { customer, loading: customerLoading } = getCustomer()
-  const { employee, loading: employeeLoading } = getEmployee()
-
-  if (customerLoading || employeeLoading) {
-    return <Loading />
-  }
-
-  const textColor = useThemeModeValue('#371b04', '#d1e9d5')
-  const bgColor = useThemeModeValue('#fff2e5', '#1d2b1f')
-  const bgColorStaff = useThemeModeValue('#fff', '#0a0118')
-  if (localStorage.getItem('token')) {
-    const token = localStorage.getItem('token')
-    const { loading, error, data } = useQuery(CHECK_TOKEN, {
-      variables: {
-        token
-      }
-    })
-    if (loading) return <Loading />
-    if (data === undefined) {
-      ErrorLogin()
-      localStorage.removeItem('token')
-    }
-  } else {
-    ErrorLogin()
-    localStorage.removeItem('login')
-    sessionStorage.removeItem('checkout-information')
-  }
 
   window.addEventListener('storage', function (e) {
     if (e.key === 'token' || e.key === 'login' || e.key === 'tokenEmp') {
@@ -205,6 +199,13 @@ const App = () => {
       window.location.reload()
     }
   })
+  const customer = customerData?.customer
+  const employee = employeeData?.employee
+  if (loading) return <Loading />
+  if (customerLoading || employeeLoading) {
+    return <Loading />
+  }
+
   return (
     <Suspense fallback={<Loading />}>
       <Box bg={!employee ? bgColor : bgColorStaff} cl={textColor}>
@@ -283,9 +284,12 @@ const App = () => {
                   element={<InvoiceEmp employee={employee} />}
                 />
               </Route>
-              <Route path='/login' element={<Login />} />
+              <Route element={<LoginRoute />}>
+                <Route path='/login' element={<Login />} />
+              </Route>
               <Route path='/register' element={<Register />} />
-              <Route path='/forgot-password' element={<ForgotPassword />} />
+              <Route path='/verify-email' element={<VerifyEmail />} />
+              <Route path='/forgot-password/*' element={<ForgotPassword />} />
               <Route path='*' element={<Error />} />
             </Routes>
           </CartProvider>
