@@ -52,7 +52,7 @@ const OrderDetailModal = ({ order, openModal, setOpenModal }) => {
           </Flex>
           <Flex justify='between'>
             <Text>Mã giảm giá áp dụng:</Text>
-            <Text>{data?.voucher?.code}</Text>
+            <Text>{data?.voucher?.name}</Text>
           </Flex>
           <Flex justify='between'>
             <Text>Phương thức thanh toán:</Text>
