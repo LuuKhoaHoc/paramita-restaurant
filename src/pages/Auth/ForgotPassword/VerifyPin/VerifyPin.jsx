@@ -4,54 +4,43 @@ import {
   Card,
   Flex,
   Form,
+  PinField,
   Text,
-  TextField,
   fr
 } from '@prismane/core'
 import { useForm, useScroll } from '@prismane/core/hooks'
 import p from '~/utils/zodToPrismane'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
 import { LoginPic } from '~/images'
 import { useNavigate } from 'react-router-dom'
 import { Loading, MainPic } from '~/components'
 import { ArrowLeft } from '@phosphor-icons/react/dist/ssr'
 import { z } from 'zod'
-import { Envelope } from '@phosphor-icons/react'
 import { useResponsive } from '~/utils/responsive'
-import { gql, useMutation } from '@apollo/client'
+import { gql, useQuery } from '@apollo/client'
 
-const REQUEST_RESET_PASSWORD = gql`
-  mutation requestResetPassword($email: String!) {
-    requestResetPassword(email: $email) {
-      status
-      message
-    }
-  }
-`
-
-const ForgotPassword = () => {
+const VerifyPin = () => {
   const { isLaptop, isMobile, isTablet } = useResponsive()
-  const [loadingMail, setLoadingMail] = useState(false)
   const navigate = useNavigate()
   const { scrollToId } = useScroll()
   useEffect(() => {
     scrollToId('forgot-password')
   }, [])
-  const [requestResetPassword, { loading, error }] = useMutation(
-    REQUEST_RESET_PASSWORD
-  )
   const { handleSubmit, handleReset, register } = useForm({
     fields: {
-      email: {
+      pin: {
         value: '',
         validators: {
           required: (v) =>
             p(
               v,
-              z.string().trim().min(1, { message: 'Không được để trống ô này' })
+              z
+                .string()
+                .trim()
+                .min(1, { message: 'Không được để trống mã Pin' })
             ),
-          email: (v) =>
-            p(v, z.string().email({ message: 'Email không hợp lệ' }))
+          min: (v) =>
+            p(v, z.string().length(4, { message: 'Mã Pin phải 4 số' }))
         }
       }
     }
@@ -89,28 +78,15 @@ const ForgotPassword = () => {
           </Card.Header>
           <Form
             onSubmit={(SubmitEvent) =>
-              handleSubmit(SubmitEvent, async (value) => {
-                setLoadingMail(true)
-                await requestResetPassword({
-                  variables: {
-                    email: value.email
-                  },
-                  onCompleted: (data) => {
-                    setLoadingMail(false)
-                  }
-                })
-                navigate('verify-pin', { state: value })
-              })
+              handleSubmit(SubmitEvent, (value) => console.log(value))
             }
             onReset={handleReset}
           >
-            <TextField
-              {...register('email')}
-              size='md'
+            <PinField
+              {...register('pin')}
+              size='lg'
               variant='underlined'
-              label='Email'
-              placeholder='hi@paramita.com'
-              icon={<Envelope />}
+              label='Mã xác nhận'
             />
             <Button
               size='lg'
@@ -119,9 +95,8 @@ const ForgotPassword = () => {
               type='submit'
               mx={'auto'}
               fillOnHover
-              loading={loadingMail}
             >
-              Gửi mã
+              Xác nhận
             </Button>
           </Form>
           <Card.Footer>
@@ -144,4 +119,4 @@ const ForgotPassword = () => {
   )
 }
 
-export default ForgotPassword
+export default VerifyPin

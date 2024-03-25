@@ -38,6 +38,9 @@ const Register = lazyWithPreload(() => import('~/pages/Auth/Register/Register'))
 const ForgotPassword = lazyWithPreload(() =>
   import('~/pages/Auth/ForgotPassword/ForgotPassword')
 )
+const VerifyPin = lazyWithPreload(() =>
+  import('~/pages/Auth/ForgotPassword/VerifyPin/VerifyPin')
+)
 const Account = lazyWithPreload(() => import('~/pages/Auth/Account/Account'))
 const AccountAddresses = lazyWithPreload(() =>
   import('~/pages/Auth/Account/AccountAddresses/AccountAddresses')
@@ -89,6 +92,7 @@ export {
   Login,
   Register,
   ForgotPassword,
+  VerifyPin,
   Account,
   AccountAddresses,
   AccountHistory,
