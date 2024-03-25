@@ -279,13 +279,18 @@ export const resolvers = {
 
         // 5. Send the PIN to the user's email.
         await sendMail({
-          to: args.email,
           subject: 'Yêu cầu đổi mật khẩu của bạn',
-          text: `Mã PIN của bạn là: ${pin}`
+          uses: 'resetPassword',
+          args: {
+            email: args.email,
+            name: user.name || user.username,
+            pin,
+            appName: 'Paramita Restaurant'
+          }
         })
         return {
           status: 'success',
-          message: `Password reset email sent to ${args.email}`
+          message: `Mã PIN đã được gửi đến ${args.email}`
         }
       } catch (error) {
         // This is where we handle the error.
@@ -295,6 +300,62 @@ export const resolvers = {
         throw new Error(
           'There was an error sending the reset password email. Please try again later.'
         )
+      }
+    },
+    verifyResetPasswordPin: async (
+      _parent: any,
+      args: {
+        email: string
+        pin: string
+      },
+      context: Context
+    ) => {
+      const user = await context.prisma.customers.findUnique({
+        where: { email: args.email }
+      })
+      if (!user) {
+        throw new Error('User not found')
+      }
+      if (user.resetPin !== args.pin) {
+        return {
+          status: 'error',
+          message: 'Mã PIN không hợp lệ!'
+        }
+      }
+      if (
+        user.resetPinRequestedAt &&
+        Date.now() - new Date(user.resetPinRequestedAt).getTime() >
+          1000 * 60 * 5
+      ) {
+        return {
+          status: 'error',
+          message: 'Mã PIN đã hết hạn!'
+        }
+      }
+      return {
+        status: 'success',
+        message: 'Mã PIN hợp lệ!'
+      }
+    },
+    resetPassword: async (
+      _parent: any,
+      args: { email: string; password: string },
+      context: Context
+    ) => {
+      const passwordHash = await bcrypt.hash(args.password, 10)
+      const user = await context.prisma.customers.findUnique({
+        where: { email: args.email }
+      })
+      if (!user) {
+        throw new Error('User not found')
+      }
+      await context.prisma.customers.update({
+        where: { email: args.email },
+        data: { password: passwordHash }
+      })
+      return {
+        status: 'success',
+        message: 'Mật khẩu đã được cập nhật!'
       }
     },
 

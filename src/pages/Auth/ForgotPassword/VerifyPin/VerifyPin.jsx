@@ -1,32 +1,45 @@
 import {
+  Alert,
+  Animation,
   Box,
   Button,
   Card,
   Flex,
   Form,
+  Icon,
   PinField,
   Text,
-  fr
+  fr,
+  useToast
 } from '@prismane/core'
 import { useForm, useScroll } from '@prismane/core/hooks'
 import p from '~/utils/zodToPrismane'
-import React, { useEffect } from 'react'
-import { LoginPic } from '~/images'
-import { useNavigate } from 'react-router-dom'
-import { Loading, MainPic } from '~/components'
-import { ArrowLeft } from '@phosphor-icons/react/dist/ssr'
+import React, { useEffect, useState } from 'react'
+import { useLocation, useNavigate } from 'react-router-dom'
 import { z } from 'zod'
-import { useResponsive } from '~/utils/responsive'
-import { gql, useQuery } from '@apollo/client'
+import { useMutation } from '@apollo/client'
+import {
+  REQUEST_RESET_PASSWORD,
+  VERIFY_PIN
+} from '~/pages/Auth/ForgotPassword/schema'
+import { CheckCircle } from '@phosphor-icons/react'
 
 const VerifyPin = () => {
-  const { isLaptop, isMobile, isTablet } = useResponsive()
+  const [sentPin, setSentPin] = useState(false)
+  const { state } = useLocation()
+  const toast = useToast()
   const navigate = useNavigate()
   const { scrollToId } = useScroll()
   useEffect(() => {
     scrollToId('forgot-password')
   }, [])
-  const { handleSubmit, handleReset, register } = useForm({
+  const [
+    verifyResetPasswordPin,
+    { loading: loadingPin, error: errorPin, data: dataPin }
+  ] = useMutation(VERIFY_PIN)
+  const [requestResetPassword, { loading: loadingMail, error: errorMail }] =
+    useMutation(REQUEST_RESET_PASSWORD)
+  const { handleSubmit, handleReset, register, setError } = useForm({
     fields: {
       pin: {
         value: '',
@@ -46,76 +59,109 @@ const VerifyPin = () => {
     }
   })
   return (
-    <Box pos={'relative'} mih={'100vh'}>
-      <MainPic
-        image={LoginPic}
-        title={'Paramita'}
-        sloganCenter={'Chào mừng bạn đến với hệ thống'}
+    <Form
+      onSubmit={(SubmitEvent) =>
+        handleSubmit(SubmitEvent, async (value) => {
+          await verifyResetPasswordPin({
+            variables: {
+              email: state.email,
+              pin: value.pin
+            },
+            onError: (error) => {
+              console.log('🚀 ~ handleSubmit ~ error:', error)
+              setError('pin', 'Mã PIN không hợp lệ')
+            },
+            onCompleted: (data) => {
+              if (data?.verifyResetPasswordPin.status == 'success') {
+                toast({
+                  element: (
+                    <Alert variant='success'>
+                      <Alert.Title
+                        fs={'md'}
+                        className='GeomanistMedium-font'
+                        cl={'white'}
+                      >
+                        Mã Pin hợp lệ~~~
+                      </Alert.Title>
+                    </Alert>
+                  )
+                })
+                navigate('/forgot-password/reset-password', {
+                  state: {
+                    email: state.email
+                  }
+                })
+              }
+              if (data?.verifyResetPasswordPin.status == 'error') {
+                setError('pin', `${data?.verifyResetPasswordPin.message}`)
+              }
+            }
+          })
+        })
+      }
+      onReset={handleReset}
+    >
+      <PinField
+        {...register('pin')}
+        size='lg'
+        variant='underlined'
+        label='Mã xác nhận'
       />
-      <Flex
-        id='forgot-password'
-        fs={'lg'}
-        align='center'
-        justify='center'
-        bd={'1px solid lightgray'}
-        bg={'primary'}
+      <Button
+        disabled={sentPin}
+        variant='text'
+        onClick={async () => {
+          await requestResetPassword({
+            variables: {
+              email: state.email
+            },
+            onError: (error) => {
+              console.log(error)
+            },
+            onCompleted: (data) => {
+              setSentPin(true)
+            }
+          })
+        }}
       >
-        <Card
-          m={isTablet ? fr(15) : isMobile ? fr(8) : fr(18)}
-          p={isTablet ? fr(15) : isMobile ? fr(10) : fr(18)}
-          br={'2xl'}
-          bsh={'xl'}
-          sx={{
-            '.PrismaneTextField-label, .PrismanePinField-label': {
-              fontSize: fr(5)
-            }
-          }}
-        >
-          <Card.Header>
-            <Text fs={'3xl'} mx={'auto'}>
-              Quên mật khẩu
-            </Text>
-          </Card.Header>
-          <Form
-            onSubmit={(SubmitEvent) =>
-              handleSubmit(SubmitEvent, (value) => console.log(value))
-            }
-            onReset={handleReset}
-          >
-            <PinField
-              {...register('pin')}
-              size='lg'
-              variant='underlined'
-              label='Mã xác nhận'
-            />
-            <Button
-              size='lg'
-              variant='tertiary'
-              color='primary'
-              type='submit'
-              mx={'auto'}
-              fillOnHover
-            >
-              Xác nhận
-            </Button>
-          </Form>
-          <Card.Footer>
-            <Flex
-              w={'100%'}
-              cs={'pointer'}
-              cl={['#0266BE', { hover: 'blue' }]}
-              justify='center'
-              align='center'
-              gap={8}
-              onClick={() => navigate(-1)}
-            >
-              <ArrowLeft />
-              Quay lại
+        {sentPin ? (
+          <Animation animated={sentPin} animation={'fade'} timing='ease'>
+            <Flex>
+              <Icon>
+                <CheckCircle />
+              </Icon>
+              <Text
+                fs={'sm'}
+                fw={'medium'}
+                cl={'primary'}
+                className='GeomanistMedium-font'
+              >
+                Gửi lại
+              </Text>
             </Flex>
-          </Card.Footer>
-        </Card>
-      </Flex>
-    </Box>
+          </Animation>
+        ) : (
+          'Bạn chưa nhận được mã? Gửi lại~~'
+        )}
+      </Button>
+      <Button
+        size='lg'
+        variant='tertiary'
+        color='primary'
+        type='submit'
+        mx={'auto'}
+        fillOnHover
+        loading={loadingPin}
+      >
+        {dataPin?.verifyResetPasswordPin?.status == 'success' ? (
+          <Icon>
+            <CheckCircle />
+          </Icon>
+        ) : (
+          'Xác nhận'
+        )}
+      </Button>
+    </Form>
   )
 }
 

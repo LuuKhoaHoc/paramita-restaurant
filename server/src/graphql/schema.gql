@@ -2,6 +2,8 @@
 type Mutation {
   # forgot password
   requestResetPassword(email: String!): Response!
+  verifyResetPasswordPin(email: String!, pin: String!): Response!
+  resetPassword(email: String!, password: String!): Response!
 
   createCategory(data: CategoryInput!): Category
   updateCategory(id: Int!, data: CategoryInput!): Category!
