@@ -1,5 +1,8 @@
 # Mutation
 type Mutation {
+  # forgot password
+  requestResetPassword(email: String!): Response!
+
   createCategory(data: CategoryInput!): Category
   updateCategory(id: Int!, data: CategoryInput!): Category!
   deleteCategory(id: ID!): Category!
@@ -294,6 +297,12 @@ type Query {
 }
 
 # TypeDefs
+# forgot password
+type Response {
+  status: String!
+  message: String!
+}
+
 type usernameExist {
   username: String!
 }

@@ -56,27 +56,29 @@ model customer_level {
 }
 
 model customers {
-  customer_id      Int                @id @default(autoincrement())
-  name             String?            @db.VarChar(255)
-  phone            String?            @db.Char(11)
-  email            String             @unique @db.VarChar(255)
-  birthday         DateTime?          @db.Date
-  points           Int                @default(0) @db.SmallInt
-  level_id         Int                @default(0)
-  status           Boolean            @default(false)
-  username         String             @unique @db.VarChar(255)
-  password         String             @db.VarChar(255)
-  created_at       DateTime           @default(now())
-  updated_at       DateTime           @updatedAt
-  tsid             String             @db.VarChar(13)
-  customer_address customer_address[]
-  customer_level   customer_level     @relation(fields: [level_id], references: [level_id], onUpdate: Restrict, map: "customers_ibfk_1")
-  invoices         invoices[]
-  orders           orders[]
-  point_histories  point_histories[]
-  reservations     reservations[]
-  reviews          reviews[]
-  vouchers         vouchers[]
+  customer_id         Int                @id @default(autoincrement())
+  name                String?            @db.VarChar(255)
+  phone               String?            @db.Char(11)
+  email               String             @unique @db.VarChar(255)
+  birthday            DateTime?          @db.Date
+  points              Int                @default(0) @db.SmallInt
+  level_id            Int                @default(0)
+  status              Boolean            @default(false)
+  username            String             @unique @db.VarChar(255)
+  password            String             @db.VarChar(255)
+  created_at          DateTime           @default(now())
+  updated_at          DateTime           @updatedAt
+  tsid                String             @db.VarChar(13)
+  resetPin            String?            @db.VarChar(4)
+  resetPinRequestedAt DateTime?
+  customer_address    customer_address[]
+  customer_level      customer_level     @relation(fields: [level_id], references: [level_id], onUpdate: Restrict, map: "customers_ibfk_1")
+  invoices            invoices[]
+  orders              orders[]
+  point_histories     point_histories[]
+  reservations        reservations[]
+  reviews             reviews[]
+  vouchers            vouchers[]
 
   @@index([level_id], map: "level_id")
 }

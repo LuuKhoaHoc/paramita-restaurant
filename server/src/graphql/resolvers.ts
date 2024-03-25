@@ -3,6 +3,7 @@ import * as bcrypt from 'bcrypt'
 import * as jwt from 'jsonwebtoken'
 import { Context } from '../context'
 import { getTsid } from 'tsid-ts'
+import { sendMail } from '../utils/sendMail'
 
 export const resolvers = {
   // Query
@@ -253,6 +254,50 @@ export const resolvers = {
   },
   // Mutation
   Mutation: {
+    // Forgot Password
+    requestResetPassword: async (
+      _parent: any,
+      args: { email: string },
+      context: Context
+    ) => {
+      try {
+        // 1. Find the user with the provided email.
+        const user = await context.prisma.customers.findUnique({
+          where: { email: args.email }
+        })
+        // 2. If user does not exist, return an error.
+        if (!user) throw new Error('User not found')
+
+        // 3. Generate a random PIN.
+        const pin = Math.floor(1000 + Math.random() * 9000).toString()
+
+        // 4. Update the user in the database with the new PIN.
+        await context.prisma.customers.update({
+          where: { email: args.email },
+          data: { resetPin: pin, resetPinRequestedAt: new Date().toISOString() }
+        })
+
+        // 5. Send the PIN to the user's email.
+        await sendMail({
+          to: args.email,
+          subject: 'Yêu cầu đổi mật khẩu của bạn',
+          text: `Mã PIN của bạn là: ${pin}`
+        })
+        return {
+          status: 'success',
+          message: `Password reset email sent to ${args.email}`
+        }
+      } catch (error) {
+        // This is where we handle the error.
+        console.error(
+          'There was an error sending the reset password email: ' + error
+        )
+        throw new Error(
+          'There was an error sending the reset password email. Please try again later.'
+        )
+      }
+    },
+
     // Category
     createCategory: async (
       _parent: any,
