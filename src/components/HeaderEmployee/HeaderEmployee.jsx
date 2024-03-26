@@ -10,34 +10,30 @@ import {
   fr
 } from '@prismane/core'
 import { useEffect, useState } from 'react'
-import { useLocation } from 'react-router-dom'
-
-const handleLogout = () => {
-  localStorage.removeItem('tokenEmp')
-  sessionStorage.clear()
-  window.location.reload()
-}
+import { useLocation, useNavigate } from 'react-router-dom'
 
 const HeaderEmployee = ({ open, setOpen, employee }) => {
   sessionStorage.setItem('openNavbar', open)
   const [openMenu, setOpenMenu] = useState(false)
+  const navigate = useNavigate()
   const { pathname } = useLocation()
   const [title, setTitle] = useState('')
-  useEffect(() => {
-    switch (pathname) {
-      case '/employee/invoice':
-        setTitle('Hoá đơn')
-        break
-      case '/employee/order':
-        setTitle('Đơn hàng')
-        break
-      case '/employee/reservation':
-        setTitle('Đặt bàn')
-        break
-      default:
-        setTitle('')
-    }
-  }, [pathname])
+  const titleMap = {
+    '/employee/invoice': 'Hoá đơn',
+    '/employee/order': 'Đơn hàng',
+    '/employee/reservation': 'Đặt bàn',
+    '/admin/invoice': 'Hoá đơn',
+    '/admin/order': 'Đơn hàng',
+    '/admin/reservation': 'Đặt bàn',
+    '/admin/customers': 'Khách hàng',
+    '/admin/employees': 'Nhân viên',
+    '/admin/content': 'Nội dung',
+    '/admin/category': 'Danh mục món ăn',
+    '/admin/menu': 'Thực đơn',
+    '/admin/table': 'Bàn',
+    '/admin/home': 'Trang chủ'
+  }
+  useEffect(() => setTitle(titleMap[pathname] || ''), [pathname])
   return (
     <Flex direction='row' align='center'>
       <Button
@@ -71,7 +67,12 @@ const HeaderEmployee = ({ open, setOpen, employee }) => {
           color='red'
           align='center'
           className='GeomanistMedium-font'
-          onClick={handleLogout}
+          onClick={() => {
+            localStorage.removeItem('tokenEmp')
+            sessionStorage.clear()
+            navigate('/')
+            window.location.reload()
+          }}
         >
           <Menu.Icon>
             <SignOut />

@@ -1,5 +1,5 @@
 import {
-  BookOpenText,
+  ForkKnife,
   CalendarBlank,
   FilmScript,
   House,
@@ -7,7 +7,8 @@ import {
   ShoppingCart,
   Table,
   UserGear,
-  Users
+  Users,
+  ListBullets
 } from '@phosphor-icons/react'
 import { Divider, Flex, Image, Stack, fr } from '@prismane/core'
 import { LogoText } from '~/images'
@@ -45,7 +46,16 @@ const NavbarEmployee = ({ employee }) => {
             <Flex>
               <NavbarButton
                 as={NavLink}
-                icon={<BookOpenText />}
+                icon={<ListBullets />}
+                to={'/admin/category'}
+                text={'Danh mục món ăn'}
+                size='md'
+              />
+            </Flex>
+            <Flex>
+              <NavbarButton
+                as={NavLink}
+                icon={<ForkKnife />}
                 to={'/admin/menu'}
                 text={'Menu'}
                 size='md'
