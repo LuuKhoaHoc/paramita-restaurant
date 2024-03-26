@@ -8,6 +8,7 @@ import { Route, Routes } from 'react-router-dom'
 
 import Content from '~/pages/Admin/Content/Content'
 import Home from '~/pages/Admin/Home/Home'
+import Category from '~/pages/Admin/Category/Category'
 import Menu from '~/pages/Admin/Menu/Menu'
 import Table from '~/pages/Admin/Table/Table'
 import EmployeeManager from '~/pages/Admin/EmployeeManager/EmployeeManager'
@@ -58,6 +59,7 @@ const Admin = ({ employee }) => {
             <Routes>
               <Route path='home' element={<Home />} />
               <Route path='content' element={<Content />} />
+              <Route path='category' element={<Category />} />
               <Route path='menu' element={<Menu />} />
               <Route path='table' element={<Table />} />
               <Route path='employees' element={<EmployeeManager />} />
