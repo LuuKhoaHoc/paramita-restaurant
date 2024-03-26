@@ -162,7 +162,7 @@ const App = () => {
   })
 
   useEffect(() => {
-    if (!loading && !data) {
+    if (!loading && !data?.checkToken) {
       ErrorLogin()
       localStorage.removeItem('token')
       localStorage.removeItem('login')
@@ -289,6 +289,7 @@ const App = () => {
               </Route>
               <Route path='/register' element={<Register />} />
               <Route path='/verify-email' element={<VerifyEmail />} />
+              <Route path='/verify-email/*' element={<VerifyEmail />} />
               <Route path='/forgot-password/*' element={<ForgotPassword />} />
               <Route path='*' element={<Error />} />
             </Routes>
