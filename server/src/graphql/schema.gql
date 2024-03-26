@@ -24,7 +24,8 @@ type Mutation {
     oldPassword: String!
     newPassword: String!
   ): Customer!
-
+  # verify email
+  verifyEmail(token: String!): Response!
   createCustomer(data: CustomerInput!): AuthPayload!
   updateCustomer(id: Int!, data: CustomerInput!): Customer!
   deleteCustomer(id: ID!): Customer!
@@ -86,7 +87,7 @@ input MenuInput {
   name: String!
   description: String!
   price: Float!
-  image: String
+  image: String!
   category: [CategoryInput!]
 }
 
@@ -104,13 +105,7 @@ input PageInput {
 }
 
 input CustomerInput {
-  name: String
-  phone: String
   email: String!
-  birthday: DateTime
-  points: Int
-  levelId: Int
-  status: Boolean
   username: String!
   password: String
 }

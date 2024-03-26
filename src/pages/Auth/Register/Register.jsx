@@ -13,7 +13,7 @@ import {
 import { useForm, useScroll } from '@prismane/core/hooks'
 import React, { useEffect } from 'react'
 import { LoginPic } from '~/images'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { Footer, Loading, MainPic } from '~/components'
 import p from '~/utils/zodToPrismane'
 import { z } from 'zod'
@@ -59,6 +59,7 @@ const CREATE_CUSTOMER = gql`
 
 const Register = () => {
   const { isLaptop, isMobile, isTablet } = useResponsive()
+  const navigate = useNavigate()
   if (sessionStorage.getItem('login') === 'true') {
     window.location.href = '/'
   }
@@ -189,18 +190,24 @@ const Register = () => {
                   queryUsername?.checkUsernameExistence === null &&
                   queryEmail?.checkEmailExistence === null
                 ) {
-                  const { data } = await createCustomer({
+                  await createCustomer({
                     variables: {
                       username: value.username,
                       email: value.email,
                       password: value.password
+                    },
+                    onCompleted: (data) => {
+                      navigate('/verify-email')
+                    },
+                    onError: (error) => {
+                      console.log(error)
+                      setError(
+                        'username',
+                        'Tên tài khoản hoặc email đã tồn tại'
+                      )
+                      setError('email', 'Tên tài khoản hoặc email đã tồn tại')
                     }
                   })
-                  sessionStorage.setItem('login', 'true')
-                  if (data?.createCustomer.token) {
-                    localStorage.setItem('token', data?.createCustomer.token)
-                  }
-                  window.location.href = '/'
                 }
               })
             }

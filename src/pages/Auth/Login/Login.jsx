@@ -68,7 +68,7 @@ const LOGIN_EMP_MUTATION = gql`
 `
 
 const Login = () => {
-  const { isLoggedIn, setIsLoggedIn } = useContext(AuthContext)
+  const { isLoggedIn, setIsLoggedIn, setToken } = useContext(AuthContext)
   const navigate = useNavigate()
   const { pathname } = useLocation()
   const { isLaptop, isMobile, isTablet } = useResponsive()
@@ -134,8 +134,8 @@ const Login = () => {
         sessionStorage.getItem('login')) &&
       localStorage.getItem('token') === mutationData?.login?.token
     ) {
-      navigate(-1)
       window.location.reload()
+      navigate(-1)
     }
   }, [
     isLoggedIn,
@@ -172,6 +172,7 @@ const Login = () => {
     }
     if (data?.login.token) {
       localStorage.setItem('token', data?.login.token)
+      setToken(data?.login.token)
     }
     setIsLoggedIn(true)
     navigate(-1)
@@ -201,11 +202,14 @@ const Login = () => {
           }
           if (res?.loginEmployee.employee.is_admin) {
             navigate('/admin/home', { replace: true })
+            window.location.reload()
           } else {
             navigate('/employee/invoice', { replace: true })
+            window.location.reload()
           }
           if (res?.loginEmployee.token) {
             localStorage.setItem('tokenEmp', res?.loginEmployee.token)
+            setToken(res?.loginEmployee.token)
           }
         }
       })

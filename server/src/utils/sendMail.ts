@@ -68,13 +68,77 @@ export const sendMail = async ({ subject, uses, args }) => {
     </body>
   </html>
 `
+  const htmlVerifyEmail = `
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Xác nhận tài khoản của bạn</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 20px;
+      }
+      
+      .container {
+        border: 1px solid #ddd;
+        padding: 20px;
+        border-radius: 10px;
+      }
+      
+      .title {
+        font-size: 18px;
+        font-weight: bold;
+      }
+      
+      .content {
+        margin-top: 10px;
+      }
+      
+      img {
+        float: left;
+        margin-right: 10px;
+      }
+
+      .button {
+        background-color: #4CAF50;
+        border: none;
+        color: white;
+        padding: 15px 32px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 16px;
+        margin: 4px 2px;
+        cursor: pointer;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <img src="https://i.imgur.com/PwVKObJ.png" width="100" height="100" />
+      <h1 class="title">Xác thực tài khoản của bạn</h1>
+      <p class="content">Xin chào ${args.name},</p>
+      <p class="content">Cảm ơn bạn rất nhiều đã đăng ký.</p>
+      <p class="content">Hãy nhấn vào nút xác thực dưới đây để hoàn tất việc đăng ký.</p>
+      <a href="${args.confirmationLink}" class="button">Xác thực tài khoản</a>
+    </div>
+  </body>
+</html>
+
+`
 
   return transporter
     .sendMail({
       from: process.env.EMAIL_USERNAME,
       to: args.email,
       subject,
-      html: uses === 'resetPassword' ? htmlResetPassword : ''
+      html:
+        uses === 'resetPassword'
+          ? htmlResetPassword
+          : uses === 'verifyEmail'
+          ? htmlVerifyEmail
+          : ''
     })
     .then((info) => {
       console.log('Email sent: ' + info.response)

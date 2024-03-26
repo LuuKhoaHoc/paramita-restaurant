@@ -614,6 +614,29 @@ export const resolvers = {
       }
       return customer
     },
+    verifyEmail: async (
+      _parent: any,
+      args: { token: string },
+      context: Context
+    ) => {
+      const token = jwt.verify(
+        args.token,
+        process.env.JWT_SECRET as string
+      ) as jwt.JwtPayload
+      const customer = await context.prisma.customers.update({
+        where: { customer_id: Number(token.userId) },
+        data: { status: true },
+        select: { status: true }
+      })
+      if (customer?.status) {
+        return {
+          status: 'success',
+          message: 'Email đã được xác thực thành công'
+        }
+      } else {
+        return { status: 'error', message: 'Email không xác thực!' }
+      }
+    },
     // Customer
     createCustomer: async (
       _parent: any,
@@ -639,13 +662,7 @@ export const resolvers = {
       const createdCustomer = await context.prisma.customers.create({
         data: {
           tsid,
-          name: args.data.name,
-          phone: args.data.phone,
           email: args.data.email,
-          birthday: args.data.birthday,
-          points: args.data.points,
-          level_id: args.data.levelId,
-          status: args.data.status,
           username: args.data.username,
           password: passwordHash
         }
@@ -654,7 +671,15 @@ export const resolvers = {
         { userId: createdCustomer.customer_id },
         process.env.JWT_SECRET as string
       )
-
+      await sendMail({
+        subject: 'Xác thực email tài khoản',
+        uses: 'verifyEmail',
+        args: {
+          name: createdCustomer.username,
+          email: createdCustomer.email,
+          confirmationLink: `http://localhost:3000/verify-email/${token}`
+        }
+      })
       return {
         customer: createdCustomer,
         token
