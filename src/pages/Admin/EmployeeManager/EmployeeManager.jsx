@@ -4,20 +4,28 @@ import {
   Button,
   Flex,
   Skeleton,
-  Stack,
+  Table,
   Text,
   TextField,
   fr
 } from '@prismane/core'
 import { useSearch } from '@prismane/core/hooks'
 import { useState } from 'react'
-import EmployeeCard from '~/pages/Admin/EmployeeManager/EmployeeCard/EmployeeCard'
-import { GET_EMPLOYEES } from '~/pages/Admin/EmployeeManager/schema'
+import EmployeeRow from '~/pages/Admin/EmployeeManager/EmployeeRow/EmployeeRow'
+import {
+  GET_EMPLOYEES,
+  GET_POSITIONS
+} from '~/pages/Admin/EmployeeManager/schema'
 import AddEmployee from '~/pages/Admin/EmployeeManager/AddEmployee/AddEmployee'
 
 const EmployeeManager = () => {
   const [openAddModal, setOpenAddModal] = useState(false)
-  const { loading, error, data } = useQuery(GET_EMPLOYEES)
+  const { loading, error, data, refetch } = useQuery(GET_EMPLOYEES)
+  const {
+    loading: loadingPosition,
+    error: errorPosition,
+    data: dataPosition
+  } = useQuery(GET_POSITIONS)
   const { query, setQuery, filtered } = useSearch(data?.employeeList || [])
   if (loading) return <Skeleton w={'100%'} h={'100vh'} mih={200} />
   return (
@@ -54,14 +62,58 @@ const EmployeeManager = () => {
             />
           </Flex>
         </Flex>
-
-        <Stack direction='row' wrap='wrap' gap={fr(3)} px={fr(4)}>
-          {filtered.map((employee) => {
-            return (
-              <EmployeeCard key={employee.employee_id} employee={employee} />
-            )
-          })}
-        </Stack>
+        <Table>
+          <Table.Head ta={'center'}>
+            <Table.Row>
+              <Table.Cell>
+                <Text className='GeomanistMedium-font'>ID</Text>
+              </Table.Cell>
+              <Table.Cell>
+                <Text className='GeomanistMedium-font'>Họ tên</Text>
+              </Table.Cell>
+              <Table.Cell>
+                <Text className='GeomanistMedium-font'>Công việc</Text>
+              </Table.Cell>
+              <Table.Cell>
+                <Text className='GeomanistMedium-font'>Trạng thái</Text>
+              </Table.Cell>
+              <Table.Cell>
+                <Text className='GeomanistMedium-font'>Hành động</Text>
+              </Table.Cell>
+            </Table.Row>
+          </Table.Head>
+          <Table.Body ta={'center'}>
+            {filtered.map((employee) => {
+              return (
+                <EmployeeRow
+                  key={employee.employee_id}
+                  employee={employee}
+                  position={dataPosition?.positionList}
+                  refetch={refetch}
+                />
+              )
+            })}
+          </Table.Body>
+          <Table.Foot ta={'center'}>
+            <Table.Row>
+              <Table.Cell>
+                <Text className='GeomanistMedium-font'>ID</Text>
+              </Table.Cell>
+              <Table.Cell>
+                <Text className='GeomanistMedium-font'>Họ tên</Text>
+              </Table.Cell>
+              <Table.Cell>
+                <Text className='GeomanistMedium-font'>Công việc</Text>
+              </Table.Cell>
+              <Table.Cell>
+                <Text className='GeomanistMedium-font'>Trạng thái</Text>
+              </Table.Cell>
+              <Table.Cell>
+                <Text className='GeomanistMedium-font'>Hành động</Text>
+              </Table.Cell>
+            </Table.Row>
+          </Table.Foot>
+        </Table>
       </Flex>
     </>
   )

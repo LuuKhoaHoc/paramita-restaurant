@@ -22,3 +22,12 @@ export const GET_EMPLOYEES = gql`
     }
   }
 `
+export const GET_POSITIONS = gql`
+  {
+    positionList {
+      position_id
+      name
+      salary
+    }
+  }
+`
