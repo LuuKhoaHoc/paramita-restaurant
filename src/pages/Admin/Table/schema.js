@@ -34,3 +34,11 @@ export const CREATE_TABLE = gql`
     }
   }
 `
+export const DELETE_TABLE = gql`
+  mutation deleteTable($id: Int!) {
+    deleteTable(id: $id) {
+      table_id
+      name
+    }
+  }
+`
