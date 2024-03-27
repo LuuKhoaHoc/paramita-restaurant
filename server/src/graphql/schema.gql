@@ -7,16 +7,16 @@ type Mutation {
 
   createCategory(data: CategoryInput!): Category
   updateCategory(id: Int!, data: CategoryInput!): Category!
-  deleteCategory(id: ID!): Category!
+  deleteCategory(id: Int!): Category!
   createMenu(data: MenuInput!): Menu
   updateMenu(id: Int!, data: MenuInput!): Menu!
-  deleteMenu(id: ID!): Menu!
+  deleteMenu(id: Int!): Menu!
   createContent(data: ContentInput!): Content
   updateContent(id: Int!, data: ContentInput!): Content!
-  deleteContent(id: ID!): Content
+  deleteContent(id: Int!): Content
   createPage(data: PageInput!): Page
   updatePage(id: Int!, data: PageInput!): Page!
-  deletePage(id: ID!): Page!
+  deletePage(id: Int!): Page!
   # Account Mutation
   login(username: String!, password: String!): AuthPayload!
   changePassword(
@@ -28,43 +28,43 @@ type Mutation {
   verifyEmail(token: String!): Response!
   createCustomer(data: CustomerInput!): AuthPayload!
   updateCustomer(id: Int!, data: CustomerInput!): Customer!
-  deleteCustomer(id: ID!): Customer!
+  deleteCustomer(id: Int!): Customer!
   createCustomerAddress(data: CustomerAddressInput!): CustomerAddress!
   updateCustomerAddress(id: Int!, data: CustomerAddressInput!): CustomerAddress!
   deleteCustomerAddress(id: Int!): CustomerAddress!
   createCustomerLevel(data: CustomerLevelInput): CustomerLevel!
   updateCustomerLevel(id: Int!, data: CustomerLevelInput): CustomerLevel!
-  deleteCustomerLevel(id: ID!): CustomerLevel!
+  deleteCustomerLevel(id: Int!): CustomerLevel!
   createInvoice(data: InvoiceInput): Invoice!
   updateInvoice(id: Int!, data: InvoiceInput): Invoice!
-  deleteInvoice(id: ID!): Invoice!
+  deleteInvoice(id: Int!): Invoice!
   createInvoiceDetail(data: InvoiceDetailInput): InvoiceDetail!
   updateInvoiceDetail(id: Int!, data: InvoiceDetailInput): InvoiceDetail!
-  deleteInvoiceDetail(id: ID!): InvoiceDetail!
+  deleteInvoiceDetail(id: Int!): InvoiceDetail!
   createOrder(data: OrderInput): Order!
   updateOrder(id: Int!, data: OrderInput): Order!
-  deleteOrder(id: ID!): Order!
+  deleteOrder(id: Int!): Order!
   createOrderDetail(data: OrderDetailInput): OrderDetail!
   updateOrderDetail(id: Int!, data: OrderDetailInput): OrderDetail!
-  deleteOrderDetail(id: ID!): OrderDetail!
+  deleteOrderDetail(id: Int!): OrderDetail!
   createPointsHistory(data: PointsHistoryInput): PointsHistory!
   updatePointsHistory(id: Int!, data: PointsHistoryInput): PointsHistory!
-  deletePointsHistory(id: ID!): PointsHistory!
+  deletePointsHistory(id: Int!): PointsHistory!
   createPromotion(data: PromotionInput): Promotion!
   updatePromotion(id: Int!, data: PromotionInput): Promotion!
-  deletePromotion(id: ID!): Promotion!
+  deletePromotion(id: Int!): Promotion!
   createRevenue(data: RevenueInput): Revenue!
   updateRevenue(id: Int!, data: RevenueInput): Revenue!
-  deleteRevenue(id: ID!): Revenue!
+  deleteRevenue(id: Int!): Revenue!
   createTable(data: TableInput): Table!
   updateTable(id: Int!, data: TableInput): Table!
-  deleteTable(id: ID!): Table!
+  deleteTable(id: Int!): Table!
   createReservation(data: ReservationInput): Reservation!
   updateReservation(id: Int!, data: ReservationInput): Reservation!
-  deleteReservation(id: ID!): Reservation!
+  deleteReservation(id: Int!): Reservation!
   createReview(data: ReviewInput): Review!
   updateReview(id: Int!, data: ReviewInput): Review!
-  deleteReview(id: ID!): Review!
+  deleteReview(id: Int!): Review!
   createVoucher(data: VoucherInput): Voucher!
   updateVoucher(id: Int!, data: VoucherInput): Voucher!
   deleteVoucher(id: Int!): Voucher!
@@ -72,10 +72,10 @@ type Mutation {
   loginEmployee(username: String!, password: String!): AuthEmployee!
   createEmployee(data: EmployeeInput): Employee!
   updateEmployee(id: Int!, data: EmployeeInput): Employee!
-  deleteEmployee(id: ID!): Employee!
+  deleteEmployee(id: Int!): Employee!
   createPosition(data: PositionInput): Position!
   updatePosition(id: Int!, data: PositionInput): Position!
-  deletePosition(id: ID!): Position!
+  deletePosition(id: Int!): Position!
 }
 
 input CategoryInput {
