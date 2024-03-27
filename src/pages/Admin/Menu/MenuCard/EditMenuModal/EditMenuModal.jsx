@@ -4,6 +4,7 @@ import {
   Field,
   Flex,
   Form,
+  Image,
   Modal,
   Paper,
   SelectField,
@@ -16,83 +17,95 @@ import { useForm } from '@prismane/core/hooks'
 import { z } from 'zod'
 import p from '~/utils/zodToPrismane'
 import { useQuery, useMutation } from '@apollo/client'
-import { GET_CATEGORIES, ADD_MENU } from '~/pages/Admin/Menu/schema'
+import { GET_CATEGORIES, UPDATE_MENU } from '~/pages/Admin/Menu/schema'
+import { useEffect, useState } from 'react'
 
-const AddMenu = ({ openModal, setOpenModal, refetch }) => {
+const EditMenuModal = ({ openModal, setOpenModal, refetch, menu }) => {
+  const [image, setImage] = useState(menu.image)
   const { loading, error, data } = useQuery(GET_CATEGORIES)
-  const [addMenu] = useMutation(ADD_MENU)
-  const { register, handleSubmit, setError, getError, handleReset } = useForm({
-    fields: {
-      image: {
-        value: null
-      },
-      name: {
-        value: '',
-        validators: {
-          required: (v) =>
-            p(
-              v,
-              z
-                .string()
-                .trim()
-                .min(1, { message: 'Không được bỏ trống trường này!' })
-            )
-        }
-      },
-      price: {
-        value: '',
-        validators: {
-          required: (v) =>
-            p(
-              v,
-              z
-                .string()
-                .trim()
-                .min(1, { message: 'Không được bỏ trống trường này!' })
-            )
-        }
-      },
-      category: {
-        value: '',
-        validators: {
-          required: (v) =>
-            p(
-              v,
-              z
-                .string()
-                .trim()
-                .min(1, { message: 'Không được bỏ trống trường này!' })
-            )
-        }
-      },
-      description: {
-        value: '',
-        validators: {
-          required: (v) =>
-            p(
-              v,
-              z
-                .string()
-                .trim()
-                .min(1, { message: 'Không được bỏ trống trường này!' })
-            )
+  const [updateMenu] = useMutation(UPDATE_MENU)
+  const { register, handleSubmit, setError, getError, handleReset, setValue } =
+    useForm({
+      fields: {
+        image: {
+          value: ''
+        },
+        name: {
+          value: '',
+          validators: {
+            required: (v) =>
+              p(
+                v,
+                z
+                  .string()
+                  .trim()
+                  .min(1, { message: 'Không được bỏ trống trường này!' })
+              )
+          }
+        },
+        price: {
+          value: '',
+          validators: {
+            required: (v) =>
+              p(
+                v,
+                z
+                  .string()
+                  .trim()
+                  .min(1, { message: 'Không được bỏ trống trường này!' })
+              )
+          }
+        },
+        category: {
+          value: '',
+          validators: {
+            required: (v) =>
+              p(
+                v,
+                z
+                  .string()
+                  .trim()
+                  .min(1, { message: 'Không được bỏ trống trường này!' })
+              )
+          }
+        },
+        description: {
+          value: '',
+          validators: {
+            required: (v) =>
+              p(
+                v,
+                z
+                  .string()
+                  .trim()
+                  .min(1, { message: 'Không được bỏ trống trường này!' })
+              )
+          }
         }
       }
-    }
-  })
+    })
+  useEffect(() => {
+    setValue('name', menu.name)
+    setValue('price', menu.price.toString())
+    setValue('category', menu.category[0].category_id.toString())
+    setValue('description', menu.description)
+  }, [])
+
   return (
     <Modal open={openModal} onClose={() => setOpenModal(false)} w={'40%'}>
       <Modal.Header justify='center' fs={'xl'}>
-        <Text className='GeomanistMedium-font'>Thêm món</Text>
+        <Text className='GeomanistMedium-font'>Chỉnh sửa món ăn</Text>
       </Modal.Header>
       <Form
         onSubmit={(SubmitEvent) => {
-          handleSubmit(
-            SubmitEvent,
-            async (v) => {
-              let image = v.image.split('\\').pop()
-              await addMenu({
+          handleSubmit(SubmitEvent, async (v) => {
+            if (v.image === '') {
+              setError('image', 'Vui lòng chọn hình ảnh!')
+            } else {
+              let image = v.image?.split('\\').pop()
+              await updateMenu({
                 variables: {
+                  id: menu?.item_id,
                   data: {
                     name: v.name,
                     image,
@@ -110,24 +123,31 @@ const AddMenu = ({ openModal, setOpenModal, refetch }) => {
                   console.log('🚀 ~ error:', error)
                 }
               })
-            },
-            (error) => {
-              if (!error.image) {
-                setError('image', 'Vui lòng chọn hình ảnh!')
-              }
             }
-          )
+          })
         }}
-        onReset={handleReset}
       >
         <Flex direction='column' gap={fr(4)}>
-          <Paper
-            w={'100%'}
+          <Image
+            src={
+              image ||
+              'https://www.viquekitchen.com/wp-content/uploads/2022/10/Nam-bau-ngu-xoc-muoi-Brunchy-abalone-mushroom-Trans-600x400.jpg'
+            }
+            alt={menu.name}
+            w={'80%'}
             h={fr(30)}
-            bg={'slate'}
+            fit='cover'
+            mx={'auto'}
+            br={'lg'}
+            bsh={'md'}
+          />
+          <Paper
+            // w={'100%'}
+            // h={fr(30)}
+            // bg={'slate'}
             as={'input'}
             type='file'
-            cs={'pointer'}
+            // cs={'pointer'}
             {...register('image')}
           />
           <Field.Error>{getError('image')}</Field.Error>
@@ -175,7 +195,7 @@ const AddMenu = ({ openModal, setOpenModal, refetch }) => {
             type='submit'
           >
             <Text className='GeomanistMedium-font' fs={'md'}>
-              Thêm
+              Sửa
             </Text>
           </Button>
         </Modal.Footer>
@@ -184,4 +204,4 @@ const AddMenu = ({ openModal, setOpenModal, refetch }) => {
   )
 }
 
-export default AddMenu
+export default EditMenuModal
