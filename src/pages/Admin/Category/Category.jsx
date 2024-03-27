@@ -13,14 +13,20 @@ import { useState } from 'react'
 import CategoryCard from '~/pages/Admin/Category/CategoryCard/CategoryCard'
 import { useQuery } from '@apollo/client'
 import { GET_CATEGORIES } from '~/pages/Admin/Category/schema'
+import AddCategoryModal from './AddCategoryModal/AddCategoryModal'
 
 const Category = () => {
-  const { loading, error, data } = useQuery(GET_CATEGORIES)
+  const { loading, error, data, refetch } = useQuery(GET_CATEGORIES)
   const { query, setQuery, filtered } = useSearch(data?.categoryList || [])
   const [openAddModal, setOpenAddModal] = useState(false)
   if (loading) return <Skeleton w={'100%'} h={'100vh'} mih={200} />
   return (
     <>
+      <AddCategoryModal
+        open={openAddModal}
+        setOpen={setOpenAddModal}
+        refetch={refetch}
+      />
       <Flex direction='column'>
         <Flex justify='between' align='center' mx={fr(4)} my={fr(4)}>
           <Text className='GeomanistMedium-font' fs={'xl'}>
@@ -54,7 +60,11 @@ const Category = () => {
         </Flex>
         <Stack direction='row' wrap='wrap' px={fr(4)}>
           {filtered.map((category) => (
-            <CategoryCard key={category.category_id} category={category} />
+            <CategoryCard
+              key={category.category_id}
+              category={category}
+              refetch={refetch}
+            />
           ))}
         </Stack>
       </Flex>

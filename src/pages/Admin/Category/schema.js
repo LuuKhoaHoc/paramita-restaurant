@@ -14,3 +14,29 @@ export const GET_CATEGORIES = gql`
     }
   }
 `
+export const ADD_CATEGORY = gql`
+  mutation createCategory($data: CategoryInput!) {
+    createCategory(data: $data) {
+      category_id
+      tsid
+      name
+    }
+  }
+`
+export const DELETE_CATEGORY = gql`
+  mutation deleteCategory($id: Int!) {
+    deleteCategory(id: $id) {
+      category_id
+      name
+    }
+  }
+`
+export const UPDATE_CATEGORY = gql`
+  mutation updateCategory($id: Int!, $data: CategoryInput!) {
+    updateCategory(id: $id, data: $data) {
+      category_id
+      tsid
+      name
+    }
+  }
+`
