@@ -66,6 +66,7 @@ const Admin = ({ employee }) => {
               <Route path='employees' element={<EmployeeManager />} />
               <Route path='customers' element={<CustomerManager />} />
               <Route path='customers/:id' element={<CustomerDetail />} />
+              <Route path='customers/:id/:type' element={<CustomerDetail />} />
               <Route path='reservation' element={<Reservation />} />
               <Route path='order' element={<Order />} />
               <Route path='*' element={<Home />} />
