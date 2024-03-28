@@ -30,7 +30,12 @@ const EmployeeManager = () => {
   if (loading) return <Skeleton w={'100%'} h={'100vh'} mih={200} />
   return (
     <>
-      <AddEmployee open={openAddModal} setOpen={setOpenAddModal} />
+      <AddEmployee
+        open={openAddModal}
+        setOpen={setOpenAddModal}
+        refetch={refetch}
+        position={dataPosition?.positionList}
+      />
       <Flex direction='column'>
         <Flex justify='between' align='center' mx={fr(4)} my={fr(4)}>
           <Text className='GeomanistMedium-font' fs={'xl'}>

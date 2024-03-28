@@ -1,50 +1,59 @@
+import { useMutation } from '@apollo/client'
 import {
   AddressBook,
+  Briefcase,
   Cake,
+  ChartBar,
   Envelope,
   GenderIntersex,
   IdentificationCard,
+  Password,
   Phone,
+  User,
   UserCirclePlus,
   X
 } from '@phosphor-icons/react'
 import {
-  AutocompleteField,
+  Alert,
   Button,
   Center,
   Flex,
+  Form,
   Image,
   Modal,
   NativeDateField,
   SelectField,
-  Stack,
   Text,
   TextField,
-  fr
+  fr,
+  useToast
 } from '@prismane/core'
 import { useForm } from '@prismane/core/hooks'
 import { useState } from 'react'
 import { z } from 'zod'
+import { ADD_EMPLOYEE } from '~/pages/Admin/EmployeeManager/schema'
+import usernameAndEmail from '~/utils/usernameAndEmail'
+import p from '~/utils/zodToPrismane'
 
-const AddEmployee = ({ open, setOpen }) => {
-  const { handleSubmit, register } = useForm({
+const AddEmployee = ({ open, setOpen, refetch, position }) => {
+  const toast = useToast()
+  const [addEmployee] = useMutation(ADD_EMPLOYEE)
+  const { register, handleSubmit, setValue, handleReset } = useForm({
     fields: {
       name: {
         value: '',
         validators: {
           required: (v) =>
-            p(
-              v,
-              z.string().trim().min(1, { message: 'Không được để trống ô này' })
-            ),
+            p(v, z.string().trim().min(1, { message: 'Không được bỏ trống!' })),
           name: (v) =>
             p(
               v,
               z
                 .string()
+                .trim()
                 .min(2, { message: 'Ít nhất 2 kí tự' })
                 .regex(/^[\p{L}\s]+$/u, {
-                  message: 'Chỉ được chứa chữ cái và khoảng trắng'
+                  message: 'Chỉ được chứa chữ có dạng với kí tự'
                 })
             )
         }
@@ -53,44 +62,41 @@ const AddEmployee = ({ open, setOpen }) => {
         value: '',
         validators: {
           required: (v) =>
-            p(
-              v,
-              z.string().trim().min(1, { message: 'Không được để trống ô này' })
-            )
+            p(v, z.string().trim().min(1, { message: 'Không được bỏ trống!' }))
         }
       },
       phone: {
         value: '',
         validators: {
           required: (v) =>
+            p(v, z.string().trim().min(1, { message: 'Không được bỏ trống!' })),
+          phone: (v) =>
             p(
               v,
-              z.string().trim().min(1, { message: 'Không được để trống ô này' })
-            ),
-          phone: (v) =>
-            p(v, z.string().regex(/^[0-9]+$/, { message: 'Chỉ được chứa số' }))
+              z
+                .string()
+                .trim()
+                .min(10, { message: 'Ít nhất 10 kí tự' })
+                .regex(/^[0-9]+$/, {
+                  message: 'Chỉ là số'
+                })
+            )
         }
       },
       email: {
         value: '',
         validators: {
           required: (v) =>
-            p(
-              v,
-              z.string().trim().min(1, { message: 'Không được để trống ô này' })
-            ),
+            p(v, z.string().trim().min(1, { message: 'Không được bỏ trống!' })),
           email: (v) =>
-            p(v, z.string().email({ message: 'Email không hợp lệ' }))
+            p(v, z.string().trim().email({ message: 'Email không hợp lệ' }))
         }
       },
       address: {
         value: '',
         validators: {
           required: (v) =>
-            p(
-              v,
-              z.string().trim().min(1, { message: 'Không được để trống ô này' })
-            )
+            p(v, z.string().trim().min(1, { message: 'Không được bỏ trình!' }))
         }
       },
       birthday: {
@@ -100,26 +106,21 @@ const AddEmployee = ({ open, setOpen }) => {
         value: '',
         validators: {
           required: (v) =>
-            p(
-              v,
-              z.string().trim().min(1, { message: 'Không được để trống ô này' })
-            )
+            p(v, z.string().trim().min(1, { message: 'Không được bỏ trống!' }))
         }
       },
-      is_admin: {
-        value: ''
-      },
-      image: {
-        value: ''
+      status: {
+        value: '',
+        validators: {
+          required: (v) =>
+            p(v, z.string().trim().min(1, { message: 'Không được bỏ trống!' }))
+        }
       },
       username: {
         value: '',
         validators: {
           required: (v) =>
-            p(
-              v,
-              z.string().trim().min(1, { message: 'Không được để trống ô này' })
-            ),
+            p(v, z.string().trim().min(1, { message: 'Không được bỏ trống!' })),
           username: (v) => usernameAndEmail(v)
         }
       },
@@ -127,99 +128,169 @@ const AddEmployee = ({ open, setOpen }) => {
         value: '',
         validators: {
           required: (v) =>
-            p(
-              v,
-              z.string().trim().min(1, { message: 'Không được để trống ô này' })
-            )
+            p(v, z.string().trim().min(1, { message: 'Không	được bỏ trống!' })),
+          password: (v) =>
+            p(v, z.string().trim().min(6, { message: 'Ít nhất 6 kí tự' }))
         }
-      },
-      status: {
-        value: ''
       }
     }
   })
   return (
-    <Modal open={open} onClose={() => setOpen(false)} w={'40%'}>
+    <Modal open={open} onClose={() => setOpen(false)} w={'30%'}>
       <Modal.Header justify='center'>
         <Text className='GeomanistMedium-font' fs={'xl'}>
           Thêm nhân viên
         </Text>
       </Modal.Header>
-      <Stack direction='column' gap={fr(4)}>
+      <Form
+        onSubmit={(SubmitEvent) =>
+          handleSubmit(SubmitEvent, async (v) => {
+            await addEmployee({
+              variables: {
+                data: {
+                  name: v.name,
+                  gender: v.gender,
+                  phone: v.phone,
+                  email: v.email,
+                  address: v.address,
+                  birthday: new Date(v.birthday),
+                  positionId: Number(v.position),
+                  status: Boolean(v.status === 'true' ? 1 : 0),
+                  username: v.username,
+                  password: v.password
+                }
+              },
+              onError: (err) => console.log(err),
+              onCompleted: (data) => {
+                console.log('🚀 ~ handleSubmit ~ data:', data)
+                refetch()
+                setOpen(false)
+                toast({
+                  element: (
+                    <Alert variant='success'>
+                      <Alert.Title className='GeomanistMedium-font'>
+                        Đã thêm nhân viên thành công
+                      </Alert.Title>
+                    </Alert>
+                  )
+                })
+              }
+            })
+            console.log(v)
+          })
+        }
+        onReset={handleReset}
+      >
         <Center>
           <Image
             src='https://cdn-icons-png.flaticon.com/512/3135/3135715.png'
             w={'30%'}
           />
         </Center>
+        <Flex align='center' justify='center' gap={fr(2)}>
+          <TextField
+            placeholder='Nhập tên nhân viên...'
+            icon={<IdentificationCard />}
+            {...register('name')}
+          />
+          <SelectField
+            icon={<GenderIntersex />}
+            className='GeomanistMedium-font'
+            placeholder='Chọn giới tính nhân viên...'
+            sx={{
+              '.PrismaneMenuItem-root': {
+                fontFamily: 'GeomanistMedium !important'
+              }
+            }}
+            {...register('gender')}
+            options={[
+              { value: 'Nam', element: 'Nam' },
+              { value: 'Nữ', element: 'Nữ' },
+              { value: 'Khác', element: 'Khác' }
+            ]}
+          />
+        </Flex>
+        <Flex align='center' justify='center' gap={fr(2)}>
+          <TextField
+            placeholder='Nhập số điện thoại nhân viên...'
+            icon={<Phone />}
+            {...register('phone')}
+          />
+          <TextField
+            placeholder='Nhập email nhân viên...'
+            icon={<Envelope />}
+            {...register('email')}
+          />
+        </Flex>
+
         <TextField
-          placeholder='Nhập tên nhân viên...'
-          icon={<IdentificationCard />}
+          placeholder='Nhập địa chỉ nhân viên...'
+          icon={<AddressBook />}
+          {...register('address')}
         />
+        <NativeDateField icon={<Cake />} {...register('birthday')} />
         <SelectField
-          icon={<GenderIntersex />}
+          icon={<Briefcase />}
           className='GeomanistMedium-font'
-          placeholder='Chọn giới tính nhân viên...'
+          placeholder='Chọn vị trí công việc nhân viên...'
           sx={{
             '.PrismaneMenuItem-root': {
               fontFamily: 'GeomanistMedium !important'
             }
           }}
+          {...register('position')}
+          options={position?.map((item) => ({
+            value: item.position_id.toString(),
+            element: item.name
+          }))}
+        />
+        <SelectField
+          icon={<ChartBar />}
+          className='GeomanistMedium-font'
+          placeholder='Chọn trạng thái hoạt động...'
+          sx={{
+            '.PrismaneMenuItem-root': {
+              fontFamily: 'GeomanistMedium !important'
+            }
+          }}
+          {...register('status')}
           options={[
-            { value: 'Nam', element: 'Nam' },
-            { value: 'Nữ', element: 'Nữ' },
-            { value: 'Khác', element: 'Khác' }
+            { value: 'true', element: 'Đang làm việc' },
+            { value: 'false', element: 'Nghỉ việc' }
           ]}
         />
         <TextField
-          placeholder='Nhập số điện thoại nhân viên...'
-          icon={<Phone />}
-        />
-        <TextField placeholder='Nhập email nhân viên...' icon={<Envelope />} />
-        <TextField
-          placeholder='Nhập địa chỉ nhân viên...'
-          icon={<AddressBook />}
-        />
-        <NativeDateField icon={<Cake />} />
-        <AutocompleteField
-          className='GeomanistMedium-font'
-          placeholder='Chọn vị trí công việc nhân viên...'
-          options={[{ value: 'Trong nha', element: 'Trong nha' }]}
-        />
-        <TextField
           placeholder='Nhập tên tài khoản nhân viên...'
-          icon={<Envelope />}
+          icon={<User />}
+          {...register('username')}
         />
         <TextField
           placeholder='Nhập mật khẩu nhân viên...'
-          icon={<AddressBook />}
+          icon={<Password />}
+          {...register('password')}
         />
-        <AutocompleteField
-          className='GeomanistMedium-font'
-          placeholder='Chọn trạng thái hoạt động nhân viên...'
-          options={[{ value: 'Trong nha', element: 'Trong nha' }]}
-        />
-      </Stack>
-      <Modal.Footer justify='between'>
-        <Button
-          size='md'
-          icon={<X />}
-          bg={['gray', 400]}
-          bsh={'sm'}
-          onClick={() => setOpen(false)}
-        >
-          Đóng
-        </Button>
-        <Button
-          variant='secondary'
-          size='md'
-          icon={<UserCirclePlus weight='bold' />}
-          bsh={'sm'}
-          onClick={() => setOpen(false)}
-        >
-          Thêm nhân viên
-        </Button>
-      </Modal.Footer>
+        <Modal.Footer justify='between'>
+          <Button
+            size='md'
+            icon={<X />}
+            bg={['gray', 400]}
+            bsh={'sm'}
+            type='reset'
+            onClick={() => setOpen(false)}
+          >
+            Đóng
+          </Button>
+          <Button
+            variant='secondary'
+            size='md'
+            icon={<UserCirclePlus weight='bold' />}
+            bsh={'sm'}
+            type='submit'
+          >
+            Thêm nhân viên
+          </Button>
+        </Modal.Footer>
+      </Form>
     </Modal>
   )
 }

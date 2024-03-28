@@ -1,19 +1,25 @@
+import { useMutation } from '@apollo/client'
 import {
   AddressBook,
+  Briefcase,
   Cake,
+  ChartBar,
   Envelope,
   GenderIntersex,
   IdentificationCard,
   Password,
   Phone,
+  User,
   UserCirclePlus,
   X
 } from '@phosphor-icons/react'
 import {
+  Alert,
   AutocompleteField,
   Button,
   Center,
   Flex,
+  Form,
   Image,
   Modal,
   NativeDateField,
@@ -21,13 +27,15 @@ import {
   Stack,
   Text,
   TextField,
-  fr
+  fr,
+  useToast
 } from '@prismane/core'
 import { useForm } from '@prismane/core/hooks'
 import { useState } from 'react'
 import { z } from 'zod'
 import usernameAndEmail from '~/utils/usernameAndEmail'
 import p from '~/utils/zodToPrismane'
+import { UPDATE_EMPLOYEE } from '~/pages/Admin/EmployeeManager/schema'
 
 const EmployeeEditModal = ({
   employee,
@@ -36,8 +44,8 @@ const EmployeeEditModal = ({
   refetch,
   position
 }) => {
-  console.log('🚀 ~ position:', position)
-  console.log('🚀 ~ EmployeeEditModal ~ employee:', employee)
+  const toast = useToast()
+  const [updateEmployee] = useMutation(UPDATE_EMPLOYEE)
   const { register, handleSubmit, setValue, handleReset } = useForm({
     fields: {
       name: {
@@ -100,10 +108,10 @@ const EmployeeEditModal = ({
         }
       },
       birthday: {
-        value: employee?.birthday || ''
+        value: employee?.birthday?.slice(0, 10) || ''
       },
       position: {
-        value: employee.position?.position_id,
+        value: employee.position?.position_id.toString(),
         validators: {
           required: (v) =>
             p(v, z.string().trim().min(1, { message: 'Không được bỏ trống!' }))
@@ -142,7 +150,43 @@ const EmployeeEditModal = ({
           Chỉnh sửa nhân viên
         </Text>
       </Modal.Header>
-      <Stack direction='column' gap={fr(4)}>
+      <Form
+        onSubmit={(SubmitEvent) =>
+          handleSubmit(SubmitEvent, async (v) => {
+            await updateEmployee({
+              variables: {
+                id: employee?.employee_id,
+                data: {
+                  name: v.name,
+                  gender: v.gender,
+                  phone: v.phone,
+                  email: v.email,
+                  address: v.address,
+                  birthday: new Date(v.birthday),
+                  positionId: Number(v.position),
+                  status: Boolean(v.status === 'true' ? 1 : 0),
+                  username: v.username,
+                  password: v.password
+                }
+              },
+              onCompleted: (data) => {
+                refetch()
+                setOpenModal(false)
+                toast({
+                  element: (
+                    <Alert variant='success'>
+                      <Alert.Title className='GeomanistMedium-font'>
+                        Đã sửa nhân viên thành công
+                      </Alert.Title>
+                    </Alert>
+                  )
+                })
+              }
+            })
+          })
+        }
+        onReset={handleReset}
+      >
         <Center>
           <Image
             src='https://cdn-icons-png.flaticon.com/512/3135/3135715.png'
@@ -189,7 +233,7 @@ const EmployeeEditModal = ({
         />
         <NativeDateField icon={<Cake />} {...register('birthday')} />
         <SelectField
-          // icon={<GenderIntersex />}
+          icon={<Briefcase />}
           className='GeomanistMedium-font'
           placeholder='Chọn vị trí công việc nhân viên...'
           sx={{
@@ -199,12 +243,12 @@ const EmployeeEditModal = ({
           }}
           {...register('position')}
           options={position?.map((item) => ({
-            value: item.position_id,
+            value: item.position_id.toString(),
             element: item.name
           }))}
         />
         <SelectField
-          // icon={<GenderIntersex />}
+          icon={<ChartBar />}
           className='GeomanistMedium-font'
           placeholder='Chọn trạng thái hoạt động...'
           sx={{
@@ -220,7 +264,7 @@ const EmployeeEditModal = ({
         />
         <TextField
           placeholder='Nhập tên tài khoản nhân viên...'
-          icon={<Envelope />}
+          icon={<User />}
           {...register('username')}
         />
         <TextField
@@ -228,27 +272,28 @@ const EmployeeEditModal = ({
           icon={<Password />}
           {...register('password')}
         />
-      </Stack>
-      <Modal.Footer justify='between'>
-        <Button
-          size='md'
-          icon={<X />}
-          bg={['gray', 400]}
-          bsh={'sm'}
-          onClick={() => setOpenModal(false)}
-        >
-          Đóng
-        </Button>
-        <Button
-          variant='secondary'
-          size='md'
-          icon={<UserCirclePlus weight='bold' />}
-          bsh={'sm'}
-          onClick={() => setOpenModal(false)}
-        >
-          Sửa nhân viên
-        </Button>
-      </Modal.Footer>
+        <Modal.Footer justify='between'>
+          <Button
+            size='md'
+            icon={<X />}
+            bg={['gray', 400]}
+            bsh={'sm'}
+            type='reset'
+            onClick={() => setOpenModal(false)}
+          >
+            Đóng
+          </Button>
+          <Button
+            variant='secondary'
+            size='md'
+            icon={<UserCirclePlus weight='bold' />}
+            bsh={'sm'}
+            type='submit'
+          >
+            Sửa nhân viên
+          </Button>
+        </Modal.Footer>
+      </Form>
     </Modal>
   )
 }

@@ -1,3 +1,4 @@
+import { useMutation } from '@apollo/client'
 import {
   Eye,
   Fire,
@@ -6,23 +7,46 @@ import {
   Trash
 } from '@phosphor-icons/react'
 import {
-  ActionButton,
   Table,
-  Flex,
   Image,
   Text,
   fr,
   Center,
   Circle,
-  Button
+  Button,
+  useToast,
+  Alert
 } from '@prismane/core'
 import { useState } from 'react'
 import EmployeeDetailModal from '~/pages/Admin/EmployeeManager/EmployeeRow/EmployeeDetailModal/EmployeeDetailModal'
 import EmployeeEditModal from '~/pages/Admin/EmployeeManager/EmployeeRow/EmployeeEditModal/EmployeeEditModal'
+import { DELETE_EMPLOYEE } from '~/pages/Admin/EmployeeManager/schema'
 
 const EmployeeRow = ({ employee, refetch, position }) => {
   const [openModal, setOpenModal] = useState(false)
   const [openEditModal, setOpenEditModal] = useState(false)
+  const toast = useToast()
+  const [deleteEmployee] = useMutation(DELETE_EMPLOYEE)
+  const handleDeleteEmployee = () => {
+    deleteEmployee({
+      variables: {
+        id: employee?.employee_id
+      },
+      onError: (err) => console.log(err),
+      onCompleted: (data) => {
+        refetch()
+        toast({
+          element: (
+            <Alert variant='error'>
+              <Alert.Title className='GeomanistMedium-font'>
+                Đã xoá nhân viên {data?.deleteEmployee.name} thành công!
+              </Alert.Title>
+            </Alert>
+          )
+        })
+      }
+    })
+  }
   return (
     <>
       <EmployeeEditModal
@@ -72,7 +96,7 @@ const EmployeeRow = ({ employee, refetch, position }) => {
                 <Circle bg='ruby' cl={'white'} size={fr(6)}>
                   <Plugs />
                 </Circle>
-                Đang làm việc
+                Nghỉ việc
               </>
             )}
           </Center>
@@ -102,6 +126,7 @@ const EmployeeRow = ({ employee, refetch, position }) => {
               color='ruby'
               fillOnHover
               variant='tertiary'
+              onClick={() => handleDeleteEmployee()}
             >
               Xoá
             </Button>
