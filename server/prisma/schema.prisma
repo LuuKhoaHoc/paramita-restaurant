@@ -232,15 +232,20 @@ model promotions {
 }
 
 model reservations {
-  reservation_id   Int       @id @default(autoincrement())
-  customer_id      Int
-  table_id         Int       @unique
-  description      String    @db.Text
-  reservation_date DateTime  @db.Date
-  status           String    @db.VarChar(255)
-  tsid             String    @db.VarChar(13)
-  customers        customers @relation(fields: [customer_id], references: [customer_id], onUpdate: Restrict, map: "reservations_ibfk_1")
-  table            tables    @relation(fields: [table_id], references: [table_id])
+  reservation_id   Int        @id @default(autoincrement())
+  customer_id      Int?
+  table_id         Int        @unique
+  name             String     @db.VarChar(255)
+  phone            String     @db.Char(11)
+  email            String     @db.VarChar(255)
+  capacity         Int        @db.TinyInt
+  reservation_time String     @db.VarChar(255)
+  reservation_date DateTime   @db.Date
+  note             String     @db.Text
+  status           String     @db.VarChar(255)
+  tsid             String     @db.VarChar(13)
+  customers        customers? @relation(fields: [customer_id], references: [customer_id], onUpdate: Restrict, map: "reservations_ibfk_1")
+  table            tables     @relation(fields: [table_id], references: [table_id])
 
   @@index([customer_id], map: "customer_id")
 }
