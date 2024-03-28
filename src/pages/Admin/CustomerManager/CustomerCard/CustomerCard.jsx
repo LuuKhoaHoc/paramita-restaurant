@@ -1,10 +1,45 @@
+import { useMutation } from '@apollo/client'
 import { Eye, PencilSimpleLine, Trash } from '@phosphor-icons/react'
-import { ActionButton, Card, Flex, Image, Text, fr } from '@prismane/core'
+import {
+  ActionButton,
+  Alert,
+  Card,
+  Flex,
+  Image,
+  Text,
+  fr,
+  useToast
+} from '@prismane/core'
 import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
+import { DELETE_CUSTOMER } from '~/pages/Admin/CustomerManager/schema'
 
-const CustomerCard = ({ customer }) => {
+const CustomerCard = ({ customer, refetch }) => {
+  const toast = useToast()
+  const navigate = useNavigate()
   const [openModal, setOpenModal] = useState(false)
   const [openEditModal, setOpenEditModal] = useState(false)
+  const [deleteCustomer] = useMutation(DELETE_CUSTOMER)
+
+  const handleDelete = async () => {
+    await deleteCustomer({
+      variables: {
+        id: customer?.customer_id
+      },
+      onCompleted: (res) => {
+        refetch()
+        toast({
+          element: (
+            <Alert variant='error'>
+              <Alert.Title className='GeomanistMedium-font'>
+                Xoá khách hàng {res.deleteCustomer.name} thành công~
+              </Alert.Title>
+            </Alert>
+          )
+        })
+      }
+    })
+  }
   return (
     <>
       <Card w={'calc(25% - 50px)'}>
@@ -20,7 +55,7 @@ const CustomerCard = ({ customer }) => {
         <Flex justify='between' py={fr(4)}>
           <Flex direction='column' gap={fr(2)}>
             <Text className='GeomanistMedium-font'>Họ tên:</Text>
-            <Text className='GeomanistMedium-font'>Email</Text>
+            <Text className='GeomanistMedium-font'>Email:</Text>
             <Text className='GeomanistMedium-font'>SĐT:</Text>
             <Text className='GeomanistMedium-font'>Rank:</Text>
             <Text className='GeomanistMedium-font'>Trạng thái:</Text>
@@ -49,7 +84,9 @@ const CustomerCard = ({ customer }) => {
           <ActionButton
             icon={<Eye />}
             fillOnHover
-            onClick={() => setOpenModal(true)}
+            onClick={() =>
+              navigate(`${customer?.customer_id}`, { state: customer })
+            }
           />
           <ActionButton
             icon={<PencilSimpleLine />}
@@ -57,7 +94,12 @@ const CustomerCard = ({ customer }) => {
             fillOnHover
             onClick={() => setOpenEditModal(true)}
           />
-          <ActionButton icon={<Trash />} color='ruby' fillOnHover />
+          <ActionButton
+            icon={<Trash />}
+            color='ruby'
+            fillOnHover
+            onClick={() => handleDelete()}
+          />
         </Card.Footer>
       </Card>
     </>

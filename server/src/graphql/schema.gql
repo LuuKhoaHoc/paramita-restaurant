@@ -27,6 +27,8 @@ type Mutation {
   # verify email
   verifyEmail(token: String!): Response!
   createCustomer(data: CustomerInput!): AuthPayload!
+  # add customer by admin
+  addCustomer(data: CustomerInput!): Customer!
   updateCustomer(id: Int!, data: CustomerInput!): Customer!
   deleteCustomer(id: Int!): Customer!
   createCustomerAddress(data: CustomerAddressInput!): CustomerAddress!
@@ -105,9 +107,13 @@ input PageInput {
 }
 
 input CustomerInput {
+  name: String
+  phone: String
   email: String!
+  birthday: DateTime
+  status: Boolean
   username: String!
-  password: String
+  password: String!
 }
 
 input CustomerAddressInput {

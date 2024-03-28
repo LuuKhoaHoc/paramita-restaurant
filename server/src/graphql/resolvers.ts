@@ -685,6 +685,27 @@ export const resolvers = {
         token
       }
     },
+    addCustomer: async (
+      _parent: any,
+      args: { data: CustomerInput },
+      context: Context
+    ) => {
+      const tsid = getTsid().timestamp.toString()
+      const passwordHash = await bcrypt.hash(args.data?.password, 10)
+      const createdCustomer = await context.prisma.customers.create({
+        data: {
+          tsid,
+          name: args.data.name,
+          phone: args.data.phone,
+          email: args.data.email,
+          birthday: args.data.birthday,
+          status: args.data.status,
+          username: args.data.username,
+          password: passwordHash
+        }
+      })
+      return createdCustomer
+    },
     updateCustomer: async (
       _parent: any,
       args: { id: number; data: CustomerInput },

@@ -100,3 +100,28 @@ export const GET_CUSTOMERS = gql`
     }
   }
 `
+
+export const ADD_CUSTOMER = gql`
+  mutation addCustomer($data: CustomerInput!) {
+    addCustomer(data: $data) {
+      customer_id
+      tsid
+      name
+      phone
+      email
+      birthday
+      status
+      username
+      password
+    }
+  }
+`
+
+export const DELETE_CUSTOMER = gql`
+  mutation deleteCustomer($id: Int!) {
+    deleteCustomer(id: $id) {
+      customer_id
+      name
+    }
+  }
+`

@@ -12,15 +12,21 @@ import {
 import { useSearch } from '@prismane/core/hooks'
 import { useState } from 'react'
 import CustomerCard from '~/pages/Admin/CustomerManager/CustomerCard/CustomerCard'
+import AddCustomerModal from '~/pages/Admin/CustomerManager/AddCustomerModal/AddCustomerModal'
 
 import { GET_CUSTOMERS } from '~/pages/Admin/CustomerManager/schema'
 
-const CustomerManager = ({ customer }) => {
+const CustomerManager = () => {
   const [openAddModal, setOpenAddModal] = useState(false)
-  const { loading, error, data } = useQuery(GET_CUSTOMERS)
+  const { loading, error, data, refetch } = useQuery(GET_CUSTOMERS)
   const { query, setQuery, filtered } = useSearch(data?.customerList || [])
   return (
     <>
+      <AddCustomerModal
+        open={openAddModal}
+        setOpen={setOpenAddModal}
+        refetch={refetch}
+      />
       <Flex direction='column'>
         <Flex justify='between' align='center' mx={fr(4)} my={fr(4)}>
           <Text className='GeomanistMedium-font' fs={'xl'}>
@@ -55,7 +61,11 @@ const CustomerManager = ({ customer }) => {
 
         <Stack direction='row' wrap='wrap' gap={fr(3)} px={fr(4)}>
           {filtered?.map((customer, index) => (
-            <CustomerCard key={customer?.tsid || index} customer={customer} />
+            <CustomerCard
+              key={customer?.tsid || index}
+              customer={customer}
+              refetch={refetch}
+            />
           ))}
         </Stack>
       </Flex>

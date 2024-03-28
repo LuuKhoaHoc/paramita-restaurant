@@ -15,6 +15,7 @@ import EmployeeManager from '~/pages/Admin/EmployeeManager/EmployeeManager'
 import CustomerManager from '~/pages/Admin/CustomerManager/CustomerManager'
 import Reservation from '~/pages/Admin/Reservation/Reservation'
 import Order from '~/pages/Admin/Order/Order'
+import CustomerDetail from '~/pages/Admin/CustomerManager/CustomerCard/CustomerDetail/CustomerDetail'
 
 const Admin = ({ employee }) => {
   const [open, setOpen] = useState(
@@ -64,6 +65,7 @@ const Admin = ({ employee }) => {
               <Route path='table' element={<Table />} />
               <Route path='employees' element={<EmployeeManager />} />
               <Route path='customers' element={<CustomerManager />} />
+              <Route path='customers/:id' element={<CustomerDetail />} />
               <Route path='reservation' element={<Reservation />} />
               <Route path='order' element={<Order />} />
               <Route path='*' element={<Home />} />
