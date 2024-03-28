@@ -1,71 +1,257 @@
+import { useMutation, useQuery } from '@apollo/client'
 import { ArrowLeft } from '@phosphor-icons/react'
 import {
   ActionButton,
+  Alert,
+  Button,
   Flex,
   Form,
   NativeDateField,
+  PasswordField,
   SelectField,
   Stack,
   Table,
   Text,
   TextField,
-  fr
+  fr,
+  useToast
 } from '@prismane/core'
-import { useSearch } from '@prismane/core/hooks'
+import { useForm, useSearch } from '@prismane/core/hooks'
 import { useLocation, useNavigate } from 'react-router-dom'
+import { z } from 'zod'
+import p from '~/utils/zodToPrismane'
+import {
+  GET_CUSTOMERS,
+  GET_RANK,
+  UPDATE_CUSTOMER
+} from '~/pages/Admin/CustomerManager/schema'
+import { Loading } from '~/components'
 
-const CustomerDetail = () => {
-  const { state } = useLocation()
+const CustomerDetail = ({ edit }) => {
+  const toast = useToast()
+  const { state, pathname } = useLocation()
+  edit = pathname.includes('edit')
   const navigate = useNavigate()
-  const { query, setQuery, filtered } = useSearch(Object.keys(state) || [])
-  console.log('🚀 ~ CustomerDetail ~ state:', state)
-
+  const [updateCustomer] = useMutation(UPDATE_CUSTOMER)
+  const { loading, error, data } = useQuery(GET_RANK)
+  const { refetch } = useQuery(GET_CUSTOMERS)
+  const { handleSubmit, handleReset, register } = useForm({
+    fields: {
+      name: {
+        value: state?.name,
+        validators: {
+          required: (v) => {
+            p(v, z.string().trim().min(1, { message: 'Không được bỏ trống!' }))
+          }
+        }
+      },
+      phone: {
+        value: state?.phone,
+        validators: {
+          required: (v) => {
+            p(v, z.string().trim().min(1, { message: 'Không được bỏ trống!' }))
+          },
+          phone: (v) => {
+            p(
+              v,
+              z
+                .string()
+                .trim()
+                .min(10, { message: 'Số điện thoại ít nhất phải 10 số!' })
+                .regex(/^[0-9]+$/, { message: 'Số điện thoại phải là số!' })
+            )
+          }
+        }
+      },
+      email: {
+        value: state?.email,
+        validators: {
+          required: (v) => {
+            p(v, z.string().trim().min(1, { message: 'Không được bỏ trống!' }))
+          },
+          email: (v) => {
+            p(v, z.string().trim().email({ message: 'Không phải là email' }))
+          }
+        }
+      },
+      points: {
+        value: state?.points,
+        validators: {
+          required: (v) => {
+            p(v, z.string().trim().min(1, { message: 'Không được bỏ trống!' }))
+          },
+          number: (v) => {
+            p(
+              v,
+              z
+                .string()
+                .trim()
+                .regex(/^[0-9]+$/, { message: 'Số điểm phải là số!' })
+            )
+          }
+        }
+      },
+      username: {
+        value: state?.username,
+        validators: {
+          required: (v) => {
+            p(v, z.string().trim().min(1, { message: 'Không được bỏ trống!' }))
+          }
+        }
+      },
+      birthday: {
+        value: state?.birthday?.slice(0, 10) || ''
+      },
+      level: {
+        value: state?.level.level_id
+      },
+      status: {
+        value: state?.status
+      }
+    }
+  })
+  if (loading) return <Loading />
   return (
     <>
       <Stack direction='column'>
-        <Flex justify='between' align='center' mx={fr(4)} my={fr(4)}>
+        <Flex justify='center' align='center' mx={fr(4)} my={fr(4)}>
           <ActionButton
             icon={<ArrowLeft weight='bold' />}
             size='md'
             variant='text'
             bd={'none'}
             bsh={'sm'}
+            mr={'auto'}
             onClick={() => navigate(-1)}
           />
-          <Text className='GeomanistMedium-font' fs={'xl'}>
+          <Text className='GeomanistMedium-font' fs={'xl'} mr={'auto'}>
             Chi tiết tài khoản ID: {state?.customer_id}
           </Text>
-
-          <TextField
-            placeholder='Tìm kiếm...'
-            value={query || ''}
-            onChange={(e) => setQuery(e.target.value)}
-          />
         </Flex>
         <Flex
           direction='column'
           align='center'
           justify='center'
           gap={fr(4)}
+          my={fr(4)}
           sx={{
             '*': {
               fontFamily: 'GeomanistMedium !important'
             }
           }}
         >
-          <Form w={'50%'}>
-            <TextField placeholder='Họ tên...' label='Họ tên:' />
-            <TextField placeholder='Số điện thoại...' label='Số điện thoại:' />
-            <TextField placeholder='Email...' label='Email:' />
-            <TextField placeholder='Điểm...' label='Điểm:' />
-            <NativeDateField label='Sinh nhật:' />
-            <TextField placeholder='Tên tài khoản...' label='Tên tài khoản:' />
-            <SelectField placeholder='Cấp độ...' label='Cấp độ:' options={[]} />
+          <Form
+            w={'50%'}
+            onReset={handleReset}
+            onSubmit={(SubmitEvent) => {
+              handleSubmit(SubmitEvent, async (v) => {
+                await updateCustomer({
+                  variables: {
+                    id: state?.customer_id,
+                    data: {
+                      name: v.name,
+                      phone: v.phone,
+                      email: v.email,
+                      birthday: new Date(v.birthday),
+                      levelId: +v.level,
+                      points: v.points,
+                      status: v.status === 'true' ? true : false,
+                      username: v.username
+                    }
+                  },
+                  onError: (err) => console.log(err),
+                  onCompleted: (data) => {
+                    toast({
+                      element: (
+                        <Alert variant='success'>
+                          <Alert.Title className='GeomanistMedium-font'>
+                            Đã cập nhật khách hàng {data?.updateCustomer.name}
+                          </Alert.Title>
+                        </Alert>
+                      )
+                    })
+                    navigate(-1)
+                    refetch()
+                  }
+                })
+              })
+            }}
+          >
+            <TextField
+              placeholder='Họ tên...'
+              label='Họ tên:'
+              {...register('name')}
+              disabled={!edit ? true : false}
+            />
+            <TextField
+              placeholder='Số điện thoại...'
+              label='Số điện thoại:'
+              {...register('phone')}
+              disabled={!edit ? true : false}
+            />
+            <TextField
+              placeholder='Email...'
+              label='Email:'
+              {...register('email')}
+              disabled={!edit ? true : false}
+            />
+            <TextField
+              placeholder='Điểm...'
+              label='Điểm:'
+              {...register('points')}
+              disabled={!edit ? true : false}
+            />
+            <NativeDateField
+              label='Sinh nhật:'
+              {...register('birthday')}
+              disabled={!edit ? true : false}
+            />
+            <TextField
+              placeholder='Tên tài khoản...'
+              label='Tên tài khoản:'
+              {...register('username')}
+              disabled={!edit ? true : false}
+            />
+            <SelectField
+              placeholder='Cấp độ...'
+              label='Cấp độ:'
+              {...register('level')}
+              disabled={!edit ? true : false}
+              options={data?.customerLevelList?.map((level) => ({
+                value: level.level_id,
+                element: level.name
+              }))}
+            />
             <SelectField
               placeholder='Trạng thái...'
               label='Trạng thái:'
-              options={[]}
+              {...register('status')}
+              disabled={!edit ? true : false}
+              options={[
+                { value: true, element: 'Đang hoạt động' },
+                { value: false, element: 'Ẩn' }
+              ]}
             />
+            <Flex>
+              <Button
+                variant='secondary'
+                size='md'
+                br={'2xl'}
+                type='reset'
+                disabled={!edit ? true : false}
+              >
+                Huỷ thay đổi
+              </Button>
+              <Button
+                size='md'
+                br={'2xl'}
+                ml={'auto'}
+                type='submit'
+                disabled={!edit ? true : false}
+              >
+                Lưu
+              </Button>
+            </Flex>
           </Form>
           <Text fs={'xl'}>Số địa chỉ</Text>
           <Flex direction='column' align='center' gap={fr(2)}>
