@@ -80,11 +80,18 @@ export const GET_CUSTOMERS = gql`
         table {
           table_id
           name
-          capacity
-          status
         }
-        description
-        reservationDate
+        customer {
+          customer_id
+          name
+        }
+        name
+        phone
+        email
+        capacity
+        note
+        reservation_time
+        reservation_date
         status
       }
       vouchers {
@@ -117,10 +124,29 @@ export const ADD_CUSTOMER = gql`
   }
 `
 
+export const UPDATE_CUSTOMER = gql`
+  mutation updateCustomer($id: Int!, $data: CustomerInput!) {
+    updateCustomer(id: $id, data: $data) {
+      customer_id
+      tsid
+      name
+    }
+  }
+`
+
 export const DELETE_CUSTOMER = gql`
   mutation deleteCustomer($id: Int!) {
     deleteCustomer(id: $id) {
       customer_id
+      name
+    }
+  }
+`
+
+export const GET_RANK = gql`
+  {
+    customerLevelList {
+      level_id
       name
     }
   }

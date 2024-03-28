@@ -92,7 +92,11 @@ const CustomerCard = ({ customer, refetch }) => {
             icon={<PencilSimpleLine />}
             color='blue'
             fillOnHover
-            onClick={() => setOpenEditModal(true)}
+            onClick={() =>
+              navigate(`${customer?.customer_id}/edit`, {
+                state: customer
+              })
+            }
           />
           <ActionButton
             icon={<Trash />}
