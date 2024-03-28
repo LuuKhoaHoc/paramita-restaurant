@@ -163,10 +163,12 @@ const App = () => {
   })
 
   useEffect(() => {
-    if (!loading && !data?.checkToken) {
+    if ((!loading && !data?.checkToken) || error) {
       ErrorLogin()
       localStorage.removeItem('token')
+      localStorage.removeItem('tokenEmp')
       localStorage.removeItem('login')
+      localStorage.removeItem('loginEmp')
       sessionStorage.removeItem('checkout-information')
     }
   }, [loading, data])
