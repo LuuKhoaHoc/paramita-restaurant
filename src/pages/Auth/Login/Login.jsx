@@ -60,6 +60,7 @@ const LOGIN_EMP_MUTATION = gql`
         employee_id
         name
         username
+        status
         is_admin
       }
       token
@@ -146,7 +147,7 @@ const Login = () => {
   ])
   // func handle login customer
   const handleLoginCustomer = async (value) => {
-    const { data } = await login({
+    await login({
       variables: {
         username: value.username,
         password: value.password
@@ -155,36 +156,41 @@ const Login = () => {
         headers: {
           Authorization: `Bearer ${mutationData?.login?.token}`
         }
+      },
+      onCompleted: (data) => {
+        if (data?.login.customer.status) {
+          sessionStorage.setItem('login', true)
+          sessionStorage.setItem(
+            'checkout-information',
+            JSON.stringify({
+              address: '',
+              payment: 'tien-mat',
+              notes: '',
+              delivery: 15000
+            })
+          )
+          if (remember) {
+            localStorage.setItem('login', true)
+          }
+          if (data?.login.token) {
+            localStorage.setItem('token', data?.login.token)
+            setToken(data?.login.token)
+          }
+          setIsLoggedIn(true)
+          navigate(-1)
+          if (!data) {
+            throw new Error()
+          }
+        } else {
+          setError('username', 'Liên hệ nhà hàng để kích hoạt tài khoản!!!')
+        }
       }
     })
-    sessionStorage.setItem(
-      'checkout-information',
-      JSON.stringify({
-        address: '',
-        payment: 'tien-mat',
-        notes: '',
-        delivery: 15000
-      })
-    )
-    sessionStorage.setItem('login', true)
-    if (remember) {
-      localStorage.setItem('login', true)
-    }
-    if (data?.login.token) {
-      localStorage.setItem('token', data?.login.token)
-      setToken(data?.login.token)
-    }
-    setIsLoggedIn(true)
-    navigate(-1)
-
-    if (!data) {
-      throw new Error()
-    }
   }
   // func handle login employee and admin
   const handleLoginEmployee = async (value) => {
     try {
-      const { data } = await loginEmp({
+      await loginEmp({
         variables: {
           username: value.username,
           password: value.password
@@ -195,21 +201,25 @@ const Login = () => {
           }
         },
         onCompleted: (res) => {
-          setIsLoggedIn(true)
-          sessionStorage.setItem('loginEmp', true)
-          if (remember) {
-            localStorage.setItem('loginEmp', true)
-          }
-          if (res?.loginEmployee.employee.is_admin) {
-            navigate('/admin/home', { replace: true })
-            window.location.reload()
+          if (res?.loginEmployee.employee.status) {
+            setIsLoggedIn(true)
+            sessionStorage.setItem('loginEmp', true)
+            if (remember) {
+              localStorage.setItem('loginEmp', true)
+            }
+            if (res?.loginEmployee.employee.is_admin) {
+              navigate('/admin/home', { replace: true })
+              window.location.reload()
+            } else {
+              navigate('/employee/invoice', { replace: true })
+              window.location.reload()
+            }
+            if (res?.loginEmployee.token) {
+              localStorage.setItem('tokenEmp', res?.loginEmployee.token)
+              setToken(res?.loginEmployee.token)
+            }
           } else {
-            navigate('/employee/invoice', { replace: true })
-            window.location.reload()
-          }
-          if (res?.loginEmployee.token) {
-            localStorage.setItem('tokenEmp', res?.loginEmployee.token)
-            setToken(res?.loginEmployee.token)
+            setError('username', 'Liên hệ nhà hàng để kích hoạt tài khoản!!!')
           }
         }
       })
