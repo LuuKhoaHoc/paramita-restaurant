@@ -112,8 +112,10 @@ input CustomerInput {
   email: String!
   birthday: DateTime
   status: Boolean
+  levelId: Int
+  points: Int
   username: String!
-  password: String!
+  password: String
 }
 
 input CustomerAddressInput {
@@ -202,9 +204,14 @@ input TableInput {
 input ReservationInput {
   customerId: Int!
   tableId: Int!
-  description: String!
-  reservationDate: DateTime!
-  status: Boolean!
+  name: String!
+  phone: String!
+  email: String!
+  capacity: Int!
+  note: String
+  reservation_time: String!
+  reservation_date: DateTime
+  status: String!
 }
 
 input ReviewInput {
@@ -460,8 +467,13 @@ type Reservation {
   tsid: String!
   customer: Customer!
   table: Table!
-  description: String!
-  reservationDate: DateTime!
+  name: String!
+  phone: String!
+  email: String!
+  capacity: Int!
+  note: String
+  reservation_time: DateTime!
+  reservation_date: DateTime!
   status: String!
 }
 

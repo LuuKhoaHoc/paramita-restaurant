@@ -1233,7 +1233,12 @@ export const resolvers = {
           tsid,
           customer_id: args.data.customerId,
           table_id: args.data.tableId,
-          description: args.data.description,
+          name: args.data.name,
+          phone: args.data.phone,
+          email: args.data.email,
+          capacity: args.data.capacity,
+          note: args.data.note,
+          reservation_time: args.data.reservationTime,
           reservation_date: args.data.reservationDate,
           status: args.data.status
         }
@@ -1249,7 +1254,12 @@ export const resolvers = {
         data: {
           customer_id: args.data.customerId,
           table_id: args.data.tableId,
-          description: args.data.description,
+          name: args.data.name,
+          phone: args.data.phone,
+          email: args.data.email,
+          capacity: args.data.capacity,
+          note: args.data.note,
+          reservation_time: args.data.reservationTime,
           reservation_date: args.data.reservationDate,
           status: args.data.status
         }
@@ -1749,7 +1759,12 @@ interface ReviewInput {
 interface ReservationInput {
   customerId: number
   tableId: number
-  description: string
+  name: string
+  phone: string
+  email: string
+  capacity: number
+  note: string
+  reservationTime: string
   reservationDate: Date
   status: string
 }

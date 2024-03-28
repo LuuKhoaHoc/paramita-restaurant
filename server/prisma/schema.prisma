@@ -241,7 +241,7 @@ model reservations {
   capacity         Int        @db.TinyInt
   reservation_time String     @db.VarChar(255)
   reservation_date DateTime   @db.Date
-  note             String     @db.Text
+  note             String?    @db.Text
   status           String     @db.VarChar(255)
   tsid             String     @db.VarChar(13)
   customers        customers? @relation(fields: [customer_id], references: [customer_id], onUpdate: Restrict, map: "reservations_ibfk_1")
