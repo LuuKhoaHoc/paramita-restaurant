@@ -11,17 +11,19 @@ import OrderRow from '~/pages/Admin/Order/OrderRow/OrderRow'
 import { useQuery } from '@apollo/client'
 
 import { GET_ORDERS } from '~/pages/Admin/Order/schema'
-import { DotsThree } from '@phosphor-icons/react'
+import { DotsThree, PlusSquare } from '@phosphor-icons/react'
 import { useSearch } from '@prismane/core/hooks'
 import { useState } from 'react'
+import AddOrderModal from '~/pages/Admin/Order/AddOrderModal/AddOrderModal'
 
 const Order = () => {
-  const [openAddModal, setOpenAddModal] = useState(false)
-  const { loading, error, data } = useQuery(GET_ORDERS)
+  const { loading, error, data, refetch } = useQuery(GET_ORDERS)
   const { query, setQuery, filtered } = useSearch(data?.orderList || [])
   if (loading) return <Skeleton w={'100%'} h={'100vh'} mih={200} />
+
   return (
     <>
+      {/* <AddOrderModal openModal={openAddModal} setOpenModal={setOpenAddModal} /> */}
       <Flex direction='column'>
         <Flex justify='between' align='center' mx={fr(4)} my={fr(4)}>
           <Text className='GeomanistMedium-font' fs={'xl'}>
@@ -33,17 +35,17 @@ const Order = () => {
               value={query || ''}
               onChange={(e) => setQuery(e.target.value)}
             />
-            <Button
+            {/* <Button
               variant='secondary'
               size='md'
-              // icon={<Shopping weight='bold' />}
+              icon={<PlusSquare weight='bold' />}
               bsh={'sm'}
               onClick={() => {
                 setOpenAddModal(true)
               }}
             >
               Thêm đơn hàng
-            </Button>
+            </Button> */}
             <Button
               icon={<DotsThree weight='bold' />}
               size='md'
@@ -75,8 +77,8 @@ const Order = () => {
             </Table.Row>
           </Table.Head>
           <Table.Body>
-            {filtered.map((order) => (
-              <OrderRow key={order.order_id} order={order} />
+            {filtered?.map((order) => (
+              <OrderRow key={order.order_id} order={order} refetch={refetch} />
             ))}
           </Table.Body>
           <Table.Foot ta={'center'}>

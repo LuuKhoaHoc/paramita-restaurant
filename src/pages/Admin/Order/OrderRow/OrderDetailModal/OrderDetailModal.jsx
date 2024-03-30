@@ -86,7 +86,7 @@ const OrderDetailModal = ({ order, openModal, setOpenModal }) => {
             </Table.Row>
           </Table.Head>
           <Table.Body ta={'center'}>
-            {order?.order_details.map((item, index) => (
+            {order?.order_details?.map((item, index) => (
               <Table.Row key={item.order_detail_id}>
                 <Table.Cell>{index + 1}</Table.Cell>
                 <Table.Cell>{item.item.name}</Table.Cell>

@@ -50,3 +50,26 @@ export const GET_VOUCHER = gql`
     }
   }
 `
+
+export const UPDATE_ORDER = gql`
+  mutation updateOrder($id: Int!, $data: OrderInput!) {
+    updateOrder(id: $id, data: $data) {
+      order_id
+    }
+  }
+`
+
+export const DELETE_ORDER = gql`
+  mutation deleteOrder($id: Int!) {
+    deleteOrder(id: $id) {
+      order_id
+    }
+  }
+`
+export const DELETE_ORDER_DETAIL = gql`
+  mutation deleteOrderDetail($id: Int!) {
+    deleteOrderDetail(id: $id) {
+      order_detail_id
+    }
+  }
+`
