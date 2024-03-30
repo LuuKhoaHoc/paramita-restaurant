@@ -61,6 +61,8 @@ type Mutation {
   createTable(data: TableInput): Table!
   updateTable(id: Int!, data: TableInput): Table!
   deleteTable(id: Int!): Table!
+  # send mail after create reservation
+  sendMailReservation(data: ReservationInput!): Response!
   createReservation(data: ReservationInput): Reservation!
   updateReservation(id: Int!, data: ReservationInput): Reservation!
   deleteReservation(id: Int!): Reservation!
@@ -196,21 +198,21 @@ input RevenueInput {
 }
 
 input TableInput {
-  name: String!
-  capacity: Int!
-  status: String!
+  name: String
+  capacity: Int
+  status: String
 }
 
 input ReservationInput {
-  customerId: Int!
-  tableId: Int!
+  customerId: Int
+  tableId: Int
   name: String!
   phone: String!
   email: String!
   capacity: Int!
   note: String
   reservation_time: String!
-  reservation_date: DateTime
+  reservation_date: DateTime!
   status: String!
 }
 
@@ -465,14 +467,14 @@ type PointsHistory {
 type Reservation {
   reservation_id: Int!
   tsid: String!
-  customer: Customer!
+  customer: Customer
   table: Table!
   name: String!
   phone: String!
   email: String!
   capacity: Int!
   note: String
-  reservation_time: DateTime!
+  reservation_time: String!
   reservation_date: DateTime!
   status: String!
 }

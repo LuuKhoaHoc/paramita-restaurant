@@ -1231,18 +1231,41 @@ export const resolvers = {
       return context.prisma.reservations.create({
         data: {
           tsid,
-          customer_id: args.data.customerId,
-          table_id: args.data.tableId,
+          customer_id: args.data?.customerId,
+          table_id: args.data?.tableId,
           name: args.data.name,
           phone: args.data.phone,
           email: args.data.email,
           capacity: args.data.capacity,
           note: args.data.note,
-          reservation_time: args.data.reservationTime,
-          reservation_date: args.data.reservationDate,
+          reservation_time: args.data.reservation_time,
+          reservation_date: args.data.reservation_date,
           status: args.data.status
         }
       })
+    },
+    // send mail after reservation
+    sendMailReservation: async (
+      _parent: any,
+      args: { data: ReservationInput },
+      context: Context
+    ) => {
+      await sendMail({
+        subject: 'Cảm ơn bạn đã đặt bàn tại Paramita!',
+        uses: 'reservation',
+        args: {
+          name: args.data.name,
+          email: args.data.email,
+          capacity: args.data.capacity,
+          reservation_time: args.data.reservation_time,
+          reservation_date: args.data.reservation_date,
+          appName: 'Paramita Restaurant'
+        }
+      })
+      return {
+        status: 'success',
+        message: `Đã gửi mail thông báo đến ${args.data.email}`
+      }
     },
     updateReservation: async (
       _parent: any,
@@ -1259,8 +1282,8 @@ export const resolvers = {
           email: args.data.email,
           capacity: args.data.capacity,
           note: args.data.note,
-          reservation_time: args.data.reservationTime,
-          reservation_date: args.data.reservationDate,
+          reservation_time: args.data.reservation_time,
+          reservation_date: args.data.reservation_date,
           status: args.data.status
         }
       })
@@ -1676,8 +1699,13 @@ export const resolvers = {
   },
   Reservation: {
     table: (parent: any, _args: any, context: Context) => {
-      return context.prisma.tables.findUnique({
+      return context.prisma.tables.findFirst({
         where: { table_id: parent?.table_id }
+      })
+    },
+    customer: (parent: any, _args: any, context: Context) => {
+      return context.prisma.customers.findUnique({
+        where: { customer_id: parent?.customer_id }
       })
     }
   },
@@ -1757,15 +1785,15 @@ interface ReviewInput {
   status: string
 }
 interface ReservationInput {
-  customerId: number
-  tableId: number
+  customerId?: number
+  tableId?: number
   name: string
   phone: string
   email: string
   capacity: number
   note: string
-  reservationTime: string
-  reservationDate: Date
+  reservation_time: string
+  reservation_date: Date
   status: string
 }
 interface TableInput {

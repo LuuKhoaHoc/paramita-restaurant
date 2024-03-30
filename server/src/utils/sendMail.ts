@@ -55,7 +55,7 @@ export const sendMail = async ({ subject, uses, args }) => {
     </head>
     <body>
       <div class="container">
-        <img src="https://i.imgur.com/PwVKObJ.png" width="100" height="100" />
+        <img src="https://i.imgur.com/PwVKObJ.png" width="50" height="50" />
         <h1 class="title">Yêu cầu đổi mật khẩu của bạn</h1>
         <p class="content">Xin chào ${args.name},</p>
         <p class="content">Bạn đã yêu cầu đổi mật khẩu cho tài khoản của bạn. Mã PIN của bạn là:</p>
@@ -111,12 +111,13 @@ export const sendMail = async ({ subject, uses, args }) => {
         font-size: 16px;
         margin: 4px 2px;
         cursor: pointer;
+        border-radius: 4px;
       }
     </style>
   </head>
   <body>
     <div class="container">
-      <img src="https://i.imgur.com/PwVKObJ.png" width="100" height="100" />
+      <img src="https://i.imgur.com/PwVKObJ.png" width="50" height="50" />
       <h1 class="title">Xác thực tài khoản của bạn</h1>
       <p class="content">Xin chào ${args.name},</p>
       <p class="content">Cảm ơn bạn rất nhiều đã đăng ký.</p>
@@ -125,7 +126,57 @@ export const sendMail = async ({ subject, uses, args }) => {
     </div>
   </body>
 </html>
+`
 
+  const htmlReservationSuccess = `
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Xác nhận đặt bàn của bạn</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 20px;
+      }
+      
+      .container {
+        border: 1px solid #ddd;
+        padding: 20px;
+        border-radius: 10px;
+      }
+      
+      .title {
+        font-size: 18px;
+        font-weight: bold;
+      }
+      
+      .content {
+        margin-top: 10px;
+      }
+
+      img {
+        float: left;
+        margin-right: 10px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <img src="https://i.imgur.com/PwVKObJ.png" width="50" height="50" />
+      <h1 class="title">Xác nhận đặt bàn của bạn</h1>
+      <p class="content">Xin chào ${args.name},</p>
+      <p class="content">Cảm ơn bạn đã đặt bàn tại nhà hàng của chúng tôi. Dưới đây là thông tin đặt bàn của bạn:</p>
+      <p class="content">Tên khách hàng: ${args.name}</p>
+      <p class="content">Thời gian: ${args.reservation_time}</p>
+      <p class="content">Ngày: ${formatDate(args.reservation_date)}</p>
+      <p class="content">Số lượng khách: ${args.capacity}</p>
+      <p class="content">Chúng tôi rất mong được phục vụ bạn.</p>
+      <p class="content">Trân trọng,</p>
+      <p class="content">Đội ngũ ${args.appName}</p>
+    </div>
+  </body>
+</html>
 `
 
   return transporter
@@ -138,6 +189,8 @@ export const sendMail = async ({ subject, uses, args }) => {
           ? htmlResetPassword
           : uses === 'verifyEmail'
           ? htmlVerifyEmail
+          : uses === 'reservation'
+          ? htmlReservationSuccess
           : ''
     })
     .then((info) => {
@@ -147,4 +200,15 @@ export const sendMail = async ({ subject, uses, args }) => {
     .catch((error) => {
       throw new Error('Failed to send email: ' + error.message)
     })
+}
+function formatDate(date) {
+  let d = new Date(date),
+    month = '' + (d.getMonth() + 1),
+    day = '' + d.getDate(),
+    year = d.getFullYear()
+
+  if (month.length < 2) month = '0' + month
+  if (day.length < 2) day = '0' + day
+
+  return [day, month, year].join('-')
 }
