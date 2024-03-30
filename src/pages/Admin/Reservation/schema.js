@@ -64,6 +64,31 @@ export const ADD_RESERVATION = gql`
     }
   }
 `
+export const UPDATE_RESERVATION = gql`
+  mutation updateReservation($id: Int!, $data: ReservationInput!) {
+    updateReservation(id: $id, data: $data) {
+      reservation_id
+      tsid
+      customer {
+        name
+      }
+      table {
+        table_id
+        name
+        capacity
+        status
+      }
+      name
+      phone
+      email
+      capacity
+      note
+      reservation_time
+      reservation_date
+      status
+    }
+  }
+`
 
 export const DELETE_RESERVATION = gql`
   mutation deleteReservation($id: Int!) {

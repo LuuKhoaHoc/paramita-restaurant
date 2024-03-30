@@ -41,6 +41,8 @@ const ReservationCard = ({ reservation, refetch }) => {
       <EditReservationModal
         openModal={openEditModal}
         setOpenModal={setOpenEditModal}
+        reservation={reservation}
+        refetch={refetch}
       />
       <Card
         w={'calc(33% - 50px)'}
