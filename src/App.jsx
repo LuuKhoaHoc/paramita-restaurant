@@ -173,7 +173,10 @@ const App = () => {
     }
   }, [loading, data])
   useEffect(() => {
-    if (!sessionStorage.getItem('loginEmp')) {
+    if (
+      !sessionStorage.getItem('loginEmp') ||
+      !localStorage.getItem('tokenEmp')
+    ) {
       localStorage.removeItem('tokenEmp')
     }
   }, [])
