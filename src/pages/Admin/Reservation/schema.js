@@ -35,6 +35,11 @@ export const GET_CUSTOMER_BY_PHONE = gql`
       name
       phone
       email
+      level {
+        level_id
+        name
+      }
+      points
     }
   }
 `
