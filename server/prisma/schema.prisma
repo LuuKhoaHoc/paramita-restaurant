@@ -234,7 +234,7 @@ model promotions {
 model reservations {
   reservation_id   Int        @id @default(autoincrement())
   customer_id      Int?
-  table_id         Int        @unique
+  table_id         Int?
   name             String     @db.VarChar(255)
   phone            String     @db.Char(11)
   email            String     @db.VarChar(255)
@@ -245,7 +245,7 @@ model reservations {
   status           String     @db.VarChar(255)
   tsid             String     @db.VarChar(13)
   customers        customers? @relation(fields: [customer_id], references: [customer_id], onUpdate: Restrict, map: "reservations_ibfk_1")
-  table            tables     @relation(fields: [table_id], references: [table_id])
+  table            tables?    @relation(fields: [table_id], references: [table_id])
 
   @@index([customer_id], map: "customer_id")
 }
@@ -272,12 +272,12 @@ model reviews {
 }
 
 model tables {
-  table_id     Int           @id @default(autoincrement())
-  name         String        @db.VarChar(255)
+  table_id     Int            @id @default(autoincrement())
+  name         String         @db.VarChar(255)
   capacity     Int
-  status       String        @db.VarChar(255)
-  tsid         String        @db.VarChar(13)
-  reservations reservations?
+  status       String         @db.VarChar(255)
+  tsid         String         @db.VarChar(13)
+  reservations reservations[]
 }
 
 model vouchers {
