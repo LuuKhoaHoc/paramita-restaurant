@@ -995,17 +995,12 @@ export const resolvers = {
           voucher_id: args.data?.voucherId,
           total_price: args.data.total,
           note: args.data?.note
-          // order_details: {
-          //   connect: {
-          //     order_detail_id: args.orderDetailId
-          //   }
-          // }
         }
       })
     },
     updateOrder: async (
       _parent: any,
-      args: { id: number; orderDetailId?: number; data: OrderInput },
+      args: { id: number; data: OrderInput },
       context: Context
     ) => {
       return context.prisma.orders.update({
@@ -1014,12 +1009,12 @@ export const resolvers = {
           customer_id: args.data.customerId,
           status: args.data.status,
           delivery_address: args.data.address,
+          transport_fee: args.data.transportFee,
           payment_method: args.data.paymentMethod,
           payment_status: args.data.paymentStatus,
-          transport_fee: args.data.transportFee,
-          order_details: {
-            connect: { order_detail_id: args.orderDetailId }
-          }
+          voucher_id: args.data?.voucherId,
+          total_price: args.data.total,
+          note: args.data?.note
         }
       })
     },
