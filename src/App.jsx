@@ -172,6 +172,11 @@ const App = () => {
       sessionStorage.removeItem('checkout-information')
     }
   }, [loading, data])
+  useEffect(() => {
+    if (!sessionStorage.getItem('loginEmp')) {
+      localStorage.removeItem('tokenEmp')
+    }
+  }, [])
 
   const {
     loading: customerLoading,
