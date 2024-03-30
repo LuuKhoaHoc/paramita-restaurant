@@ -19,7 +19,7 @@ import AddReservationModal from '~/pages/Admin/Reservation/AddReservationModal/A
 
 const Reservation = () => {
   const [openAddModal, setOpenAddModal] = useState(false)
-  const { loading, error, data } = useQuery(GET_RESERVATIONS)
+  const { loading, error, data, refetch } = useQuery(GET_RESERVATIONS)
   const { query, setQuery, filtered } = useSearch(data?.reservationList || [])
   if (loading) return <Skeleton w={'100%'} h={'100vh'} mih={200} />
   return (
@@ -27,6 +27,7 @@ const Reservation = () => {
       <AddReservationModal
         openModal={openAddModal}
         setOpenModal={setOpenAddModal}
+        refetch={refetch}
       />
       <Flex direction='column'>
         <Flex justify='between' align='center' mx={fr(4)} my={fr(4)}>
@@ -60,7 +61,15 @@ const Reservation = () => {
           </Flex>
         </Flex>
         <Stack direction='row' wrap='wrap' gap={fr(3)} px={fr(4)}>
-          <ReservationCard />
+          {filtered?.map((reservation) => {
+            return (
+              <ReservationCard
+                key={reservation.reservation_id}
+                reservation={reservation}
+                refetch={refetch}
+              />
+            )
+          })}
         </Stack>
       </Flex>
     </>

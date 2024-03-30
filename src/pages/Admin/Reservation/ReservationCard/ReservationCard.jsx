@@ -1,16 +1,51 @@
 import { Eye, PencilSimpleLine, Trash } from '@phosphor-icons/react'
-import { ActionButton, Card, Flex, Image, Text, fr } from '@prismane/core'
+import {
+  ActionButton,
+  Card,
+  Flex,
+  Image,
+  Text,
+  fr,
+  useToast
+} from '@prismane/core'
 import { useState } from 'react'
 import EditReservationModal from './EditReservationModal/EditReservationModal'
-const ReservationCard = ({ reservation }) => {
+import { useMutation } from '@apollo/client'
+import { DELETE_RESERVATION } from '~/pages/Admin/Reservation/schema'
+
+const ReservationCard = ({ reservation, refetch }) => {
   const [openEditModal, setOpenEditModal] = useState(false)
+  const toast = useToast()
+  const [deleteReservation] = useMutation(DELETE_RESERVATION)
+  const handleDelete = () => {
+    deleteReservation({
+      variables: {
+        id: reservation.reservation_id
+      },
+      onCompleted: () => {
+        refetch()
+        toast({
+          element: (
+            <Alert variant='error'>
+              <Alert.Title className='GeomanistMedium-font'>
+                Đã xoá đơn đặt bàn thành công
+              </Alert.Title>
+            </Alert>
+          )
+        })
+      }
+    })
+  }
   return (
     <>
       <EditReservationModal
         openModal={openEditModal}
         setOpenModal={setOpenEditModal}
       />
-      <Card w={'calc(25% - 50px)'}>
+      <Card
+        w={'calc(33% - 50px)'}
+        sx={{ '*': { fontFamily: 'GeomanistMedium !important' } }}
+      >
         <Card.Header justify='center'>
           <Image
             src='https://picsum.photos/seed/picsum/200/300'
@@ -23,31 +58,26 @@ const ReservationCard = ({ reservation }) => {
         </Card.Header>
         <Flex justify='between' py={fr(4)}>
           <Flex direction='column' gap={fr(4)}>
-            <Text className='GeomanistMedium-font'>Mã đặt bàn:</Text>
-            <Text className='GeomanistMedium-font'>Khách hàng:</Text>
-            <Text className='GeomanistMedium-font'>Mã bàn:</Text>
-            <Text className='GeomanistMedium-font'>Mô tả:</Text>
-            <Text className='GeomanistMedium-font'>Ngày đặt:</Text>
-            <Text className='GeomanistMedium-font'>Trạng thái:</Text>
+            <Text>Mã đặt bàn:</Text>
+            <Text>ID Khách hàng:</Text>
+            <Text>Tên người đặt:</Text>
+            <Text>Bàn:</Text>
+            <Text>Mô tả:</Text>
+            <Text>Ngày đặt:</Text>
+            <Text>Trạng thái:</Text>
           </Flex>
-          <Flex direction='column' gap={fr(2)} align='end'>
-            {/* <Text className='GeomanistMedium-font'>
-              {customer?.name || 'Chưa có'}
+          <Flex direction='column' gap={fr(4)} align='end'>
+            <Text>{reservation?.reservation_id || 'Chưa có'}</Text>
+            <Text>{reservation?.customer.customer_id || 'Chưa có'}</Text>
+            <Text>{reservation?.name || 'Chưa có'}</Text>
+            <Text>{reservation?.table.name || 'Chưa có'}</Text>
+            <Text>{reservation?.note || 'Chưa có'}</Text>
+            <Text>
+              {reservation?.reservation_date?.toString().substring(0, 10) +
+                ' - ' +
+                reservation?.reservation_time || 'Chưa có'}
             </Text>
-            <Text className='GeomanistMedium-font'>
-              {customer?.email || 'Chưa có'}
-            </Text>
-            <Text className='GeomanistMedium-font'>
-              {customer?.phone || 'Chưa có'}
-            </Text>
-            <Text className='GeomanistMedium-font'>
-              {customer?.level.name || 'Chưa có'}
-            </Text>
-            <Text className='GeomanistMedium-font'>
-              {(customer?.status).toString() === 'true'
-                ? 'Đang hoạt động'
-                : 'Ẩn'}
-            </Text> */}
+            <Text>{reservation?.status || 'Chưa có'}</Text>
           </Flex>
         </Flex>
         <Card.Footer align='center' justify='center' gap={fr(4)}>
@@ -57,7 +87,12 @@ const ReservationCard = ({ reservation }) => {
             fillOnHover
             onClick={() => setOpenEditModal(true)}
           />
-          <ActionButton icon={<Trash />} color='ruby' fillOnHover />
+          <ActionButton
+            icon={<Trash />}
+            color='ruby'
+            fillOnHover
+            onClick={() => handleDelete()}
+          />
         </Card.Footer>
       </Card>
     </>
