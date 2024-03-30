@@ -1275,8 +1275,8 @@ export const resolvers = {
       return context.prisma.reservations.update({
         where: { reservation_id: args.id },
         data: {
-          customer_id: args.data.customerId,
-          table_id: args.data.tableId,
+          customer_id: args.data?.customerId,
+          table_id: args.data?.tableId,
           name: args.data.name,
           phone: args.data.phone,
           email: args.data.email,

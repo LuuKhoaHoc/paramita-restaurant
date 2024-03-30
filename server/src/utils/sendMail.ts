@@ -153,6 +153,7 @@ export const sendMail = async ({ subject, uses, args }) => {
       
       .content {
         margin-top: 10px;
+        font-weight: bold;
       }
 
       img {
