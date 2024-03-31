@@ -8,7 +8,7 @@
     "@cloudinary/react": "^1.13.0",
     "@cloudinary/url-gen": "^1.18.0",
     "@phosphor-icons/react": "^2.1.4",
-    "@prismane/core": "^1.4.3",
+    "@prismane/core": "^1.5.0",
     "@vitejs/plugin-react": "^4.2.1",
     "graphql": "^16.8.1",
     "lightgallery": "^2.7.2",
