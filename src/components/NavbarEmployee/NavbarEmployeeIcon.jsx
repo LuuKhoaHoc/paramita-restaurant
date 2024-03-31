@@ -5,10 +5,11 @@ import {
   House,
   Note,
   ShoppingCart,
-  Table,
   UserGear,
   Users,
-  ListBullets
+  ListBullets,
+  Invoice,
+  PicnicTable
 } from '@phosphor-icons/react'
 import { Animation, Divider, Flex, Image, Stack, fr } from '@prismane/core'
 import { LogoIcon } from '~/images'
@@ -60,7 +61,7 @@ const NavbarEmployeeIcon = ({ employee }) => {
             <Flex>
               <NavbarButton
                 as={NavLink}
-                icon={<Table />}
+                icon={<PicnicTable />}
                 to={'/admin/table'}
                 size='lg'
               />
@@ -94,6 +95,14 @@ const NavbarEmployeeIcon = ({ employee }) => {
                 as={NavLink}
                 icon={<ShoppingCart />}
                 to={'/admin/order'}
+                size='lg'
+              />
+            </Flex>
+            <Flex>
+              <NavbarButton
+                as={NavLink}
+                icon={<Invoice />}
+                to={'/admin/invoice'}
                 size='lg'
               />
             </Flex>
