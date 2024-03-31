@@ -7,7 +7,7 @@
     "@apollo/client": "^3.9.5",
     "@cloudinary/react": "^1.13.0",
     "@cloudinary/url-gen": "^1.18.0",
-    "@phosphor-icons/react": "^2.0.15",
+    "@phosphor-icons/react": "^2.1.4",
     "@prismane/core": "^1.4.3",
     "@vitejs/plugin-react": "^4.2.1",
     "graphql": "^16.8.1",
