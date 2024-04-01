@@ -48,7 +48,6 @@ const OrderRow = ({ order, refetch }) => {
       },
       onError: (err) => console.log(err),
       onCompleted: (data) => {
-        console.log('🚀 ~ handleDeleteOrder ~ data:', data)
         toast({
           element: (
             <Alert variant='error'>

@@ -11,10 +11,8 @@ import OrderRow from '~/pages/Admin/Order/OrderRow/OrderRow'
 import { useQuery } from '@apollo/client'
 
 import { GET_ORDERS } from '~/pages/Admin/Order/schema'
-import { DotsThree, PlusSquare } from '@phosphor-icons/react'
+import { DotsThree } from '@phosphor-icons/react'
 import { useSearch } from '@prismane/core/hooks'
-import { useState } from 'react'
-import AddOrderModal from '~/pages/Admin/Order/AddOrderModal/AddOrderModal'
 
 const Order = () => {
   const { loading, error, data, refetch } = useQuery(GET_ORDERS)
@@ -23,7 +21,6 @@ const Order = () => {
 
   return (
     <>
-      {/* <AddOrderModal openModal={openAddModal} setOpenModal={setOpenAddModal} /> */}
       <Flex direction='column'>
         <Flex justify='between' align='center' mx={fr(4)} my={fr(4)}>
           <Text className='GeomanistMedium-font' fs={'xl'}>
@@ -35,17 +32,6 @@ const Order = () => {
               value={query || ''}
               onChange={(e) => setQuery(e.target.value)}
             />
-            {/* <Button
-              variant='secondary'
-              size='md'
-              icon={<PlusSquare weight='bold' />}
-              bsh={'sm'}
-              onClick={() => {
-                setOpenAddModal(true)
-              }}
-            >
-              Thêm đơn hàng
-            </Button> */}
             <Button
               icon={<DotsThree weight='bold' />}
               size='md'

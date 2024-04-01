@@ -19,7 +19,6 @@ const EditOrderModal = ({
   order,
   refetch
 }) => {
-  console.log('🚀 ~ EditOrderModal ~ order:', order)
   const toast = useToast()
   const [updateOrder] = useMutation(UPDATE_ORDER)
   const { handleReset, handleSubmit, register } = useForm({
