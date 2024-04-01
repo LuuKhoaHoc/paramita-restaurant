@@ -16,6 +16,7 @@ import CustomerManager from '~/pages/Admin/CustomerManager/CustomerManager'
 import Reservation from '~/pages/Admin/Reservation/Reservation'
 import Order from '~/pages/Admin/Order/Order'
 import CustomerDetail from '~/pages/Admin/CustomerManager/CustomerCard/CustomerDetail/CustomerDetail'
+import Invoice from '~/pages/Admin/Invoice/Invoice'
 
 const Admin = ({ employee }) => {
   const [open, setOpen] = useState(
@@ -69,6 +70,7 @@ const Admin = ({ employee }) => {
               <Route path='customers/:id/:type' element={<CustomerDetail />} />
               <Route path='reservation' element={<Reservation />} />
               <Route path='order' element={<Order />} />
+              <Route path='invoice' element={<Invoice />} />
               <Route path='*' element={<Home />} />
             </Routes>
           </Grid.Item>
