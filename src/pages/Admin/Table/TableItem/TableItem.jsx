@@ -11,7 +11,7 @@ import {
 import { useState } from 'react'
 import EditTableModal from '~/pages/Admin/Table/TableItem/EditTableModal/EditTableModal'
 
-const TableItem = ({ table }) => {
+const TableItem = ({ table, employee }) => {
   const [open, setOpen] = useState(false)
   const isCapacityOdd = table?.capacity % 2 !== 0
   let capacity = Math.floor(table?.capacity)
@@ -34,7 +34,12 @@ const TableItem = ({ table }) => {
 
   return (
     <>
-      <EditTableModal open={open} setOpen={setOpen} table={table} />
+      <EditTableModal
+        open={open}
+        setOpen={setOpen}
+        table={table}
+        employee={employee}
+      />
       <Center
         direction='column'
         gap={fr(2)}

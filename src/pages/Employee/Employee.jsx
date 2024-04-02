@@ -9,6 +9,7 @@ import { Route, Routes } from 'react-router-dom'
 import InvoiceEmp from '~/pages/Employee/Invoice/InvoiceEmp'
 import OrderEmp from '~/pages/Employee/Order/OrderEmp'
 import ReservationEmp from '~/pages/Employee/Reservation/ReservationEmp'
+import TableEmp from '~/pages/Employee/Table/TableEmp'
 
 const Employee = ({ employee }) => {
   const [open, setOpen] = useState(
@@ -54,6 +55,7 @@ const Employee = ({ employee }) => {
               <Route path='invoice' element={<InvoiceEmp />} />
               <Route path='order' element={<OrderEmp />} />
               <Route path='reservation' element={<ReservationEmp />} />
+              <Route path='table' element={<TableEmp />} />
               <Route path='*' element={<InvoiceEmp />} />
             </Routes>
           </Grid.Item>

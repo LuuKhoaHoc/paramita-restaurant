@@ -14,20 +14,14 @@ import { useSearch } from '@prismane/core/hooks'
 import { useState } from 'react'
 import { useQuery } from '@apollo/client'
 import TableItem from '~/pages/Admin/Table/TableItem/TableItem'
-import AddTableModal from '~/pages/Admin/Table/AddTableModal/AddTableModal'
 import { GET_TABLES } from '~/pages/Admin/Table/schema'
 
-const Table = ({ employee }) => {
+const TableEmp = () => {
   const [openAddModal, setOpenAddModal] = useState(false)
   const { loading, error, data, refetch } = useQuery(GET_TABLES)
   const { query, setQuery, filtered } = useSearch(data?.tableList || [])
   return (
     <>
-      <AddTableModal
-        open={openAddModal}
-        setOpen={setOpenAddModal}
-        refetch={refetch}
-      />
       <Flex direction='column'>
         <Flex justify='between' align='center' mx={fr(4)} my={fr(4)}>
           <Text className='GeomanistMedium-font' fs={'xl'}>
@@ -42,17 +36,6 @@ const Table = ({ employee }) => {
               value={query || ''}
               onChange={(e) => setQuery(e.target.value)}
             />
-            <Button
-              variant='secondary'
-              size='md'
-              icon={<ListPlus weight='bold' />}
-              bsh={'sm'}
-              onClick={() => {
-                setOpenAddModal(true)
-              }}
-            >
-              Thêm bàn
-            </Button>
             <Button
               icon={<DotsThree weight='bold' />}
               size='md'
@@ -71,13 +54,7 @@ const Table = ({ employee }) => {
           gap={fr(20)}
         >
           {filtered?.map((table) => {
-            return (
-              <TableItem
-                key={table.table_id}
-                table={table}
-                employee={employee}
-              />
-            )
+            return <TableItem key={table.table_id} table={table} />
           })}
         </Stack>
       </Flex>
@@ -85,4 +62,4 @@ const Table = ({ employee }) => {
   )
 }
 
-export default Table
+export default TableEmp

@@ -18,7 +18,7 @@ import {
   DELETE_TABLE
 } from '~/pages/Admin/Table/schema'
 
-const EditTableModal = ({ open, setOpen, table }) => {
+const EditTableModal = ({ open, setOpen, table, employee }) => {
   const [status, toggle] = useToggle(['Trống', 'Đã đặt', 'Cần dọn'])
   const { refetch } = useQuery(GET_TABLES)
   const [updateTable] = useMutation(UPDATE_TABLE)
@@ -91,7 +91,7 @@ const EditTableModal = ({ open, setOpen, table }) => {
                 data: {
                   name: v.name,
                   capacity: Number(v.capacity),
-                  status: status
+                  status: status !== table?.status ? table?.status : status
                 }
               },
               onCompleted: () => {
@@ -108,15 +108,17 @@ const EditTableModal = ({ open, setOpen, table }) => {
           label='Tên bàn'
           placeholder='Nhập tên bàn...'
           {...register('name')}
+          disabled={!employee?.is_admin}
         />
         <TextField
           label='Số lượng chỗ ngồi'
           placeholder='Nhập số lượng bàn...'
           {...register('capacity')}
+          disabled={!employee?.is_admin}
         />
         <Flex gap={fr(4)}>
           <Field.Label className='GeomanistMedium-font' fs={'md'}>
-            Trạng thái: {status}
+            Trạng thái: {status !== table?.status ? table?.status : status}
           </Field.Label>
           <Button
             variant='tertiary'
@@ -139,16 +141,18 @@ const EditTableModal = ({ open, setOpen, table }) => {
           >
             Đóng
           </Button>
-          <Button
-            variant='secondary'
-            br={'full'}
-            size='md'
-            color={'red'}
-            type='button'
-            onClick={() => handleDelete()}
-          >
-            Xoá bàn
-          </Button>
+          {employee?.is_admin && (
+            <Button
+              variant='secondary'
+              br={'full'}
+              size='md'
+              color={'red'}
+              type='button'
+              onClick={() => handleDelete()}
+            >
+              Xoá bàn
+            </Button>
+          )}
           <Button variant='secondary' br={'full'} size='md' type='submit'>
             Sửa
           </Button>
