@@ -55,7 +55,9 @@ const ChangePassword = lazyWithPreload(() =>
   import('~/pages/Auth/Account/ChangePassword/ChangePassword')
 )
 const Error = lazyWithPreload(() => import('~/pages/Error/Error'))
-const AuthEmp = lazyWithPreload(() => import('~/pages/Employee/Auth/AuthEmp'))
+const AuthEmp = lazyWithPreload(() =>
+  import('~/pages/Employee/AuthEmp/AuthEmp')
+)
 const InvoiceEmp = lazyWithPreload(() =>
   import('~/pages/Employee/Invoice/InvoiceEmp')
 )
