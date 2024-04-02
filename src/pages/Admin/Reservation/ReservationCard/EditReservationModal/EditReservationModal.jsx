@@ -39,7 +39,8 @@ const EditReservationModal = ({
   openModal,
   setOpenModal,
   reservation,
-  refetch
+  refetch,
+  viewMode = false
 }) => {
   const toast = useToast()
   const {
@@ -182,7 +183,7 @@ const EditReservationModal = ({
       <Modal open={openModal} onClose={() => setOpenModal(false)} w={'25vw'}>
         <Modal.Header justify='center'>
           <Text className='GeomanistMedium-font' fs={'xl'}>
-            Sửa đơn đặt bàn
+            {viewMode ? 'Chi tiết đơn đặt bàn' : 'Sửa đơn đặt bàn'}
           </Text>
         </Modal.Header>
         <Flex sx={{ '*': { fontFamily: 'GeomanistMedium !important' } }}>
@@ -255,18 +256,21 @@ const EditReservationModal = ({
               placeholder='Nhập tên khách hàng...'
               icon={<IdentificationCard />}
               {...register('name')}
+              disabled={viewMode}
             />
             <TextField
               label='Số điện thoại'
               placeholder='Nhập số điện thoại khách hàng...'
               icon={<Phone />}
               {...register('phone')}
+              disabled={viewMode}
             />
             <TextField
               label='Email'
               placeholder='Nhập email khách hàng...'
               icon={<Envelope />}
               {...register('email')}
+              disabled={viewMode}
             />
             <TextField
               label='Giờ đặt'
@@ -274,6 +278,7 @@ const EditReservationModal = ({
               icon={<Timer />}
               addons={<Field.Addon ta={'center'}>24 tiếng</Field.Addon>}
               {...register('time')}
+              disabled={viewMode}
             />
             <NativeDateField
               icon={<Calendar />}
@@ -281,11 +286,13 @@ const EditReservationModal = ({
               label='Ngày đặt'
               placeholder='Nhập ngày đặt...'
               {...register('date')}
+              disabled={viewMode}
             />
             <NativeSelectField
               label='Chọn bàn'
               placeholder='Chọn bàn...'
               {...register('table')}
+              disabled={viewMode}
               options={tableAvailable?.map((table) => ({
                 value: table.table_id,
                 label: table.name + ' - ' + table.capacity + ' người'
@@ -295,6 +302,7 @@ const EditReservationModal = ({
               label='Chọn trạng thái'
               placeholder='Chọn trạng thái...'
               {...register('status')}
+              disabled={viewMode}
               options={[
                 {
                   value: 'Chờ xác nhận',
@@ -317,12 +325,14 @@ const EditReservationModal = ({
               placeholder='Nhập số lượng người...'
               min={1}
               {...register('capacity')}
+              disabled={viewMode}
             />
             <TextareaField
               icon={<Note />}
               label='Ghi chú'
               placeholder='Nhập ghi chú...'
               {...register('note')}
+              disabled={viewMode}
             />
             <Button
               icon={<CalendarPlus />}
@@ -331,8 +341,12 @@ const EditReservationModal = ({
               br={'full'}
               variant='secondary'
               type='submit'
+              disabled={viewMode}
             >
-              <Text className='GeomanistMedium-font'>Thêm đơn đặt bàn</Text>
+              <Text className='GeomanistMedium-font'>
+                {' '}
+                {viewMode ? 'Chi tiết đơn đặt bàn' : 'Sửa đơn đặt bàn'}
+              </Text>
             </Button>
           </Form>
         </Flex>

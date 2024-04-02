@@ -6,7 +6,7 @@ import { formatTime } from '~/utils/formatTime'
 import EditInvoiceModal from './EditInvoiceModal/EditInvoiceModal'
 import DeleteInvoiceModal from './DeleteInvoiceModal/DeleteInvoiceModal'
 
-const InvoiceRow = ({ invoice }) => {
+const InvoiceRow = ({ invoice, employee }) => {
   const [openDetailModal, setOpenDetailModal] = useState(false)
   const [openEditModal, setOpenEditModal] = useState(false)
   const [openDeleteModal, setOpenDeleteModal] = useState(false)
@@ -53,16 +53,17 @@ const InvoiceRow = ({ invoice }) => {
           >
             Chỉnh sửa
           </Button>
-          <Button
-            variant='tertiary'
-            icon={<Trash />}
-            color='ruby'
-            fillOnHover
-            disabled={invoice.payment_status === 'Đã thanh toán'}
-            onClick={() => setOpenDeleteModal(true)}
-          >
-            Xoá
-          </Button>
+          {employee?.is_admin && (
+            <Button
+              variant='tertiary'
+              icon={<Trash />}
+              color='ruby'
+              fillOnHover
+              onClick={() => setOpenDeleteModal(true)}
+            >
+              Xoá
+            </Button>
+          )}
         </Flex>
       </Table.Cell>
     </Table.Row>

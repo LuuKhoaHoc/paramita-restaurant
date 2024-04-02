@@ -17,7 +17,7 @@ import { GET_RESERVATIONS } from '~/pages/Admin/Reservation/schema'
 import ReservationCard from '~/pages/Admin/Reservation/ReservationCard/ReservationCard'
 import AddReservationModal from '~/pages/Admin/Reservation/AddReservationModal/AddReservationModal'
 
-const Reservation = () => {
+const Reservation = ({ employee }) => {
   const [openAddModal, setOpenAddModal] = useState(false)
   const { loading, error, data, refetch } = useQuery(GET_RESERVATIONS)
   const { query, setQuery, filtered } = useSearch(data?.reservationList || [])
@@ -67,6 +67,7 @@ const Reservation = () => {
                 key={reservation.reservation_id}
                 reservation={reservation}
                 refetch={refetch}
+                employee={employee}
               />
             )
           })}

@@ -68,9 +68,12 @@ const Admin = ({ employee }) => {
               <Route path='customers' element={<CustomerManager />} />
               <Route path='customers/:id' element={<CustomerDetail />} />
               <Route path='customers/:id/:type' element={<CustomerDetail />} />
-              <Route path='reservation' element={<Reservation />} />
-              <Route path='order' element={<Order />} />
-              <Route path='invoice' element={<Invoice />} />
+              <Route
+                path='reservation'
+                element={<Reservation employee={employee} />}
+              />
+              <Route path='order' element={<Order employee={employee} />} />
+              <Route path='invoice' element={<Invoice employee={employee} />} />
               <Route path='*' element={<Home />} />
             </Routes>
           </Grid.Item>

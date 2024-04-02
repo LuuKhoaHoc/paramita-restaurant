@@ -14,7 +14,7 @@ import { GET_ORDERS } from '~/pages/Admin/Order/schema'
 import { DotsThree } from '@phosphor-icons/react'
 import { useSearch } from '@prismane/core/hooks'
 
-const Order = () => {
+const Order = ({ employee }) => {
   const { loading, error, data, refetch } = useQuery(GET_ORDERS)
   const { query, setQuery, filtered } = useSearch(data?.orderList || [])
   if (loading) return <Skeleton w={'100%'} h={'100vh'} mih={200} />
@@ -64,7 +64,12 @@ const Order = () => {
           </Table.Head>
           <Table.Body>
             {filtered?.map((order) => (
-              <OrderRow key={order.order_id} order={order} refetch={refetch} />
+              <OrderRow
+                key={order.order_id}
+                order={order}
+                refetch={refetch}
+                employee={employee}
+              />
             ))}
           </Table.Body>
           <Table.Foot ta={'center'}>

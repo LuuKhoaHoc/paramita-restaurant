@@ -4,11 +4,12 @@ import { AuthContext } from '~/contexts/AuthContext'
 
 const AuthEmp = ({ employee }) => {
   const { isLoggedIn } = useContext(AuthContext)
-  return (isLoggedIn ||
+  return ((isLoggedIn ||
     sessionStorage.getItem('loginEmp') ||
     localStorage.getItem('loginEmp')) &&
     localStorage.getItem('tokenEmp') &&
-    employee?.is_admin ? (
+    employee?.is_admin) ||
+    employee ? (
     <Outlet />
   ) : (
     <Navigate to={'/login'} />

@@ -1,6 +1,7 @@
 import { Eye, PencilSimpleLine, Trash } from '@phosphor-icons/react'
 import {
   ActionButton,
+  Button,
   Card,
   Flex,
   Image,
@@ -13,7 +14,8 @@ import EditReservationModal from './EditReservationModal/EditReservationModal'
 import { useMutation } from '@apollo/client'
 import { DELETE_RESERVATION } from '~/pages/Admin/Reservation/schema'
 
-const ReservationCard = ({ reservation, refetch }) => {
+const ReservationCard = ({ reservation, refetch, employee }) => {
+  const [viewMode, setViewMode] = useState(false)
   const [openEditModal, setOpenEditModal] = useState(false)
   const toast = useToast()
   const [deleteReservation] = useMutation(DELETE_RESERVATION)
@@ -43,6 +45,7 @@ const ReservationCard = ({ reservation, refetch }) => {
         setOpenModal={setOpenEditModal}
         reservation={reservation}
         refetch={refetch}
+        viewMode={viewMode}
       />
       <Card
         w={'calc(33% - 50px)'}
@@ -83,18 +86,40 @@ const ReservationCard = ({ reservation, refetch }) => {
           </Flex>
         </Flex>
         <Card.Footer align='center' justify='center' gap={fr(4)}>
-          <ActionButton
+          <Button
+            icon={<Eye />}
+            variant='tertiary'
+            fillOnHover
+            onClick={() => {
+              setViewMode(true)
+              setOpenEditModal(true)
+            }}
+          >
+            Chi tiết
+          </Button>
+          <Button
             icon={<PencilSimpleLine />}
             color='blue'
+            variant='tertiary'
             fillOnHover
-            onClick={() => setOpenEditModal(true)}
-          />
-          <ActionButton
-            icon={<Trash />}
-            color='ruby'
-            fillOnHover
-            onClick={() => handleDelete()}
-          />
+            onClick={() => {
+              setViewMode(false)
+              setOpenEditModal(true)
+            }}
+          >
+            Chỉnh sửa
+          </Button>
+          {employee?.is_admin && (
+            <Button
+              icon={<Trash />}
+              color='ruby'
+              variant='tertiary'
+              fillOnHover
+              onClick={() => handleDelete()}
+            >
+              Xoá
+            </Button>
+          )}
         </Card.Footer>
       </Card>
     </>

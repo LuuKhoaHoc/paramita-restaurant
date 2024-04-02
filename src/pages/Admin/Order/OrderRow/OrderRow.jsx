@@ -16,7 +16,7 @@ import OrderDetailModal from '~/pages/Admin/Order/OrderRow/OrderDetailModal/Orde
 import EditOrderModal from '~/pages/Admin/Order/OrderRow//EditOrderModal/EditOrderModal'
 import { useMutation } from '@apollo/client'
 
-const OrderRow = ({ order, refetch }) => {
+const OrderRow = ({ order, refetch, employee }) => {
   const toast = useToast()
   const [deleteOrder] = useMutation(DELETE_ORDER)
   const [deleteOrderDetail] = useMutation(DELETE_ORDER_DETAIL)
@@ -124,24 +124,34 @@ const OrderRow = ({ order, refetch }) => {
             </Modal.Footer>
           </Modal>
           <Flex gap={fr(4)} justify='center'>
-            <ActionButton
+            <Button
               icon={<Eye />}
+              variant='tertiary'
               fillOnHover
-              color='slate'
               onClick={() => setOpenDetailModal(true)}
-            />
-            <ActionButton
+            >
+              Chi tiết
+            </Button>
+            <Button
               icon={<Pen />}
+              variant='tertiary'
               fillOnHover
               color='diamond'
               onClick={() => setOpenEditModal(true)}
-            />
-            <ActionButton
-              icon={<Trash />}
-              fillOnHover
-              color='ruby'
-              onClick={() => setOpenDeleteModal(true)}
-            />
+            >
+              Chỉnh sửa
+            </Button>
+            {employee?.id_admin && (
+              <Button
+                icon={<Trash />}
+                variant='tertiary'
+                fillOnHover
+                color='ruby'
+                onClick={() => setOpenDeleteModal(true)}
+              >
+                Xoá
+              </Button>
+            )}
           </Flex>
         </Table.Cell>
       </Table.Row>

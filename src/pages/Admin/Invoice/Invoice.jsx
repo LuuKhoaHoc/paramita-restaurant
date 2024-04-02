@@ -14,9 +14,9 @@ import { DotsThree, PlusSquare } from '@phosphor-icons/react'
 import { useSearch } from '@prismane/core/hooks'
 import { useState } from 'react'
 import AddInvoiceModal from '~/pages/Admin/Invoice/AddInvoiceModal/AddInvoiceModal'
-import InvoiceRow from './InvoiceRow/InvoiceRow'
+import InvoiceRow from '~/pages/Admin/Invoice/InvoiceRow/InvoiceRow'
 
-const Invoice = () => {
+const Invoice = ({ employee }) => {
   const [openAddModal, setOpenAddModal] = useState(false)
   const { loading, error, data, refetch } = useQuery(GET_INVOICES)
   const { query, setQuery, filtered } = useSearch(data?.invoiceList || [])
@@ -88,6 +88,7 @@ const Invoice = () => {
                 key={invoice.invoice_id}
                 invoice={invoice}
                 refetch={refetch}
+                employee={employee}
               />
             ))}
           </Table.Body>

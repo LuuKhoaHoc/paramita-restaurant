@@ -1,3 +1,0 @@
-const EditInvoice = () => {
-  third
-}
