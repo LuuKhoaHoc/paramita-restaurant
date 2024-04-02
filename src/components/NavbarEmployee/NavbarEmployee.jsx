@@ -146,6 +146,15 @@ const NavbarEmployee = ({ employee }) => {
                 size='md'
               />
             </Flex>
+            <Flex>
+              <NavbarButton
+                as={NavLink}
+                icon={<PicnicTable />}
+                to={'/employee/table'}
+                text={'Bàn'}
+                size='md'
+              />
+            </Flex>
           </>
         )}
       </Stack>

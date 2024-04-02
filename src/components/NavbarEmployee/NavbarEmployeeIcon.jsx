@@ -133,6 +133,14 @@ const NavbarEmployeeIcon = ({ employee }) => {
                 size='lg'
               />
             </Flex>
+            <Flex>
+              <NavbarButton
+                as={NavLink}
+                icon={<PicnicTable />}
+                to={'/employee/table'}
+                size='lg'
+              />
+            </Flex>
           </>
         )}
       </Stack>
