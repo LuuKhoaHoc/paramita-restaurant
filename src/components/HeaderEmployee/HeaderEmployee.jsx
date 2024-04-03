@@ -53,7 +53,9 @@ const HeaderEmployee = ({ open, setOpen, employee }) => {
         onClick={() => setOpenMenu(!openMenu)}
       >
         <Avatar size='sm' color={'copper'} />
-        <Text className='GeomanistMedium-font'>{employee?.name}</Text>
+        <Text className='GeomanistMedium-font'>
+          {employee?.name} - {employee?.position?.name}
+        </Text>
       </Center>
       <Menu
         w={fr(48)}

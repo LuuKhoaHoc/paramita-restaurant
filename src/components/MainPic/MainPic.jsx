@@ -29,7 +29,7 @@ const MainPic = ({
   const [onHovered, setOnHovered] = useState(false)
   const { isLaptop, isTablet, isMobile } = useResponsive()
   return (
-    <Box w={'100%'} h={'100vh'} pos={'relative'}>
+    <Box w={'100%'} h={'100vh'} pos={'relative'} cl={'white'}>
       <Transition
         alt='main pic'
         w='100%'
@@ -45,19 +45,14 @@ const MainPic = ({
           backgroundSize: 'cover'
         }}
       />
-      <Center
-        w={'100%'}
-        h={'100%'}
-        direction='column'
-        cl={'white'}
-        cs={'default'}
-      >
+      <Center w={'100%'} h={'100%'} direction='column' cs={'default'}>
         {sloganLeft ? (
           <Text
             fs={isMobile ? 'md' : 'xl'}
             mb={-50}
             mr={isMobile ? 200 : 300}
             z={10}
+            cl={'white'}
           >
             <TypeAnimation
               sequence={[sloganLeft, 1000]}
@@ -73,6 +68,7 @@ const MainPic = ({
             fs={isTablet ? 'lg' : isMobile ? 'base' : 'xl'}
             mb={-50}
             ml={isMobile ? 150 : 250}
+            cl={'white'}
             z={10}
           >
             <TypeAnimation
@@ -90,6 +86,7 @@ const MainPic = ({
             mb={-50}
             ls={5}
             z={10}
+            cl={'white'}
           >
             <TypeAnimation
               sequence={[sloganCenter, 1000]}
@@ -115,6 +112,7 @@ const MainPic = ({
             ml={30}
             mt={-40}
             z={10}
+            cl={'white'}
           >
             <TypeAnimation
               sequence={[subtitle, 1000]}
@@ -130,6 +128,7 @@ const MainPic = ({
             ml={30}
             mt={-20}
             z={10}
+            cl={'white'}
           >
             <TypeAnimation
               sequence={[subtitle, 1000]}
