@@ -8,6 +8,9 @@ type Mutation {
   createCategory(data: CategoryInput!): Category
   updateCategory(id: Int!, data: CategoryInput!): Category!
   deleteCategory(id: Int!): Category!
+  createContact($data: ContactInput!): Contact!
+  updateContact($id: Int!, $data: ContactInput!): Contact!
+  deleteContact($id: Int!): Contact
   createMenu(data: MenuInput!): Menu
   updateMenu(id: Int!, data: MenuInput!): Menu!
   deleteMenu(id: Int!): Menu!
@@ -86,6 +89,14 @@ input CategoryInput {
   name: String!
   menu: [MenuInput!]
 }
+
+input ContactInput {
+  name: String!
+  email: String!
+  phone: String!
+  message: String!
+}
+
 input MenuInput {
   categoryId: Int
   name: String!
@@ -321,6 +332,15 @@ type usernameExist {
 type emailExist {
   email: String!
 }
+
+type Contact {
+  contact_id: Int!
+  name: String!
+  email: String!
+  phone: String!
+  message: String!
+}
+
 type Category {
   category_id: Int!
   tsid: String!

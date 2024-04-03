@@ -358,7 +358,30 @@ export const resolvers = {
         message: 'Mật khẩu đã được cập nhật!'
       }
     },
-
+    // Contact
+    createContact: async (
+      _parent: any,
+      args: { data: ContactInput },
+      context: Context
+    ) => {
+      return context.prisma.contact.create({
+        data: {
+          name: args.data.name,
+          email: args.data.email,
+          phone: args.data.phone,
+          message: args.data.message
+        }
+      })
+    },
+    deleteContact: async (
+      _parent: any,
+      args: { id: any },
+      context: Context
+    ) => {
+      return context.prisma.contact.delete({
+        where: { contact_id: args.id || undefined }
+      })
+    },
     // Category
     createCategory: async (
       _parent: any,
@@ -1746,6 +1769,13 @@ export const resolvers = {
 }
 
 // Interface
+interface ContactInput {
+  name: string
+  email: string
+  phone: string
+  message: string
+}
+
 interface PositionInput {
   name: string
   description: string

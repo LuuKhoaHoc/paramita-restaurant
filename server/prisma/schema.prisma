@@ -299,3 +299,12 @@ model vouchers {
 
   @@index([customer_id], map: "customer_id")
 }
+
+model contact {
+  contact_id Int      @id @default(autoincrement())
+  name       String
+  email      String
+  phone      String   @default("")
+  message    String   @db.Text
+  createdAt  DateTime @default(now())
+}
