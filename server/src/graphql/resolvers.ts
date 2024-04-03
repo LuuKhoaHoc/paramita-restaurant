@@ -1694,9 +1694,11 @@ export const resolvers = {
   },
   Reservation: {
     table: (parent: any, _args: any, context: Context) => {
-      return context.prisma.tables.findFirst({
-        where: { table_id: parent?.table_id }
-      })
+      return parent?.table_id === null
+        ? null
+        : context.prisma.tables.findFirst({
+            where: { table_id: parent.table_id }
+          })
     },
     customer: (parent: any, _args: any, context: Context) => {
       return context.prisma.customers.findUnique({

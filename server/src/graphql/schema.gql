@@ -468,7 +468,7 @@ type Reservation {
   reservation_id: Int!
   tsid: String!
   customer: Customer
-  table: Table!
+  table: Table
   name: String!
   phone: String!
   email: String!
