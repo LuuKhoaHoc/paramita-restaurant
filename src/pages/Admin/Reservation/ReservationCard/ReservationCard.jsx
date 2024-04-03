@@ -1,6 +1,7 @@
 import { Eye, PencilSimpleLine, Trash } from '@phosphor-icons/react'
 import {
   ActionButton,
+  Alert,
   Button,
   Card,
   Flex,
@@ -13,18 +14,33 @@ import { useState } from 'react'
 import EditReservationModal from './EditReservationModal/EditReservationModal'
 import { useMutation } from '@apollo/client'
 import { DELETE_RESERVATION } from '~/pages/Admin/Reservation/schema'
+import { GET_TABLES, UPDATE_TABLE } from '~/pages/Admin/Table/schema'
 
 const ReservationCard = ({ reservation, refetch, employee }) => {
   const [viewMode, setViewMode] = useState(false)
   const [openEditModal, setOpenEditModal] = useState(false)
   const toast = useToast()
   const [deleteReservation] = useMutation(DELETE_RESERVATION)
+  const [updateTable] = useMutation(UPDATE_TABLE)
   const handleDelete = () => {
     deleteReservation({
       variables: {
         id: reservation.reservation_id
       },
       onCompleted: () => {
+        if (reservation?.table?.table_id) {
+          updateTable({
+            variables: {
+              id: reservation?.table?.table_id,
+              data: {
+                status: 'Trống'
+              }
+            },
+            onError: (err) => console.log(err),
+            refetchQueries: [GET_TABLES],
+            awaitRefetchQueries: true
+          })
+        }
         refetch()
         toast({
           element: (
@@ -67,7 +83,7 @@ const ReservationCard = ({ reservation, refetch, employee }) => {
             <Text>ID Khách hàng:</Text>
             <Text>Tên người đặt:</Text>
             <Text>Bàn:</Text>
-            <Text>Mô tả:</Text>
+            <Text>Ghi chú:</Text>
             <Text>Ngày đặt:</Text>
             <Text>Trạng thái:</Text>
           </Flex>
@@ -75,7 +91,7 @@ const ReservationCard = ({ reservation, refetch, employee }) => {
             <Text>{reservation?.reservation_id || 'Chưa có'}</Text>
             <Text>{reservation?.customer.customer_id || 'Chưa có'}</Text>
             <Text>{reservation?.name || 'Chưa có'}</Text>
-            <Text>{reservation?.table.name || 'Chưa có'}</Text>
+            <Text>{reservation?.table?.name || 'Chưa có'}</Text>
             <Text>{reservation?.note || 'Chưa có'}</Text>
             <Text>
               {reservation?.reservation_date?.toString().substring(0, 10) +

@@ -180,7 +180,14 @@ const EditReservationModal = ({
   } = useQuery(GET_CUSTOMER_BY_PHONE, { variables: { phone: customerPhone } })
   return (
     <>
-      <Modal open={openModal} onClose={() => setOpenModal(false)} w={'25vw'}>
+      <Modal
+        open={openModal}
+        onClose={() => {
+          handleReset()
+          setOpenModal(false)
+        }}
+        w={'25vw'}
+      >
         <Modal.Header justify='center'>
           <Text className='GeomanistMedium-font' fs={'xl'}>
             {viewMode ? 'Chi tiết đơn đặt bàn' : 'Sửa đơn đặt bàn'}
@@ -192,62 +199,67 @@ const EditReservationModal = ({
             onReset={handleReset}
             onSubmit={(SubmitEvent) =>
               handleSubmit(SubmitEvent, (v) => {
-                updateReservation({
-                  variables: {
-                    id: reservation?.reservation_id,
-                    data: {
-                      customerId: dataCustomer?.getCustomerByPhone?.customer_id,
-                      tableId: +v.table,
-                      name: v.name,
-                      phone: v.phone,
-                      email: v.email,
-                      capacity: +v.capacity,
-                      note: v.note,
-                      reservation_time: v.time,
-                      reservation_date: new Date(v.date),
-                      status: v.status
-                    }
-                  },
-                  onError: (err) => console.log(err),
-                  onCompleted: async (data) => {
-                    await updateTable({
-                      variables: {
-                        id: data?.updateReservation?.table?.table_id,
-                        data: {
-                          status: 'Đã đặt'
-                        }
-                      },
-                      onCompleted: (data) => {
-                        if (
-                          data?.updateTable?.table_id !==
-                          reservation?.table?.table_id
-                        ) {
-                          updateTable({
-                            variables: {
-                              id: reservation?.table?.table_id,
-                              data: {
-                                status: 'Trống'
-                              }
-                            }
-                          })
-                        }
+                try {
+                  updateReservation({
+                    variables: {
+                      id: reservation?.reservation_id,
+                      data: {
+                        customerId:
+                          dataCustomer?.getCustomerByPhone?.customer_id,
+                        tableId: +v.table,
+                        name: v.name,
+                        phone: v.phone,
+                        email: v.email,
+                        capacity: +v.capacity,
+                        note: v.note,
+                        reservation_time: v.time,
+                        reservation_date: new Date(v.date),
+                        status: v.status
                       }
-                    }).then(() => {
-                      refetch()
-                      refetchTable()
-                      setOpenModal(false)
-                      toast({
-                        element: (
-                          <Alert variant='info'>
-                            <Alert.Title className='GeomanistMedium-font'>
-                              Sửa đơn đặt bàn thành công
-                            </Alert.Title>
-                          </Alert>
-                        )
+                    },
+                    onError: (err) => console.log(err),
+                    onCompleted: async (data) => {
+                      await updateTable({
+                        variables: {
+                          id: data?.updateReservation?.table?.table_id,
+                          data: {
+                            status: 'Đã đặt'
+                          }
+                        },
+                        onCompleted: (data) => {
+                          if (
+                            data?.updateTable?.table_id !==
+                            reservation?.table?.table_id
+                          ) {
+                            updateTable({
+                              variables: {
+                                id: reservation?.table?.table_id,
+                                data: {
+                                  status: 'Trống'
+                                }
+                              }
+                            })
+                          }
+                        }
+                      }).then(() => {
+                        refetch()
+                        refetchTable()
+                        setOpenModal(false)
+                        toast({
+                          element: (
+                            <Alert variant='info'>
+                              <Alert.Title className='GeomanistMedium-font'>
+                                Sửa đơn đặt bàn thành công
+                              </Alert.Title>
+                            </Alert>
+                          )
+                        })
                       })
-                    })
-                  }
-                })
+                    }
+                  })
+                } catch (error) {
+                  console.log('🚀 ~ handleSubmit ~ error:', error)
+                }
               })
             }
           >
