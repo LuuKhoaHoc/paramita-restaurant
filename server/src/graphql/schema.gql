@@ -8,9 +8,9 @@ type Mutation {
   createCategory(data: CategoryInput!): Category
   updateCategory(id: Int!, data: CategoryInput!): Category!
   deleteCategory(id: Int!): Category!
-  createContact($data: ContactInput!): Contact!
-  updateContact($id: Int!, $data: ContactInput!): Contact!
-  deleteContact($id: Int!): Contact
+  createContact(data: ContactInput!): Contact!
+  updateContact(id: Int!, data: ContactInput!): Contact!
+  deleteContact(id: Int!): Contact
   createMenu(data: MenuInput!): Menu
   updateMenu(id: Int!, data: MenuInput!): Menu!
   deleteMenu(id: Int!): Menu!
