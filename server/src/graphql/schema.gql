@@ -296,6 +296,7 @@ type Query {
   voucher(id: Int!): Voucher
   employee(id: ID!): Employee
   position(id: ID!): Position
+  contact(id: Int!): Contact
 
   categoryList: [Category!]!
   menuList: [Menu!]!
@@ -317,6 +318,7 @@ type Query {
   voucherList: [Voucher!]!
   employeeList: [Employee!]!
   positionList: [Position!]!
+  contactList: [Contact!]!
 }
 
 # TypeDefs
@@ -339,6 +341,7 @@ type Contact {
   email: String!
   phone: String!
   message: String!
+  createAt: DateTime
 }
 
 type Category {
