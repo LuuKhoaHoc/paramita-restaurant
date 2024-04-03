@@ -91,7 +91,7 @@ const EditTableModal = ({ open, setOpen, table, employee }) => {
                 data: {
                   name: v.name,
                   capacity: Number(v.capacity),
-                  status: status !== table?.status ? table?.status : status
+                  status: status
                 }
               },
               onCompleted: () => {
@@ -116,10 +116,13 @@ const EditTableModal = ({ open, setOpen, table, employee }) => {
           {...register('capacity')}
           disabled={!employee?.is_admin}
         />
-        <Flex gap={fr(4)}>
-          <Field.Label className='GeomanistMedium-font' fs={'md'}>
-            Trạng thái: {status !== table?.status ? table?.status : status}
-          </Field.Label>
+        <Text className='GeomanistMedium-font'>
+          Trạng thái hiện tại: {table?.status}
+        </Text>
+        <Flex gap={fr(4)} align='center'>
+          <Text className='GeomanistMedium-font'>
+            Trạng thái muốn đổi: {status}
+          </Text>
           <Button
             variant='tertiary'
             br={'full'}
