@@ -9,7 +9,8 @@ import {
   Users,
   ListBullets,
   Invoice,
-  PicnicTable
+  PicnicTable,
+  AddressBookTabs
 } from '@phosphor-icons/react'
 import { Animation, Divider, Flex, Image, Stack, fr } from '@prismane/core'
 import { LogoIcon } from '~/images'
@@ -18,7 +19,7 @@ import { NavLink } from 'react-router-dom'
 
 const NavbarEmployeeIcon = ({ employee }) => {
   return (
-    <Animation animation={'scale-x'} animated={true}>
+    <Animation animation={'scale-x'} animated={true} bsh={'md'}>
       <Stack m={fr(4)} gap={fr(6)} direction='column'>
         <Flex justify='center' align='center'>
           <Image src={LogoIcon} w={fr(16)} mx={'auto'} />
@@ -106,6 +107,14 @@ const NavbarEmployeeIcon = ({ employee }) => {
                 size='lg'
               />
             </Flex>
+            <Flex>
+              <NavbarButton
+                as={NavLink}
+                icon={<AddressBookTabs />}
+                to={'/admin/contact'}
+                size='lg'
+              />
+            </Flex>
           </>
         ) : (
           <>
@@ -138,6 +147,14 @@ const NavbarEmployeeIcon = ({ employee }) => {
                 as={NavLink}
                 icon={<PicnicTable />}
                 to={'/employee/table'}
+                size='lg'
+              />
+            </Flex>
+            <Flex>
+              <NavbarButton
+                as={NavLink}
+                icon={<AddressBookTabs />}
+                to={'/employee/contact'}
                 size='lg'
               />
             </Flex>

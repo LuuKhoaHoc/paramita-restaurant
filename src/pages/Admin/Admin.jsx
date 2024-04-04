@@ -17,6 +17,7 @@ import Reservation from '~/pages/Admin/Reservation/Reservation'
 import Order from '~/pages/Admin/Order/Order'
 import CustomerDetail from '~/pages/Admin/CustomerManager/CustomerCard/CustomerDetail/CustomerDetail'
 import Invoice from '~/pages/Admin/Invoice/Invoice'
+import Contact from '~/pages/Admin/Contact/Contact'
 
 const Admin = ({ employee }) => {
   const [open, setOpen] = useState(
@@ -27,16 +28,9 @@ const Admin = ({ employee }) => {
       <Toaster position='top-right' mt={fr(10)}>
         <Grid templateColumns={12} templateRows={13} h={'100vh'}>
           {/* Navbar */}
-          <Grid.Item
-            columnStart={1}
-            columnEnd={!open ? 2 : 3}
-            h={'100vh'}
-            bsh={'md'}
-          >
+          <Grid.Item columnStart={1} columnEnd={!open ? 2 : 3}>
             {open ? (
-              <Animation animation={'scale-x'} animated={open}>
-                <NavbarEmployee employee={employee} />
-              </Animation>
+              <NavbarEmployee employee={employee} />
             ) : (
               <NavbarEmployeeIcon employee={employee} />
             )}
@@ -74,6 +68,7 @@ const Admin = ({ employee }) => {
               />
               <Route path='order' element={<Order employee={employee} />} />
               <Route path='invoice' element={<Invoice employee={employee} />} />
+              <Route path='contact' element={<Contact employee={employee} />} />
               <Route path='*' element={<Home />} />
             </Routes>
           </Grid.Item>
