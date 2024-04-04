@@ -30,7 +30,7 @@ const SmallBookTable = () => {
       <Grid.Item columnStart={1} columnEnd={13}>
         <Box pos={'relative'} w={'100%'} my={fr(5)}>
           <Image
-            src={HomePic3}
+            src={data?.page?.content[0]?.image}
             alt='restaurant-space'
             fit='cover'
             w={'100%'}

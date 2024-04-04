@@ -49,22 +49,32 @@ const SmallGallery = ({ images }) => {
                 data-src={item}
                 href={item}
               >
-                <Image
-                  className='img-responsive'
-                  src={item}
-                  m={fr(1)}
+                <Box
+                  dp={'inline-block'}
+                  of={'hidden'}
                   br={'md'}
-                  bsh={'md'}
-                  fit='cover'
-                  // w={fr(100)}
-                  h={isTablet ? fr(60) : isMobile ? fr(40) : fr(80)}
                   sx={{
-                    transition: 'transform 0.3s',
                     '&:hover': {
-                      transform: 'scale(1.1)'
+                      img: {
+                        transform: 'scale(1.2)'
+                      }
                     }
                   }}
-                />
+                >
+                  <Image
+                    className='img-responsive'
+                    src={item}
+                    m={fr(1)}
+                    br={'md'}
+                    bsh={'md'}
+                    fit='cover'
+                    // w={'100%'}
+                    h={isTablet ? fr(60) : isMobile ? fr(40) : fr(80)}
+                    sx={{
+                      transition: 'all 0.3s ease-in-out'
+                    }}
+                  />
+                </Box>
               </a>
             ))}
           </LightGallery>
