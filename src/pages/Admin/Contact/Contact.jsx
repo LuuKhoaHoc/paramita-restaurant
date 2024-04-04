@@ -16,7 +16,7 @@ import { useSearch } from '@prismane/core/hooks'
 
 const Contact = ({ employee }) => {
   const { loading, error, data, refetch } = useQuery(GET_CONTACTS)
-  const { query, setQuery, filtered } = useSearch(data?.orderList || [])
+  const { query, setQuery, filtered } = useSearch(data?.contactList || [])
   if (loading) return <Skeleton w={'100%'} h={'100vh'} mih={200} />
 
   return (

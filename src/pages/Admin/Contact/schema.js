@@ -8,7 +8,7 @@ export const GET_CONTACTS = gql`
       email
       phone
       message
-      createAt
+      createdAt
     }
   }
 `

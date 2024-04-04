@@ -14,6 +14,7 @@ import { useState } from 'react'
 import { DELETE_CONTACT } from '~/pages/Admin/Contact/schema'
 import { useMutation } from '@apollo/client'
 import ContactDetailDrawer from '~/pages/Admin/Contact/ContactRow/ContactDetailDrawer/ContactDetailDrawer'
+import { formatTime } from '~/utils/formatTime'
 
 const ContactRow = ({ contact, refetch, employee }) => {
   const toast = useToast()
@@ -48,7 +49,7 @@ const ContactRow = ({ contact, refetch, employee }) => {
         <Table.Cell>{contact?.contact_id}</Table.Cell>
         <Table.Cell>{contact?.name}</Table.Cell>
         <Table.Cell>{contact?.email}</Table.Cell>
-        <Table.Cell>{contact?.createAt}</Table.Cell>
+        <Table.Cell>{formatTime(contact?.createdAt)}</Table.Cell>
         <Table.Cell>
           <ContactDetailDrawer
             contact={contact}
@@ -105,7 +106,7 @@ const ContactRow = ({ contact, refetch, employee }) => {
             >
               Chi tiết
             </Button>
-            {employee?.id_admin && (
+            {employee?.is_admin && (
               <Button
                 icon={<Trash />}
                 variant='tertiary'
