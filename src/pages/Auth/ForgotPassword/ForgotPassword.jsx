@@ -10,6 +10,8 @@ import { useResponsive } from '~/utils/responsive'
 import SendEmail from './SendEmail/SendEmail'
 import VerifyPin from './VerifyPin/VerifyPin'
 import ResetPassword from './ResetPassword/ResetPassword'
+import { useQuery } from '@apollo/client'
+import { GET_CONTENT } from '~/pages/Auth/Login/schema'
 
 const ForgotPassword = () => {
   const { isLaptop, isMobile, isTablet } = useResponsive()
@@ -19,13 +21,15 @@ const ForgotPassword = () => {
   useEffect(() => {
     scrollToId('forgot-password')
   }, [])
+  // query
+  const { data: content } = useQuery(GET_CONTENT)
   return (
     <Toaster position='top-right' mt={fr(22.5)}>
       <Box pos={'relative'} mih={'100vh'}>
         <MainPic
-          image={LoginPic}
-          title={'Paramita'}
-          sloganCenter={'Chào mừng bạn đến với hệ thống'}
+          image={content?.page?.content[0].image}
+          title={content?.page?.content[0].title}
+          sloganCenter={content?.page?.content[0].slogan}
         />
         <Flex
           id='forgot-password'
@@ -40,6 +44,7 @@ const ForgotPassword = () => {
             p={isTablet ? fr(15) : isMobile ? fr(10) : fr(18)}
             br={'2xl'}
             bsh={'xl'}
+            gap={fr(8)}
             sx={{
               '.PrismaneTextField-label, .PrismanePinField-label': {
                 fontSize: fr(5)

@@ -73,7 +73,7 @@ const Order = () => {
         <MainPic
           title={dataContent?.page?.content[0]?.title}
           subtitle={dataContent?.page?.content[0]?.description}
-          image={Orders}
+          image={dataContent?.page?.content[0]?.image}
         />
         <Box w={'100%'} h={'100%'} pos={'relative'}>
           <Grid templateColumns={12}>

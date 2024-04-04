@@ -17,6 +17,7 @@ const MenuItem = ({ image, title, price, category }) => {
             br={'lg'}
             w={isTablet ? fr(48) : isMobile ? fr(25) : fr(56)}
             h={isTablet ? fr(48) : isMobile ? fr(25) : fr(56)}
+            fit='cover'
           />
         </Link>
       </Box>

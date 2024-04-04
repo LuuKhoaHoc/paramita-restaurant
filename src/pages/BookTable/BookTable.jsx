@@ -67,27 +67,6 @@ const BookTable = () => {
             )
         }
       },
-      // phone: {
-      //   value: phone,
-      //   validators: {
-      //     required: (v) =>
-      //       p(
-      //         v,
-      //         z
-      //           .string()
-      //           .trim()
-      //           .min(1, { message: 'Vui lòng nhập số điện thoại' })
-      //       ),
-      //     phoneNumber: (v) =>
-      //       p(
-      //         v,
-      //         z
-      //           .string()
-      //           .trim()
-      //           .min(10, { message: 'Số điện thoại ít nhất phải 10 kí tự' })
-      //       )
-      //   }
-      // },
       email: {
         value: '',
         validators: {
@@ -161,6 +140,7 @@ const BookTable = () => {
   const [open, setOpen] = useState(false)
   const { isMobile, isTablet, isLaptop } = useResponsive()
   const { loading, error, data } = useQuery(GET_CONTENTS)
+  console.log('🚀 ~ BookTable ~ data:', data)
   const [createReservation] = useMutation(ADD_RESERVATION)
   const [sendMailReservation, { loading: sendMailLoading }] =
     useMutation(SEND_MAIL)
@@ -198,7 +178,7 @@ const BookTable = () => {
       </Modal>
       <Box pos={'relative'} mih={'100vh'} of={'hidden'}>
         <MainPic
-          image={BookTablePic}
+          image={data?.page?.content[0]?.image}
           title={data?.page?.content[0]?.title}
           subtitle={data?.page?.content[0]?.description}
         />
@@ -420,7 +400,7 @@ const BookTable = () => {
                   <Box>
                     <Image
                       w={'100%'}
-                      src={HomePic1}
+                      src={data?.page?.content[1]?.image}
                       alt='table'
                       br={'lg'}
                       bsh={'md'}
@@ -447,7 +427,7 @@ const BookTable = () => {
                 >
                   <Image
                     w={isMobile ? '100%' : fr(160)}
-                    src={Space6}
+                    src={data?.page?.content[6]?.image}
                     alt='restaurant-space'
                     br={'lg'}
                     bsh={'md'}

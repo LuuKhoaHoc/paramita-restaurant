@@ -72,14 +72,13 @@ const Menu = () => {
     error: errorMenu,
     data: dataMenu
   } = useQuery(GET_MENU)
-  if (loadingContent) return <Loading />
   const listFood = dataMenu?.menuList || []
   const categoryName = dataCategory?.categoryList.map((item) => item.name)
-  console.log('🚀 ~ Menu ~ listFood:', listFood)
+  if (loadingContent) return <Loading />
   return (
     <Box pos={'relative'} mih={'100vh'}>
       <MainPic
-        image={Menus}
+        image={dataContent?.page?.content[0]?.image}
         title={dataContent?.page?.content[0].title}
         subtitle={dataContent?.page?.content[0].description}
       />

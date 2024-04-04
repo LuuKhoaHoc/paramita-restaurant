@@ -11,7 +11,6 @@ import {
 } from '@prismane/core'
 // img
 import {
-  BangGo,
   BanhXeo,
   BunHue,
   BunNam,
@@ -20,8 +19,6 @@ import {
   ComTam,
   DauHuNonChungTuong,
   DividerLogo,
-  HomePic,
-  HomePic2,
   Lau
 } from '~/images'
 import React, { useEffect, useState } from 'react'
@@ -77,7 +74,7 @@ const Home = () => {
     <Box pos={'relative'} mih={'100vh'} of={'hidden'}>
       <MainPic
         title={data?.page?.content[0]?.title}
-        image={HomePic}
+        image={data?.page?.content[0]?.image}
         sloganRight={data?.page?.content[0]?.slogan}
       />
       <Box w={'100%'} h={'100%'} pos={'relative'}>
@@ -103,7 +100,6 @@ const Home = () => {
                   timing='ease-in-out'
                   delay={0}
                 >
-                  {/*TODO: Thêm image nếu có */}
                   <Image
                     w={
                       isLaptop
@@ -123,7 +119,7 @@ const Home = () => {
                         ? fr(80)
                         : fr(160)
                     }
-                    src={BangGo}
+                    src={data?.page?.content[1]?.image}
                     alt='restaurant-space'
                     br={'lg'}
                     bsh={'md'}
@@ -286,11 +282,11 @@ const Home = () => {
                     duration={2000}
                     delay={0}
                     of={'hidden'}
-                    sx={{ 
+                    sx={{
                       textOverflow: 'ellipsis',
                       display: '-webkit-box',
                       WebkitLineClamp: '10',
-                      WebkitBoxOrient: 'vertical',
+                      WebkitBoxOrient: 'vertical'
                     }}
                   >
                     <Text
@@ -343,7 +339,7 @@ const Home = () => {
                         ? fr(100)
                         : fr(160)
                     }
-                    src={HomePic2}
+                    src={data?.page?.content[2]?.image}
                     alt='restaurant-space'
                     br={'lg'}
                     bsh={'md'}
@@ -371,7 +367,7 @@ const Home = () => {
               additionalTransfrom={0}
               arrows
               autoPlay
-              autoPlaySpeed={10}
+              autoPlaySpeed={1000}
               centerMode={false}
               className=''
               containerClass='container-with-dots'
@@ -393,7 +389,7 @@ const Home = () => {
                     max: 3000,
                     min: 1441
                   },
-                  items: 5,
+                  items: 4,
                   partialVisibilityGutter: 40
                 },
                 laptop: {
@@ -429,7 +425,7 @@ const Home = () => {
               sliderClass=''
               slidesToSlide={1}
               swipeable
-              transitionDuration={3000}
+              transitionDuration={1000}
             >
               {imagesFood.map((item, index) => (
                 <Flex

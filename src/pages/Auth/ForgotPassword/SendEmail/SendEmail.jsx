@@ -93,7 +93,7 @@ const SendEmail = () => {
         color='primary'
         type='submit'
         mx={'auto'}
-        fillOnHover
+        full
         loading={loadingMail}
       >
         Gửi mã

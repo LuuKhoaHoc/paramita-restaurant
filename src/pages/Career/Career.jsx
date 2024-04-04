@@ -14,6 +14,7 @@ const GET_CONTENTS = gql`
       content {
         title
         slogan
+        image
         description
         position
       }
@@ -28,7 +29,7 @@ const Career = () => {
   return (
     <Box pos={'relative'} mih={'100vh'}>
       <MainPic
-        image={CareerPic}
+        image={data?.page?.content[0]?.image}
         title={data?.page?.content[0].title}
         subtitle={data?.page?.content[0].description}
       />
@@ -59,7 +60,7 @@ const Career = () => {
                   {data?.page?.content[1].description}
                 </Text>
                 <Image
-                  src={BangGo}
+                  src={data?.page?.content[1]?.image}
                   alt=''
                   w={isTablet ? fr(80) : isMobile ? fr(50) : 'inherit'}
                   h={isTablet ? 'inherit' : isMobile ? 'inherit' : fr(83)}

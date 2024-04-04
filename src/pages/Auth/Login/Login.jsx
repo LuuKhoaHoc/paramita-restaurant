@@ -16,57 +16,19 @@ import p from '~/utils/zodToPrismane'
 import { z } from 'zod'
 import usernameAndEmail from '~/utils/usernameAndEmail'
 import React, { useEffect, useState, useContext } from 'react'
-import { LoginPic } from '~/images'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
-import { AlertCustom, Loading, MainPic } from '~/components'
+import { Loading, MainPic } from '~/components'
 import { Password, User } from '@phosphor-icons/react'
 import { useResponsive } from '~/utils/responsive'
-import { gql, useMutation, useQuery } from '@apollo/client'
+import { useMutation, useQuery } from '@apollo/client'
 import { AuthContext } from '~/contexts/AuthContext'
-
-const CHECK_USERNAME_EXIST = gql`
-  query checkUsername($username: String!) {
-    checkUsernameExistence(username: $username) {
-      username
-    }
-  }
-`
-const CHECK_EMAIL_EXIST = gql`
-  query checkEmail($email: String!) {
-    checkEmailExistence(email: $email) {
-      email
-    }
-  }
-`
-
-const LOGIN_MUTATION = gql`
-  mutation login($username: String!, $password: String!) {
-    login(username: $username, password: $password) {
-      customer {
-        customer_id
-        tsid
-        status
-        username
-        email
-      }
-      token
-    }
-  }
-`
-const LOGIN_EMP_MUTATION = gql`
-  mutation loginEmp($username: String!, $password: String!) {
-    loginEmployee(username: $username, password: $password) {
-      employee {
-        employee_id
-        name
-        username
-        status
-        is_admin
-      }
-      token
-    }
-  }
-`
+import {
+  CHECK_EMAIL_EXIST,
+  CHECK_USERNAME_EXIST,
+  LOGIN_EMP_MUTATION,
+  LOGIN_MUTATION,
+  GET_CONTENT
+} from '~/pages/Auth/Login/schema'
 
 const Login = () => {
   const { isLoggedIn, setIsLoggedIn, setToken } = useContext(AuthContext)
@@ -112,6 +74,8 @@ const Login = () => {
       }
     }
   })
+  // query
+  const { data: content } = useQuery(GET_CONTENT)
   // Mutation
   const [
     login,
@@ -233,9 +197,9 @@ const Login = () => {
   return (
     <Box pos={'relative'} mih={'100vh'}>
       <MainPic
-        image={LoginPic}
-        title={'Paramita'}
-        sloganCenter={'Chào mừng bạn đến với hệ thống'}
+        image={content?.page?.content[0].image}
+        title={content?.page?.content[0].title}
+        sloganCenter={content?.page?.content[0].slogan}
       />
       <Flex
         id='login'

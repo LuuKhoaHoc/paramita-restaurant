@@ -16,6 +16,7 @@ import { useResponsive } from '~/utils/responsive'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { Envelope, EnvelopeOpen } from '@phosphor-icons/react'
 import { gql, useMutation } from '@apollo/client'
+import { GET_CONTENT } from '~/pages/Auth/Login/schema'
 
 const VERIFY_EMAIL = gql`
   mutation verifyEmail($token: String!) {
@@ -50,13 +51,14 @@ const VerifyEmail = () => {
       }
     })
   }, [])
-
+  // query
+  const { data: content } = useQuery(GET_CONTENT)
   return (
     <Box pos={'relative'} mih={'100vh'}>
       <MainPic
-        image={LoginPic}
-        title={'Paramita'}
-        sloganCenter={'Chào mừng bạn đến với hệ thống'}
+        image={content?.page?.content[0].image}
+        title={content?.page?.content[0].title}
+        sloganCenter={content?.page?.content[0].slogan}
       />
       <Flex
         id='register'

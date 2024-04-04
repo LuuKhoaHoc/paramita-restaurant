@@ -14,7 +14,6 @@ import {
   useThemeModeValue
 } from '@prismane/core'
 // img
-import { ContactPic } from '~/images'
 import React, { useEffect, useState } from 'react'
 // component
 import { Loading, MainPic } from '~/components'
@@ -38,6 +37,7 @@ const GET_CONTENTS = gql`
       content {
         title
         slogan
+        image
         description
         position
       }
@@ -139,7 +139,7 @@ const Contact = () => {
       </Modal>
       <Box pos={'relative'} mih={'100vh'}>
         <MainPic
-          image={ContactPic}
+          image={data?.page?.content[0]?.image}
           title={data?.page?.content[0]?.title}
           subtitle={data?.page?.content[0]?.description}
         />

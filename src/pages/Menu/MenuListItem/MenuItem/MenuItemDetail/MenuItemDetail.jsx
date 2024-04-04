@@ -85,6 +85,7 @@ const MenuItemDetail = () => {
                 br={'lg'}
                 w={isMobile ? '80%' : isTablet ? '90%' : '100%'}
                 h={isMobile ? fr(70) : isTablet ? fr(80) : fr(100)}
+                fit='cover'
               />
               <Flex
                 direction='column'
@@ -119,11 +120,16 @@ const MenuItemDetail = () => {
               </Text>
             </Box>
             <Divider />
+
             <Box my={fr(6)} ml={isMobile ? fr(4) : fr(0)}>
               <Text as={'h3'} className='GeomanistMedium-font' mb={fr(2)}>
                 Món ăn liên quan
               </Text>
-              <Flex justify='around'>
+              <Flex
+                justify='around'
+                align='center'
+                direction={isMobile ? 'column' : 'row'}
+              >
                 {menuList.slice(0, 4).map((item, index) => (
                   <Flex direction='column' key={index}>
                     <Link
@@ -139,8 +145,9 @@ const MenuItemDetail = () => {
                         alt='bun-hue'
                         br={'xl'}
                         bsh={'md'}
-                        w={isMobile ? fr(30) : isTablet ? '90%' : fr(43)}
-                        h={isMobile ? fr(30) : isTablet ? '90%' : fr(43)}
+                        w={isMobile ? fr(50) : isTablet ? '90%' : fr(43)}
+                        h={isMobile ? fr(50) : isTablet ? '90%' : fr(43)}
+                        fit='cover'
                       />
                     </Link>
                     <Link

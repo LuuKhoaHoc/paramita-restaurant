@@ -17,6 +17,7 @@ const GET_CONTENTS = gql`
       content {
         title
         slogan
+        image
         description
         position
       }
@@ -84,7 +85,7 @@ const Album = () => {
       <MainPic
         title={data?.page?.content[0].title}
         subtitle={data?.page?.content[0].description}
-        image={AlbumPic}
+        image={data?.page?.content[0]?.image}
       />
       <Box w={'100%'} h={'100%'} pos={'relative'}>
         <Grid templateColumns={12}>

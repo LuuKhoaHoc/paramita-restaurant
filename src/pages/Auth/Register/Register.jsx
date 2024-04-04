@@ -12,50 +12,19 @@ import {
 } from '@prismane/core'
 import { useForm, useScroll } from '@prismane/core/hooks'
 import React, { useEffect } from 'react'
-import { LoginPic } from '~/images'
 import { Link, useNavigate } from 'react-router-dom'
-import { Footer, Loading, MainPic } from '~/components'
+import { Loading, MainPic } from '~/components'
 import p from '~/utils/zodToPrismane'
 import { z } from 'zod'
 import { Envelope, Password, User } from '@phosphor-icons/react'
 import { useResponsive } from '~/utils/responsive'
-import { gql, useMutation, useQuery } from '@apollo/client'
-
-const CHECK_USERNAME_EXIST = gql`
-  query checkUsername($username: String!) {
-    checkUsernameExistence(username: $username) {
-      username
-    }
-  }
-`
-const CHECK_EMAIL_EXIST = gql`
-  query checkEmail($email: String!) {
-    checkEmailExistence(email: $email) {
-      email
-    }
-  }
-`
-
-const CREATE_CUSTOMER = gql`
-  mutation createCustomer(
-    $username: String!
-    $email: String!
-    $password: String!
-  ) {
-    createCustomer(
-      data: { username: $username, email: $email, password: $password }
-    ) {
-      customer {
-        customer_id
-        tsid
-        status
-        username
-        email
-      }
-      token
-    }
-  }
-`
+import { useMutation, useQuery } from '@apollo/client'
+import {
+  CHECK_EMAIL_EXIST,
+  CHECK_USERNAME_EXIST,
+  CREATE_CUSTOMER,
+  GET_CONTENT
+} from '~/pages/Auth/Register/schema'
 
 const Register = () => {
   const { isLaptop, isMobile, isTablet } = useResponsive()
@@ -129,6 +98,8 @@ const Register = () => {
       }
     }
   })
+  // query
+  const { data: content } = useQuery(GET_CONTENT)
   // Mutation
   const [createCustomer, { loading: mutationLoading, error: mutationError }] =
     useMutation(CREATE_CUSTOMER)
@@ -145,9 +116,9 @@ const Register = () => {
   return (
     <Box pos={'relative'} mih={'100vh'}>
       <MainPic
-        image={LoginPic}
-        title={'Paramita'}
-        sloganCenter={'Chào mừng bạn đến với hệ thống'}
+        image={content?.page?.content[0].image}
+        title={content?.page?.content[0].title}
+        sloganCenter={content?.page?.content[0].slogan}
       />
       <Flex
         id='register'

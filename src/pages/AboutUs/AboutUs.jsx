@@ -10,36 +10,26 @@ import {
   fr
 } from '@prismane/core'
 // img
-import {
-  DividerLogo,
-  AboutUsPic,
-  BuddhaRestaurant,
-  Space4,
-  Space5,
-  CanhChua,
-  LauParamita,
-  NemVuong,
-  NamSot
-} from '~/images'
+import { DividerLogo } from '~/images'
 import React, { useEffect, useState } from 'react'
 // component
 import { MainPic, DividerParamita } from '~/components'
 import { useResponsive } from '~/utils/responsive'
-import {useQuery, gql} from '@apollo/client'
+import { useQuery, gql } from '@apollo/client'
 
-const GET_CONTENTS = gql `
+const GET_CONTENTS = gql`
   query {
     page(name: "About Us") {
-    page_id
-    name
-    content {
-      title
-      slogan
-      description
-      image
-      position
+      page_id
+      name
+      content {
+        title
+        slogan
+        description
+        image
+        position
+      }
     }
-  }
   }
 `
 
@@ -61,7 +51,7 @@ const AboutUs = () => {
     <Box pos={'relative'} mih={'100vh'} of={'hidden'}>
       <MainPic
         title={data?.page?.content[0]?.title}
-        image={AboutUsPic}
+        image={data?.page?.content[0]?.image}
         sloganLeft={data?.page?.content[0]?.slogan}
       />
       <Box w={'100%'} h={'100%'} pos={'relative'}>
@@ -84,7 +74,6 @@ const AboutUs = () => {
                   duration={1000}
                   delay={0}
                 >
-                  {/* TODO: Thêm ảnh nếu có */}
                   <Image
                     w={
                       isLaptop
@@ -95,7 +84,7 @@ const AboutUs = () => {
                         ? fr(80)
                         : fr(160)
                     }
-                    src={BuddhaRestaurant}
+                    src={data?.page?.content[1]?.image}
                     alt='restaurant-space'
                     br={'lg'}
                     bsh={'md'}
@@ -139,7 +128,9 @@ const AboutUs = () => {
                       ff={'GeomanistBold'}
                       cl={'primary'}
                     >
-                      <Highlight cl={'#fff'}>{data?.page?.content[1]?.title}</Highlight>
+                      <Highlight cl={'#fff'}>
+                        {data?.page?.content[1]?.title}
+                      </Highlight>
                     </Text>
                   </Animation>
                   <Animation
@@ -154,7 +145,7 @@ const AboutUs = () => {
                       ta='center'
                     >
                       "{data?.page?.content[1]?.description}"
-                      </Text>
+                    </Text>
                   </Animation>
                 </Flex>
               </Box>
@@ -202,7 +193,9 @@ const AboutUs = () => {
                     ff={'GeomanistBold'}
                     cl={'primary'}
                   >
-                    <Highlight cl={'#fff'}>{data?.page?.content[2]?.title}</Highlight>
+                    <Highlight cl={'#fff'}>
+                      {data?.page?.content[2]?.title}
+                    </Highlight>
                   </Text>
                 </Animation>
                 <Animation
@@ -216,7 +209,7 @@ const AboutUs = () => {
                     fs={isTablet ? 'xl' : isMobile ? 'md' : '2xl'}
                     ta='center'
                   >
-                    "{data?.page?.content[1]?.description}"
+                    "{data?.page?.content[2]?.description}"
                   </Text>
                 </Animation>
               </Flex>
@@ -232,7 +225,6 @@ const AboutUs = () => {
                   duration={2000}
                   delay={0}
                 >
-                  {/* TODO: Thêm ảnh nếu có */}
                   <Image
                     w={
                       isLaptop
@@ -252,7 +244,7 @@ const AboutUs = () => {
                         ? fr(70)
                         : fr(160)
                     }
-                    src={Space4}
+                    src={data?.page?.content[2]?.image}
                     br={'lg'}
                     bsh={'xl'}
                   />
@@ -282,7 +274,7 @@ const AboutUs = () => {
                         ? fr(70)
                         : fr(160)
                     }
-                    src={Space5}
+                    src={data?.page?.content[4]?.image}
                     br={'lg'}
                     bsh={'xl'}
                   />
@@ -341,7 +333,9 @@ const AboutUs = () => {
                       ff={'GeomanistBold'}
                       cl={'primary'}
                     >
-                      <Highlight cl={'#fff'}>{data?.page?.content[3]?.title}</Highlight>
+                      <Highlight cl={'#fff'}>
+                        {data?.page?.content[3]?.title}
+                      </Highlight>
                     </Text>
                   </Animation>
                   <Animation
@@ -384,7 +378,7 @@ const AboutUs = () => {
                           : fr(120)
                       }
                       fit='contain'
-                      src={CanhChua}
+                      src={data?.page?.content[3]?.image}
                       alt='canh-chua'
                     />
                     <Image
@@ -407,7 +401,7 @@ const AboutUs = () => {
                           : fr(120)
                       }
                       fit='contain'
-                      src={LauParamita}
+                      src={data?.page?.content[5]?.image}
                       alt='lau-paramita'
                     />
                   </Flex>
@@ -433,7 +427,7 @@ const AboutUs = () => {
                           : fr(120)
                       }
                       fit='contain'
-                      src={NemVuong}
+                      src={data?.page?.content[6]?.image}
                       alt='nem-vuong'
                     />
                     <Image
@@ -456,7 +450,7 @@ const AboutUs = () => {
                           : fr(120)
                       }
                       fit='contain'
-                      src={NamSot}
+                      src={data?.page?.content[7]?.image}
                       alt='nam-sot'
                     />
                   </Flex>

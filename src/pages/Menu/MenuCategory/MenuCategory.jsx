@@ -95,7 +95,7 @@ const MenuCategory = () => {
   return (
     <Box pos={'relative'} mih={'100vh'}>
       <MainPic
-        image={Menus}
+        image={dataContent?.page?.content[0]?.image}
         title={dataContent?.page?.content[0].title}
         subtitle={dataContent?.page?.content[0].description}
       />
