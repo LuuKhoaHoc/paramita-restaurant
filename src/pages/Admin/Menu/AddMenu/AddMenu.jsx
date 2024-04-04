@@ -1,30 +1,37 @@
 import { CheckCircle, X } from '@phosphor-icons/react'
 import {
+  Alert,
   Button,
   Field,
   Flex,
   Form,
+  Image,
   Modal,
+  NativeSelectField,
   Paper,
   SelectField,
   Text,
   TextField,
   TextareaField,
-  fr
+  fr,
+  useToast
 } from '@prismane/core'
 import { useForm } from '@prismane/core/hooks'
 import { z } from 'zod'
 import p from '~/utils/zodToPrismane'
 import { useQuery, useMutation } from '@apollo/client'
 import { GET_CATEGORIES, ADD_MENU } from '~/pages/Admin/Menu/schema'
+import { useState } from 'react'
 
 const AddMenu = ({ openModal, setOpenModal, refetch }) => {
+  const toast = useToast()
+  const [image, setImage] = useState('')
   const { loading, error, data } = useQuery(GET_CATEGORIES)
-  const [addMenu] = useMutation(ADD_MENU)
+  const [addMenu, { loading: addLoading }] = useMutation(ADD_MENU)
   const { register, handleSubmit, setError, getError, handleReset } = useForm({
     fields: {
       image: {
-        value: null
+        value: ''
       },
       name: {
         value: '',
@@ -80,6 +87,20 @@ const AddMenu = ({ openModal, setOpenModal, refetch }) => {
       }
     }
   })
+  const handleFileChange = (event) => {
+    const file = event.target.files[0]
+    const reader = new FileReader()
+
+    reader.onloadend = function () {
+      // After the file has been read, the result as base64 will be accessible in reader.result
+      setImage(reader.result) // Now reader.result should be the base64 string of your file
+    }
+
+    if (file) {
+      // Convert the file to base64
+      reader.readAsDataURL(file)
+    }
+  }
   return (
     <Modal open={openModal} onClose={() => setOpenModal(false)} w={'40%'}>
       <Modal.Header justify='center' fs={'xl'}>
@@ -90,7 +111,6 @@ const AddMenu = ({ openModal, setOpenModal, refetch }) => {
           handleSubmit(
             SubmitEvent,
             async (v) => {
-              let image = v.image.split('\\').pop()
               await addMenu({
                 variables: {
                   data: {
@@ -98,13 +118,23 @@ const AddMenu = ({ openModal, setOpenModal, refetch }) => {
                     image,
                     price: Number(v.price),
                     description: v.description,
-                    categoryId: Number(v.category)
+                    categoryId: Number(v.category),
+                    image
                   }
                 },
                 onCompleted: (data) => {
                   setOpenModal(false)
                   handleReset()
                   refetch()
+                  toast({
+                    element: (
+                      <Alert variant='success'>
+                        <Alert.Title ff={'GeomanistMedium !important'}>
+                          Đã thêm món ăn thành công
+                        </Alert.Title>
+                      </Alert>
+                    )
+                  })
                 },
                 onError: (error) => {
                   console.log('🚀 ~ error:', error)
@@ -121,25 +151,34 @@ const AddMenu = ({ openModal, setOpenModal, refetch }) => {
         onReset={handleReset}
       >
         <Flex direction='column' gap={fr(4)}>
-          <Paper
-            w={'100%'}
+          <Image
+            src={
+              image ||
+              'https://fakeimg.pl/600x300/39b54a/ffffff?text=Paramita&font=lobster'
+            }
+            alt={'food-image'}
+            w={'80%'}
             h={fr(30)}
-            bg={'slate'}
-            as={'input'}
-            type='file'
-            cs={'pointer'}
-            {...register('image')}
+            fit='cover'
+            mx={'auto'}
+            br={'lg'}
+            bsh={'md'}
           />
+          <Paper as={'input'} type='file' onChange={handleFileChange} />
           <Field.Error>{getError('image')}</Field.Error>
-          <SelectField
+          <NativeSelectField
             placeholder='Chọn danh mục cho món ăn...'
-            {...register('category')}
             className='GeomanistMedium-font'
-            cl={'black'}
+            {...register('category')}
             options={data?.categoryList.map((category) => ({
               value: category.category_id,
-              element: category.name
+              label: category.name
             }))}
+            sx={{
+              '.PrismaneMenu-root-open': {
+                overflow: 'auto'
+              }
+            }}
           />
           <TextField placeholder='Nhập tên món ăn...' {...register('name')} />
           <TextField
@@ -156,12 +195,14 @@ const AddMenu = ({ openModal, setOpenModal, refetch }) => {
         </Flex>
         <Modal.Footer align='center' justify='between'>
           <Button
+            variant='tertiary'
             icon={<X />}
             iconPosition='right'
             size='md'
-            bg={'gray'}
+            color={'gray'}
             type='reset'
             onClick={() => setOpenModal(false)}
+            fillOnHover
           >
             <Text className='GeomanistMedium-font' fs={'md'}>
               Đóng
@@ -173,6 +214,7 @@ const AddMenu = ({ openModal, setOpenModal, refetch }) => {
             size='md'
             variant='secondary'
             type='submit'
+            loading={addLoading}
           >
             <Text className='GeomanistMedium-font' fs={'md'}>
               Thêm

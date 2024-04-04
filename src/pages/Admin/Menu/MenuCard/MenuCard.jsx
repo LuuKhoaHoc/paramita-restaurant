@@ -1,5 +1,14 @@
 import { Eye, PencilSimpleLine, Trash } from '@phosphor-icons/react'
-import { ActionButton, Card, Flex, Image, Text, fr } from '@prismane/core'
+import {
+  ActionButton,
+  Alert,
+  Card,
+  Flex,
+  Image,
+  Text,
+  fr,
+  useToast
+} from '@prismane/core'
 import MenuDetailModal from '~/pages/Admin/Menu/MenuCard/MenuDetailModal/MenuDetailModal'
 import EditMenuModal from '~/pages/Admin/Menu/MenuCard/EditMenuModal/EditMenuModal'
 import { useState } from 'react'
@@ -7,6 +16,7 @@ import { useMutation } from '@apollo/client'
 import { DELETE_MENU } from '~/pages/Admin/Menu/schema'
 
 const MenuCard = ({ menu, refetch }) => {
+  const toast = useToast()
   const [openDetailModal, setOpenDetailModal] = useState(false)
   const [openEditModal, setOpenEditModal] = useState(false)
   const [deleteMenu] = useMutation(DELETE_MENU)
@@ -20,6 +30,15 @@ const MenuCard = ({ menu, refetch }) => {
       }
     }).then(() => {
       refetch()
+      toast({
+        element: (
+          <Alert variant='error'>
+            <Alert.Title ff={'GeomanistMedium !important'}>
+              Đã xoá món ăn thành công
+            </Alert.Title>
+          </Alert>
+        )
+      })
     })
   }
   return (
@@ -38,7 +57,7 @@ const MenuCard = ({ menu, refetch }) => {
       <Card w={'calc(20% - 48px)'}>
         <Card.Header justify='center'>
           <Image
-            src='https://picsum.photos/200'
+            src={menu?.image}
             alt=''
             br={'xl'}
             w={'100%'}

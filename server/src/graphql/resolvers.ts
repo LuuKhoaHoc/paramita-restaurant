@@ -4,6 +4,7 @@ import * as jwt from 'jsonwebtoken'
 import { Context } from '../context'
 import { getTsid } from 'tsid-ts'
 import { sendMail } from '../utils/sendMail'
+import { uploadImage } from '../utils/cloudinaryConfig'
 
 export const resolvers = {
   // Query
@@ -484,15 +485,17 @@ export const resolvers = {
           "Missing required 'data' argument in createMenu mutation."
         )
       }
+      const { name, categoryId, description, price, image } = args.data
+      const uploadResponse = await uploadImage(image, 'food')
       const tsid = getTsid().timestamp.toString()
       return context.prisma.menu.create({
         data: {
           tsid,
-          category_id: args.data.categoryId,
-          name: args.data.name,
-          description: args.data.description,
-          price: args.data.price,
-          image: args.data.image
+          category_id: categoryId,
+          name,
+          description,
+          price,
+          image: uploadResponse as string
         }
       })
     },
@@ -501,16 +504,52 @@ export const resolvers = {
       args: { id: number; data: MenuInput },
       context: Context
     ) => {
-      return context.prisma.menu.update({
-        where: { item_id: args.id },
-        data: {
-          name: args.data.name,
-          category_id: args.data.categoryId,
-          description: args.data.description,
-          price: args.data.price,
-          image: args.data.image
-        }
+      const Menu = await context.prisma.menu.findFirst({
+        where: { item_id: args.id }
       })
+
+      const { name, categoryId, description, price, image } = args.data
+
+      // No need to upload a new image
+      if (Menu?.image === image) {
+        return context.prisma.menu.update({
+          where: { item_id: args.id },
+          data: { name, category_id: categoryId, description, price }
+        })
+      }
+
+      // A new image is provided
+      // Let's try to upload it
+      try {
+        const uploadResponse = await uploadImage(image, 'food')
+
+        // If an image was indeed uploaded we can use it
+        // Otherwise, keep using the old image
+        const imageLink = uploadResponse ? uploadResponse : Menu?.image
+
+        return context.prisma.menu.update({
+          where: { item_id: args.id },
+          data: {
+            name,
+            category_id: categoryId,
+            description,
+            price,
+            image: imageLink
+          }
+        })
+      } catch (err) {
+        if (err instanceof Error) {
+          // Now TypeScript knows that `err` is an Error, so you can access `message`
+          console.error(
+            `Could not upload image for menu ${args.id}. Error: ${err.message}`
+          )
+          throw new Error('An error occurred while updating the menu')
+        } else {
+          // Handle any unexpected errors here
+          console.error(err)
+          throw new Error('An unexpected error occurred.')
+        }
+      }
     },
     deleteMenu: async (_parent: any, args: { id: any }, context: Context) => {
       return context.prisma.menu.delete({

@@ -50,8 +50,8 @@ const Menu = () => {
           </Flex>
         </Flex>
         <Stack direction='row' wrap='wrap' px={fr(4)}>
-          {filtered.map((menu) => (
-            <MenuCard key={menu?.item_id} menu={menu} refetch={refetch} />
+          {filtered.map((menu, index) => (
+            <MenuCard key={index} menu={menu} refetch={refetch} />
           ))}
         </Stack>
       </Flex>
