@@ -127,7 +127,12 @@ const Contact = () => {
           <br /> ~~Cảm ơn bạn đã tin tưởng Paramita~~
         </Text>
         <Modal.Footer justify='end'>
-          <Button variant='tertiary' fillOnHover color='gray'>
+          <Button
+            variant='tertiary'
+            fillOnHover
+            color='gray'
+            onClick={() => setOpenModal(false)}
+          >
             Đóng
           </Button>
         </Modal.Footer>
