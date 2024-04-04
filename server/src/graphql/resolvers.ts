@@ -557,51 +557,23 @@ export const resolvers = {
       })
     },
     // Content
-    createContent: async (
-      _parent: any,
-      args: { data: ContentInput },
-      context: Context
-    ) => {
-      if (!args.data) {
-        throw new Error(
-          "Missing required 'data' argument in createContent mutation."
-        )
-      }
-      const tsid = getTsid().timestamp.toString()
-      return context.prisma.contents.create({
-        data: {
-          tsid,
-          title: args.data.title,
-          slogan: args.data?.slogan,
-          description: args.data.description,
-          position: args.data.position,
-          page_id: args.data.pageId
-        }
-      })
-    },
     updateContent: async (
       _parent: any,
       args: { id: number; data: ContentInput },
       context: Context
     ) => {
+      const fileStr = args.data?.image
+      const uploadResponse = await uploadImage(fileStr, 'full-page-img')
       return context.prisma.contents.update({
         where: { content_id: args.id },
         data: {
           title: args.data.title,
           slogan: args.data?.slogan,
+          image: uploadResponse as string,
           description: args.data.description,
           position: args.data?.position,
           page_id: args.data?.pageId
         }
-      })
-    },
-    deleteContent: async (
-      _parent: any,
-      args: { id: any },
-      context: Context
-    ) => {
-      return context.prisma.contents.delete({
-        where: { content_id: args.id }
       })
     },
     // Page

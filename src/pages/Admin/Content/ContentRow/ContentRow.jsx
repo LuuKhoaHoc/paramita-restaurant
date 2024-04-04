@@ -4,7 +4,9 @@ import {
   Button,
   Flex,
   Form,
+  Image,
   Modal,
+  Paper,
   SelectField,
   Table,
   Text,
@@ -24,41 +26,39 @@ import { useMutation, useQuery } from '@apollo/client'
 
 const ContentRow = ({ content }) => {
   const [open, setOpen] = useState(false)
+  const [image, setImage] = useState('')
   const toast = useToast()
-  const { handleSubmit, register, setValue } = useForm({
+  const { handleSubmit, register, setValue, handleReset } = useForm({
     fields: {
       title: {
-        value: '',
-        validators: {
-          required: (v) =>
-            p(
-              v,
-              z.string().trim().min(1, { message: 'Không bỏ trống tiêu đề' })
-            )
-        }
+        value: content?.title || ''
       },
       slogan: {
-        value: ''
+        value: content?.slogan || ''
       },
       description: {
-        value: '',
-        validators: {
-          required: (v) =>
-            p(v, z.string().trim().min(1, { message: 'Không bỏ trống mô tả' }))
-        }
+        value: content?.description || ''
       }
     },
     validateOn: 'change'
   })
-  useEffect(() => {
-    setValue('title', content.title)
-    setValue('slogan', content.slogan)
-    setValue('description', content.description)
-  }, [])
   const { refetch } = useQuery(GET_CONTENTS)
   const [updateContent, { loading: updateLoading }] =
     useMutation(UPDATE_CONTENT)
+  const handleFileChange = (event) => {
+    const file = event.target.files[0]
+    const reader = new FileReader()
 
+    reader.onloadend = function () {
+      // After the file has been read, the result as base64 will be accessible in reader.result
+      setImage(reader.result) // Now reader.result should be the base64 string of your file
+    }
+
+    if (file) {
+      // Convert the file to base64
+      reader.readAsDataURL(file)
+    }
+  }
   return (
     <>
       <Modal
@@ -85,6 +85,7 @@ const ContentRow = ({ content }) => {
                   data: {
                     title: v.title,
                     slogan: v.slogan,
+                    image,
                     description: v.description,
                     pageId: content.page.page_id
                   }
@@ -99,18 +100,14 @@ const ContentRow = ({ content }) => {
                       </Alert>
                     )
                   })
+                  handleReset()
                   setOpen(false)
                   refetch()
                 }
               })
             })
           }}
-          onReset={() => {
-            setValue('title', content.title)
-            setValue('slogan', content.slogan)
-            setValue('description', content.description)
-            setOpen(false)
-          }}
+          onReset={handleReset}
         >
           <Flex
             gap={fr(2)}
@@ -122,6 +119,20 @@ const ContentRow = ({ content }) => {
                 }
             }}
           >
+            <Image
+              src={
+                image ||
+                'https://fakeimg.pl/600x300/39b54a/ffffff?text=Paramita&font=lobster'
+              }
+              alt={'food-image'}
+              w={'80%'}
+              h={fr(30)}
+              fit='cover'
+              mx={'auto'}
+              br={'lg'}
+              bsh={'md'}
+            />
+            <Paper as={'input'} type='file' onChange={handleFileChange} />
             <TextField
               label='Tiêu đề'
               placeholder='Nhập tiêu đề...'
@@ -133,7 +144,7 @@ const ContentRow = ({ content }) => {
               {...register('slogan')}
             />
             <TextareaField
-              className='Geomanist-font'
+              className='GeomanistMedium-font'
               label='Mô tả'
               size='md'
               placeholder='Nhập mô tả...'
@@ -144,19 +155,34 @@ const ContentRow = ({ content }) => {
               label='Trang'
               defaultValue={content.page.name}
               options={[]}
+              disabled
             />
             <SelectField
               className='GeomanistMedium-font'
               label='Vị trí'
               defaultValue={content.position}
               options={[]}
+              disabled
             />
           </Flex>
-          <Modal.Footer justify='end' align='center' gap={fr(2)}>
-            <Button size='md' variant='secondary' color='gray' type='reset'>
+          <Modal.Footer justify='between' align='center' gap={fr(2)}>
+            <Button
+              size='md'
+              variant='secondary'
+              color='gray'
+              type='reset'
+              onClick={() => setOpen(false)}
+              loading={updateLoading}
+            >
               Đóng
             </Button>
-            <Button variant='secondary' icon={<NotePencil />} type='submit'>
+            <Button
+              size='md'
+              variant='secondary'
+              icon={<NotePencil />}
+              type='submit'
+              loading={updateLoading}
+            >
               Sửa
             </Button>
           </Modal.Footer>
@@ -170,7 +196,13 @@ const ContentRow = ({ content }) => {
           {content.description}
         </Table.Cell>
         <Table.Cell>
-          <img src={content.image} alt={content.title} />
+          <Image
+            src={content.image}
+            alt={content.title}
+            br={'lg'}
+            w={'100%'}
+            fit='cover'
+          />
         </Table.Cell>
         <Table.Cell>{content.page.name}</Table.Cell>
         <Table.Cell>{content.position}</Table.Cell>
