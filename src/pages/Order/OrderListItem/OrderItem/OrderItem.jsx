@@ -112,6 +112,7 @@ const OrderItem = ({ id, image, title, price, description }) => {
           src={image}
           alt={title}
           mx={'auto'}
+          fit='cover'
         />
         <Text fs={isTablet ? 'xl' : isMobile ? 'lg' : '2xl'}>{title}</Text>
         <Text fs={isTablet ? 'md' : isMobile ? 'base' : 'lg'}>
@@ -135,7 +136,7 @@ const OrderItem = ({ id, image, title, price, description }) => {
         <List p={fr(2)}>
           {optionList.map((option, index) => (
             <List.Item key={index} my={fr(2)} justify='between'>
-              <Text fs={isTablet ? 'md' : isMobile ? 'base' : 'lg'}>
+              <Text fs={isTablet ? 'md' : isMobile ? 'base' : 'lg'} w={fr(30)}>
                 {option.title}
               </Text>
               <Radio.Group
@@ -189,6 +190,7 @@ const OrderItem = ({ id, image, title, price, description }) => {
           pl={fr(1)}
           mx={'auto'}
           br={'xl'}
+          fit='cover'
         />
         <Text fs={'md'} my={fr(2)} h={fr(16)}>
           {title}

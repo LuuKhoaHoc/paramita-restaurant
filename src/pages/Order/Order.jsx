@@ -5,17 +5,7 @@ import { Leaf } from '@phosphor-icons/react'
 import OrderListCategory from '~/pages/Order/OrderListCategory/OrderListCategory'
 import OrderListItem from '~/pages/Order/OrderListItem/OrderListItem'
 // img
-import {
-  Orders,
-  BanhXeo,
-  BunHue,
-  BunNam,
-  CaTimNuong,
-  ChaoNamMoi,
-  ComTam,
-  DauHuNonChungTuong,
-  Lau
-} from '~/images'
+import { Orders } from '~/images'
 import { useResponsive } from '~/utils/responsive'
 import { gql, useQuery } from '@apollo/client'
 
@@ -74,56 +64,6 @@ const Order = () => {
   } = useQuery(GET_MENU)
 
   const listFood = dataMenu?.menuList || []
-  // const listFood = [
-  //   {
-  //     image: BanhXeo,
-  //     title: 'Bánh xèo',
-  //     price: '100.000',
-  //     description: 'Món Bánh xèo ngon miệng'
-  //   },
-  //   {
-  //     image: BunHue,
-  //     title: 'Bún Huế Paramita',
-  //     price: '80.000',
-  //     description: 'Món Bún Huế thơm ngon'
-  //   },
-  //   {
-  //     image: BunNam,
-  //     title: 'Bún nấm nướng chả giò',
-  //     price: '100.000',
-  //     description: 'Món Bún nấm nướng chả giò hấp dẫn'
-  //   },
-  //   {
-  //     image: CaTimNuong,
-  //     title: 'Cà tím nướng hành ớt',
-  //     price: '100.000',
-  //     description: 'Món Cà tím nướng hành ớt đậm đà'
-  //   },
-  //   {
-  //     image: ChaoNamMoi,
-  //     title: 'Cháo nấm mối',
-  //     price: '100.000',
-  //     description: 'Món Cháo nấm mối thơm ngon'
-  //   },
-  //   {
-  //     image: ComTam,
-  //     title: 'Cơm tấm Paramita',
-  //     price: '100.000',
-  //     description: 'Món Cơm tấm ngon lành'
-  //   },
-  //   {
-  //     image: DauHuNonChungTuong,
-  //     title: 'Đậu hũ non chưng tương',
-  //     price: '100.000',
-  //     description: 'Món Đậu hũ non chưng tương thơm ngon'
-  //   },
-  //   {
-  //     image: Lau,
-  //     title: 'Lẩu Paramita',
-  //     price: '80.000',
-  //     description: 'Món Lẩu thơm ngon'
-  //   }
-  // ]
   const { isMobile, isTablet, isLaptop } = useResponsive()
   if (loadingContent) return <Loading />
 
