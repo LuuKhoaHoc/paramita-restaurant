@@ -24,6 +24,9 @@ import {
 } from '@phosphor-icons/react'
 import { useResponsive } from '~/utils/responsive'
 import { gql, useQuery } from '@apollo/client'
+import { useForm } from '@prismane/core/hooks'
+import p from '~/utils/zodToPrismane'
+import { z } from 'zod'
 
 const GET_CONTENTS = gql`
   query {
@@ -54,6 +57,54 @@ const Contact = () => {
       window.removeEventListener('scroll', handleScroll)
     }
   }, [])
+  const {} = useForm({
+    fields: {
+      name: {
+        value: '',
+        validators: {
+          required: (v) =>
+            p(
+              v,
+              z.string().trim().min(1, { message: 'Vui điền đầy đủ thông tin' })
+            )
+        }
+      },
+      email: {
+        value: '',
+        validators: {
+          required: (v) =>
+            p(
+              v,
+              z.string().trim().min(1, { message: 'Vui điền đầy đủ thông tin' })
+            ),
+          email: (v) =>
+            p(v, z.string().email({ message: 'Email không hợp lệ' }))
+        }
+      },
+      phone: {
+        value: '',
+        validators: {
+          required: (v) =>
+            p(
+              v,
+              z.string().trim().min(1, { message: 'Vui điền đầy đủ thông tin' })
+            ),
+          phoneNumber: (v) =>
+            p(v, z.string().min(10, { message: 'Số điện thoại phải 10 số!' }))
+        }
+      },
+      message: {
+        value: '',
+        validators: {
+          required: (v) =>
+            p(
+              v,
+              z.string().trim().min(1, { message: 'Vui điền đầy đủ thông tin' })
+            )
+        }
+      }
+    }
+  })
   if (loading) return <Loading />
   return (
     <Box pos={'relative'} mih={'100vh'}>
@@ -226,11 +277,11 @@ const Contact = () => {
               <Box
                 w={'70%'}
                 sx={{
-                  '.PrismaneTextField-label, .PrismaneTextarea-label': {
+                  '.PrismaneTextField-label, .PrismaneTextareaField-label': {
                     fontSize: '20px'
                   },
                   '@media (max-width: 768px)': {
-                    '.PrismaneTextField-label, .PrismaneTextarea-label': {
+                    '.PrismaneTextField-label, .PrismaneTextareaField-label': {
                       fontSize: '16px'
                     }
                   }
