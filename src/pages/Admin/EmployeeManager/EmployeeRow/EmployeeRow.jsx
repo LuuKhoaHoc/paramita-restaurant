@@ -63,7 +63,7 @@ const EmployeeRow = ({ employee, refetch, position }) => {
       />
       <Table.Row>
         <Table.Cell>
-          <Text className='GeomanistMedium-font'>{employee?.employee_id}</Text>
+          <Text>{employee?.employee_id}</Text>
         </Table.Cell>
         <Table.Cell>
           <Center gap={fr(2)}>
@@ -74,16 +74,14 @@ const EmployeeRow = ({ employee, refetch, position }) => {
               w={fr(10)}
               h={fr(10)}
             />
-            <Text className='GeomanistMedium-font'>{employee?.name}</Text>
+            <Text>{employee?.name}</Text>
           </Center>
         </Table.Cell>
         <Table.Cell>
-          <Text className='GeomanistMedium-font'>
-            {employee?.position.name}
-          </Text>
+          <Text>{employee?.position.name}</Text>
         </Table.Cell>
         <Table.Cell>
-          <Center justify='center' gap={fr(2)} className='GeomanistMedium-font'>
+          <Center justify='center' gap={fr(2)}>
             {(employee?.status).toString() === 'true' ? (
               <>
                 <Circle bg='primary' cl={'white'} size={fr(5)}>
