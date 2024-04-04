@@ -6,8 +6,8 @@
     "forceConsistentCasingInFileNames": true,
     "noImplicitAny": false,
     "outDir": "./dist",
-    "rootDir": "./src",
+    "rootDir": "./src"
   },
-  "include": ["src/**/*.ts"],
+  "include": ["src/**/*.ts", "src/utils/cloudinaryConfig.ts"],
   "exclude": ["node_modules"]
 }
