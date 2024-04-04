@@ -73,6 +73,16 @@ export const resolvers = {
         where: { phone: args.phone }
       })
     },
+    // Contact
+    contactList: async (_parent: any, _args: any, context: Context) => {
+      return context.prisma.contact.findMany()
+    },
+    contact: async (_parent: any, args: { id: any }, context: Context) => {
+      return context.prisma.contact.findUnique({
+        where: { contact_id: args.id || undefined }
+      })
+    },
+    // Category
     categoryList: async (_parent: any, _args: any, context: Context) => {
       return context.prisma.categories.findMany()
     },
@@ -81,6 +91,7 @@ export const resolvers = {
         where: { category_id: args.id || undefined }
       })
     },
+    // Menu
     menuList: async (_parent: any, _args: any, context: Context) => {
       return context.prisma.menu.findMany()
     },
@@ -89,6 +100,7 @@ export const resolvers = {
         where: { item_id: args.id || undefined }
       })
     },
+    // Content
     contentList: async (_parent: any, _args: any, context: Context) => {
       return context.prisma.contents.findMany()
     },
@@ -97,6 +109,7 @@ export const resolvers = {
         where: { content_id: args.id || undefined }
       })
     },
+    // Page
     pageList: async (_parent: any, _args: any, context: Context) => {
       return context.prisma.pages.findMany()
     },
@@ -105,6 +118,7 @@ export const resolvers = {
         where: { name: args.name || undefined }
       })
     },
+    // Customer
     customerList: async (_parent: any, _args: any, context: Context) => {
       return context.prisma.customers.findMany()
     },
@@ -141,6 +155,7 @@ export const resolvers = {
         where: { address_id: args.id || undefined }
       })
     },
+    // Invoice
     invoiceList: async (_parent: any, _args: any, context: Context) => {
       return context.prisma.invoices.findMany()
     },
@@ -158,6 +173,7 @@ export const resolvers = {
         where: { invoice_detail_id: args.id || undefined }
       })
     },
+    // Order
     orderList: async (_parent: any, _args: any, context: Context) => {
       return context.prisma.orders.findMany()
     },
@@ -175,6 +191,7 @@ export const resolvers = {
         where: { order_detail_id: args.id || undefined }
       })
     },
+    // Point history
     pointsHistoryList: async (_parent: any, _args: any, context: Context) => {
       return context.prisma.point_histories.findMany()
     },
@@ -183,6 +200,7 @@ export const resolvers = {
         where: { point_history_id: args.id || undefined }
       })
     },
+    // Promotion
     promotionList: async (_parent: any, _args: any, context: Context) => {
       return context.prisma.promotions.findMany()
     },
@@ -191,6 +209,7 @@ export const resolvers = {
         where: { promotion_id: args.id || undefined }
       })
     },
+    // Revenue
     revenueList: async (_parent: any, _args: any, context: Context) => {
       return context.prisma.revenue.findMany()
     },
@@ -199,6 +218,7 @@ export const resolvers = {
         where: { revenue_id: args.id || undefined }
       })
     },
+    // Table
     tableList: async (_parent: any, _args: any, context: Context) => {
       return context.prisma.tables.findMany()
     },
@@ -207,6 +227,7 @@ export const resolvers = {
         where: { table_id: args.id || undefined }
       })
     },
+    // Reservation
     reservationList: async (_parent: any, _args: any, context: Context) => {
       return context.prisma.reservations.findMany()
     },
@@ -215,6 +236,7 @@ export const resolvers = {
         where: { reservation_id: args.id || undefined }
       })
     },
+    // Review
     reviewList: async (_parent: any, _args: any, context: Context) => {
       return context.prisma.reviews.findMany()
     },
@@ -223,6 +245,7 @@ export const resolvers = {
         where: { review_id: args.id || undefined }
       })
     },
+    // Voucher
     voucherList: async (_parent: any, _args: any, context: Context) => {
       return context.prisma.vouchers.findMany()
     },
@@ -231,6 +254,7 @@ export const resolvers = {
         where: { voucher_id: args.id || undefined }
       })
     },
+    // Employee
     employeeList: async (_parent: any, _args: any, context: Context) => {
       return context.prisma.employees.findMany()
     },
@@ -243,6 +267,7 @@ export const resolvers = {
         where: { employee_id: employee_id.userId || undefined }
       })
     },
+    // Position
     positionList: async (_parent: any, _args: any, context: Context) => {
       return context.prisma.positions.findMany()
     },

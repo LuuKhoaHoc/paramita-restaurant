@@ -341,7 +341,7 @@ type Contact {
   email: String!
   phone: String!
   message: String!
-  createAt: DateTime
+  createdAt: DateTime!
 }
 
 type Category {
