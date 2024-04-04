@@ -1,4 +1,4 @@
-import { Button, Drawer, Flex, Text } from '@prismane/core'
+import { Button, Drawer, Flex, Text, fr } from '@prismane/core'
 import { formatTime } from '~/utils/formatTime'
 
 const ContactDetailDrawer = ({ contact, open, setOpen }) => {
@@ -17,7 +17,7 @@ const ContactDetailDrawer = ({ contact, open, setOpen }) => {
       >
         Chi tiết liên hệ
       </Drawer.Header>
-      <Flex direction='column' justify='evenly' h={'100%'}>
+      <Flex direction='column' gap={fr(16)}>
         <Text fs={'lg'} className='GeomanistMedium-font'>
           <Text cl={'gray'}>Tên khách liên hệ:</Text> {contact?.name}
         </Text>
