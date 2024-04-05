@@ -118,8 +118,7 @@ const AddMenu = ({ openModal, setOpenModal, refetch }) => {
                     image,
                     price: Number(v.price),
                     description: v.description,
-                    categoryId: Number(v.category),
-                    image
+                    categoryId: Number(v.category)
                   }
                 },
                 onCompleted: (data) => {

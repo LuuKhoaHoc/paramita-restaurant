@@ -10,6 +10,8 @@
     "@phosphor-icons/react": "^2.1.4",
     "@prismane/core": "^1.5.0",
     "@vitejs/plugin-react": "^4.2.1",
+    "echarts": "^5.5.0",
+    "echarts-for-react": "^3.0.2",
     "graphql": "^16.8.1",
     "lightgallery": "^2.7.2",
     "react": "^18.2.0",
