@@ -123,7 +123,9 @@ model invoice_details {
   total_price       Decimal  @db.Decimal(10, 2)
   tsid              String   @db.VarChar(13)
   invoices          invoices @relation(fields: [invoice_id], references: [invoice_id])
+  menu              menu     @relation(fields: [item_id], references: [item_id])
 
+  @@index([item_id], map: "item_id")
   @@index([invoice_id], map: "invoice_details_invoice_id_fkey")
 }
 
@@ -146,15 +148,16 @@ model invoices {
 }
 
 model menu {
-  item_id       Int             @id @default(autoincrement())
-  name          String          @db.VarChar(255)
-  description   String          @db.Text
-  price         Decimal         @db.Decimal(10, 2)
-  image         String          @db.Text
-  tsid          String          @db.VarChar(13)
-  category_id   Int
-  categories    categories      @relation(fields: [category_id], references: [category_id])
-  order_details order_details[]
+  item_id         Int               @id @default(autoincrement())
+  name            String            @db.VarChar(255)
+  description     String            @db.Text
+  price           Decimal           @db.Decimal(10, 2)
+  image           String            @db.Text
+  tsid            String            @db.VarChar(13)
+  category_id     Int
+  categories      categories        @relation(fields: [category_id], references: [category_id])
+  order_details   order_details[]
+  invoice_details invoice_details[]
 
   @@index([category_id], map: "category_id")
 }
