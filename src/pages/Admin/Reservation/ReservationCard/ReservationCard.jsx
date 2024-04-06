@@ -69,7 +69,7 @@ const ReservationCard = ({ reservation, refetch, employee }) => {
       >
         <Card.Header justify='center'>
           <Image
-            src='https://picsum.photos/seed/picsum/200/300'
+            src='https://fakeimg.pl/600x300/39b54a/ffffff?text=Para+Reservation&font=lobster'
             alt=''
             br={'xl'}
             w={'100%'}

@@ -137,6 +137,7 @@ const OrderRow = ({ order, refetch, employee }) => {
               variant='tertiary'
               fillOnHover
               color='diamond'
+              disabled={order?.status === 'Hoàn thành'}
               onClick={() => setOpenEditModal(true)}
             >
               Chỉnh sửa
