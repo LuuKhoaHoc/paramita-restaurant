@@ -55,6 +55,7 @@ export const UPDATE_ORDER = gql`
   mutation updateOrder($id: Int!, $data: OrderInput!) {
     updateOrder(id: $id, data: $data) {
       order_id
+      status
     }
   }
 `
@@ -70,6 +71,18 @@ export const DELETE_ORDER_DETAIL = gql`
   mutation deleteOrderDetail($id: Int!) {
     deleteOrderDetail(id: $id) {
       order_detail_id
+    }
+  }
+`
+export const CREATE_POINT_HISTORY = gql`
+  mutation createPointHistory($data: PointsHistoryInput!) {
+    createPointsHistory(data: $data) {
+      point_history_id
+      tsid
+      customer {
+        customer_id
+        name
+      }
     }
   }
 `

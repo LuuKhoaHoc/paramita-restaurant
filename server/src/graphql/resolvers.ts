@@ -9,6 +9,86 @@ import { uploadImage } from '../utils/cloudinaryConfig'
 export const resolvers = {
   // Query
   Query: {
+    // Get revenue by quarter
+    getRevenueByQuarter: async (
+      _parent: any,
+      args: { quarter: string },
+      context: Context
+    ) => {
+      const total_price_invoice = await context.prisma.invoices
+        .findMany({
+          where: {
+            invoice_time: {
+              gte: new Date(new Date().getFullYear(), +args.quarter * 3 - 3, 1),
+              lte: new Date(new Date().getFullYear(), +args.quarter * 3, 1)
+            },
+            payment_status: { startsWith: 'Đã' }
+          },
+          select: {
+            total_price: true
+          }
+        })
+        .then((res) => res.reduce((acc, item) => acc + item.total_price, 0))
+      const total_price_order = await context.prisma.orders
+        .findMany({
+          where: {
+            created_at: {
+              gte: new Date(new Date().getFullYear(), +args.quarter * 3 - 3, 1),
+              lte: new Date(new Date().getFullYear(), +args.quarter * 3, 1)
+            },
+            status: { contains: 'Hoàn thành' }
+          },
+          select: {
+            total_price: true
+          }
+        })
+        .then((res) => res.reduce((acc, item) => acc + item.total_price, 0))
+
+      return {
+        revenueInvoice: total_price_invoice,
+        revenueOrder: total_price_order
+      }
+    },
+    // get revenue by month
+    getRevenueByMonth: async (
+      _parent: any,
+      args: { month: String },
+      context: Context
+    ) => {
+      const total_price_invoice = await context.prisma.invoices
+        .findMany({
+          where: {
+            invoice_time: {
+              gte: new Date(new Date().getFullYear(), +args.month - 1, 1),
+              lte: new Date(new Date().getFullYear(), +args.month - 1, 31)
+            },
+            payment_status: { startsWith: 'Đã' }
+          },
+          select: {
+            total_price: true
+          }
+        })
+        .then((res) => res.reduce((acc, item) => acc + item.total_price, 0))
+      const total_price_order = await context.prisma.orders
+        .findMany({
+          where: {
+            created_at: {
+              gte: new Date(new Date().getFullYear(), +args.month - 1, 1),
+              lte: new Date(new Date().getFullYear(), +args.month - 1, 31)
+            },
+            status: { contains: 'Hoàn thành' }
+          },
+          select: {
+            total_price: true
+          }
+        })
+        .then((res) => res.reduce((acc, item) => acc + item.total_price, 0))
+
+      return {
+        revenueInvoice: total_price_invoice,
+        revenueOrder: total_price_order
+      }
+    },
     // Authentication
     checkUsernameExistence: async (
       _parent: any,
@@ -1731,11 +1811,12 @@ export const resolvers = {
         where: { customer_id: parent?.customer_id }
       })
     },
-    voucher: (parent: any, _args: any, context: Context) => {
-      return context.prisma.vouchers.findFirst({
-        where: { voucher_id: parent?.voucher_id }
-      })
-    },
+    // voucher: (parent: any, _args: any, context: Context) => {
+    //   console.log('🚀 ~ parent:', parent)
+    //   return context.prisma.vouchers.findFirst({
+    //     where: { voucher_id: parent?.voucher_id }
+    //   })
+    // },
     order: (parent: any, _args: any, context: Context) => {
       return context.prisma.orders.findFirst({
         where: { order_id: parent?.order_id }

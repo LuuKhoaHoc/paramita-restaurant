@@ -275,7 +275,8 @@ type Query {
   checkToken(token: String!): AuthPayload
   # get Customer by phone number
   getCustomerByPhone(phone: String!): Customer
-
+  getRevenueByQuarter(quarter: String!): StatisticsResponse
+  getRevenueByMonth(month: String!): StatisticsResponse
   category(id: ID!): Category
   item(id: ID!): Menu
   content(id: ID!): Content
@@ -323,6 +324,10 @@ type Query {
 
 # TypeDefs
 # forgot password
+type StatisticsResponse {
+  revenueInvoice: String!
+  revenueOrder: String!
+}
 type Response {
   status: String!
   message: String!
