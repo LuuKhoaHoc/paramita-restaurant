@@ -15,9 +15,7 @@ import { useResponsive } from '~/utils/responsive'
 import timestampToDateTime from '~/utils/timeStampToDateTime'
 
 const AccountOrder = ({ customer }) => {
-  const orders = customer?.orders.filter(
-    (item) => item.status === 'Chờ xác nhận'
-  )
+  const orders = customer?.orders.filter((item) => item.status !== 'Hoàn thành')
   const { isTablet, isMobile } = useResponsive()
   const [order, setOrder] = useState()
   const [open, setOpen] = useState(false)

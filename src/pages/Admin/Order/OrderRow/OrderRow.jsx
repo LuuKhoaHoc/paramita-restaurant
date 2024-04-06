@@ -141,7 +141,7 @@ const OrderRow = ({ order, refetch, employee }) => {
             >
               Chỉnh sửa
             </Button>
-            {employee?.id_admin && (
+            {employee?.is_admin && (
               <Button
                 icon={<Trash />}
                 variant='tertiary'

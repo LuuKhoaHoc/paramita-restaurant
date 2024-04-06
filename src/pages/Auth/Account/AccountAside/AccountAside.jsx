@@ -22,7 +22,7 @@ import {
   fr,
   useThemeModeValue
 } from '@prismane/core'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { NavLink } from 'react-router-dom'
 import { useResponsive } from '~/utils/responsive'
 import { gql, useQuery } from '@apollo/client'
@@ -41,6 +41,10 @@ const AccountAside = ({ customer }) => {
   const textColor = useThemeModeValue('#371b04', '#d1e9d5')
   const bgColor = useThemeModeValue('#fff2e5', '#1d2b1f')
   const [point, setPoint] = useState(customer?.points)
+  let customerPoints = customer?.point_histories.reduce(
+    (acc, item) => acc + item.points_earned,
+    0
+  )
   const handleLogout = () => {
     sessionStorage.clear()
     localStorage.removeItem('orders')
@@ -49,6 +53,9 @@ const AccountAside = ({ customer }) => {
     localStorage.removeItem('token')
     window.location.href = '/'
   }
+  useEffect(() => {
+    setPoint(customerPoints)
+  }, [customerPoints])
 
   const { data: levelData } = useQuery(GET_NEXTLEVEL, {
     variables: {
@@ -76,7 +83,7 @@ const AccountAside = ({ customer }) => {
               bsh={'sm'}
               br={'xl'}
               pos={'relative'}
-              cl={'#fff'}
+              cl={'#fff !important'}
               sx={{
                 background: 'linear-gradient(180deg, #6ad078 0%, #004209 100%)'
               }}
@@ -256,7 +263,10 @@ const AccountAside = ({ customer }) => {
               pos={'relative'}
               cl={'#fff'}
               sx={{
-                background: 'linear-gradient(180deg, #6ad078 0%, #004209 100%)'
+                background: 'linear-gradient(180deg, #6ad078 0%, #004209 100%)',
+                '*': {
+                  color: '#fff'
+                }
               }}
             >
               <Center

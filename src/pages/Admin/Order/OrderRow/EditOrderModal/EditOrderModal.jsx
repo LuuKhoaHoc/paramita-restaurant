@@ -5,13 +5,13 @@ import {
   Flex,
   Form,
   Modal,
-  NativeSelectField,
   SelectField,
   fr,
   useToast
 } from '@prismane/core'
 import { useForm } from '@prismane/core/hooks'
-import { UPDATE_ORDER } from '~/pages/Admin/Order/schema'
+import { UPDATE_ORDER, CREATE_POINT_HISTORY } from '~/pages/Admin/Order/schema'
+import { GET_CUSTOMER } from '~/utils/appSchema'
 
 const EditOrderModal = ({
   openEditModal,
@@ -21,6 +21,7 @@ const EditOrderModal = ({
 }) => {
   const toast = useToast()
   const [updateOrder] = useMutation(UPDATE_ORDER)
+  const [createPointHistory] = useMutation(CREATE_POINT_HISTORY)
   const { handleReset, handleSubmit, register } = useForm({
     fields: {
       status: { value: order?.status },
@@ -46,7 +47,6 @@ const EditOrderModal = ({
         onReset={handleReset}
         onSubmit={(SubmitEvent) =>
           handleSubmit(SubmitEvent, (v) => {
-            console.log(v)
             updateOrder({
               variables: {
                 id: order?.order_id,
@@ -64,9 +64,21 @@ const EditOrderModal = ({
               },
               onError: (err) => console.log(err),
               onCompleted: (data) => {
-                console.log('🚀 ~ handleSubmit ~ data:', data)
                 refetch()
                 setOpenEditModal(false)
+                if (data?.updateOrder.status === 'Hoàn thành') {
+                  createPointHistory({
+                    variables: {
+                      data: {
+                        customerId: order?.customer.customer_id,
+                        orderId: order?.order_id,
+                        voucherId: order?.voucher?.voucher_id,
+                        earnedPoints: Math.floor(order?.total_price / 10000),
+                        transactionDate: new Date()
+                      }
+                    }
+                  })
+                }
                 toast({
                   element: (
                     <Alert variant='success'>
@@ -76,7 +88,9 @@ const EditOrderModal = ({
                     </Alert>
                   )
                 })
-              }
+              },
+              refetchQueries: [GET_CUSTOMER, 'getCustomer'],
+              awaitRefetchQueries: true
             })
           })
         }
