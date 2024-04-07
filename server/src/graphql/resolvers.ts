@@ -15,37 +15,45 @@ export const resolvers = {
       args: { quarter: string },
       context: Context
     ) => {
-      const total_price_invoice = await context.prisma.invoices
-        .findMany({
-          where: {
-            invoice_time: {
-              gte: new Date(new Date().getFullYear(), +args.quarter * 3 - 3, 1),
-              lte: new Date(new Date().getFullYear(), +args.quarter * 3, 1)
-            },
-            payment_status: { startsWith: 'Đã' }
+      const invoices = await context.prisma.invoices.findMany({
+        where: {
+          invoice_time: {
+            gte: new Date(new Date().getFullYear(), +args.quarter * 3 - 3, 1),
+            lte: new Date(new Date().getFullYear(), +args.quarter * 3, 1)
           },
-          select: {
-            total_price: true
-          }
-        })
-        .then((res) => res.reduce((acc, item) => acc + item.total_price, 0))
-      const total_price_order = await context.prisma.orders
-        .findMany({
-          where: {
-            created_at: {
-              gte: new Date(new Date().getFullYear(), +args.quarter * 3 - 3, 1),
-              lte: new Date(new Date().getFullYear(), +args.quarter * 3, 1)
-            },
-            status: { contains: 'Hoàn thành' }
+          payment_status: { startsWith: 'Đã' }
+        },
+        select: {
+          invoice_id: true,
+          total_price: true
+        }
+      })
+      const total_price_invoice = invoices.reduce(
+        (acc, item) => acc + item.total_price,
+        0
+      )
+      const orders = await context.prisma.orders.findMany({
+        where: {
+          created_at: {
+            gte: new Date(new Date().getFullYear(), +args.quarter * 3 - 3, 1),
+            lte: new Date(new Date().getFullYear(), +args.quarter * 3, 1)
           },
-          select: {
-            total_price: true
-          }
-        })
-        .then((res) => res.reduce((acc, item) => acc + item.total_price, 0))
+          status: { contains: 'Hoàn thành' }
+        },
+        select: {
+          order_id: true,
+          total_price: true
+        }
+      })
+      const total_price_order = orders.reduce(
+        (acc, item) => acc + item.total_price,
+        0
+      )
 
       return {
+        invoiceNumber: invoices.length,
         revenueInvoice: total_price_invoice,
+        orderNumber: orders.length,
         revenueOrder: total_price_order
       }
     },
@@ -55,37 +63,44 @@ export const resolvers = {
       args: { month: String },
       context: Context
     ) => {
-      const total_price_invoice = await context.prisma.invoices
-        .findMany({
-          where: {
-            invoice_time: {
-              gte: new Date(new Date().getFullYear(), +args.month - 1, 1),
-              lte: new Date(new Date().getFullYear(), +args.month - 1, 31)
-            },
-            payment_status: { startsWith: 'Đã' }
+      const invoices = await context.prisma.invoices.findMany({
+        where: {
+          invoice_time: {
+            gte: new Date(new Date().getFullYear(), +args.month - 1, 1),
+            lte: new Date(new Date().getFullYear(), +args.month - 1, 31)
           },
-          select: {
-            total_price: true
-          }
-        })
-        .then((res) => res.reduce((acc, item) => acc + item.total_price, 0))
-      const total_price_order = await context.prisma.orders
-        .findMany({
-          where: {
-            created_at: {
-              gte: new Date(new Date().getFullYear(), +args.month - 1, 1),
-              lte: new Date(new Date().getFullYear(), +args.month - 1, 31)
-            },
-            status: { contains: 'Hoàn thành' }
+          payment_status: { startsWith: 'Đã' }
+        },
+        select: {
+          invoice_id: true,
+          total_price: true
+        }
+      })
+      const total_price_invoice = invoices.reduce(
+        (acc, item) => acc + item.total_price,
+        0
+      )
+      const orders = await context.prisma.orders.findMany({
+        where: {
+          created_at: {
+            gte: new Date(new Date().getFullYear(), +args.month - 1, 1),
+            lte: new Date(new Date().getFullYear(), +args.month - 1, 31)
           },
-          select: {
-            total_price: true
-          }
-        })
-        .then((res) => res.reduce((acc, item) => acc + item.total_price, 0))
-
+          status: { contains: 'Hoàn thành' }
+        },
+        select: {
+          order_id: true,
+          total_price: true
+        }
+      })
+      const total_price_order = orders.reduce(
+        (acc, item) => acc + item.total_price,
+        0
+      )
       return {
+        invoiceNumber: invoices.length,
         revenueInvoice: total_price_invoice,
+        orderNumber: orders.length,
         revenueOrder: total_price_order
       }
     },

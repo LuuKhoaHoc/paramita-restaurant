@@ -14,7 +14,13 @@ import {
   ArrowsClockwise,
   User,
   UserGear,
-  ShoppingCart
+  ShoppingCart,
+  ArrowCircleRight,
+  PicnicTable,
+  ForkKnife,
+  CalendarBlank,
+  AddressBookTabs,
+  Invoice
 } from '@phosphor-icons/react'
 import ReactECharts from 'echarts-for-react'
 import { useState } from 'react'
@@ -25,6 +31,10 @@ import {
 import { GET_CUSTOMERS } from '~/pages/Admin/CustomerManager/schema'
 import { GET_EMPLOYEES } from '~/pages/Admin/EmployeeManager/schema'
 import { GET_ORDERS } from '~/pages/Admin/Order/schema'
+import { NavLink } from 'react-router-dom'
+import { GET_MENU } from '~/pages/Admin/Menu/schema'
+import { GET_TABLES } from '~/pages/Admin/Table/schema'
+import { GET_RESERVATIONS } from '~/pages/Admin/Reservation/schema'
 
 const Home = () => {
   const [quarter, setQuarter] = useState('1')
@@ -33,6 +43,10 @@ const Home = () => {
   const { loading: loadingEmployee, data: dataEmployee } =
     useQuery(GET_EMPLOYEES)
   const { loading: loadingOrder, data: dataOrder } = useQuery(GET_ORDERS)
+  const { loading: loadingMenu, data: dataMenu } = useQuery(GET_MENU)
+  const { loading: loadingTable, data: dataTable } = useQuery(GET_TABLES)
+  const { loading: loadingReservation, data: dataReservation } =
+    useQuery(GET_RESERVATIONS)
   const {
     data: dataQuarter,
     loading: loadingQuarter,
@@ -164,7 +178,7 @@ const Home = () => {
         <Text className='GeomanistMedium-font' fs={'xl'} mr={'auto'}>
           Thống kê doanh thu
         </Text>
-        <Tooltip label='Làm mới!' position='right-start'>
+        <Tooltip label='Làm mới!' position='left-start'>
           <ActionButton
             onClick={handleRefetch}
             icon={<ArrowsClockwise />}
@@ -190,7 +204,6 @@ const Home = () => {
 
       <Flex
         w={'100%'}
-        height={fr(300)}
         sx={{
           '*': {
             fontFamily: 'GeomanistMedium !important'
@@ -198,20 +211,65 @@ const Home = () => {
         }}
       >
         <ReactECharts
-          style={{ width: '50%', height: fr(100) }}
+          style={{ width: '50%', height: fr(80) }}
           option={optionPie}
         />
         <ReactECharts
-          style={{ width: '50%', height: fr(100) }}
+          style={{ width: '50%', height: fr(80) }}
           option={optionBar}
         />
       </Flex>
-
+      <Flex mx={fr(16)} gap={fr(8)}>
+        <Card
+          w={'50%'}
+          h={fr(10)}
+          direction='row'
+          justify='center'
+          align='center'
+          fs={'xl'}
+          bsh={'md'}
+          gap={fr(8)}
+          bg={'blue'}
+          cl={'white'}
+        >
+          <Text ff={'GeomanistMedium !important'} cl={'white'}>
+            {dataQuarter?.getRevenueByQuarter?.invoiceNumber}
+          </Text>
+          <Icon size={fr(12)}>
+            <Invoice />
+          </Icon>
+          <Text ff={'GeomanistMedium !important'} cl={'white'}>
+            Hoá đơn
+          </Text>
+        </Card>
+        <Card
+          w={'50%'}
+          h={fr(10)}
+          direction='row'
+          justify='center'
+          align='center'
+          fs={'xl'}
+          bsh={'md'}
+          gap={fr(8)}
+          bg={'primary'}
+          cl={'white'}
+        >
+          <Text ff={'GeomanistMedium !important'} cl={'white'}>
+            {dataQuarter?.getRevenueByQuarter?.orderNumber}
+          </Text>
+          <Icon size={fr(12)}>
+            <ShoppingCart />
+          </Icon>
+          <Text ff={'GeomanistMedium !important'} cl={'white'}>
+            Đơn hàng
+          </Text>
+        </Card>
+      </Flex>
       <Flex justify='between' align='center' mx={fr(4)} my={fr(4)}>
         <Text className='GeomanistMedium-font' fs={'xl'} mr={'auto'}>
           Thống kê nhà hàng
         </Text>
-        <Tooltip label='Làm mới!' position='right-start'>
+        <Tooltip label='Làm mới!' position='left-start'>
           <ActionButton
             onClick={handleRefetch}
             icon={<ArrowsClockwise />}
@@ -221,11 +279,11 @@ const Home = () => {
           />
         </Tooltip>
       </Flex>
-      <Stack direction='row' mx={fr(8)}>
+      <Stack direction='row' mx={fr(8)} gap={fr(4)} wrap='wrap'>
         <Card
           direction='row'
-          grow
-          h={fr(35)}
+          miw={'30%'}
+          h={fr(28)}
           gap={fr(4)}
           fs={'2xl'}
           justify='center'
@@ -234,17 +292,25 @@ const Home = () => {
           <Text ff={'GeomanistMedium !important'}>
             {dataCustomer?.customerList.length}
           </Text>
-          <Icon size={fr(15)}>
+          <Icon size={fr(12)}>
             <User />
           </Icon>
           <Text ff={'GeomanistMedium !important'} fs={'xl'}>
             Khách hàng
           </Text>
+          <Icon
+            size={fr(8)}
+            cl={['inherit', { hover: 'primary' }]}
+            as={NavLink}
+            to={'/admin/customers'}
+          >
+            <ArrowCircleRight />
+          </Icon>
         </Card>
         <Card
+          miw={'30%'}
           direction='row'
-          grow
-          h={fr(35)}
+          h={fr(28)}
           gap={fr(4)}
           fs={'2xl'}
           justify='center'
@@ -253,31 +319,128 @@ const Home = () => {
           <Text ff={'GeomanistMedium !important'}>
             {dataEmployee?.employeeList.length}
           </Text>
-          <Icon size={fr(15)}>
+          <Icon size={fr(12)}>
             <UserGear />
           </Icon>
           <Text ff={'GeomanistMedium !important'} fs={'xl'}>
             Nhân viên
           </Text>
+          <Icon
+            size={fr(8)}
+            cl={['inherit', { hover: 'primary' }]}
+            as={NavLink}
+            to={'/admin/employees'}
+          >
+            <ArrowCircleRight />
+          </Icon>
         </Card>
         <Card
           direction='row'
-          grow
-          h={fr(35)}
+          miw={'30%'}
+          h={fr(28)}
           gap={fr(4)}
           fs={'2xl'}
           justify='center'
           align='center'
         >
           <Text ff={'GeomanistMedium !important'}>
-            {dataOrder?.orderList.length}
+            {dataMenu?.menuList.length}
           </Text>
-          <Icon size={fr(15)}>
-            <ShoppingCart />
+          <Icon size={fr(12)}>
+            <ForkKnife />
           </Icon>
           <Text ff={'GeomanistMedium !important'} fs={'xl'}>
-            Đơn hàng
+            Món ăn
           </Text>
+          <Icon
+            size={fr(8)}
+            cl={['inherit', { hover: 'primary' }]}
+            as={NavLink}
+            to={'/admin/menu'}
+          >
+            <ArrowCircleRight />
+          </Icon>
+        </Card>
+        <Card
+          miw={'30%'}
+          direction='row'
+          h={fr(28)}
+          gap={fr(4)}
+          fs={'2xl'}
+          justify='center'
+          align='center'
+        >
+          <Text ff={'GeomanistMedium !important'}>
+            {dataTable?.tableList.length}
+          </Text>
+          <Icon size={fr(12)}>
+            <PicnicTable />
+          </Icon>
+          <Text ff={'GeomanistMedium !important'} fs={'xl'}>
+            Bàn
+          </Text>
+          <Icon
+            size={fr(8)}
+            cl={['inherit', { hover: 'primary' }]}
+            as={NavLink}
+            to={'/admin/table'}
+          >
+            <ArrowCircleRight />
+          </Icon>
+        </Card>
+        <Card
+          miw={'30%'}
+          direction='row'
+          h={fr(28)}
+          gap={fr(4)}
+          fs={'2xl'}
+          justify='center'
+          align='center'
+        >
+          <Text ff={'GeomanistMedium !important'}>
+            {dataReservation?.reservationList.length}
+          </Text>
+          <Icon size={fr(12)}>
+            <CalendarBlank />
+          </Icon>
+          <Text ff={'GeomanistMedium !important'} fs={'xl'}>
+            Đơn đặt bàn
+          </Text>
+          <Icon
+            size={fr(8)}
+            cl={['inherit', { hover: 'primary' }]}
+            as={NavLink}
+            to={'/admin/table'}
+          >
+            <ArrowCircleRight />
+          </Icon>
+        </Card>
+        <Card
+          miw={'30%'}
+          direction='row'
+          h={fr(28)}
+          gap={fr(4)}
+          fs={'2xl'}
+          justify='center'
+          align='center'
+        >
+          <Text ff={'GeomanistMedium !important'}>
+            {dataReservation?.reservationList.length}
+          </Text>
+          <Icon size={fr(12)}>
+            <AddressBookTabs />
+          </Icon>
+          <Text ff={'GeomanistMedium !important'} fs={'xl'}>
+            Liên hệ
+          </Text>
+          <Icon
+            size={fr(8)}
+            cl={['inherit', { hover: 'primary' }]}
+            as={NavLink}
+            to={'/admin/contact'}
+          >
+            <ArrowCircleRight />
+          </Icon>
         </Card>
       </Stack>
     </>

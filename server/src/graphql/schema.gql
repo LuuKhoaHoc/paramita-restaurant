@@ -325,7 +325,9 @@ type Query {
 # TypeDefs
 # forgot password
 type StatisticsResponse {
+  invoiceNumber: Int
   revenueInvoice: String!
+  orderNumber: Int
   revenueOrder: String!
 }
 type Response {
