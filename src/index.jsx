@@ -14,7 +14,7 @@ import theme from './theme'
 
 const client = new ApolloClient({
   link: new HttpLink({
-    uri: 'http://localhost:4000/graphql',
+    uri: 'https://paramita-restaurant.onrender.com/graphql',
     credentials: 'include'
   }),
   cache: new InMemoryCache()

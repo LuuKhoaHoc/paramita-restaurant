@@ -8,7 +8,7 @@ const app = express()
 const yoga = createYoga({
   schema,
   cors: {
-    origin: 'http://localhost:3000',
+    origin: 'https://paramita-restaurant.vercel.app',
     credentials: true
   },
   context
