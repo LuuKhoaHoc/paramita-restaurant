@@ -1,22 +1,38 @@
 import { useQuery } from '@apollo/client'
 import {
   Flex,
+  Icon,
+  Card,
+  Stack,
   Text,
   fr,
   NativeSelectField,
   ActionButton,
   Tooltip
 } from '@prismane/core'
-import { ArrowsClockwise } from '@phosphor-icons/react'
+import {
+  ArrowsClockwise,
+  User,
+  UserGear,
+  ShoppingCart
+} from '@phosphor-icons/react'
 import ReactECharts from 'echarts-for-react'
 import { useState } from 'react'
 import {
   GET_REVENUE_BY_MONTH,
   GET_REVENUE_BY_QUARTER
 } from '~/pages/Admin/Home/schema'
+import { GET_CUSTOMERS } from '~/pages/Admin/CustomerManager/schema'
+import { GET_EMPLOYEES } from '~/pages/Admin/EmployeeManager/schema'
+import { GET_ORDERS } from '~/pages/Admin/Order/schema'
 
 const Home = () => {
   const [quarter, setQuarter] = useState('1')
+  const { loading: loadingCustomer, data: dataCustomer } =
+    useQuery(GET_CUSTOMERS)
+  const { loading: loadingEmployee, data: dataEmployee } =
+    useQuery(GET_EMPLOYEES)
+  const { loading: loadingOrder, data: dataOrder } = useQuery(GET_ORDERS)
   const {
     data: dataQuarter,
     loading: loadingQuarter,
@@ -146,7 +162,7 @@ const Home = () => {
     <>
       <Flex justify='between' align='center' mx={fr(4)} my={fr(4)}>
         <Text className='GeomanistMedium-font' fs={'xl'} mr={'auto'}>
-          Báo cáo doanh thu
+          Thống kê doanh thu
         </Text>
         <Tooltip label='Làm mới!' position='right-start'>
           <ActionButton
@@ -190,6 +206,80 @@ const Home = () => {
           option={optionBar}
         />
       </Flex>
+
+      <Flex justify='between' align='center' mx={fr(4)} my={fr(4)}>
+        <Text className='GeomanistMedium-font' fs={'xl'} mr={'auto'}>
+          Thống kê nhà hàng
+        </Text>
+        <Tooltip label='Làm mới!' position='right-start'>
+          <ActionButton
+            onClick={handleRefetch}
+            icon={<ArrowsClockwise />}
+            variant='text'
+            size='md'
+            cl={['gray', { hover: 'primary' }]}
+          />
+        </Tooltip>
+      </Flex>
+      <Stack direction='row' mx={fr(8)}>
+        <Card
+          direction='row'
+          grow
+          h={fr(35)}
+          gap={fr(4)}
+          fs={'2xl'}
+          justify='center'
+          align='center'
+        >
+          <Text ff={'GeomanistMedium !important'}>
+            {dataCustomer?.customerList.length}
+          </Text>
+          <Icon size={fr(15)}>
+            <User />
+          </Icon>
+          <Text ff={'GeomanistMedium !important'} fs={'xl'}>
+            Khách hàng
+          </Text>
+        </Card>
+        <Card
+          direction='row'
+          grow
+          h={fr(35)}
+          gap={fr(4)}
+          fs={'2xl'}
+          justify='center'
+          align='center'
+        >
+          <Text ff={'GeomanistMedium !important'}>
+            {dataEmployee?.employeeList.length}
+          </Text>
+          <Icon size={fr(15)}>
+            <UserGear />
+          </Icon>
+          <Text ff={'GeomanistMedium !important'} fs={'xl'}>
+            Nhân viên
+          </Text>
+        </Card>
+        <Card
+          direction='row'
+          grow
+          h={fr(35)}
+          gap={fr(4)}
+          fs={'2xl'}
+          justify='center'
+          align='center'
+        >
+          <Text ff={'GeomanistMedium !important'}>
+            {dataOrder?.orderList.length}
+          </Text>
+          <Icon size={fr(15)}>
+            <ShoppingCart />
+          </Icon>
+          <Text ff={'GeomanistMedium !important'} fs={'xl'}>
+            Đơn hàng
+          </Text>
+        </Card>
+      </Stack>
     </>
   )
 }
