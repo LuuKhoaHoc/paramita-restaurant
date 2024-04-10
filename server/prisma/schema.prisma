@@ -253,14 +253,6 @@ model reservations {
   @@index([customer_id], map: "customer_id")
 }
 
-model revenue {
-  revenue_id Int      @id @default(autoincrement())
-  date       DateTime @db.Date
-  revenue    Decimal  @db.Decimal(10, 2)
-  cost       Decimal  @db.Decimal(10, 2)
-  tsid       String   @db.VarChar(13)
-}
-
 model reviews {
   review_id   Int       @id @default(autoincrement())
   customer_id Int
