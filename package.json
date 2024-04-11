@@ -19,6 +19,7 @@
     "react-lazy-with-preload": "^2.2.1",
     "react-loader-spinner": "^6.1.0",
     "react-multi-carousel": "^2.8.4",
+    "react-quill": "^2.0.0",
     "react-router-dom": "^6.20.1",
     "react-type-animation": "^3.2.0",
     "vite": "^5.0.10",
