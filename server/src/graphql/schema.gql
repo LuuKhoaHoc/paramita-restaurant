@@ -531,10 +531,10 @@ type Promotion {
   tsid: String!
   name: String!
   description: String!
-  startDate: DateTime!
-  endDate: DateTime!
+  start_date: DateTime!
+  end_date: DateTime!
   target: String!
-  condition: String!
+  conditions: String!
   discount: Float!
   status: String!
 }

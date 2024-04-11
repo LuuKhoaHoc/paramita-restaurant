@@ -305,15 +305,6 @@ export const resolvers = {
         where: { promotion_id: args.id || undefined }
       })
     },
-    // Revenue
-    revenueList: async (_parent: any, _args: any, context: Context) => {
-      return context.prisma.revenue.findMany()
-    },
-    revenue: async (_parent: any, args: { id: any }, context: Context) => {
-      return context.prisma.revenue.findUnique({
-        where: { revenue_id: args.id || undefined }
-      })
-    },
     // Table
     tableList: async (_parent: any, _args: any, context: Context) => {
       return context.prisma.tables.findMany()
@@ -1279,50 +1270,6 @@ export const resolvers = {
     ) => {
       return context.prisma.promotions.delete({
         where: { promotion_id: args.id }
-      })
-    },
-    // Revenue
-    createRevenue: async (
-      _parent: any,
-      args: { data: RevenueInput },
-      context: Context
-    ) => {
-      if (!args.data) {
-        throw new Error(
-          "Missing required 'data' argument in createRevenue mutation."
-        )
-      }
-      const tsid = getTsid().timestamp.toString()
-      return context.prisma.revenue.create({
-        data: {
-          tsid,
-          date: args.data.date,
-          revenue: args.data.revenue,
-          cost: args.data.cost
-        }
-      })
-    },
-    updateRevenue: async (
-      _parent: any,
-      args: { id: number; data: RevenueInput },
-      context: Context
-    ) => {
-      return context.prisma.revenue.update({
-        where: { revenue_id: args.id },
-        data: {
-          date: args.data.date,
-          revenue: args.data.revenue,
-          cost: args.data.cost
-        }
-      })
-    },
-    deleteRevenue: async (
-      _parent: any,
-      args: { id: any },
-      context: Context
-    ) => {
-      return context.prisma.revenue.delete({
-        where: { revenue_id: args.id }
       })
     },
     // Table
