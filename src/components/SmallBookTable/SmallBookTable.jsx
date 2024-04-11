@@ -62,8 +62,13 @@ const SmallBookTable = () => {
             >
               {data?.page?.content[0].description}
             </Text>
-            <StyledButton cl={['primary', 100]} p={fr(5)}>
-              <Link to={'/book-table'}>Đặt bàn ngay</Link>
+            <StyledButton
+              cl={['primary', 100]}
+              p={fr(3)}
+              as={Link}
+              to={'/book-table'}
+            >
+              Đặt bàn ngay
             </StyledButton>
           </Flex>
         </Box>

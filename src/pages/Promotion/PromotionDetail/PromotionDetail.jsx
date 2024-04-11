@@ -6,7 +6,6 @@ import { useLocation } from 'react-router-dom'
 
 const PromotionDetail = () => {
   const { state } = useLocation()
-  console.log('🚀 ~ PromotionDetail ~ state:', state)
   let strings = `Thời gian áp dụng: Từ 00h00 ngày 01/01/2023 đến 23h59 ngày 31/01/2023.
   Áp dụng cho các đơn hàng combo có giá trị từ 500.000 VNĐ trở lên.
   Giảm trực tiếp 20% trên tổng giá trị của combo đủ điều kiện.
