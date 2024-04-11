@@ -1,5 +1,14 @@
 import { DotsThree, RowsPlusTop } from '@phosphor-icons/react'
-import { Button, Table, Chip, Flex, Text, TextField, fr } from '@prismane/core'
+import {
+  Button,
+  Table,
+  Chip,
+  Flex,
+  Text,
+  TextField,
+  fr,
+  Toaster
+} from '@prismane/core'
 import { useSearch } from '@prismane/core/hooks'
 import { useState } from 'react'
 import { useQuery } from '@apollo/client'
@@ -9,21 +18,20 @@ import PromotionRow from '~/pages/Admin/Promotion/PromotionRow/PromotionRow'
 
 const Promotion = ({ employee }) => {
   const [openAddModal, setOpenAddModal] = useState(false)
-  const { loading, error, data, refetch } = useQuery(GET_PROMOTIONS)
+  const { loading, error, data } = useQuery(GET_PROMOTIONS)
   const { query, setQuery, filtered } = useSearch(data?.promotionList || [])
   return (
-    <>
-      <AddPromotionModal
-        open={openAddModal}
-        setOpen={setOpenAddModal}
-        refetch={refetch}
-      />
+    <Toaster position='top-right' mt={fr(10)}>
+      <AddPromotionModal open={openAddModal} setOpen={setOpenAddModal} />
       <Flex direction='column'>
         <Flex justify='between' align='center' mx={fr(4)} my={fr(4)}>
           <Text className='GeomanistMedium-font' fs={'xl'}>
             Tất cả chương trình khuyến mãi
           </Text>
           <Flex align='center' gap={fr(2)}>
+            <Chip color={'green'}>Đang diễn ra</Chip>
+            <Chip color='red'>Đã kết thúc</Chip>
+            <Chip color='blue'>Chưa diễn ra</Chip>
             <TextField
               placeholder='Tìm kiếm...'
               value={query || ''}
@@ -58,7 +66,7 @@ const Promotion = ({ employee }) => {
             <Table.Row>
               <Table.Cell>ID</Table.Cell>
               <Table.Cell>Tiêu đề</Table.Cell>
-              <Table.Cell>Đối tượng</Table.Cell>
+              <Table.Cell>Trạng thái</Table.Cell>
               <Table.Cell>Điều kiện</Table.Cell>
               <Table.Cell>Thời gian bắt đầu</Table.Cell>
               <Table.Cell>Thời gian kết thúc</Table.Cell>
@@ -78,7 +86,7 @@ const Promotion = ({ employee }) => {
             <Table.Row>
               <Table.Cell>ID</Table.Cell>
               <Table.Cell>Tiêu đề</Table.Cell>
-              <Table.Cell>Đối tượng</Table.Cell>
+              <Table.Cell>Trạng thái</Table.Cell>
               <Table.Cell>Điều kiện</Table.Cell>
               <Table.Cell>Thời gian bắt đầu</Table.Cell>
               <Table.Cell>Thời gian kết thúc</Table.Cell>
@@ -87,7 +95,7 @@ const Promotion = ({ employee }) => {
           </Table.Foot>
         </Table>
       </Flex>
-    </>
+    </Toaster>
   )
 }
 

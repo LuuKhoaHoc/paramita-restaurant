@@ -20,7 +20,9 @@ import { useMutation, useQuery } from '@apollo/client'
 import { GET_RANK } from '~/pages/Admin/CustomerManager/schema'
 import p from '~/utils/zodToPrismane'
 import { z } from 'zod'
-import { ADD_PROMOTION } from '~/pages/Admin/Promotion/schema'
+import { ADD_PROMOTION, GET_PROMOTIONS } from '~/pages/Admin/Promotion/schema'
+import { checkPromotion } from '~/pages/Admin/Promotion/checkPromotion'
+import { toolbarOptions } from '~/utils/toolbarOption'
 
 const AddPromotionModal = ({ open, setOpen }) => {
   const toast = useToast()
@@ -29,23 +31,6 @@ const AddPromotionModal = ({ open, setOpen }) => {
   const [desError, setDesError] = useState('')
   const [addPromotion] = useMutation(ADD_PROMOTION)
 
-  const toolbarOptions = [
-    ['bold', 'italic', 'underline', 'strike'], // toggled buttons
-    ['blockquote', 'code-block'],
-    ['link', 'image', 'video', 'formula'][({ header: 1 }, { header: 2 })], // custom button values
-    [{ list: 'ordered' }, { list: 'bullet' }, { list: 'check' }],
-    [{ script: 'sub' }, { script: 'super' }], // superscript/subscript
-    [{ indent: '-1' }, { indent: '+1' }], // outdent/indent
-    [{ direction: 'rtl' }], // text direction
-
-    [{ size: ['small', false, 'large', 'huge'] }], // custom dropdown
-    [{ header: [1, 2, 3, 4, 5, 6, false] }],
-
-    [{ color: [] }, { background: [] }], // dropdown with defaults from theme
-    [{ align: [] }],
-
-    ['clean'] // remove formatting button
-  ]
   const module = {
     toolbar: toolbarOptions
   }
@@ -153,7 +138,6 @@ const AddPromotionModal = ({ open, setOpen }) => {
               return
             } else {
               setDesError('')
-              console.log(v)
               try {
                 addPromotion({
                   variables: {
@@ -165,20 +149,22 @@ const AddPromotionModal = ({ open, setOpen }) => {
                       target: v.target,
                       condition: v.condition,
                       discount: +v.discount,
-                      status: 'Hoạt động'
+                      status: checkPromotion(v.startDate, v.endDate)
                     }
                   },
                   onError: (err) => console.log(err),
+                  refetchQueries: [{ query: GET_PROMOTIONS }],
+                  awaitRefetchQueries: true,
                   onCompleted: () => {
                     toast({
                       element: (
                         <Alert variant='success'>
                           <Alert.Title className='GeomanistMedium-font'>
-                            Thêm chương trình khuyến mái thành cảnh công
+                            Thêm chương trình khuyến mãi thành công
                           </Alert.Title>
                         </Alert>
                       ),
-                      duration: 3000
+                      duration: 2000
                     })
                     handleReset()
                     setDescription('')

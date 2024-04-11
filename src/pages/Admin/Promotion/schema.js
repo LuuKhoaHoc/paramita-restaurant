@@ -24,3 +24,21 @@ export const GET_PROMOTIONS = gql`
     }
   }
 `
+
+export const UPDATE_PROMOTION = gql`
+  mutation updatePromotion($id: Int!, $data: PromotionInput!) {
+    updatePromotion(id: $id, data: $data) {
+      promotion_id
+      name
+    }
+  }
+`
+
+export const DELETE_PROMOTION = gql`
+  mutation deletePromotion($id: Int!) {
+    deletePromotion(id: $id) {
+      promotion_id
+      name
+    }
+  }
+`
