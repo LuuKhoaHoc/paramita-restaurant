@@ -1,17 +1,8 @@
-import { Box, Flex, Grid, fr } from '@prismane/core'
+import { Box, Flex, Grid, fr, TextField } from '@prismane/core'
+import { useSearch } from '@prismane/core/hooks'
+import { MagnifyingGlass } from '@phosphor-icons/react'
 // img
-import {
-  BanhXeo,
-  BunHue,
-  BunNam,
-  CaTimNuong,
-  ChaoNamMoi,
-  ComTam,
-  DauHuNonChungTuong,
-  Lau,
-  PromotionPic,
-  coffeeCup
-} from '~/images'
+import { PromotionPic, coffeeCup } from '~/images'
 import React, { useState } from 'react'
 // component
 import { DividerParamita, MainPic } from '~/components'
@@ -20,6 +11,8 @@ import 'react-multi-carousel/lib/styles.css'
 import PromotionItem from '~/pages/Promotion/PromotionItem/PromotionItem'
 import { useResponsive } from '~/utils/responsive'
 import { gql, useQuery } from '@apollo/client'
+import { GET_PROMOTIONS } from '~/pages/Admin/Promotion/schema'
+import { formatTime } from '~/utils/formatTime'
 
 const GET_CONTENTS = gql`
   query {
@@ -38,16 +31,14 @@ const GET_CONTENTS = gql`
 `
 
 const Promotion = () => {
-  const imagesFood = [
-    { image: BanhXeo, title: 'Bánh xèo', rating: 5 },
-    { image: BunHue, title: 'Bún Huế Paramita', rating: 4.5 },
-    { image: BunNam, title: 'Bún nấm nướng chả giò', rating: 5 },
-    { image: CaTimNuong, title: 'Cà tím nướng hành ớt', rating: 5 },
-    { image: ChaoNamMoi, title: 'Cháo nấm mối', rating: 5 },
-    { image: ComTam, title: 'Cơm tấm Paramita', rating: 5 },
-    { image: DauHuNonChungTuong, title: 'Đậu hũ non chưng tương', rating: 5 },
-    { image: Lau, title: 'Lẩu Paramita', rating: 4.5 }
-  ]
+  const {
+    loading: loadingPromotion,
+    error: errorPromotion,
+    data: dataPromotion
+  } = useQuery(GET_PROMOTIONS)
+  const { filtered, query, setQuery } = useSearch(
+    dataPromotion?.promotionList || []
+  )
   const responsiveCarousel = {
     desktop: {
       breakpoint: { max: 3000, min: 1024 },
@@ -98,6 +89,15 @@ const Promotion = () => {
             columnStart={isTablet ? 2 : isMobile ? 1 : 3}
             columnEnd={isTablet ? 12 : isMobile ? 13 : 11}
           >
+            <Flex my={fr(4)} justify='end'>
+              <TextField
+                variant='underlined'
+                placeholder='Tìm kiếm...'
+                value={query}
+                onChange={(e) => setQuery(e.target.value)}
+                icon={<MagnifyingGlass />}
+              />
+            </Flex>
             <Flex
               pos={'relative'}
               direction='column'
@@ -106,43 +106,18 @@ const Promotion = () => {
               gap={fr(10)}
               my={fr(5)}
             >
-              <PromotionItem
-                title={'Ưu đãi lớn - Giảm ngay 20% khi mua combo 500k'}
-                objectApply={'Tất cả'}
-                image={imagesFood[0].image}
-                description='Đây là cơ hội tuyệt vời để thưởng thức
-                các combo ngon miệng tại nhà hàng với mức giá hấp dẫn chưa từng có. 
-                Từ ngày 01/01 đến 31/01/2023, combo từ 500k sẽ được giảm ngay 20% giá trị.
-                Không giới hạn đơn hàng và không áp dụng vào dịp lễ Tết. 
-                Hãy liên hệ ngay để đặt combo và nhận ưu đãi cực lớn này!'
-                dateStart={'01/01/2023'}
-                dateEnd={'01/01/2023'}
-              />
-              <PromotionItem
-                title={'Giảm ngay 35% khi mua combo 500k'}
-                objectApply={'Vàng'}
-                image={imagesFood[0].image}
-                description='Đây là cơ hội tuyệt vời để thưởng thức
-                các combo ngon miệng tại nhà hàng với mức giá hấp dẫn chưa từng có. 
-                Từ ngày 01/01 đến 31/01/2023, combo từ 500k sẽ được giảm ngay 20% giá trị.
-                Không giới hạn đơn hàng và không áp dụng vào dịp lễ Tết. 
-                Hãy liên hệ ngay để đặt combo và nhận ưu đãi cực lớn này!'
-                dateStart={'01/01/2023'}
-                dateEnd={'01/01/2023'}
-              />
-              <PromotionItem
-                title={'Paramita chính thức mở bán coffee'}
-                objectApply={'Vàng'}
-                image={coffeeCup}
-                description='
-                Paramita chính thức mở bán cà phê tại quận Bình Tân 
-                và quận Tân Phú từ ngày 1/11. 
-                Với thời gian hoạt động từ 7h30 đến 22h00, 
-                quán hứa hẹn sẽ mang đến cho quý khách những trải nghiệm 
-                cà phê thơm ngon và hấp dẫn nhất.'
-                dateStart={'01/01/2023'}
-                dateEnd={'01/01/2023'}
-              />
+              {filtered?.map((item) => (
+                <PromotionItem
+                  key={item?.tsid}
+                  image={coffeeCup}
+                  title={item?.name}
+                  objectApply={item?.target}
+                  condition={item?.conditions}
+                  dateStart={formatTime(item?.start_date)}
+                  dateEnd={formatTime(item?.end_date)}
+                  description={item?.description}
+                />
+              ))}
             </Flex>
             <Flex
               pos={'relative'}

@@ -7,23 +7,36 @@ import { itemToURL } from '~/utils/stringToURL'
 const PromotionItem = ({
   image,
   title,
+  condition,
   objectApply,
   description = '',
   dateStart,
   dateEnd
 }) => {
   const { isMobile, isTablet, isLaptop } = useResponsive()
-
   return (
     <Box w={'100%'}>
-      <Link to={'/promotion/' + itemToURL(title)}>
+      <Link
+        to={'/promotion/' + itemToURL(title)}
+        state={{
+          image,
+          title,
+          condition,
+          objectApply,
+          description,
+          dateStart,
+          dateEnd
+        }}
+      >
         <Flex direction='row' gap={fr(4)} mx={isMobile ? fr(5) : 0}>
           <Box>
             <Image
               src={image}
               alt={title}
-              w={isMobile ? fr(30) : fr(43)}
-              h={isMobile ? fr(30) : fr(43)}
+              miw={isMobile ? fr(30) : fr(43)}
+              mih={isMobile ? fr(30) : fr(43)}
+              maw={isMobile ? fr(30) : fr(43)}
+              mah={isMobile ? fr(30) : fr(43)}
               br={'lg'}
               bsh={'md'}
             />
@@ -37,10 +50,15 @@ const PromotionItem = ({
             >
               {title}
             </Text>
-            <Text as={'p'}>
-              Thời gian: {dateStart} - {dateEnd}
+            <Text as={'p'} fs={'md'}>
+              Thời gian: {dateStart} đến {dateEnd}
             </Text>
-            <Text as={'p'}>Đối tượng áp dụng: {objectApply}</Text>
+            <Text as={'p'} fs={'md'}>
+              Đối tượng áp dụng: {objectApply}
+            </Text>
+            <Text as={'p'} fs={'md'}>
+              Điều kiện: {condition}
+            </Text>
             <Text
               as={'p'}
               mt={fr(5)}
@@ -50,9 +68,8 @@ const PromotionItem = ({
               sx={{
                 textOverflow: 'ellipsis'
               }}
-            >
-              {description}
-            </Text>
+              dangerouslySetInnerHTML={{ __html: description }}
+            ></Text>
           </Box>
         </Flex>
       </Link>

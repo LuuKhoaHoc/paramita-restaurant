@@ -2,8 +2,11 @@ import { Box, Flex, Grid, Image, List, Text, fr } from '@prismane/core'
 import React from 'react'
 import { PromotionPic } from '~/images'
 import { useResponsive } from '~/utils/responsive'
+import { useLocation } from 'react-router-dom'
 
 const PromotionDetail = () => {
+  const { state } = useLocation()
+  console.log('🚀 ~ PromotionDetail ~ state:', state)
   let strings = `Thời gian áp dụng: Từ 00h00 ngày 01/01/2023 đến 23h59 ngày 31/01/2023.
   Áp dụng cho các đơn hàng combo có giá trị từ 500.000 VNĐ trở lên.
   Giảm trực tiếp 20% trên tổng giá trị của combo đủ điều kiện.
@@ -11,10 +14,9 @@ const PromotionDetail = () => {
   Không áp dụng chương trình cho các ngày lễ, Tết và các khuyến mãi khác đang diễn ra cùng thời điểm.
   Quý khách vui lòng xuất trình voucher khuyến mãi để được giảm giá khi thanh toán.
   Xin vui lòng liên hệ Hotline XXX để được tư vấn lựa chọn combo phù hợp.`
-  const cutStringToArray = (inputString) => {
-    return inputString.split('\n')
+  const capitalize = (inputString) => {
+    return inputString.charAt(0).toUpperCase() + inputString.slice(1)
   }
-  const array = cutStringToArray(strings)
   const { isLaptop, isTablet, isMobile } = useResponsive()
   return (
     <>
@@ -29,20 +31,29 @@ const PromotionDetail = () => {
               <Image w={'100%'} br={'lg'} bsh={'lg'} src={PromotionPic} />
             </Box>
             <Box mx={isMobile ? fr(3) : 0}>
-              <Text as={'h1'} fs={isMobile ? 'xl' : 'inherit'} className='GeomanistMedium-font'>
-                Ưu đãi lớn - Giảm ngay 20% khi mua combo 500k
+              <Text
+                as={'h1'}
+                fs={isMobile ? 'xl' : 'inherit'}
+                className='GeomanistMedium-font'
+              >
+                {state?.title || 'Chương trình khuyết mãi'}
               </Text>
               <Text as={'p'} fs={'lg'} cl={'base'}>
-                Đối tượng áp dụng: Tất cả
+                Đối tượng áp dụng: {state?.objectApply || 'Tất cả'}
               </Text>
               <Text as={'p'} fs={'lg'} cl={'base'}>
-                Thời gian: 01/01/2023 - 01/01/2023
+                Điều kiện áp dụng: {capitalize(state?.condition) || 'Không có'}
               </Text>
-              <List.Unordered ml={fr(5)} fs={'lg'}>
-                {array.map((item, index) => (
-                  <List.Item key={index}>{item}</List.Item>
-                ))}
-              </List.Unordered>
+              <Text as={'p'} fs={'lg'} cl={'base'}>
+                Thời gian: {state?.dateStart} đến {state?.dateEnd}
+              </Text>
+              <Box
+                ml={fr(5)}
+                fs={'lg'}
+                dangerouslySetInnerHTML={{
+                  __html: state?.description || strings
+                }}
+              ></Box>
               <Text as={'p'} fs={'lg'}>
                 Chương trình có thể kết thúc sớm nếu hết ngân sách. Mong quý
                 khách ủng hộ và cùng nhau thưởng thức các món ngon của nhà hàng!
