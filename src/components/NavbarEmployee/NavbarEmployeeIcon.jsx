@@ -10,7 +10,8 @@ import {
   ListBullets,
   Invoice,
   PicnicTable,
-  AddressBookTabs
+  AddressBookTabs,
+  SealPercent
 } from '@phosphor-icons/react'
 import { Animation, Divider, Flex, Image, Stack, fr } from '@prismane/core'
 import { LogoIcon } from '~/images'
@@ -64,6 +65,14 @@ const NavbarEmployeeIcon = ({ employee }) => {
                 as={NavLink}
                 icon={<PicnicTable />}
                 to={'/admin/table'}
+                size='lg'
+              />
+            </Flex>
+            <Flex>
+              <NavbarButton
+                as={NavLink}
+                icon={<SealPercent />}
+                to={'/admin/promotion'}
                 size='lg'
               />
             </Flex>

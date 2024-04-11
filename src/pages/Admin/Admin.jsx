@@ -11,6 +11,7 @@ import Home from '~/pages/Admin/Home/Home'
 import Category from '~/pages/Admin/Category/Category'
 import Menu from '~/pages/Admin/Menu/Menu'
 import Table from '~/pages/Admin/Table/Table'
+import Promotion from '~/pages/Admin/Promotion/Promotion'
 import EmployeeManager from '~/pages/Admin/EmployeeManager/EmployeeManager'
 import CustomerManager from '~/pages/Admin/CustomerManager/CustomerManager'
 import Reservation from '~/pages/Admin/Reservation/Reservation'
@@ -58,6 +59,7 @@ const Admin = ({ employee }) => {
               <Route path='category' element={<Category />} />
               <Route path='menu' element={<Menu />} />
               <Route path='table' element={<Table employee={employee} />} />
+              <Route path='promotion' element={<Promotion />} />
               <Route path='employees' element={<EmployeeManager />} />
               <Route path='customers' element={<CustomerManager />} />
               <Route path='customers/:id' element={<CustomerDetail />} />
