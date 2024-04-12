@@ -28,7 +28,12 @@ const CartItem = ({ image, title, price, selected, quantity }) => {
   const [open, setOpen] = useState(false)
   return (
     <>
-      <Modal w={'50vw'} open={open} onClose={() => setOpen(false)} closable>
+      <Modal
+        w={isMobile ? '100%' : '50vw'}
+        open={open}
+        onClose={() => setOpen(false)}
+        closable
+      >
         <Modal.Header>
           <Text
             fw='bold'
@@ -41,10 +46,10 @@ const CartItem = ({ image, title, price, selected, quantity }) => {
             Tuỳ chọn
           </Text>
         </Modal.Header>
-        <Flex w={'100%'} direction='column' px={fr(4)} mx={fr(-4)}>
+        <Flex w={'100%'} direction='column' px={fr(4)} mx={fr(-4)} gap={fr(4)}>
           {isMobile && (
             <Flex align='center' justify='between'>
-              <Text fs={'lg'}>{price}đ</Text>
+              <Text fs={'lg'}>{price.toLocaleString('vi-VN')}đ</Text>
               <NumberField
                 w={'fit-content'}
                 value={quantity}
@@ -58,7 +63,9 @@ const CartItem = ({ image, title, price, selected, quantity }) => {
           )}
           {selected.map((option, index) => (
             <Flex justify='between' key={index}>
-              <Text fs={'lg'}>{option.title}</Text>
+              <Text fs={'lg'} w={fr(25)}>
+                {option.title}
+              </Text>
               <Radio.Group
                 name='answer'
                 value={option.selected}
