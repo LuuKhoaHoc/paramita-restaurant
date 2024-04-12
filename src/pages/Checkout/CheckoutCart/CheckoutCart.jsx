@@ -454,13 +454,13 @@ const CheckoutCart = ({ customer }) => {
           mx={fr(-4)}
           px={fr(4)}
           py={isTablet ? fr(3) : fr(5)}
-          cl={'#fff'}
           sx={{
             borderBottomLeftRadius: '10px',
             borderBottomRightRadius: '10px'
           }}
         >
           <Text
+            cl={'#fff'}
             as={'h3'}
             fs={isTablet ? 'base' : 'inherit'}
             className='GeomanistLight-font'
@@ -468,6 +468,7 @@ const CheckoutCart = ({ customer }) => {
             Tổng thanh toán
           </Text>
           <Text
+            cl={'#fff'}
             as={'h3'}
             fs={isTablet ? 'base' : 'inherit'}
             className='GeomanistLight-font'

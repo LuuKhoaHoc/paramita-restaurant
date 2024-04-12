@@ -1,9 +1,11 @@
 import {
   CheckCircle,
   ClockCounterClockwise,
-  PushPin
+  PushPin,
+  X
 } from '@phosphor-icons/react'
 import {
+  ActionButton,
   Box,
   Button,
   Center,
@@ -76,6 +78,12 @@ const CheckoutShipping = ({ customer }) => {
     handleSetAddress(valueString)
     handleReset()
   }
+  const handleDeleteAddressHistory = (item) => {
+    const index = addressHistory.indexOf(item)
+    console.log('🚀 ~ handleDeleteAddressHistory ~ index:', index)
+    addressHistory.splice(index, 1)
+    localStorage.setItem('address-history', JSON.stringify(addressHistory))
+  }
   function hasTwoCommas(text) {
     var count = (text.match(/,/g) || []).length
     return count >= 2
@@ -113,16 +121,25 @@ const CheckoutShipping = ({ customer }) => {
             {filtered.map((item, index) => (
               <List.Item
                 key={index}
-                onClick={handleSetInput}
                 bg={['transparent', { hover: ['base', 100] }]}
                 br={'md'}
                 cs={'pointer'}
               >
-                <Button variant='text' icon={<ClockCounterClockwise />}>
+                <Button
+                  variant='text'
+                  icon={<ClockCounterClockwise />}
+                  onClick={handleSetInput}
+                >
                   <Text fs={isMobile ? 'sm' : isTablet ? 'base' : 'md'}>
                     {item}
                   </Text>
                 </Button>
+                <ActionButton
+                  icon={<X />}
+                  variant='text'
+                  cl={['gray', { hover: 'ruby' }]}
+                  onClick={() => handleDeleteAddressHistory(item)}
+                />
               </List.Item>
             ))}
           </List>
