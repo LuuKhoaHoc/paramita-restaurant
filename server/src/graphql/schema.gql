@@ -277,6 +277,7 @@ type Query {
   getCustomerByPhone(phone: String!): Customer
   getRevenueByQuarter(quarter: String!): StatisticsResponse
   getRevenueByMonth(month: String!): StatisticsResponse
+  getRevenueByWeek(month: String!): StatisticsWeek
   category(id: ID!): Category
   item(id: ID!): Menu
   content(id: ID!): Content
@@ -324,6 +325,9 @@ type Query {
 
 # TypeDefs
 # forgot password
+type StatisticsWeek {
+  response: String!
+}
 type StatisticsResponse {
   invoiceNumber: Int
   revenueInvoice: String!

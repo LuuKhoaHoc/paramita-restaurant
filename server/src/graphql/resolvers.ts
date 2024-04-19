@@ -104,6 +104,102 @@ export const resolvers = {
         revenueOrder: total_price_order
       }
     },
+    // Get revenue by week
+    getRevenueByWeek: async (
+      _parent: any,
+      args: { month: String },
+      context: Context
+    ) => {
+      const firstDayOfMonth = new Date(
+        new Date().getFullYear(),
+        +args.month - 1,
+        1
+      )
+      const weeksInMonth = Math.ceil(
+        (new Date(new Date().getFullYear(), +args.month, 0).getDate() -
+          firstDayOfMonth.getDate()) /
+          7
+      )
+      let arrWeek: any = []
+      for (let i = 0; i < weeksInMonth; i++) {
+        const startOfWeek = new Date(
+          firstDayOfMonth.getTime() + i * 7 * 24 * 60 * 60 * 1000
+        )
+        const endOfWeek = new Date(
+          startOfWeek.getTime() + 6 * 24 * 60 * 60 * 1000
+        )
+        arrWeek.push({
+          Week: `Tuần ${i + 1}`,
+          Start: startOfWeek.getDate(),
+          End: endOfWeek.getDate(),
+          Invoice: 0,
+          Order: 0
+        })
+      }
+      for (let i = 0; i < arrWeek.length; i++) {
+        await context.prisma.invoices
+          .findMany({
+            where: {
+              invoice_time: {
+                gte: new Date(
+                  new Date().getFullYear(),
+                  +args.month - 1,
+                  arrWeek[i].Start
+                ),
+                lte: new Date(
+                  new Date().getFullYear(),
+                  +args.month - 1,
+                  arrWeek[i].End
+                )
+              },
+              payment_status: { startsWith: 'Đã' }
+            },
+            select: {
+              invoice_id: true,
+              total_price: true
+            }
+          })
+          .then((data) => {
+            const total_price_invoice = data.reduce(
+              (acc, item) => acc + item.total_price,
+              0
+            )
+            arrWeek[i].Invoice = total_price_invoice
+          })
+        await context.prisma.orders
+          .findMany({
+            where: {
+              created_at: {
+                gte: new Date(
+                  new Date().getFullYear(),
+                  +args.month - 1,
+                  arrWeek[i].Start
+                ),
+                lte: new Date(
+                  new Date().getFullYear(),
+                  +args.month - 1,
+                  arrWeek[i].End
+                )
+              },
+              status: { contains: 'Hoàn thành' }
+            },
+            select: {
+              order_id: true,
+              total_price: true
+            }
+          })
+          .then((data) => {
+            const total_price_order = data.reduce(
+              (acc, item) => acc + item.total_price,
+              0
+            )
+            arrWeek[i].Order = total_price_order
+          })
+      }
+      return {
+        response: JSON.stringify(arrWeek)
+      }
+    },
     // Authentication
     checkUsernameExistence: async (
       _parent: any,
@@ -1774,7 +1870,6 @@ export const resolvers = {
       })
     },
     // voucher: (parent: any, _args: any, context: Context) => {
-    //   console.log('🚀 ~ parent:', parent)
     //   return context.prisma.vouchers.findFirst({
     //     where: { voucher_id: parent?.voucher_id }
     //   })
