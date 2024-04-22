@@ -29,7 +29,7 @@
     "zod": "^3.22.4"
   },
   "scripts": {
-    "dev": "vite",
+    "dev": "dotenvx run -- vite",
     "build": " vite build",
     "preview": "vite preview"
   },
