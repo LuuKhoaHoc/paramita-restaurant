@@ -147,11 +147,17 @@ const Home = () => {
           />
         </Tooltip>
       </Flex>
-      <Stack direction='row' mx={fr(8)} gap={fr(4)} wrap='wrap'>
+      <Stack
+        direction='row'
+        mx={fr(8)}
+        gap={fr(4)}
+        wrap='wrap'
+        justify='center'
+      >
         <Card
           direction='row'
-          miw={'30%'}
-          h={fr(28)}
+          miw={'20%'}
+          h={fr(18)}
           gap={fr(4)}
           fs={'2xl'}
           justify='center'
@@ -177,8 +183,8 @@ const Home = () => {
         </Card>
         <Card
           direction='row'
-          miw={'30%'}
-          h={fr(28)}
+          miw={'20%'}
+          h={fr(18)}
           gap={fr(4)}
           fs={'2xl'}
           justify='center'
@@ -204,8 +210,8 @@ const Home = () => {
         </Card>
         <Card
           direction='row'
-          miw={'30%'}
-          h={fr(28)}
+          miw={'20%'}
+          h={fr(18)}
           gap={fr(4)}
           fs={'2xl'}
           justify='center'
@@ -230,9 +236,9 @@ const Home = () => {
           </Icon>
         </Card>
         <Card
-          miw={'30%'}
+          miw={'20%'}
           direction='row'
-          h={fr(28)}
+          h={fr(18)}
           gap={fr(4)}
           fs={'2xl'}
           justify='center'
@@ -258,8 +264,8 @@ const Home = () => {
         </Card>
         <Card
           direction='row'
-          miw={'30%'}
-          h={fr(28)}
+          miw={'20%'}
+          h={fr(18)}
           gap={fr(4)}
           fs={'2xl'}
           justify='center'
@@ -284,9 +290,9 @@ const Home = () => {
           </Icon>
         </Card>
         <Card
-          miw={'30%'}
+          miw={'20%'}
           direction='row'
-          h={fr(28)}
+          h={fr(18)}
           gap={fr(4)}
           fs={'2xl'}
           justify='center'
@@ -311,9 +317,9 @@ const Home = () => {
           </Icon>
         </Card>
         <Card
-          miw={'30%'}
+          miw={'20%'}
           direction='row'
-          h={fr(28)}
+          h={fr(18)}
           gap={fr(4)}
           fs={'2xl'}
           justify='center'
@@ -338,9 +344,9 @@ const Home = () => {
           </Icon>
         </Card>
         <Card
-          miw={'30%'}
+          miw={'20%'}
           direction='row'
-          h={fr(28)}
+          h={fr(18)}
           gap={fr(4)}
           fs={'2xl'}
           justify='center'

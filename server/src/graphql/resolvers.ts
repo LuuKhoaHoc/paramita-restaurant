@@ -115,10 +115,9 @@ export const resolvers = {
         +args.month - 1,
         1
       )
+      const lastDayOfMonth = new Date(new Date().getFullYear(), +args.month, 0)
       const weeksInMonth = Math.ceil(
-        (new Date(new Date().getFullYear(), +args.month, 0).getDate() -
-          firstDayOfMonth.getDate()) /
-          7
+        (lastDayOfMonth.getDate() - firstDayOfMonth.getDate()) / 7
       )
       let arrWeek: any = []
       for (let i = 0; i < weeksInMonth; i++) {
@@ -128,6 +127,11 @@ export const resolvers = {
         const endOfWeek = new Date(
           startOfWeek.getTime() + 6 * 24 * 60 * 60 * 1000
         )
+
+        if (endOfWeek.getMonth() !== +args.month - 1) {
+          endOfWeek.setTime(lastDayOfMonth.getTime())
+        }
+
         arrWeek.push({
           Week: `Tuần ${i + 1}`,
           Start: startOfWeek.getDate(),
@@ -144,12 +148,12 @@ export const resolvers = {
                 gte: new Date(
                   new Date().getFullYear(),
                   +args.month - 1,
-                  arrWeek[i].Start
+                  arrWeek[i].Start - 1
                 ),
                 lte: new Date(
                   new Date().getFullYear(),
                   +args.month - 1,
-                  arrWeek[i].End
+                  arrWeek[i].End - 1
                 )
               },
               payment_status: { startsWith: 'Đã' }

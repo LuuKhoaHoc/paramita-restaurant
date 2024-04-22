@@ -1,32 +1,47 @@
 import { useQuery } from '@apollo/client'
-import { Flex, Icon, Card, Text, fr } from '@prismane/core'
-import { ShoppingCart, Invoice } from '@phosphor-icons/react'
+import { Flex, Icon, Card, Text, fr, Center } from '@prismane/core'
+import {
+  ShoppingCart,
+  Invoice,
+  CurrencyCircleDollar
+} from '@phosphor-icons/react'
 import ReactECharts from 'echarts-for-react'
 import {
   GET_REVENUE_BY_MONTH,
   GET_REVENUE_BY_WEEK
 } from '~/pages/Admin/Home/schema'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 const MonthlyStatistics = ({ monthInput }) => {
-  const { loading: loadingMonth, data: dataMonth } = useQuery(
-    GET_REVENUE_BY_MONTH,
-    {
-      variables: {
-        month: monthInput
-      }
+  const {
+    loading: loadingMonth,
+    data: dataMonth,
+    error: errorMonth
+  } = useQuery(GET_REVENUE_BY_MONTH, {
+    variables: {
+      month: monthInput
     }
-  )
-  if (loadingMonth) return <div>Loading...</div>
-  const { loading: loadingWeek, data: dataWeek } = useQuery(
-    GET_REVENUE_BY_WEEK,
-    {
-      variables: {
-        month: monthInput
-      }
+  })
+  const {
+    loading: loadingWeek,
+    data: dataWeek,
+    error: errorWeek,
+    refetch: refetchWeek
+  } = useQuery(GET_REVENUE_BY_WEEK, {
+    variables: {
+      month: monthInput
     }
-  )
-  if (loadingWeek) return <div>Loading...</div>
+  })
+  useEffect(() => {
+    if (dataMonth) {
+      refetchWeek()
+    }
+  }, [])
+
+  if (loadingMonth || loadingWeek) return <div>Loading...</div>
+  if (errorMonth || errorWeek) return <div>Error!</div>
+  if (!dataWeek || !dataMonth) return null
+
   const week = JSON.parse(dataWeek.getRevenueByWeek.response)
   const revenue = [
     {
@@ -99,15 +114,33 @@ const MonthlyStatistics = ({ monthInput }) => {
             fontFamily: 'GeomanistMedium !important'
           }
         }}
+        direction='column'
       >
-        <ReactECharts
-          style={{ width: '50%', height: fr(80) }}
-          option={optionPie}
-        />
-        <ReactECharts
-          style={{ width: '50%', height: fr(80) }}
-          option={optionBar}
-        />
+        <Center>
+          <Icon size={fr(12)} cl='primary'>
+            <CurrencyCircleDollar />
+          </Icon>
+          <Text fs={'xl'}>
+            Tổng doanh thu tháng này{' '}
+            <Text cl={'primary'}>
+              {(
+                +dataMonth?.getRevenueByMonth.revenueInvoice +
+                +dataMonth?.getRevenueByMonth.revenueOrder
+              ).toLocaleString('vi-VN')}{' '}
+              VND
+            </Text>
+          </Text>
+        </Center>
+        <Flex>
+          <ReactECharts
+            style={{ width: '50%', height: fr(80) }}
+            option={optionPie}
+          />
+          <ReactECharts
+            style={{ width: '50%', height: fr(80) }}
+            option={optionBar}
+          />
+        </Flex>
       </Flex>
       <Flex mx={fr(16)} gap={fr(8)}>
         <Card
@@ -123,7 +156,7 @@ const MonthlyStatistics = ({ monthInput }) => {
           cl={'white'}
         >
           <Text ff={'GeomanistMedium !important'} cl={'white'}>
-            {dataMonth?.getRevenueByQuarter?.invoiceNumber}
+            {dataMonth?.getRevenueByMonth?.invoiceNumber}
           </Text>
           <Icon size={fr(12)}>
             <Invoice />
@@ -145,7 +178,7 @@ const MonthlyStatistics = ({ monthInput }) => {
           cl={'white'}
         >
           <Text ff={'GeomanistMedium !important'} cl={'white'}>
-            {dataMonth?.getRevenueByQuarter?.orderNumber}
+            {dataMonth?.getRevenueByMonth?.orderNumber}
           </Text>
           <Icon size={fr(12)}>
             <ShoppingCart />
