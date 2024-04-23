@@ -44,11 +44,13 @@ import QuarterlyStatistics from '~/pages/Admin/Home/QuarterlyStatistics/Quarterl
 import MonthlyStatistics from '~/pages/Admin/Home/MonthlyStatistics/MonthlyStatistics'
 import YearlyStatistics from '~/pages/Admin/Home/YearlyStatistics/YearlyStatistics'
 import WeeklyStatistics from '~/pages/Admin/Home/WeeklyStatistics/WeeklyStatistics'
+import DailyStatistics from './DailyStatistics/DailyStatistics'
 
 const Home = () => {
   const [statisticsBy, setStatisticsBy] = useState('quarter')
   const [value, setValue] = useState('1')
   const [week, setWeek] = useState('1')
+  const [day, setDay] = useState(new Date().toISOString().split('T')[0])
   const [year, setYear] = useState(new Date().getFullYear().toString())
   const { loading: loadingCustomer, data: dataCustomer } =
     useQuery(GET_CUSTOMERS)
@@ -103,7 +105,11 @@ const Home = () => {
             options={yearOptions}
           />
         ) : statisticsBy === 'day' ? (
-          <NativeDateField ml={fr(4)} />
+          <NativeDateField
+            ml={fr(4)}
+            value={day}
+            onChange={(e) => setDay(e.target.value)}
+          />
         ) : statisticsBy === 'month' ? (
           <NativeSelectField
             ml={fr(4)}
@@ -161,7 +167,7 @@ const Home = () => {
       ) : statisticsBy === 'week' ? (
         <WeeklyStatistics weekInput={week} />
       ) : (
-        <></>
+        <DailyStatistics dayInput={day} />
       )}
       <Flex justify='between' align='center' mx={fr(4)} my={fr(4)}>
         <Text className='GeomanistMedium-font' fs={'xl'} mr={'auto'}>

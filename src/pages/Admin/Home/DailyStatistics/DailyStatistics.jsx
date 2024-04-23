@@ -6,57 +6,31 @@ import {
   CurrencyCircleDollar
 } from '@phosphor-icons/react'
 import ReactECharts from 'echarts-for-react'
-import { GET_REVENUE_BY_WEEKLY } from '~/pages/Admin/Home/schema'
-import { useEffect, useState } from 'react'
+import { GET_REVENUE_BY_DAY } from '~/pages/Admin/Home/schema'
+import { dataTimeOptions } from '~/pages/Admin/Home/selectFieldOptions'
+import { useState } from 'react'
 
-const WeeklyStatistics = ({ weekInput }) => {
-  const [weeklyRevenue, setWeeklyRevenue] = useState()
-  const [numberInvoice, setNumberInvoice] = useState(0)
-  const [numberOrder, setNumberOrder] = useState(0)
-  const { data: dataWeek } = useQuery(GET_REVENUE_BY_WEEKLY, {
-    variables: { week: weekInput },
+const DailyStatistics = ({ dayInput }) => {
+  const [day, setDay] = useState('')
+  const {
+    loading: loadingDay,
+    data: dataDay,
+    error: errorDay
+  } = useQuery(GET_REVENUE_BY_DAY, {
+    variables: { day: dayInput },
     onCompleted: (data) => {
-      setWeeklyRevenue(JSON.parse(data.getRevenueByWeekly.response))
+      const jsonParse = JSON.parse(data.getRevenueByDay.response)
+      setDay(jsonParse)
     }
   })
-  // calculate revenue for option pie
-
-  let revenueOrder = weeklyRevenue?.reduce(
-    (acc, item) => acc + item.Order || 0,
-    0
-  )
-  let revenueInvoice = weeklyRevenue?.reduce(
-    (acc, item) => acc + item.Invoice || 0,
-    0
-  )
-  // sync invoice and order for option line
-  const syncedInvoiceArr = new Array(7).fill(0)
-  const syncedOrderArr = new Array(7).fill(0)
-
-  weeklyRevenue?.forEach((item) => {
-    const dayIndex = item.Day - 1
-    syncedInvoiceArr[dayIndex] = item.Invoice || 0
-    syncedOrderArr[dayIndex] = item.Order || 0
-  })
-
-  // Count number of order and invoice
-  useEffect(() => {
-    weeklyRevenue?.forEach((item) => {
-      if (item.Invoice) {
-        setNumberInvoice(numberInvoice + 1)
-      } else {
-        setNumberOrder(numberOrder + 1)
-      }
-    })
-  }, [weeklyRevenue, weekInput])
 
   const revenue = [
     {
-      value: revenueInvoice,
+      value: day?.invoice?.reduce((acc, item) => acc + item, 0),
       name: 'Hoá đơn'
     },
     {
-      value: revenueOrder,
+      value: day?.order?.reduce((acc, item) => acc + item, 0),
       name: 'Đơn hàng'
     }
   ]
@@ -114,15 +88,7 @@ const WeeklyStatistics = ({ weekInput }) => {
     xAxis: {
       type: 'category',
       boundaryGap: false,
-      data: [
-        'Thứ Hai',
-        'Thứ Ba',
-        'Thứ Tư',
-        'Thứ Năm',
-        'Thứ Sáu',
-        'Thứ Bảy',
-        'Chủ Nhật'
-      ]
+      data: dataTimeOptions
     },
     yAxis: {
       type: 'value',
@@ -138,12 +104,14 @@ const WeeklyStatistics = ({ weekInput }) => {
       {
         type: 'line',
         name: 'Hoá đơn',
-        data: syncedInvoiceArr
+        smooth: true,
+        data: day?.invoice
       },
       {
         type: 'line',
         name: 'Đơn hàng',
-        data: syncedOrderArr
+        smooth: true,
+        data: day?.order
       }
     ]
   }
@@ -165,7 +133,8 @@ const WeeklyStatistics = ({ weekInput }) => {
           <Text fs={'xl'}>
             Tổng doanh thu tuần này{' '}
             <Text cl={'primary'}>
-              {(revenueInvoice + revenueOrder).toLocaleString('vi-VN')} VND
+              {(revenue[0].value + revenue[1].value).toLocaleString('vi-VN')}{' '}
+              VND
             </Text>
           </Text>
         </Center>
@@ -194,7 +163,7 @@ const WeeklyStatistics = ({ weekInput }) => {
           cl={'white'}
         >
           <Text ff={'GeomanistMedium !important'} cl={'white'}>
-            {numberInvoice}
+            {/* {dataWeek?.getRevenueByWeekly?.invoiceNumber} */}
           </Text>
           <Icon size={fr(12)}>
             <Invoice />
@@ -216,7 +185,7 @@ const WeeklyStatistics = ({ weekInput }) => {
           cl={'white'}
         >
           <Text ff={'GeomanistMedium !important'} cl={'white'}>
-            {numberOrder}
+            {/* {dataWeek?.getRevenueByWeekly?.orderNumber} */}
           </Text>
           <Icon size={fr(12)}>
             <ShoppingCart />
@@ -230,4 +199,4 @@ const WeeklyStatistics = ({ weekInput }) => {
   )
 }
 
-export default WeeklyStatistics
+export default DailyStatistics

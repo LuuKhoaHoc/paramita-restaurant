@@ -278,8 +278,9 @@ type Query {
   getRevenueByYear(year: String!): StatisticsResponse
   getRevenueByQuarter(quarter: String!): StatisticsResponse
   getRevenueByMonth(month: String!, year: String): StatisticsResponse
-  getRevenueByWeek(month: String!): StatisticsWeek
-  getRevenueByWeekly(week: String!): StatisticsWeek
+  getRevenueByWeek(month: String!): Statistics
+  getRevenueByWeekly(week: String!): Statistics
+  getRevenueByDay(day: String!): Statistics
   category(id: ID!): Category
   item(id: ID!): Menu
   content(id: ID!): Content
@@ -327,7 +328,7 @@ type Query {
 
 # TypeDefs
 # forgot password
-type StatisticsWeek {
+type Statistics {
   response: String!
 }
 type StatisticsResponse {

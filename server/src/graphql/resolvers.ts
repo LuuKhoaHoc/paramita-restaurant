@@ -335,6 +335,62 @@ export const resolvers = {
         response: JSON.stringify(arrWeek)
       }
     },
+    // get revenue by day
+    getRevenueByDay: async (
+      _parent: any,
+      args: { day: string },
+      context: Context
+    ) => {
+      let date = new Date(args.day)
+      const invoice = await context.prisma.invoices.findMany({
+        where: {
+          invoice_time: {
+            gte: date,
+            lte: new Date(date.getTime() + 24 * 60 * 60 * 1000)
+          },
+          payment_status: { startsWith: 'Đã' }
+        },
+        select: {
+          invoice_id: true,
+          invoice_time: true,
+          total_price: true
+        },
+        orderBy: {
+          invoice_time: 'asc'
+        }
+      })
+
+      const order = await context.prisma.orders.findMany({
+        where: {
+          created_at: {
+            gte: date,
+            lte: new Date(date.getTime() + 24 * 60 * 60 * 1000)
+          },
+          status: { contains: 'Hoàn thành' }
+        },
+        select: {
+          order_id: true,
+          created_at: true,
+          total_price: true
+        },
+        orderBy: {
+          created_at: 'asc'
+        }
+      })
+      let invoiceArray = new Array(24).fill(0)
+      let orderArray = new Array(24).fill(0)
+      invoice.forEach((item) => {
+        const hour = item.invoice_time.getHours()
+        invoiceArray[hour] = (invoiceArray[hour] || 0) + item.total_price
+      })
+      order.forEach((item) => {
+        const hour = item.created_at.getHours()
+        orderArray[hour] = (orderArray[hour] || 0) + item.total_price
+      })
+      return {
+        response: JSON.stringify({ invoice: invoiceArray, order: orderArray })
+      }
+    },
     // Authentication
     checkUsernameExistence: async (
       _parent: any,

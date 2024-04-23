@@ -1,5 +1,12 @@
 import { gql } from '@apollo/client'
 
+export const GET_REVENUE_BY_DAY = gql`
+  query getRevenueByDay($day: String!) {
+    getRevenueByDay(day: $day) {
+      response
+    }
+  }
+`
 export const GET_REVENUE_BY_WEEK = gql`
   query getRevenueByWeek($month: String!) {
     getRevenueByWeek(month: $month) {
