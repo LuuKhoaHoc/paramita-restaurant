@@ -1,7 +1,7 @@
 import { gql } from '@apollo/client'
 
 export const GET_RESERVATIONS = gql`
-  {
+  query getReservations {
     reservationList {
       reservation_id
       tsid

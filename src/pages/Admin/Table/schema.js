@@ -1,7 +1,7 @@
 import { gql } from '@apollo/client'
 
 export const GET_TABLES = gql`
-  {
+  query getTables {
     tableList {
       table_id
       tsid

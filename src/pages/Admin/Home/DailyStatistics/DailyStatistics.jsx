@@ -131,7 +131,7 @@ const DailyStatistics = ({ dayInput }) => {
             <CurrencyCircleDollar />
           </Icon>
           <Text fs={'xl'}>
-            Tổng doanh thu tuần này{' '}
+            Tổng doanh thu ngày này{' '}
             <Text cl={'primary'}>
               {(revenue[0].value + revenue[1].value).toLocaleString('vi-VN')}{' '}
               VND
@@ -163,7 +163,7 @@ const DailyStatistics = ({ dayInput }) => {
           cl={'white'}
         >
           <Text ff={'GeomanistMedium !important'} cl={'white'}>
-            {/* {dataWeek?.getRevenueByWeekly?.invoiceNumber} */}
+            {day?.invoice?.filter((item) => item !== 0).length}
           </Text>
           <Icon size={fr(12)}>
             <Invoice />
@@ -185,7 +185,7 @@ const DailyStatistics = ({ dayInput }) => {
           cl={'white'}
         >
           <Text ff={'GeomanistMedium !important'} cl={'white'}>
-            {/* {dataWeek?.getRevenueByWeekly?.orderNumber} */}
+            {day?.order?.filter((item) => item !== 0).length}
           </Text>
           <Icon size={fr(12)}>
             <ShoppingCart />

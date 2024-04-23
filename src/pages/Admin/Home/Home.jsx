@@ -1,4 +1,4 @@
-import { useQuery } from '@apollo/client'
+import { useApolloClient, useQuery } from '@apollo/client'
 import {
   Flex,
   Icon,
@@ -47,6 +47,7 @@ import WeeklyStatistics from '~/pages/Admin/Home/WeeklyStatistics/WeeklyStatisti
 import DailyStatistics from './DailyStatistics/DailyStatistics'
 
 const Home = () => {
+  const client = useApolloClient()
   const [statisticsBy, setStatisticsBy] = useState('quarter')
   const [value, setValue] = useState('1')
   const [week, setWeek] = useState('1')
@@ -62,7 +63,24 @@ const Home = () => {
   const { loading: loadingTable, data: dataTable } = useQuery(GET_TABLES)
   const { loading: loadingReservation, data: dataReservation } =
     useQuery(GET_RESERVATIONS)
-  const handleRefetch = async () => {}
+  const handleRefetchData = async () => {
+    await client.refetchQueries({
+      include: [
+        'getInvoices',
+        'getCustomers',
+        'getEmployees',
+        'getOrders',
+        'getMenus',
+        'getTables',
+        'getReservations'
+      ]
+    })
+  }
+  const handleRefetchGraph = async () => {
+    await client.refetchQueries({
+      include: 'active'
+    })
+  }
   return (
     <>
       <Flex justify='between' align='center' mx={fr(4)} my={fr(4)}>
@@ -71,7 +89,7 @@ const Home = () => {
         </Text>
         <Tooltip label='Làm mới!' position='left-start'>
           <ActionButton
-            onClick={handleRefetch}
+            onClick={handleRefetchGraph}
             icon={<ArrowsClockwise />}
             variant='text'
             size='md'
@@ -175,7 +193,7 @@ const Home = () => {
         </Text>
         <Tooltip label='Làm mới!' position='left-start'>
           <ActionButton
-            onClick={handleRefetch}
+            onClick={handleRefetchData}
             icon={<ArrowsClockwise />}
             variant='text'
             size='md'
