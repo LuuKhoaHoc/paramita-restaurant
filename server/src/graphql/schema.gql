@@ -275,9 +275,11 @@ type Query {
   checkToken(token: String!): AuthPayload
   # get Customer by phone number
   getCustomerByPhone(phone: String!): Customer
+  getRevenueByYear(year: String!): StatisticsResponse
   getRevenueByQuarter(quarter: String!): StatisticsResponse
-  getRevenueByMonth(month: String!): StatisticsResponse
+  getRevenueByMonth(month: String!, year: String): StatisticsResponse
   getRevenueByWeek(month: String!): StatisticsWeek
+  getRevenueByWeekly(week: String!): StatisticsWeek
   category(id: ID!): Category
   item(id: ID!): Menu
   content(id: ID!): Content

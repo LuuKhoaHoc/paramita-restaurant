@@ -6,43 +6,44 @@ import {
   CurrencyCircleDollar
 } from '@phosphor-icons/react'
 import ReactECharts from 'echarts-for-react'
-import {
-  GET_REVENUE_BY_MONTH,
-  GET_REVENUE_BY_QUARTER
-} from '~/pages/Admin/Home/schema'
+import { GET_REVENUE_BY_WEEKLY } from '~/pages/Admin/Home/schema'
+import { useEffect, useState } from 'react'
 
-const QuarterlyStatistics = ({ quarterInput }) => {
-  const {
-    data: dataQuarter,
-    loading: loadingQuarter,
-    refetch: refetchQuarter
-  } = useQuery(GET_REVENUE_BY_QUARTER, {
-    variables: {
-      quarter: quarterInput
+const WeeklyStatistics = ({ weekInput }) => {
+  const [weeklyRevenue, setWeeklyRevenue] = useState()
+  const { data: dataWeek } = useQuery(GET_REVENUE_BY_WEEKLY, {
+    variables: { week: weekInput },
+    onCompleted: (data) => {
+      setWeeklyRevenue(JSON.parse(data.getRevenueByWeekly.response))
     }
   })
-  let refetchMonth
-  let revenues = []
-  let startMonth = quarterInput * 3 - 2
-  for (let i = 0; i < 3; i++) {
-    const month = startMonth + i
-    const { data, loading, refetch } = useQuery(GET_REVENUE_BY_MONTH, {
-      variables: {
-        month: month.toString(),
-        year: new Date().getFullYear().toString()
-      }
-    })
-    refetchMonth = refetch
-    revenues.push(data)
-  }
-  if (loadingQuarter) return <div>Loading</div>
+  // calculate revenue for option pie
+
+  let revenueOrder = weeklyRevenue?.reduce(
+    (acc, item) => acc + item.Order || 0,
+    0
+  )
+  let revenueInvoice = weeklyRevenue?.reduce(
+    (acc, item) => acc + item.Invoice || 0,
+    0
+  )
+  // sync invoice and order for option line
+  const syncedInvoiceArr = new Array(7).fill(0)
+  const syncedOrderArr = new Array(7).fill(0)
+
+  weeklyRevenue?.forEach((item) => {
+    const dayIndex = item.Day - 1
+    syncedInvoiceArr[dayIndex] = item.Invoice || 0
+    syncedOrderArr[dayIndex] = item.Order || 0
+  })
+
   const revenue = [
     {
-      value: +dataQuarter?.getRevenueByQuarter.revenueInvoice,
+      value: revenueInvoice,
       name: 'Hoá đơn'
     },
     {
-      value: +dataQuarter?.getRevenueByQuarter.revenueOrder,
+      value: revenueOrder,
       name: 'Đơn hàng'
     }
   ]
@@ -79,56 +80,37 @@ const QuarterlyStatistics = ({ quarterInput }) => {
       }
     ]
   }
-  const optionBar = {
-    legend: {},
-    tooltip: {
-      valueFormatter: (v) => `${Number(v).toLocaleString('vi-VN')} VND`
+
+  const optionLine = {
+    legend: {
+      data: ['Đơn hàng', 'Hoá đơn']
     },
-    dataset: {
-      dimensions: ['Month', 'Hoá đơn', 'Đơn hàng'],
-      source: [
-        {
-          Month: `Tháng ${
-            quarterInput === '1'
-              ? '1'
-              : quarterInput === '2'
-              ? '4'
-              : quarterInput === '3'
-              ? '7'
-              : '10'
-          }`,
-          'Đơn hàng': revenues[0]?.getRevenueByMonth?.revenueOrder,
-          'Hoá đơn': revenues[0]?.getRevenueByMonth?.revenueInvoice
-        },
-        {
-          Month: `Tháng ${
-            quarterInput === '1'
-              ? '2'
-              : quarterInput === '2'
-              ? '5'
-              : quarterInput === '3'
-              ? '8'
-              : '11'
-          }`,
-          'Đơn hàng': revenues[1]?.getRevenueByMonth?.revenueOrder,
-          'Hoá đơn': revenues[1]?.getRevenueByMonth?.revenueInvoice
-        },
-        {
-          Month: `Tháng ${
-            quarterInput === '1'
-              ? '3'
-              : quarterInput === '2'
-              ? '6'
-              : quarterInput === '3'
-              ? '9'
-              : '12'
-          }`,
-          'Đơn hàng': revenues[2]?.getRevenueByMonth?.revenueOrder,
-          'Hoá đơn': revenues[2]?.getRevenueByMonth?.revenueInvoice
-        }
+    grid: {
+      left: '3%',
+      right: '4%',
+      bottom: '3%',
+      containLabel: true
+    },
+    tooltip: {
+      valueFormatter: (v) => `${Number(v).toLocaleString('vi-VN')} VND`,
+      trigger: 'axis',
+      axisPointer: {
+        type: 'cross'
+      }
+    },
+    xAxis: {
+      type: 'category',
+      boundaryGap: false,
+      data: [
+        'Thứ Hai',
+        'Thứ Ba',
+        'Thứ Tư',
+        'Thứ Năm',
+        'Thứ Sáu',
+        'Thứ Bảy',
+        'Chủ Nhật'
       ]
     },
-    xAxis: { type: 'category' },
     yAxis: {
       type: 'value',
       axisLabel: {
@@ -138,9 +120,19 @@ const QuarterlyStatistics = ({ quarterInput }) => {
         snap: true
       }
     },
-    // Declare several bar series, each will be mapped
-    // to a column of dataset.source by default.
-    series: [{ type: 'bar' }, { type: 'bar' }]
+
+    series: [
+      {
+        type: 'line',
+        name: 'Hoá đơn',
+        data: syncedInvoiceArr
+      },
+      {
+        type: 'line',
+        name: 'Đơn hàng',
+        data: syncedOrderArr
+      }
+    ]
   }
   return (
     <>
@@ -158,13 +150,9 @@ const QuarterlyStatistics = ({ quarterInput }) => {
             <CurrencyCircleDollar />
           </Icon>
           <Text fs={'xl'}>
-            Tổng doanh thu quý này{' '}
+            Tổng doanh thu tuần này{' '}
             <Text cl={'primary'}>
-              {(
-                +dataQuarter?.getRevenueByQuarter.revenueInvoice +
-                +dataQuarter?.getRevenueByQuarter.revenueOrder
-              ).toLocaleString('vi-VN')}{' '}
-              VND
+              {(revenueInvoice + revenueOrder).toLocaleString('vi-VN')} VND
             </Text>
           </Text>
         </Center>
@@ -175,7 +163,7 @@ const QuarterlyStatistics = ({ quarterInput }) => {
           />
           <ReactECharts
             style={{ width: '50%', height: fr(80) }}
-            option={optionBar}
+            option={optionLine}
           />
         </Flex>
       </Flex>
@@ -193,7 +181,7 @@ const QuarterlyStatistics = ({ quarterInput }) => {
           cl={'white'}
         >
           <Text ff={'GeomanistMedium !important'} cl={'white'}>
-            {dataQuarter?.getRevenueByQuarter?.invoiceNumber}
+            {dataWeek?.getRevenueByWeekly?.invoiceNumber}
           </Text>
           <Icon size={fr(12)}>
             <Invoice />
@@ -215,7 +203,7 @@ const QuarterlyStatistics = ({ quarterInput }) => {
           cl={'white'}
         >
           <Text ff={'GeomanistMedium !important'} cl={'white'}>
-            {dataQuarter?.getRevenueByQuarter?.orderNumber}
+            {dataWeek?.getRevenueByWeekly?.orderNumber}
           </Text>
           <Icon size={fr(12)}>
             <ShoppingCart />
@@ -229,4 +217,4 @@ const QuarterlyStatistics = ({ quarterInput }) => {
   )
 }
 
-export default QuarterlyStatistics
+export default WeeklyStatistics

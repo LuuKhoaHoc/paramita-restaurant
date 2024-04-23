@@ -19,7 +19,8 @@ const MonthlyStatistics = ({ monthInput }) => {
     error: errorMonth
   } = useQuery(GET_REVENUE_BY_MONTH, {
     variables: {
-      month: monthInput
+      month: monthInput,
+      year: new Date().getFullYear().toString()
     }
   })
   const {
@@ -56,7 +57,7 @@ const MonthlyStatistics = ({ monthInput }) => {
 
   const optionPie = {
     title: {
-      text: 'Tổng doanh thu từ các nguồn',
+      text: 'Doanh thu từ các nguồn',
       left: 'center',
       textStyle: {
         fontFamily: 'GeomanistMedium'
@@ -100,7 +101,15 @@ const MonthlyStatistics = ({ monthInput }) => {
       }))
     },
     xAxis: { type: 'category' },
-    yAxis: { type: 'value' },
+    yAxis: {
+      type: 'value',
+      axisLabel: {
+        formatter: '{value} VND'
+      },
+      axisPointer: {
+        snap: true
+      }
+    },
     // Declare several bar series, each will be mapped
     // to a column of dataset.source by default.
     series: [{ type: 'bar' }, { type: 'bar' }]

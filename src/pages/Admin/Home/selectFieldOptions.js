@@ -28,3 +28,21 @@ export const yearOptions = [
   { value: '2025', element: '2025' },
   { value: '2026', element: '2026' }
 ]
+function daysInYear(year) {
+  return (year % 4 === 0 && year % 100 > 0) || year % 400 == 0 ? 366 : 365
+}
+const WeekInYear = Math.floor(daysInYear(new Date().getFullYear()) / 7)
+
+function getStartDateOfWeek(week) {
+  let oneJan = new Date(new Date().getFullYear(), 0, 1)
+  let date = new Date(oneJan.getTime() + (week - 1) * 7 * 24 * 60 * 60 * 1000)
+  return `${date.getDate()} - ${date.getMonth() + 1}`
+}
+export const weekOptions = Array.from({ length: WeekInYear }, (_, i) => {
+  return {
+    value: i + 1,
+    label: `Tuần ${i + 1} từ ${getStartDateOfWeek(
+      i + 1
+    )} đến ${getStartDateOfWeek(i + 1.9)}`
+  }
+})

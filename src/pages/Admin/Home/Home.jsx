@@ -34,13 +34,22 @@ import { GET_MENU } from '~/pages/Admin/Menu/schema'
 import { GET_TABLES } from '~/pages/Admin/Table/schema'
 import { GET_RESERVATIONS } from '~/pages/Admin/Reservation/schema'
 import { GET_INVOICES } from '~/pages/Admin/Invoice/schema'
-import QuarterlyStatistics from './QuarterlyStatistics/QuarterlyStatistics'
-import { monthOptions, quarterOptions, yearOptions } from './selectFieldOptions'
-import MonthlyStatistics from './MonthlyStatistics/MonthlyStatistics'
+import {
+  monthOptions,
+  quarterOptions,
+  weekOptions,
+  yearOptions
+} from './selectFieldOptions'
+import QuarterlyStatistics from '~/pages/Admin/Home/QuarterlyStatistics/QuarterlyStatistics'
+import MonthlyStatistics from '~/pages/Admin/Home/MonthlyStatistics/MonthlyStatistics'
+import YearlyStatistics from '~/pages/Admin/Home/YearlyStatistics/YearlyStatistics'
+import WeeklyStatistics from '~/pages/Admin/Home/WeeklyStatistics/WeeklyStatistics'
 
 const Home = () => {
-  const [value, setValue] = useState('1')
   const [statisticsBy, setStatisticsBy] = useState('quarter')
+  const [value, setValue] = useState('1')
+  const [week, setWeek] = useState('1')
+  const [year, setYear] = useState(new Date().getFullYear().toString())
   const { loading: loadingCustomer, data: dataCustomer } =
     useQuery(GET_CUSTOMERS)
   const { loading: loadingEmployee, data: dataEmployee } =
@@ -77,8 +86,9 @@ const Home = () => {
             onChange={(e) => setStatisticsBy(e.target.value)}
             options={[
               { label: 'Quý', value: 'quarter' },
-              { label: 'Tháng', value: 'month' },
               { label: 'Năm', value: 'year' },
+              { label: 'Tháng', value: 'month' },
+              { label: 'Tuần', value: 'week' },
               { label: 'Ngày', value: 'day' }
             ]}
           />
@@ -88,8 +98,8 @@ const Home = () => {
             ml={fr(4)}
             placeholder='Nhập năm muốn thống kê'
             gap={fr(0)}
-            value={new Date().getFullYear().toString() || value}
-            onChange={(e) => setValue(e.target.value)}
+            value={year}
+            onChange={(e) => setYear(e.target.value)}
             options={yearOptions}
           />
         ) : statisticsBy === 'day' ? (
@@ -108,6 +118,22 @@ const Home = () => {
             }}
             options={monthOptions}
           />
+        ) : statisticsBy === 'week' ? (
+          <>
+            <NativeSelectField
+              ml={fr(4)}
+              className='GeomanistMedium-font'
+              name='select3'
+              value={week}
+              onChange={(e) => setWeek(e.target.value)}
+              sx={{
+                '*': {
+                  cursor: 'pointer'
+                }
+              }}
+              options={weekOptions}
+            />
+          </>
         ) : (
           <NativeSelectField
             ml={fr(4)}
@@ -130,6 +156,10 @@ const Home = () => {
         <MonthlyStatistics
           monthInput={value || (new Date().getMonth() + 1).toString()}
         />
+      ) : statisticsBy === 'year' ? (
+        <YearlyStatistics yearInput={year} />
+      ) : statisticsBy === 'week' ? (
+        <WeeklyStatistics weekInput={week} />
       ) : (
         <></>
       )}

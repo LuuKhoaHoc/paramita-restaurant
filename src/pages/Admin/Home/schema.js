@@ -7,9 +7,16 @@ export const GET_REVENUE_BY_WEEK = gql`
     }
   }
 `
+export const GET_REVENUE_BY_WEEKLY = gql`
+  query getRevenueByWeekly($week: String!) {
+    getRevenueByWeekly(week: $week) {
+      response
+    }
+  }
+`
 export const GET_REVENUE_BY_MONTH = gql`
-  query getRevenueByMonth($month: String!) {
-    getRevenueByMonth(month: $month) {
+  query getRevenueByMonth($month: String!, $year: String!) {
+    getRevenueByMonth(month: $month, year: $year) {
       invoiceNumber
       revenueInvoice
       orderNumber
@@ -20,6 +27,16 @@ export const GET_REVENUE_BY_MONTH = gql`
 export const GET_REVENUE_BY_QUARTER = gql`
   query getRevenueByQuarter($quarter: String!) {
     getRevenueByQuarter(quarter: $quarter) {
+      invoiceNumber
+      revenueInvoice
+      orderNumber
+      revenueOrder
+    }
+  }
+`
+export const GET_REVENUE_BY_YEAR = gql`
+  query getRevenueByYear($year: String!) {
+    getRevenueByYear(year: $year) {
       invoiceNumber
       revenueInvoice
       orderNumber

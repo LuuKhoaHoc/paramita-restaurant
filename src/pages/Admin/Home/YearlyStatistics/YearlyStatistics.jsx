@@ -1,4 +1,4 @@
-import { useQuery } from '@apollo/client'
+import { useApolloClient, useQuery } from '@apollo/client'
 import { Flex, Icon, Card, Text, fr, Center } from '@prismane/core'
 import {
   ShoppingCart,
@@ -8,41 +8,53 @@ import {
 import ReactECharts from 'echarts-for-react'
 import {
   GET_REVENUE_BY_MONTH,
-  GET_REVENUE_BY_QUARTER
+  GET_REVENUE_BY_YEAR
 } from '~/pages/Admin/Home/schema'
+import { useEffect, useState } from 'react'
 
-const QuarterlyStatistics = ({ quarterInput }) => {
+const YearlyStatistics = ({ yearInput }) => {
+  const client = useApolloClient()
+  const [monthlyRevenue, setMonthlyRevenue] = useState([])
   const {
-    data: dataQuarter,
-    loading: loadingQuarter,
-    refetch: refetchQuarter
-  } = useQuery(GET_REVENUE_BY_QUARTER, {
+    data: dataYear,
+    loading: loadingYear,
+    refetch: refetchYear
+  } = useQuery(GET_REVENUE_BY_YEAR, {
     variables: {
-      quarter: quarterInput
+      year: yearInput
     }
   })
-  let refetchMonth
-  let revenues = []
-  let startMonth = quarterInput * 3 - 2
-  for (let i = 0; i < 3; i++) {
-    const month = startMonth + i
-    const { data, loading, refetch } = useQuery(GET_REVENUE_BY_MONTH, {
-      variables: {
-        month: month.toString(),
-        year: new Date().getFullYear().toString()
+  useEffect(() => {
+    const fetchMonthlyRevenue = async () => {
+      let revenueData = []
+
+      for (let i = 1; i <= 12; i++) {
+        const { data } = await client.query({
+          query: GET_REVENUE_BY_MONTH,
+          variables: { month: i.toString(), year: yearInput },
+          fetchPolicy: 'no-cache'
+        })
+        revenueData.push({
+          Month: i,
+          'Hoá đơn': +data?.getRevenueByMonth.revenueInvoice,
+          'Đơn hàng': +data?.getRevenueByMonth.revenueOrder
+        })
       }
-    })
-    refetchMonth = refetch
-    revenues.push(data)
-  }
-  if (loadingQuarter) return <div>Loading</div>
+      setMonthlyRevenue(revenueData)
+    }
+    fetchMonthlyRevenue()
+    return () => {
+      setMonthlyRevenue([])
+    }
+  }, [client, yearInput])
+
   const revenue = [
     {
-      value: +dataQuarter?.getRevenueByQuarter.revenueInvoice,
+      value: +dataYear?.getRevenueByYear.revenueInvoice,
       name: 'Hoá đơn'
     },
     {
-      value: +dataQuarter?.getRevenueByQuarter.revenueOrder,
+      value: +dataYear?.getRevenueByYear.revenueOrder,
       name: 'Đơn hàng'
     }
   ]
@@ -86,47 +98,7 @@ const QuarterlyStatistics = ({ quarterInput }) => {
     },
     dataset: {
       dimensions: ['Month', 'Hoá đơn', 'Đơn hàng'],
-      source: [
-        {
-          Month: `Tháng ${
-            quarterInput === '1'
-              ? '1'
-              : quarterInput === '2'
-              ? '4'
-              : quarterInput === '3'
-              ? '7'
-              : '10'
-          }`,
-          'Đơn hàng': revenues[0]?.getRevenueByMonth?.revenueOrder,
-          'Hoá đơn': revenues[0]?.getRevenueByMonth?.revenueInvoice
-        },
-        {
-          Month: `Tháng ${
-            quarterInput === '1'
-              ? '2'
-              : quarterInput === '2'
-              ? '5'
-              : quarterInput === '3'
-              ? '8'
-              : '11'
-          }`,
-          'Đơn hàng': revenues[1]?.getRevenueByMonth?.revenueOrder,
-          'Hoá đơn': revenues[1]?.getRevenueByMonth?.revenueInvoice
-        },
-        {
-          Month: `Tháng ${
-            quarterInput === '1'
-              ? '3'
-              : quarterInput === '2'
-              ? '6'
-              : quarterInput === '3'
-              ? '9'
-              : '12'
-          }`,
-          'Đơn hàng': revenues[2]?.getRevenueByMonth?.revenueOrder,
-          'Hoá đơn': revenues[2]?.getRevenueByMonth?.revenueInvoice
-        }
-      ]
+      source: monthlyRevenue
     },
     xAxis: { type: 'category' },
     yAxis: {
@@ -158,11 +130,11 @@ const QuarterlyStatistics = ({ quarterInput }) => {
             <CurrencyCircleDollar />
           </Icon>
           <Text fs={'xl'}>
-            Tổng doanh thu quý này{' '}
+            Tổng doanh thu năm này{' '}
             <Text cl={'primary'}>
               {(
-                +dataQuarter?.getRevenueByQuarter.revenueInvoice +
-                +dataQuarter?.getRevenueByQuarter.revenueOrder
+                +dataYear?.getRevenueByYear.revenueInvoice +
+                +dataYear?.getRevenueByYear.revenueOrder
               ).toLocaleString('vi-VN')}{' '}
               VND
             </Text>
@@ -193,7 +165,7 @@ const QuarterlyStatistics = ({ quarterInput }) => {
           cl={'white'}
         >
           <Text ff={'GeomanistMedium !important'} cl={'white'}>
-            {dataQuarter?.getRevenueByQuarter?.invoiceNumber}
+            {dataYear?.getRevenueByYear?.invoiceNumber}
           </Text>
           <Icon size={fr(12)}>
             <Invoice />
@@ -215,7 +187,7 @@ const QuarterlyStatistics = ({ quarterInput }) => {
           cl={'white'}
         >
           <Text ff={'GeomanistMedium !important'} cl={'white'}>
-            {dataQuarter?.getRevenueByQuarter?.orderNumber}
+            {dataYear?.getRevenueByYear?.orderNumber}
           </Text>
           <Icon size={fr(12)}>
             <ShoppingCart />
@@ -229,4 +201,4 @@ const QuarterlyStatistics = ({ quarterInput }) => {
   )
 }
 
-export default QuarterlyStatistics
+export default YearlyStatistics

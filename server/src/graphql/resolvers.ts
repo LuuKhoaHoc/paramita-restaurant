@@ -9,6 +9,53 @@ import { uploadImage } from '../utils/cloudinaryConfig'
 export const resolvers = {
   // Query
   Query: {
+    // Get revenue by year
+    getRevenueByYear: async (
+      _parent: any,
+      args: { year: string },
+      context: Context
+    ) => {
+      const invoices = await context.prisma.invoices.findMany({
+        where: {
+          invoice_time: {
+            gte: new Date(+args.year, 0, 1),
+            lte: new Date(+args.year, 11, 31)
+          },
+          payment_status: { startsWith: 'Đã' }
+        },
+        select: {
+          invoice_id: true,
+          total_price: true
+        }
+      })
+      const total_price_invoice = invoices.reduce(
+        (acc, item) => acc + item.total_price,
+        0
+      )
+      const orders = await context.prisma.orders.findMany({
+        where: {
+          created_at: {
+            gte: new Date(+args.year, 0, 1),
+            lte: new Date(+args.year, 11, 31)
+          },
+          status: { contains: 'Hoàn thành' }
+        },
+        select: {
+          order_id: true,
+          total_price: true
+        }
+      })
+      const total_price_order = orders.reduce(
+        (acc, item) => acc + item.total_price,
+        0
+      )
+      return {
+        invoiceNumber: invoices.length,
+        revenueInvoice: total_price_invoice,
+        orderNumber: orders.length,
+        revenueOrder: total_price_order
+      }
+    },
     // Get revenue by quarter
     getRevenueByQuarter: async (
       _parent: any,
@@ -60,14 +107,14 @@ export const resolvers = {
     // get revenue by month
     getRevenueByMonth: async (
       _parent: any,
-      args: { month: String },
+      args: { month: string; year: string },
       context: Context
     ) => {
       const invoices = await context.prisma.invoices.findMany({
         where: {
           invoice_time: {
-            gte: new Date(new Date().getFullYear(), +args.month - 1, 1),
-            lte: new Date(new Date().getFullYear(), +args.month - 1, 31)
+            gte: new Date(+args.year, +args.month - 1, 1),
+            lte: new Date(+args.year, +args.month - 1, 31)
           },
           payment_status: { startsWith: 'Đã' }
         },
@@ -83,8 +130,8 @@ export const resolvers = {
       const orders = await context.prisma.orders.findMany({
         where: {
           created_at: {
-            gte: new Date(new Date().getFullYear(), +args.month - 1, 1),
-            lte: new Date(new Date().getFullYear(), +args.month - 1, 31)
+            gte: new Date(+args.year, +args.month - 1, 1),
+            lte: new Date(+args.year, +args.month - 1, 31)
           },
           status: { contains: 'Hoàn thành' }
         },
@@ -107,7 +154,7 @@ export const resolvers = {
     // Get revenue by week
     getRevenueByWeek: async (
       _parent: any,
-      args: { month: String },
+      args: { month: string },
       context: Context
     ) => {
       const firstDayOfMonth = new Date(
@@ -200,6 +247,90 @@ export const resolvers = {
             arrWeek[i].Order = total_price_order
           })
       }
+      return {
+        response: JSON.stringify(arrWeek)
+      }
+    },
+    // get revenue by weekly
+    getRevenueByWeekly: async (
+      _parent: any,
+      args: { week: string },
+      context: Context
+    ) => {
+      let oneJan = new Date(new Date().getFullYear(), 0, 1)
+      let startDateOfWeek = new Date(
+        oneJan.getTime() + (+args.week - 1) * 7 * 24 * 60 * 60 * 1000
+      )
+      let endDateOfWeek = new Date(
+        startDateOfWeek.getTime() + 6 * 24 * 60 * 60 * 1000
+      )
+      let weekObj: {
+        [key: string]: { [key: number]: { Invoice?: number; Order?: number } }
+      } = {}
+      const invoice = await context.prisma.invoices.findMany({
+        where: {
+          invoice_time: {
+            gte: startDateOfWeek,
+            lte: endDateOfWeek
+          },
+          payment_status: { startsWith: 'Đã' }
+        },
+        select: {
+          invoice_id: true,
+          invoice_time: true,
+          total_price: true
+        }
+      })
+      invoice.forEach((item) => {
+        const week = args.week
+        const day = item.invoice_time.getDay() + 1
+        const invoiceTotal = item.total_price
+
+        if (!weekObj[week]) {
+          weekObj[week] = {}
+        }
+
+        if (!weekObj[week][day]) {
+          weekObj[week][day] = {}
+        }
+
+        weekObj[week][day].Invoice =
+          (weekObj[week][day].Invoice || 0) + invoiceTotal
+      })
+      const order = await context.prisma.orders.findMany({
+        where: {
+          created_at: {
+            gte: startDateOfWeek,
+            lte: endDateOfWeek
+          },
+          status: { contains: 'Hoàn thành' }
+        },
+        select: {
+          order_id: true,
+          created_at: true,
+          total_price: true
+        }
+      })
+      order.forEach((item) => {
+        const week = args.week
+        const day = item.created_at.getDay() + 1
+        const orderTotal = item.total_price
+
+        if (!weekObj[week]) {
+          weekObj[week] = {}
+        }
+
+        if (!weekObj[week][day]) {
+          weekObj[week][day] = {}
+        }
+
+        weekObj[week][day].Order = (weekObj[week][day].Order || 0) + orderTotal
+      })
+      const arrWeek = Object.entries(weekObj).flatMap(([week, days]) => {
+        return Object.entries(days).map(([day, values]) => {
+          return { Week: week, Day: parseInt(day), ...values }
+        })
+      })
       return {
         response: JSON.stringify(arrWeek)
       }
