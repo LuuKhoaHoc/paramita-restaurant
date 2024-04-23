@@ -60,7 +60,7 @@ const App = () => {
   const bgColor = useThemeModeValue('#fff2e5', '#1d2b1f')
   const bgColorStaff = useThemeModeValue('#fff', '#0a0118')
   const token =
-    localStorage.getItem('token') || localStorage.getItem('tokenEmp')
+    localStorage.getItem('token') || localStorage.getItem('tokenEmp') || ''
 
   const { loading, error, data } = useQuery(CHECK_TOKEN, {
     skip: !token, // Skip this query if no token.

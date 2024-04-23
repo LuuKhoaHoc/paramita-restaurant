@@ -392,7 +392,7 @@ const Home = () => {
             size={fr(8)}
             cl={['inherit', { hover: 'primary' }]}
             as={NavLink}
-            to={'/admin/table'}
+            to={'/admin/reservation'}
           >
             <ArrowCircleRight />
           </Icon>

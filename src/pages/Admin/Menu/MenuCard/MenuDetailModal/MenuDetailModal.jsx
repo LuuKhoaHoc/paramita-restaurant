@@ -3,8 +3,14 @@ import { Flex, Image, Modal, Text, fr } from '@prismane/core'
 const MenuDetailModal = ({ open, setOpen, menu }) => {
   return (
     <Modal open={open} onClose={() => setOpen(false)} w={'40%'}>
-      <Modal.Header>
-        <Image src={menu?.image} alt={menu?.name} br={'lg'} w={'100%'} />
+      <Modal.Header justify='center'>
+        <Image
+          src={menu?.image}
+          alt={menu?.name}
+          br={'lg'}
+          w={'100%'}
+          h={fr(140)}
+        />
       </Modal.Header>
       <Flex direction='column' fs={'md'} gap={fr(2)}>
         <Text className='GeomanistMedium-font' ta={'center'} fs={'lg'}>

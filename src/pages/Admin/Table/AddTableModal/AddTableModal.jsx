@@ -81,6 +81,7 @@ const AddTableModal = ({ open, setOpen, refetch }) => {
               onCompleted: () => {
                 refetch()
                 setOpen(false)
+                handleReset()
               }
             })
           })

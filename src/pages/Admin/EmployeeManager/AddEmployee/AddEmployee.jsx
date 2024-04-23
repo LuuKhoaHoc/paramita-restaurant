@@ -162,9 +162,9 @@ const AddEmployee = ({ open, setOpen, refetch, position }) => {
               },
               onError: (err) => console.log(err),
               onCompleted: (data) => {
-                console.log('🚀 ~ handleSubmit ~ data:', data)
                 refetch()
                 setOpen(false)
+                handleReset()
                 toast({
                   element: (
                     <Alert variant='success'>
@@ -176,7 +176,6 @@ const AddEmployee = ({ open, setOpen, refetch, position }) => {
                 })
               }
             })
-            console.log(v)
           })
         }
         onReset={handleReset}
@@ -197,6 +196,7 @@ const AddEmployee = ({ open, setOpen, refetch, position }) => {
             icon={<GenderIntersex />}
             className='GeomanistMedium-font'
             placeholder='Chọn giới tính nhân viên...'
+            gap={fr(0)}
             sx={{
               '.PrismaneMenuItem-root': {
                 fontFamily: 'GeomanistMedium !important'
