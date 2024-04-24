@@ -15,7 +15,7 @@ import { Loading, MainPic } from '~/components'
 import { useResponsive } from '~/utils/responsive'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { Envelope, EnvelopeOpen } from '@phosphor-icons/react'
-import { gql, useMutation } from '@apollo/client'
+import { gql, useMutation, useQuery } from '@apollo/client'
 import { GET_CONTENT } from '~/pages/Auth/Login/schema'
 
 const VERIFY_EMAIL = gql`
@@ -44,7 +44,6 @@ const VerifyEmail = () => {
     verifyEmail({
       variables: { token },
       onCompleted: (data) => {
-        console.log('🚀 ~ useEffect ~ data:', data)
         if (data.verifyEmail.status === 'success') {
           setValidate(true)
         }
