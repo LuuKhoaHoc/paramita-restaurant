@@ -140,7 +140,6 @@ const BookTable = () => {
   const [open, setOpen] = useState(false)
   const { isMobile, isTablet, isLaptop } = useResponsive()
   const { loading, error, data } = useQuery(GET_CONTENTS)
-  console.log('🚀 ~ BookTable ~ data:', data)
   const [createReservation] = useMutation(ADD_RESERVATION)
   const [sendMailReservation, { loading: sendMailLoading }] =
     useMutation(SEND_MAIL)
