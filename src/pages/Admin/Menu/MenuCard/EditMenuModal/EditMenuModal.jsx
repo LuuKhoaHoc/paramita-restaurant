@@ -155,7 +155,7 @@ const EditMenuModal = ({ openModal, setOpenModal, refetch, menu }) => {
             alt={menu.name}
             w={'80%'}
             h={fr(30)}
-            fit='cover'
+            fit='scale-down'
             mx={'auto'}
             br={'lg'}
             bsh={'md'}

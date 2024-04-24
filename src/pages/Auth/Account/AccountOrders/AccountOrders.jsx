@@ -64,11 +64,11 @@ const AccountOrder = ({ customer }) => {
                   setOpen(!open)
                 }}
               >
-                <Flex align='center'>
+                <Flex align='center' w={'25vw'}>
                   <Image
                     src={item.order_details[0].item.image}
                     alt='order'
-                    w={isMobile ? fr(20) : fr(32)}
+                    w={isMobile ? fr(20) : fr(36)}
                     h={isMobile ? fr(20) : fr(32)}
                     br={'lg'}
                   />

@@ -15,7 +15,8 @@ import {
   Circle,
   Button,
   useToast,
-  Alert
+  Alert,
+  Flex
 } from '@prismane/core'
 import { useState } from 'react'
 import EmployeeDetailModal from '~/pages/Admin/EmployeeManager/EmployeeRow/EmployeeDetailModal/EmployeeDetailModal'
@@ -66,16 +67,7 @@ const EmployeeRow = ({ employee, refetch, position }) => {
           <Text>{employee?.employee_id}</Text>
         </Table.Cell>
         <Table.Cell>
-          <Center gap={fr(2)}>
-            <Image
-              src='https://cdn-icons-png.flaticon.com/512/3135/3135715.png'
-              alt=''
-              br={'full'}
-              w={fr(10)}
-              h={fr(10)}
-            />
-            <Text>{employee?.name}</Text>
-          </Center>
+          <Text>{employee?.name}</Text>
         </Table.Cell>
         <Table.Cell>
           <Text>{employee?.position.name}</Text>

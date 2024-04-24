@@ -230,6 +230,7 @@ const AddInvoiceModal = ({ openModal, setOpenModal, refetch }) => {
                         w={fr(18)}
                         h={fr(18)}
                         br={'md'}
+                        fit='cover'
                       />
                       <Flex direction='column' fs={'lg'}>
                         <Text>{item?.name}</Text>

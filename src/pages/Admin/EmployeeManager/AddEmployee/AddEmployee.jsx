@@ -96,7 +96,7 @@ const AddEmployee = ({ open, setOpen, refetch, position }) => {
         value: '',
         validators: {
           required: (v) =>
-            p(v, z.string().trim().min(1, { message: 'Không được bỏ trình!' }))
+            p(v, z.string().trim().min(1, { message: 'Không được bỏ trống!' }))
         }
       },
       birthday: {
@@ -188,11 +188,13 @@ const AddEmployee = ({ open, setOpen, refetch, position }) => {
         </Center>
         <Flex align='center' justify='center' gap={fr(2)}>
           <TextField
+            w={'100%'}
             placeholder='Nhập tên nhân viên...'
             icon={<IdentificationCard />}
             {...register('name')}
           />
           <SelectField
+            w={'100%'}
             icon={<GenderIntersex />}
             className='GeomanistMedium-font'
             placeholder='Chọn giới tính nhân viên...'
@@ -212,11 +214,13 @@ const AddEmployee = ({ open, setOpen, refetch, position }) => {
         </Flex>
         <Flex align='center' justify='center' gap={fr(2)}>
           <TextField
+            w={'100%'}
             placeholder='Nhập số điện thoại nhân viên...'
             icon={<Phone />}
             {...register('phone')}
           />
           <TextField
+            w={'100%'}
             placeholder='Nhập email nhân viên...'
             icon={<Envelope />}
             {...register('email')}

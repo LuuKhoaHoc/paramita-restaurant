@@ -109,7 +109,8 @@ const CheckoutReview = ({ customer }) => {
               price: item.price,
               total: item.price * item.quantity
             }
-          }
+          },
+          refetchQueries: ['getOrders']
         })
       )
 

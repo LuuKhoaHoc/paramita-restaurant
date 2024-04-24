@@ -113,6 +113,7 @@ const App = () => {
       ErrorLogin()
       localStorage.removeItem('login')
       localStorage.removeItem('token')
+      localStorage.removeItem('tokenEmp')
       sessionStorage.clear()
       window.location.reload()
     }

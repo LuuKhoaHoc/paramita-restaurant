@@ -147,7 +147,10 @@ const AddMenu = ({ openModal, setOpenModal, refetch }) => {
             }
           )
         }}
-        onReset={handleReset}
+        onReset={() => {
+          handleReset()
+          setImage('')
+        }}
       >
         <Flex direction='column' gap={fr(4)}>
           <Image
@@ -158,7 +161,7 @@ const AddMenu = ({ openModal, setOpenModal, refetch }) => {
             alt={'food-image'}
             w={'80%'}
             h={fr(30)}
-            fit='cover'
+            fit={!image ? 'cover' : 'scale-down'}
             mx={'auto'}
             br={'lg'}
             bsh={'md'}

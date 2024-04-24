@@ -26,11 +26,12 @@ const HistoryRewardPoint = ({ customer }) => {
       >
         Lịch sử tích điểm
       </Text>
-      <Stack>
+      <Stack align='center'>
         {customer.point_histories?.map((item, index) => {
           return (
             <Flex
               key={index}
+              w={'25vw'}
               align='center'
               bg={'#fff'}
               br={'base'}

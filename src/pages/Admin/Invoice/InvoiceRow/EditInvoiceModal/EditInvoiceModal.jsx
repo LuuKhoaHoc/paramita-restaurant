@@ -330,11 +330,12 @@ const EditInvoiceModal = ({ openModal, setOpenModal, refetch, invoice }) => {
                       align='center'
                     >
                       <Image
-                        src='https://picsum.photos/200/300'
+                        src={item?.image}
                         alt='món-ăn'
-                        miw={fr(18)}
+                        w={fr(18)}
                         h={fr(18)}
                         br={'md'}
+                        fit='cover'
                       />
                       <Flex direction='column' fs={'lg'}>
                         <Text>{item?.name}</Text>
