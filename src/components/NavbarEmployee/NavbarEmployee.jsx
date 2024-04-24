@@ -20,7 +20,7 @@ import { NavLink } from 'react-router-dom'
 
 const NavbarEmployee = ({ employee }) => {
   return (
-    <Animation animation={'scale-x'} animated={true} bsh={'md'}>
+    <Animation animation={'scale-x'} animated={true} bsh={'base'}>
       <Stack gap={fr(6)} mt={fr(8)} direction='column' w={'100%'}>
         <Flex justify='center'>
           <Image src={LogoText} />

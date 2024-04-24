@@ -10,6 +10,7 @@ import InvoiceEmp from '~/pages/Employee/Invoice/InvoiceEmp'
 import OrderEmp from '~/pages/Employee/Order/OrderEmp'
 import ReservationEmp from '~/pages/Employee/Reservation/ReservationEmp'
 import TableEmp from '~/pages/Employee/Table/TableEmp'
+import Contact from '~/pages/Admin/Contact/Contact'
 
 const Employee = ({ employee }) => {
   const [open, setOpen] = useState(
@@ -20,16 +21,9 @@ const Employee = ({ employee }) => {
       <Toaster position='top-right' mt={fr(10)}>
         <Grid templateColumns={12} templateRows={13} h={'100vh'}>
           {/* Navbar */}
-          <Grid.Item
-            columnStart={1}
-            columnEnd={!open ? 2 : 3}
-            h={'100vh'}
-            bsh={'md'}
-          >
+          <Grid.Item columnStart={1} columnEnd={!open ? 2 : 3} h={'100vh'}>
             {open ? (
-              <Animation animation={'scale-x'} animated={open}>
-                <NavbarEmployee employee={employee} />
-              </Animation>
+              <NavbarEmployee employee={employee} />
             ) : (
               <NavbarEmployeeIcon employee={employee} />
             )}
@@ -56,6 +50,7 @@ const Employee = ({ employee }) => {
               <Route path='order' element={<OrderEmp />} />
               <Route path='reservation' element={<ReservationEmp />} />
               <Route path='table' element={<TableEmp />} />
+              <Route path='contact' element={<Contact employee={employee} />} />
               <Route path='*' element={<InvoiceEmp />} />
             </Routes>
           </Grid.Item>
