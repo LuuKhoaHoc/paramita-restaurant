@@ -23,7 +23,7 @@ const NavbarEmployeeIcon = ({ employee }) => {
     <Animation animation={'scale-x'} animated={true} bsh={'base'}>
       <Stack m={fr(4)} gap={fr(6)} direction='column'>
         <Flex justify='center' align='center'>
-          <Image src={LogoIcon} w={fr(16)} mx={'auto'} />
+          <Image src={LogoIcon} w={fr(13)} mx={'auto'} />
         </Flex>
         <Divider />
         {employee?.is_admin ? (

@@ -1,6 +1,9 @@
 import { extendTheme } from '@prismane/core/themes'
 
 const theme = extendTheme({
+  mode: window.matchMedia('(prefers-color-scheme: dark)').matches
+    ? 'dark'
+    : 'light',
   colors: {
     primary: {
       100: '#6ad078',
@@ -13,6 +16,6 @@ const theme = extendTheme({
       800: '#004209',
       900: '#022306'
     }
-  },
+  }
 })
 export default theme

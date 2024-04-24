@@ -19,32 +19,27 @@ const Employee = ({ employee }) => {
   return (
     <>
       <Toaster position='top-right' mt={fr(10)}>
-        <Grid templateColumns={12} templateRows={13} h={'100vh'}>
+        <Grid templateColumns={12}>
+          {/* Header */}
+          <Grid.Item
+            columnStart={!open ? 2 : 3}
+            columnEnd={13}
+            h={fr(23)}
+            bsh={'base'}
+          >
+            <HeaderEmployee open={open} setOpen={setOpen} employee={employee} />
+          </Grid.Item>
           {/* Navbar */}
-          <Grid.Item columnStart={1} columnEnd={!open ? 2 : 3} h={'100vh'}>
+          <Grid.Item columnStart={1} columnEnd={!open ? 2 : 3} mt={fr(-22.5)}>
             {open ? (
               <NavbarEmployee employee={employee} />
             ) : (
               <NavbarEmployeeIcon employee={employee} />
             )}
           </Grid.Item>
-          {/* Header */}
-          <Grid.Item
-            columnStart={!open ? 2 : 3}
-            columnEnd={13}
-            rowStart={1}
-            rowEnd={2}
-            bsh={'base'}
-          >
-            <HeaderEmployee open={open} setOpen={setOpen} employee={employee} />
-          </Grid.Item>
+
           {/* Body */}
-          <Grid.Item
-            columnStart={!open ? 2 : 3}
-            columnEnd={13}
-            rowStart={2}
-            rowEnd={'auto'}
-          >
+          <Grid.Item columnStart={!open ? 2 : 3} columnEnd={13}>
             <Routes>
               <Route path='invoice' element={<InvoiceEmp />} />
               <Route path='order' element={<OrderEmp />} />
