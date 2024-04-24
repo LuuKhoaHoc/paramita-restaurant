@@ -33,7 +33,7 @@ const HistoryRewardPoint = ({ customer }) => {
               key={index}
               w={'25vw'}
               align='center'
-              bg={'#fff'}
+              bg={(theme) => (theme.mode === 'dark' ? '#1a1a1a' : '#fff')}
               br={'base'}
               bsh={'md'}
               p={fr(2)}
