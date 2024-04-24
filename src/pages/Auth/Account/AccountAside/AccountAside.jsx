@@ -1,4 +1,5 @@
 import {
+  ArrowsClockwise,
   CaretCircleDoubleUp,
   CaretDoubleDown,
   ClockCountdown,
@@ -9,23 +10,25 @@ import {
   User
 } from '@phosphor-icons/react'
 import {
+  ActionButton,
+  Alert,
   Box,
   Button,
   Center,
   Divider,
   Flex,
-  Grid,
   List,
   Progress,
-  Square,
   Text,
+  Tooltip,
   fr,
-  useThemeModeValue
+  useThemeModeValue,
+  useToast
 } from '@prismane/core'
 import React, { useEffect, useState } from 'react'
 import { NavLink } from 'react-router-dom'
 import { useResponsive } from '~/utils/responsive'
-import { gql, useQuery } from '@apollo/client'
+import { gql, useApolloClient, useQuery } from '@apollo/client'
 
 const GET_NEXTLEVEL = gql`
   query getLevel($id: Int!) {
@@ -36,7 +39,22 @@ const GET_NEXTLEVEL = gql`
   }
 `
 
+const UPDATE_CUSTOMER_LEVEL = gql`
+  mutation updateCustomerLevel($id: Int!, $data: CustomerInput!) {
+    updateCustomer(id: $id, data: $data) {
+      customer_id
+      level {
+        level_id
+        name
+        points
+      }
+    }
+  }
+`
+
 const AccountAside = ({ customer }) => {
+  const client = useApolloClient()
+  const toast = useToast()
   const { isLaptop, isTablet, isMobile } = useResponsive()
   const textColor = useThemeModeValue('#371b04', '#d1e9d5')
   const bgColor = useThemeModeValue('#fff2e5', '#1d2b1f')
@@ -45,6 +63,11 @@ const AccountAside = ({ customer }) => {
     (acc, item) => acc + item.points_earned,
     0
   )
+  const { data: levelData } = useQuery(GET_NEXTLEVEL, {
+    variables: {
+      id: customer?.level.level_id + 1
+    }
+  })
   const handleLogout = () => {
     sessionStorage.clear()
     localStorage.removeItem('orders')
@@ -53,15 +76,72 @@ const AccountAside = ({ customer }) => {
     localStorage.removeItem('token')
     window.location.href = '/'
   }
+  const handleRefetch = async () => {
+    await client.refetchQueries({
+      include: 'active'
+    })
+  }
   useEffect(() => {
     setPoint(customerPoints)
+    client.mutate({
+      mutation: gql`
+        mutation updateCustomerPoint($id: Int!, $data: CustomerInput!) {
+          updateCustomer(id: $id, data: $data) {
+            customer_id
+            points
+          }
+        }
+      `,
+      variables: {
+        id: customer.customer_id,
+        data: {
+          username: customer?.username,
+          email: customer?.email,
+          points: point
+        }
+      },
+      onQueryUpdated: ({ data }) => {
+        console.log(data)
+      }
+    })
+    if (point >= levelData?.customerLevel.points) {
+      client.mutate({
+        mutation: gql`
+          mutation updateCustomerLevel($id: Int!, $data: CustomerInput!) {
+            updateCustomer(id: $id, data: $data) {
+              customer_id
+              level {
+                level_id
+                name
+                points
+              }
+            }
+          }
+        `,
+        variables: {
+          id: customer.customer_id,
+          data: {
+            username: customer?.username,
+            email: customer?.email,
+            levelId: customer?.level.level_id + 1
+          }
+        },
+        onQueryUpdated: ({ data }) => {
+          console.log(data)
+          toast({
+            element: (
+              <Alert variant='success'>
+                <Alert.Title className='GeomanistMedium-font'>
+                  Chúc mừng bạn thăng hạng thành công!
+                </Alert.Title>
+              </Alert>
+            )
+          })
+        }
+      })
+    }
   }, [customerPoints])
 
-  const { data: levelData } = useQuery(GET_NEXTLEVEL, {
-    variables: {
-      id: customer?.level.level_id + 1
-    }
-  })
   return (
     <>
       {isMobile || isTablet ? (
@@ -286,6 +366,15 @@ const AccountAside = ({ customer }) => {
                   Tích điểm
                 </Text>
               </Center>
+              <Tooltip label='Làm mới'>
+                <ActionButton
+                  icon={<ArrowsClockwise />}
+                  variant='text'
+                  br={'full'}
+                  onClick={() => handleRefetch()}
+                />
+              </Tooltip>
+
               <Flex direction='column' gap={fr(2)} pt={fr(8)} px={fr(4)}>
                 <Text as={'p'} fs={'xl'} className='GeomanistMedium-font'>
                   {customer?.username}
