@@ -2089,8 +2089,8 @@ export const resolvers = {
           })
     },
     customer: (parent: any, _args: any, context: Context) => {
-      return context.prisma.customers.findUnique({
-        where: { customer_id: parent?.customer_id }
+      return context.prisma.customers.findFirst({
+        where: { customer_id: parent?.customer_id || undefined }
       })
     }
   },

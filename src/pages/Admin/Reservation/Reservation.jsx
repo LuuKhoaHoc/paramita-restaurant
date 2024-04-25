@@ -60,7 +60,13 @@ const Reservation = ({ employee }) => {
             />
           </Flex>
         </Flex>
-        <Stack direction='row' wrap='wrap' gap={fr(3)} px={fr(4)}>
+        <Stack
+          direction='row'
+          wrap='wrap'
+          gap={fr(3)}
+          px={fr(4)}
+          h={'fit-content'}
+        >
           {filtered?.map((reservation) => {
             return (
               <ReservationCard

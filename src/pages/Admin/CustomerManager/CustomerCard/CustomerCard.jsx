@@ -42,7 +42,7 @@ const CustomerCard = ({ customer, refetch }) => {
   }
   return (
     <>
-      <Card w={'calc(25% - 50px)'}>
+      <Card w={'calc(25% - 50px)'} h={'fit-content'}>
         <Card.Header justify='center'>
           <Image
             src='https://cdn-icons-png.flaticon.com/512/3135/3135715.png'
