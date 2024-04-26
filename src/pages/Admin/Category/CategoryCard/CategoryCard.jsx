@@ -27,6 +27,17 @@ const CategoryCard = ({ category, refetch }) => {
       variables: {
         id: category?.category_id
       },
+      onError: () => {
+        toast({
+          element: (
+            <Alert variant='error'>
+              <Alert.Title className='GeomanistMedium-font'>
+                Xoá danh mục không thành công! Do danh mục đang được sử dụng
+              </Alert.Title>
+            </Alert>
+          )
+        })
+      },
       onCompleted: () => {
         refetch()
         toast({

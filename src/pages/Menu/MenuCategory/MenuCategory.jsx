@@ -1,16 +1,4 @@
 import { Box, Divider, Flex, Grid, Text, fr } from '@prismane/core'
-// img
-import {
-  BanhXeo,
-  BunHue,
-  BunNam,
-  CaTimNuong,
-  ChaoNamMoi,
-  ComTam,
-  DauHuNonChungTuong,
-  Menus,
-  Lau
-} from '~/images'
 // component
 import { Loading, MainPic } from '~/components'
 import MenuListCategory from '~/pages/Menu/MenuListCategory/MenuListCategory'
@@ -19,43 +7,7 @@ import { useParams } from 'react-router-dom'
 import { useResponsive } from '~/utils/responsive'
 import { gql, useQuery } from '@apollo/client'
 import { itemToURL } from '~/utils/stringToURL'
-
-const GET_CONTENTS = gql`
-  query {
-    page(name: "Menu") {
-      page_id
-      name
-      content {
-        title
-        slogan
-        description
-        image
-        position
-      }
-    }
-  }
-`
-const GET_CATEGORYLIST = gql`
-  query {
-    categoryList {
-      name
-    }
-  }
-`
-const GET_MENU = gql`
-  query {
-    menuList {
-      item_id
-      image
-      name
-      price
-      description
-      category {
-        name
-      }
-    }
-  }
-`
+import { GET_CATEGORYLIST, GET_CONTENTS, GET_MENU } from '~/pages/Menu/schema'
 
 const MenuCategory = () => {
   const { isMobile, isTablet, isLaptop } = useResponsive()

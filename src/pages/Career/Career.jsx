@@ -1,7 +1,6 @@
 import { Box, Flex, Grid, Image, Text, fr } from '@prismane/core'
 import React from 'react'
 import { Loading, MainPic } from '~/components'
-import { BangGo, CareerPic } from '~/images'
 import CareerPost from '~/pages/Career/CareerPost/CareerPost'
 import { useResponsive } from '~/utils/responsive'
 import { gql, useQuery } from '@apollo/client'

@@ -10,7 +10,6 @@ import {
 } from '@prismane/core'
 import { useScroll } from '@prismane/core/hooks'
 import React, { useEffect, useState } from 'react'
-import { LoginPic } from '~/images'
 import { Loading, MainPic } from '~/components'
 import { useResponsive } from '~/utils/responsive'
 import { useLocation, useNavigate } from 'react-router-dom'

@@ -4,8 +4,6 @@ import { Loading, MainPic } from '~/components'
 import { Leaf } from '@phosphor-icons/react'
 import OrderListCategory from '~/pages/Order/OrderListCategory/OrderListCategory'
 import OrderListItem from '~/pages/Order/OrderListItem/OrderListItem'
-// img
-import { Orders } from '~/images'
 import { useResponsive } from '~/utils/responsive'
 import { gql, useQuery } from '@apollo/client'
 

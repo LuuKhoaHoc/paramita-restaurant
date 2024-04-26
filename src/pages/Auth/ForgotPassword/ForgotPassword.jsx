@@ -1,7 +1,6 @@
-import { Box, Card, Flex, Text, Toaster, fr, useToast } from '@prismane/core'
+import { Box, Card, Flex, Text, Toaster, fr } from '@prismane/core'
 import { useScroll } from '@prismane/core/hooks'
 import React, { useEffect, useState } from 'react'
-import { LoginPic } from '~/images'
 import { Route, Routes, useLocation, useNavigate } from 'react-router-dom'
 import { Loading, MainPic } from '~/components'
 import { ArrowLeft } from '@phosphor-icons/react/dist/ssr'

@@ -1,59 +1,11 @@
 import { Box, Divider, Flex, Grid, fr } from '@prismane/core'
-// img
-import {
-  BanhXeo,
-  BunHue,
-  BunNam,
-  CaTimNuong,
-  ChaoNamMoi,
-  ComTam,
-  DauHuNonChungTuong,
-  Menus,
-  Lau
-} from '~/images'
 // component
 import { Loading, MainPic } from '~/components'
 import MenuListCategory from '~/pages/Menu/MenuListCategory/MenuListCategory'
 import MenuListItem from '~/pages/Menu/MenuListItem/MenuListItem'
 import { useResponsive } from '~/utils/responsive'
+import { GET_CATEGORYLIST, GET_CONTENTS, GET_MENU } from '~/pages/Menu/schema'
 import { gql, useQuery } from '@apollo/client'
-
-const GET_CONTENTS = gql`
-  query {
-    page(name: "Menu") {
-      page_id
-      name
-      content {
-        title
-        slogan
-        description
-        image
-        position
-      }
-    }
-  }
-`
-const GET_CATEGORYLIST = gql`
-  query {
-    categoryList {
-      name
-    }
-  }
-`
-const GET_MENU = gql`
-  query {
-    menuList {
-      item_id
-      image
-      name
-      price
-      description
-      category {
-        name
-      }
-    }
-  }
-`
 
 const Menu = () => {
   const { isMobile, isTablet } = useResponsive()

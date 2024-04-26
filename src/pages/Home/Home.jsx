@@ -9,26 +9,17 @@ import {
   Text,
   fr
 } from '@prismane/core'
-// img
-import {
-  BanhXeo,
-  BunHue,
-  BunNam,
-  CaTimNuong,
-  ChaoNamMoi,
-  ComTam,
-  DauHuNonChungTuong,
-  DividerLogo,
-  Lau
-} from '~/images'
 import React, { useEffect, useState } from 'react'
 import Carousel from 'react-multi-carousel'
 import 'react-multi-carousel/lib/styles.css'
+//img
+import { DividerLogo } from '~/images/index'
 // component
 import { MainPic, StyledButton, DividerParamita } from '~/components'
 import { Star } from '@phosphor-icons/react'
 import { Link } from 'react-router-dom'
 import { useResponsive } from '~/utils/responsive'
+import { GET_MENU } from '~/pages/Menu/schema'
 import { useQuery, gql } from '@apollo/client'
 
 const GET_CONTENTS = gql`
@@ -49,16 +40,12 @@ const GET_CONTENTS = gql`
 
 const Home = () => {
   const { isLaptop, isTablet, isMobile } = useResponsive()
-  const imagesFood = [
-    { image: BanhXeo, title: 'Bánh xèo', rating: 5 },
-    { image: BunHue, title: 'Bún Huế Paramita', rating: 4.5 },
-    { image: BunNam, title: 'Bún nấm nướng chả giò', rating: 5 },
-    { image: CaTimNuong, title: 'Cà tím nướng hành ớt', rating: 5 },
-    { image: ChaoNamMoi, title: 'Cháo nấm mối', rating: 5 },
-    { image: ComTam, title: 'Cơm tấm Paramita', rating: 5 },
-    { image: DauHuNonChungTuong, title: 'Đậu hũ non chưng tương', rating: 5 },
-    { image: Lau, title: 'Lẩu Paramita', rating: 4.5 }
-  ]
+  const {
+    loading: loadingMenu,
+    data: dataMenu,
+    error: errorMenu
+  } = useQuery(GET_MENU)
+  console.log('🚀 ~ Home ~ dataMenu:', dataMenu)
   const [scrollEvent, setScrollEvent] = useState(false)
   const { loading, error, data } = useQuery(GET_CONTENTS)
   useEffect(() => {
@@ -319,7 +306,6 @@ const Home = () => {
                   duration={2000}
                   delay={0}
                 >
-                  {/* TODO: Thêm image nếu có */}
                   <Image
                     w={
                       isLaptop
@@ -363,7 +349,7 @@ const Home = () => {
                 </Highlight>
               </Text>
             </Box>
-            <Carousel
+            {/* <Carousel
               additionalTransfrom={0}
               arrows
               autoPlay
@@ -427,7 +413,7 @@ const Home = () => {
               swipeable
               transitionDuration={1000}
             >
-              {imagesFood.map((item, index) => (
+              {dataMenu?.map((item, index) => (
                 <Flex
                   justify='center'
                   align='center'
@@ -465,7 +451,7 @@ const Home = () => {
                   </Link>
                 </Flex>
               ))}
-            </Carousel>
+            </Carousel> */}
           </Grid.Item>
         </Grid>
       </Box>

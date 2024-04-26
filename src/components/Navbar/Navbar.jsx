@@ -25,7 +25,6 @@ import { LogoText } from '~/images'
 import { useResponsive } from '~/utils/responsive'
 import lazyWithPreload from 'react-lazy-with-preload'
 import { useEffect, useState, useContext } from 'react'
-import { Loading } from '~/components'
 import {
   ClockCountdown,
   List as ListIcon,

@@ -1,6 +1,4 @@
 import { Box, Flex, Grid, Highlight, Image, Text, fr } from '@prismane/core'
-// img
-import { AlbumPic } from '~/images'
 import React, { useState } from 'react'
 // component
 import { MainPic, DividerParamita, Loading } from '~/components'

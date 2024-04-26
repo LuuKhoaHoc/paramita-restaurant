@@ -19,7 +19,7 @@ import {
   fr
 } from '@prismane/core'
 // img
-import { HomePic2, DividerLogo, Space6, BookTablePic, HomePic1 } from '~/images'
+import { DividerLogo } from '~/images'
 import React, { useEffect, useState } from 'react'
 
 // component

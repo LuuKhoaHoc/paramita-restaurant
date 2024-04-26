@@ -1,5 +1,4 @@
 import { Box, Flex, Grid, Image, Text, fr } from '@prismane/core'
-import { HomePic3 } from '~/images'
 import { Loading, StyledButton } from '~/components'
 import { Link } from 'react-router-dom'
 import { useResponsive } from '~/utils/responsive'

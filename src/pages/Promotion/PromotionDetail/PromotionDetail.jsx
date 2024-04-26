@@ -1,4 +1,4 @@
-import { Box, Flex, Grid, Image, List, Text, fr } from '@prismane/core'
+import { Box, Flex, Grid, Image, Text, fr } from '@prismane/core'
 import React from 'react'
 import { PromotionPic } from '~/images'
 import { useResponsive } from '~/utils/responsive'

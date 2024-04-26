@@ -28,7 +28,7 @@ const Table = ({ employee }) => {
         setOpen={setOpenAddModal}
         refetch={refetch}
       />
-      <Flex direction='column'>
+      <Flex direction='column' h={'fit-content'}>
         <Flex justify='between' align='center' mx={fr(4)} my={fr(4)}>
           <Text className='GeomanistMedium-font' fs={'xl'}>
             Tất cả bàn

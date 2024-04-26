@@ -72,7 +72,7 @@ const Promotion = () => {
         {data?.page?.content?.map((item, index) => (
           <MainPic
             key={index}
-            image={PromotionPic}
+            image={item.image || PromotionPic}
             title={item.title}
             subtitle={item.description}
           />

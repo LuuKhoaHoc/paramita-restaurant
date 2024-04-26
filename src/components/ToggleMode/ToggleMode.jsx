@@ -11,8 +11,12 @@ import {
 import React from 'react'
 
 const ToggleMode = () => {
-  const { toggleThemeMode } = usePrismaneTheme()
+  const { toggleThemeMode, theme } = usePrismaneTheme()
   const icon = useThemeModeValue(<Moon weight='fill' />, <Sun weight='fill' />)
+  const handleChangeMode = () => {
+    toggleThemeMode()
+    localStorage.setItem('mode', theme.mode === 'dark' ? 'light' : 'dark')
+  }
   return (
     <Transition
       pos={'fixed'}
@@ -24,7 +28,7 @@ const ToggleMode = () => {
       <Center>
         <Circle
           bg={(theme) => (theme.mode === 'dark' ? '#fff2e5' : '#1d2b1f')}
-          onClick={toggleThemeMode}
+          onClick={handleChangeMode}
           cl={(theme) => (theme.mode === 'dark' ? '#1d2b1f' : '#fff2e5')}
           size={fr(10)}
           cs={'pointer'}
