@@ -166,7 +166,7 @@ const Navbar = ({ customer }) => {
                     <Text></Text>
                   </Drawer.Header>
                   <Flex direction='column' className='GeomanistMedium-font'>
-                    {isLoggedIn === 'false' ? (
+                    {isLoggedIn === false ? (
                       <Center>
                         <Box>
                           <Link
@@ -487,7 +487,10 @@ const Navbar = ({ customer }) => {
                       pos={['relative', { ':before': 'absolute' }]}
                       sx={lineAnimation}
                     >
-                      <NavLink to={'/menu'} onMouseOver={() => Menus.preload()}>
+                      <NavLink
+                        to={'/menu/tat-ca'}
+                        onMouseOver={() => Menus.preload()}
+                      >
                         Thực đơn{' '}
                       </NavLink>
                     </Box>
